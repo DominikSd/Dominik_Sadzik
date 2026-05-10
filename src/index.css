@@ -9,7 +9,59 @@ html, body, #root {
 }
 
 body {
-  background: #050816;
+  /* base dark background */
+  background: linear-gradient(135deg, #050816 0%, #07111f 45%, #0a0618 100%);
   color: #fff;
   font-family: Inter, ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
+
+/* Subtle full-page decorative gradient layer (fixed, behind content) */
+.page-gradient {
+  position: fixed;
+  inset: 0;
+  z-index: -2;
+  pointer-events: none;
+  background:
+    linear-gradient(120deg, rgba(56, 189, 248, 0.06), transparent 35%, rgba(139, 92, 246, 0.06)),
+    radial-gradient(circle at 20% 30%, rgba(59, 130, 246, 0.20), transparent 30%),
+    radial-gradient(circle at 80% 70%, rgba(168, 85, 247, 0.18), transparent 32%);
+  mix-blend-mode: screen;
+}
+
+@media (max-width: 767px) {
+  .page-gradient { opacity: 0.6; }
+}
+
+/* Reusable card style for semi-transparent panels */
+.card {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 20px 40px rgba(2,6,23,0.45);
+  border-radius: 1rem;
+}
+
+/* Gradient text utility */
+.gradient-text {
+  background: linear-gradient(90deg, #38bdf8, #6366f1, #a855f7);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* Gradient button base */
+.gradient-button {
+  background: linear-gradient(90deg, #2563eb, #7c3aed);
+  box-shadow: 0 14px 40px rgba(59, 130, 246, 0.16);
+}
+
+.gradient-button:focus, .gradient-button:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 4px rgba(56,189,248,0.12), 0 14px 40px rgba(59,130,246,0.16);
+}
+
+.page-decor { pointer-events: none; }
+
+.no-horiz-scroll { overflow-x: hidden; }

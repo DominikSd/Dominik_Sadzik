@@ -487,9 +487,9 @@ function Hero() {
             initial={{ opacity: 0, y: 28 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.75, delay: 0.1 }}
-            className="max-w-4xl text-4xl font-black leading-[1.05] tracking-tight md:text-6xl lg:text-7xl"
+            className="max-w-4xl text-4xl font-black leading-[1.05] tracking-tight md:text-7xl lg:text-8xl"
           >
-            Strona, która dobrze wygląda i jasno pokazuje Twoją ofertę
+            Strona, która <span className="gradient-text">dobrze wygląda</span> i jasno pokazuje Twoją ofertę
           </motion.h1>
 
           <motion.p
@@ -507,7 +507,7 @@ function Hero() {
             transition={{ duration: 0.75, delay: 0.3 }}
             className="mt-9 flex flex-col gap-4 sm:flex-row"
           >
-            <a href="#kontakt" className="group inline-flex items-center justify-center gap-2 rounded-full bg-gradient-to-r from-blue-500 to-violet-500 px-7 py-4 text-sm font-bold shadow-xl shadow-blue-500/25 transition hover:scale-105">
+            <a href="#kontakt" className="group inline-flex items-center justify-center gap-2 rounded-full gradient-button px-7 py-4 text-sm font-bold text-white transition transform-gpu hover:scale-105 focus:outline-none focus-visible:ring-4 focus-visible:ring-cyan-300/30">
               Chcę stronę
               <Icon name="arrow-right" className="h-4 w-4 transition group-hover:translate-x-1" />
             </a>
@@ -517,7 +517,10 @@ function Hero() {
           </motion.div>
         </div>
 
-        <div className="relative">
+        <div className="relative z-10">
+          <div className="absolute inset-0 grid place-items-center z-0 pointer-events-none">
+            <div className="h-44 w-44 rounded-full bg-gradient-to-br from-cyan-400/12 to-violet-500/12 blur-3xl" />
+          </div>
           <NetworkMonitorLogo />
           <motion.div
             initial={{ opacity: 0, x: 30 }}
@@ -582,7 +585,7 @@ function ServicesSection() {
 function BenefitsSection() {
   return (
     <section id="korzysci" className="px-6 py-20 md:px-10 md:min-h-[calc(100vh-80px)] md:flex md:items-center scroll-mt-20 md:snap-center md:snap-always">
-      <div className="mx-auto grid max-w-7xl gap-10 rounded-[2rem] border border-white/10 bg-white/[0.04] p-7 backdrop-blur md:grid-cols-[0.85fr_1.15fr] md:p-10">
+      <div className="mx-auto grid max-w-7xl gap-10 rounded-[2rem] border border-white/10 bg-white/[0.04] p-7 backdrop-blur md:grid-cols-[0.85fr_1.15fr] md:p-10 card">
         <motion.div
           initial="hidden"
           whileInView="visible"
@@ -831,6 +834,7 @@ export default function LandingPage() {
 
   return (
     <div className="relative min-h-screen overflow-x-hidden bg-[#050816] text-white">
+      <div className="page-gradient" />
       {selfTestErrors.length > 0 && (
         <div className="fixed bottom-4 left-4 z-50 max-w-sm rounded-2xl border border-red-400/40 bg-red-950/90 p-4 text-sm text-red-100 shadow-2xl">
           <p className="font-bold">Błąd testów treści:</p>
