@@ -26,16 +26,3 @@ Właściwym punktem startowym aplikacji jest `index.html`, który ładuje `src/m
 
 ## Publikacja na GitHub Pages
 
-Projekt jest przygotowany do publikacji przez GitHub Actions. Po wypchnięciu zmian na gałąź `main` workflow zbuduje aplikację Vite i opublikuje katalog `dist`.
-
-W ustawieniach repozytorium na GitHubie wybierz:
-
-- `Settings` -> `Pages`
-- `Build and deployment`
-- `Source: GitHub Actions`
-
-Adres strony dla tego repozytorium:
-
-```text
-https://dominiksd.github.io/Dominik_Sadzik/
-```
