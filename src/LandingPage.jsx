@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 import AnimatedCircuit from "./components/AnimatedCircuit";
 
 const fadeUp = {
-  hidden: { opacity: 0, y: 28 },
+  hidden: { opacity: 1, y: 0 },
   visible: { opacity: 1, y: 0 },
 };
 
@@ -253,7 +253,7 @@ function CircuitDecorations() {
 function NetworkMonitorLogo() {
   return (
     <motion.div
-      initial={{ opacity: 0, scale: 0.92, y: 24 }}
+      initial={{ opacity: 1, scale: 1, y: 0 }}
       animate={{ opacity: 1, scale: 1, y: 0 }}
       transition={{ duration: 0.8, ease: "easeOut" }}
       className="relative mx-auto w-full max-w-[540px]"
@@ -380,7 +380,7 @@ function Header() {
     <header className="sticky top-0 z-40 border-b border-white/10 bg-[#050816]/75 backdrop-blur-xl">
       <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4 md:px-10">
         <motion.div
-          initial={{ opacity: 0, x: -16 }}
+          initial={{ opacity: 1, x: 0 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.55 }}
           className="flex items-center gap-3"
@@ -472,7 +472,7 @@ function Hero() {
       <div className="mx-auto grid max-w-7xl items-center gap-14 md:grid-cols-[1.05fr_0.95fr] relative z-10">
         <div>
           <motion.div
-            initial={{ opacity: 0, y: 18 }}
+            initial={{ opacity: 1, y: 0 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
             className="mb-6 inline-flex items-center gap-2 rounded-full border border-cyan-400/20 bg-white/5 px-4 py-2 text-sm text-cyan-100 backdrop-blur"
@@ -482,7 +482,7 @@ function Hero() {
           </motion.div>
 
           <motion.h1
-            initial={{ opacity: 0, y: 28 }}
+            initial={{ opacity: 1, y: 0 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.75, delay: 0.1 }}
             className="max-w-4xl text-4xl font-black leading-[1.05] tracking-tight md:text-6xl lg:text-7xl"
@@ -491,7 +491,7 @@ function Hero() {
           </motion.h1>
 
           <motion.p
-            initial={{ opacity: 0, y: 24 }}
+            initial={{ opacity: 1, y: 0 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.75, delay: 0.2 }}
             className="mt-6 max-w-2xl text-lg leading-8 text-slate-300 md:text-xl"
@@ -500,7 +500,7 @@ function Hero() {
           </motion.p>
 
           <motion.div
-            initial={{ opacity: 0, y: 22 }}
+            initial={{ opacity: 1, y: 0 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.75, delay: 0.3 }}
             className="mt-9 flex flex-col gap-4 sm:flex-row"
@@ -521,7 +521,7 @@ function Hero() {
           </div>
           <NetworkMonitorLogo />
           <motion.div
-            initial={{ opacity: 0, x: 30 }}
+            initial={{ opacity: 1, x: 0 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.75, duration: 0.6 }}
             className="absolute right-0 top-6 hidden rounded-lg border border-white/10 bg-white/[0.07] px-4 py-3 text-sm text-slate-100 shadow-xl shadow-violet-500/10 backdrop-blur md:block"
@@ -529,7 +529,7 @@ function Hero() {
             Responsywność
           </motion.div>
           <motion.div
-            initial={{ opacity: 0, x: -30 }}
+            initial={{ opacity: 1, x: 0 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.95, duration: 0.6 }}
             className="absolute -left-4 bottom-20 hidden rounded-lg border border-white/10 bg-white/[0.07] px-4 py-3 text-sm text-slate-100 shadow-xl shadow-blue-500/10 backdrop-blur md:block"
@@ -537,7 +537,7 @@ function Hero() {
             Czytelny design
           </motion.div>
           <motion.div
-            initial={{ opacity: 0, y: 24 }}
+            initial={{ opacity: 1, y: 0 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 1.05, duration: 0.6 }}
             className="absolute bottom-2 right-10 hidden rounded-lg border border-white/10 bg-slate-950/65 px-4 py-3 text-sm text-cyan-100 shadow-xl shadow-cyan-500/10 backdrop-blur md:block"
@@ -545,7 +545,7 @@ function Hero() {
             Szybkość
           </motion.div>
           <motion.div
-            initial={{ opacity: 0, y: -24 }}
+            initial={{ opacity: 1, y: 0 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 1.15, duration: 0.6 }}
             className="absolute left-12 top-0 hidden rounded-lg border border-white/10 bg-slate-950/65 px-4 py-3 text-sm text-cyan-100 shadow-xl shadow-blue-500/10 backdrop-blur lg:block"
@@ -765,7 +765,7 @@ function FaqSection() {
 
         <div className="space-y-4">
           {faq.map((item, index) => (
-            <motion.div key={item.q} initial={{ opacity: 0, y: 18 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: index * 0.08 }} className="rounded-lg border border-white/10 bg-white/[0.045] backdrop-blur">
+            <motion.div key={item.q} initial={{ opacity: 1, y: 0 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: index * 0.08 }} className="rounded-lg border border-white/10 bg-white/[0.045] backdrop-blur">
               <button type="button" onClick={() => setOpen(open === index ? -1 : index)} className="flex w-full items-center justify-between gap-4 p-6 text-left">
                 <span className="font-bold text-white">{item.q}</span>
                 <Icon name="chevron-down" className={`h-5 w-5 text-cyan-300 transition ${open === index ? "rotate-180" : ""}`} />
@@ -798,7 +798,7 @@ function ContactSection() {
             </motion.div>
           </motion.div>
 
-          <motion.div initial={{ opacity: 0, x: 40 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true, amount: 0.35 }} transition={{ duration: 0.65 }} className="rounded-lg border border-cyan-300/20 bg-slate-950/55 p-6 shadow-2xl shadow-blue-500/10">
+          <motion.div initial={{ opacity: 1, x: 0 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true, amount: 0.35 }} transition={{ duration: 0.65 }} className="rounded-lg border border-cyan-300/20 bg-slate-950/55 p-6 shadow-2xl shadow-blue-500/10">
             <div className="space-y-5">
               <div className="flex items-center gap-4">
                 <div className="flex h-12 w-12 items-center justify-center rounded-lg border border-cyan-300/30 bg-white/5 text-cyan-200"><Icon name="phone" className="h-5 w-5" /></div>
