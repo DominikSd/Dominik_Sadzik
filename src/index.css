@@ -2,6 +2,18 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  --bg-very-dark: #050816;
+  --bg-dark-2: #07111f;
+  --bg-dark-3: #0a0618;
+  --accent-cyan: rgba(56, 189, 248, 0.24);
+  --accent-blue: rgba(37, 99, 235, 0.24);
+  --accent-violet: rgba(124, 58, 237, 0.22);
+  --accent-purple: rgba(168, 85, 247, 0.18);
+  --gradient-blur: 0;
+  --gradient-opacity: 1;
+}
+
 html, body, #root {
   height: 100%;
   overflow-x: hidden;
@@ -9,38 +21,56 @@ html, body, #root {
 }
 
 body {
-  /* base dark background */
-  background: linear-gradient(135deg, #050816 0%, #07111f 45%, #0a0618 100%);
+  background:
+    radial-gradient(circle at 12% 12%, rgba(37, 99, 235, 0.3), transparent 28%),
+    radial-gradient(circle at 88% 18%, rgba(124, 58, 237, 0.28), transparent 30%),
+    radial-gradient(circle at 50% 55%, rgba(14, 165, 233, 0.12), transparent 35%),
+    radial-gradient(circle at 80% 85%, rgba(168, 85, 247, 0.22), transparent 34%),
+    linear-gradient(135deg, var(--bg-very-dark) 0%, var(--bg-dark-2) 45%, var(--bg-dark-3) 100%);
   color: #fff;
   font-family: Inter, ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* Subtle full-page decorative gradient layer (fixed, behind content) */
 .page-gradient {
   position: fixed;
   inset: 0;
-  z-index: -2;
+  z-index: 0;
   pointer-events: none;
+  opacity: 0.92;
   background:
-    linear-gradient(120deg, rgba(56, 189, 248, 0.06), transparent 35%, rgba(139, 92, 246, 0.06)),
-    radial-gradient(circle at 20% 30%, rgba(59, 130, 246, 0.20), transparent 30%),
-    radial-gradient(circle at 80% 70%, rgba(168, 85, 247, 0.18), transparent 32%);
+    linear-gradient(120deg, rgba(56, 189, 248, 0.1), transparent 35%, rgba(139, 92, 246, 0.12)),
+    radial-gradient(34rem 34rem at -8% 8%, rgba(37, 99, 235, 0.28), transparent 64%),
+    radial-gradient(42rem 42rem at 108% 22%, rgba(124, 58, 237, 0.28), transparent 66%),
+    radial-gradient(34rem 34rem at 44% 92%, rgba(14, 165, 233, 0.14), transparent 68%),
+    radial-gradient(32rem 32rem at 88% 84%, rgba(168, 85, 247, 0.18), transparent 68%);
+  background-repeat: no-repeat;
   mix-blend-mode: screen;
+  filter: blur(var(--gradient-blur));
+  transform: translateZ(0);
+  animation: gradientDrift 18s ease-in-out infinite alternate;
 }
 
 @media (max-width: 767px) {
-  .page-gradient { opacity: 0.6; }
+  .page-gradient { opacity: 0.54; }
 }
 
-/* Reusable card style for semi-transparent panels */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.001ms !important;
+  }
+}
+
 .card {
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.06);
+  background: rgba(255, 255, 255, 0.045);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   backdrop-filter: blur(10px);
-  box-shadow: 0 20px 40px rgba(2,6,23,0.45);
-  border-radius: 1rem;
+  box-shadow: 0 20px 46px rgba(2,6,23,0.42);
+  border-radius: 0.5rem;
 }
 
 /* Gradient text utility */
@@ -65,3 +95,18 @@ body {
 .page-decor { pointer-events: none; }
 
 .no-horiz-scroll { overflow-x: hidden; }
+
+a:focus-visible,
+button:focus-visible {
+  outline: 2px solid rgba(56, 189, 248, 0.9);
+  outline-offset: 4px;
+}
+
+@keyframes gradientDrift {
+  from {
+    transform: translate3d(-1.5%, -1%, 0) scale(1);
+  }
+  to {
+    transform: translate3d(1.5%, 1%, 0) scale(1.04);
+  }
+}

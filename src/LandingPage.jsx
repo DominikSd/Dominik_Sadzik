@@ -1,4 +1,4 @@
-import React, { useMemo, useState, useEffect } from "react";
+import React, { useMemo, useState } from "react";
 import { motion } from "framer-motion";
 import AnimatedCircuit from "./components/AnimatedCircuit";
 
@@ -125,27 +125,27 @@ const services = [
   {
     icon: "monitor",
     title: "Strony internetowe",
-    text: "Czytelna strona firmowa, która pokazuje ofertę i ułatwia kontakt z klientem.",
+    text: "Nowoczesna strona, która prezentuje ofertę i ułatwia kontakt z klientem.",
   },
   {
     icon: "palette",
     title: "Wizytówki online",
-    text: "Prosty start w internecie: najważniejsze informacje, kontakt i linki w jednym miejscu.",
+    text: "Prosta wizytówka online z najważniejszymi informacjami o firmie.",
   },
   {
     icon: "sparkles",
     title: "Odświeżenie strony",
-    text: "Poprawa wyglądu, układu i treści strony, która już istnieje, ale wymaga dopracowania.",
+    text: "Poprawa wyglądu, układu i czytelności istniejącej strony.",
   },
 ];
 
 const benefits = [
-  "Dobrze wygląda na telefonie i komputerze",
-  "Jasna oferta bez technicznego chaosu",
+  "Responsywny wygląd na telefonie i komputerze",
+  "Czytelna oferta bez technicznego chaosu",
   "Pomoc z domeną, hostingiem i publikacją",
-  "Możliwość dalszej rozbudowy",
   "Formularz kontaktowy lub szybki kontakt online",
   "Nowoczesny wygląd dopasowany do branży",
+  "Możliwość dalszej rozbudowy",
 ];
 
 const process = [
@@ -209,8 +209,6 @@ const faq = [
   },
 ];
 
-const SECTION_IDS = ["hero", "oferta", "korzysci", "proces", "realizacje", "pakiety", "faq", "kontakt"];
-
 function runContentSelfTests() {
   const errors = [];
 
@@ -263,10 +261,10 @@ function NetworkMonitorLogo() {
       <motion.div
         animate={{ y: [0, -10, 0] }}
         transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
-        className="relative rounded-[2rem] border border-cyan-400/30 bg-slate-950/65 p-4 shadow-2xl shadow-blue-500/20 backdrop-blur"
+        className="relative rounded-lg border border-cyan-400/35 bg-slate-950/65 p-4 shadow-2xl shadow-blue-500/20 backdrop-blur"
       >
-        <div className="absolute inset-0 rounded-[2rem] bg-gradient-to-br from-cyan-400/15 via-transparent to-violet-500/15" />
-        <div className="relative aspect-[16/10] rounded-[1.45rem] border-2 border-transparent bg-slate-950 p-7 [background:linear-gradient(#050816,#050816)_padding-box,linear-gradient(135deg,#1d9bff,#9a4dff)_border-box]">
+        <div className="absolute inset-0 rounded-lg bg-gradient-to-br from-cyan-400/15 via-transparent to-violet-500/15" />
+        <div className="relative aspect-[16/10] rounded-lg border-2 border-transparent bg-slate-950 p-7 [background:linear-gradient(#050816,#050816)_padding-box,linear-gradient(135deg,#1d9bff,#9a4dff)_border-box]">
           <svg viewBox="0 0 420 250" className="h-full w-full overflow-visible" role="img" aria-label="Animowane logo monitora z globem sieciowym">
             <defs>
               <linearGradient id="globeGradient" x1="0" x2="1" y1="0" y2="1">
@@ -372,8 +370,8 @@ function Header() {
   const [isOpen, setIsOpen] = useState(false);
   const menuItems = [
     ["Oferta", "#oferta"],
-    ["Proces", "#proces"],
     ["Realizacje", "#realizacje"],
+    ["Proces", "#proces"],
     ["FAQ", "#faq"],
     ["Kontakt", "#kontakt"],
   ];
@@ -387,12 +385,12 @@ function Header() {
           transition={{ duration: 0.55 }}
           className="flex items-center gap-3"
         >
-          <div className="flex h-11 w-11 items-center justify-center rounded-2xl border border-cyan-400/40 bg-slate-950/70 shadow-lg shadow-blue-500/20">
+          <div className="flex h-11 w-11 items-center justify-center rounded-lg border border-cyan-400/40 bg-slate-950/70 shadow-lg shadow-blue-500/20">
             <Icon name="globe" className="h-5 w-5 text-cyan-300" />
           </div>
           <div>
-            <p className="text-sm font-bold tracking-wide text-white">Imię Nazwisko</p>
-            <p className="text-xs text-cyan-200/70">Projektowanie stron i wizytówek</p>
+            <p className="text-sm font-bold tracking-wide text-white">Dominik Sadzik</p>
+            <p className="text-xs text-cyan-200/70">Strony internetowe i wizytówki online</p>
           </div>
         </motion.div>
 
@@ -405,7 +403,7 @@ function Header() {
                 e.preventDefault();
                 const id = href.replace("#", "");
                 const el = document.getElementById(id);
-                if (el) el.scrollIntoView({ behavior: "smooth", block: "center" });
+                if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
               }}
               className="transition hover:text-cyan-300"
             >
@@ -416,7 +414,7 @@ function Header() {
 
         <a
           href="#kontakt"
-          className="hidden rounded-full bg-gradient-to-r from-blue-500 to-violet-500 px-5 py-2.5 text-sm font-semibold shadow-lg shadow-blue-500/25 transition hover:scale-105 md:inline-flex"
+          className="hidden rounded-full gradient-button px-5 py-2.5 text-sm font-semibold shadow-lg shadow-blue-500/25 transition hover:scale-105 md:inline-flex"
         >
           Wycena projektu
         </a>
@@ -424,7 +422,7 @@ function Header() {
         <button
           type="button"
           onClick={() => setIsOpen((value) => !value)}
-          className="rounded-2xl border border-white/10 bg-white/5 p-3 text-white md:hidden"
+          className="rounded-lg border border-white/10 bg-white/5 p-3 text-white md:hidden"
           aria-label="Otwórz menu"
           aria-expanded={isOpen}
         >
@@ -443,10 +441,10 @@ function Header() {
                   e.preventDefault();
                   const id = href.replace("#", "");
                   const el = document.getElementById(id);
-                  if (el) el.scrollIntoView({ behavior: "smooth", block: "center" });
+                  if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
                   setIsOpen(false);
                 }}
-                className="rounded-2xl bg-white/5 px-4 py-3 transition hover:bg-white/10"
+                className="rounded-lg bg-white/5 px-4 py-3 transition hover:bg-white/10"
               >
                 {label}
               </a>
@@ -460,15 +458,15 @@ function Header() {
 
 function Hero() {
   return (
-    <section id="hero" className="relative overflow-x-hidden px-6 pb-20 pt-12 md:px-10 md:pb-28 md:pt-20 md:min-h-[calc(100vh-80px)] md:flex md:items-center scroll-mt-20 md:snap-center md:snap-always">
+    <section id="hero" className="relative overflow-x-hidden px-6 pb-16 pt-12 md:min-h-[calc(100vh-80px)] md:px-10 md:pb-20 md:pt-16 md:flex md:items-center scroll-mt-24">
       <div className="pointer-events-none absolute left-4 top-6 md:left-12 md:top-10 z-0">
-        <div className="block md:hidden"><AnimatedCircuit variant="small" className="w-40 h-24 opacity-40" /></div>
-        <div className="hidden md:block"><AnimatedCircuit variant="full" className="w-56 h-36 opacity-60" /></div>
+        <div className="block md:hidden"><AnimatedCircuit variant="mini" className="h-24 w-40 opacity-35" /></div>
+        <div className="hidden md:block"><AnimatedCircuit variant="stair" className="h-40 w-64 opacity-65" /></div>
       </div>
 
       <div className="pointer-events-none absolute right-4 bottom-6 md:right-12 md:bottom-10 z-0">
-        <div className="block md:hidden"><AnimatedCircuit variant="small" flip className="w-36 h-20 opacity-35" /></div>
-        <div className="hidden md:block"><AnimatedCircuit variant="full" flip className="w-64 h-40 opacity-60" /></div>
+        <div className="block md:hidden"><AnimatedCircuit variant="mini" flip className="h-20 w-36 opacity-30" /></div>
+        <div className="hidden md:block"><AnimatedCircuit variant="branch" flip className="h-44 w-72 opacity-55" /></div>
       </div>
 
       <div className="mx-auto grid max-w-7xl items-center gap-14 md:grid-cols-[1.05fr_0.95fr] relative z-10">
@@ -487,9 +485,9 @@ function Hero() {
             initial={{ opacity: 0, y: 28 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.75, delay: 0.1 }}
-            className="max-w-4xl text-4xl font-black leading-[1.05] tracking-tight md:text-7xl lg:text-8xl"
+            className="max-w-4xl text-4xl font-black leading-[1.05] tracking-tight md:text-6xl lg:text-7xl"
           >
-            Strona, która <span className="gradient-text">dobrze wygląda</span> i jasno pokazuje Twoją ofertę
+            Nowoczesne strony internetowe i <span className="gradient-text">wizytówki dla Twojej firmy</span>
           </motion.h1>
 
           <motion.p
@@ -498,7 +496,7 @@ function Hero() {
             transition={{ duration: 0.75, delay: 0.2 }}
             className="mt-6 max-w-2xl text-lg leading-8 text-slate-300 md:text-xl"
           >
-            Projektuję nowoczesne strony i wizytówki online dla małych firm, specjalistów oraz osób, które chcą profesjonalnie pokazać się w internecie — bez zbędnego komplikowania.
+            Projektuję estetyczne, czytelne i responsywne strony oraz wizytówki online dla małych firm, specjalistów i lokalnych usług.
           </motion.p>
 
           <motion.div
@@ -508,11 +506,11 @@ function Hero() {
             className="mt-9 flex flex-col gap-4 sm:flex-row"
           >
             <a href="#kontakt" className="group inline-flex items-center justify-center gap-2 rounded-full gradient-button px-7 py-4 text-sm font-bold text-white transition transform-gpu hover:scale-105 focus:outline-none focus-visible:ring-4 focus-visible:ring-cyan-300/30">
-              Chcę stronę
+              Zacznijmy projekt
               <Icon name="arrow-right" className="h-4 w-4 transition group-hover:translate-x-1" />
             </a>
             <a href="#realizacje" className="inline-flex items-center justify-center rounded-full border border-white/15 bg-white/5 px-7 py-4 text-sm font-semibold text-slate-100 backdrop-blur transition hover:border-cyan-300/50 hover:bg-white/10">
-              Zobacz przykłady
+              Zobacz realizacje
             </a>
           </motion.div>
         </div>
@@ -526,7 +524,7 @@ function Hero() {
             initial={{ opacity: 0, x: 30 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.75, duration: 0.6 }}
-            className="absolute right-0 top-6 hidden rounded-2xl border border-white/10 bg-white/10 px-4 py-3 text-sm text-slate-100 shadow-xl shadow-violet-500/10 backdrop-blur md:block"
+            className="absolute right-0 top-6 hidden rounded-lg border border-white/10 bg-white/[0.07] px-4 py-3 text-sm text-slate-100 shadow-xl shadow-violet-500/10 backdrop-blur md:block"
           >
             Responsywność
           </motion.div>
@@ -534,9 +532,25 @@ function Hero() {
             initial={{ opacity: 0, x: -30 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.95, duration: 0.6 }}
-            className="absolute -left-4 bottom-20 hidden rounded-2xl border border-white/10 bg-white/10 px-4 py-3 text-sm text-slate-100 shadow-xl shadow-blue-500/10 backdrop-blur md:block"
+            className="absolute -left-4 bottom-20 hidden rounded-lg border border-white/10 bg-white/[0.07] px-4 py-3 text-sm text-slate-100 shadow-xl shadow-blue-500/10 backdrop-blur md:block"
           >
             Czytelny design
+          </motion.div>
+          <motion.div
+            initial={{ opacity: 0, y: 24 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 1.05, duration: 0.6 }}
+            className="absolute bottom-2 right-10 hidden rounded-lg border border-white/10 bg-slate-950/65 px-4 py-3 text-sm text-cyan-100 shadow-xl shadow-cyan-500/10 backdrop-blur md:block"
+          >
+            Szybkość
+          </motion.div>
+          <motion.div
+            initial={{ opacity: 0, y: -24 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 1.15, duration: 0.6 }}
+            className="absolute left-12 top-0 hidden rounded-lg border border-white/10 bg-slate-950/65 px-4 py-3 text-sm text-cyan-100 shadow-xl shadow-blue-500/10 backdrop-blur lg:block"
+          >
+            Kontakt online
           </motion.div>
         </div>
       </div>
@@ -546,9 +560,10 @@ function Hero() {
 
 function ServicesSection() {
   return (
-    <section id="oferta" className="relative px-6 py-20 md:px-10 md:min-h-[calc(100vh-80px)] md:flex md:items-center scroll-mt-20 md:snap-center md:snap-always">
-      <div className="pointer-events-none absolute right-6 top-6 hidden md:block opacity-40 z-0"><AnimatedCircuit variant="small" className="w-40 h-20" /></div>
-      <div className="mx-auto max-w-7xl">
+    <section id="oferta" className="relative overflow-hidden px-6 py-20 md:px-10 lg:py-24 scroll-mt-24">
+      <div className="pointer-events-none absolute right-2 top-8 hidden opacity-55 md:block z-0"><AnimatedCircuit variant="longDrop" className="h-28 w-80" /></div>
+      <div className="pointer-events-none absolute bottom-6 left-8 hidden opacity-28 lg:block z-0"><AnimatedCircuit variant="mini" className="h-20 w-36" /></div>
+      <div className="relative z-10 mx-auto max-w-7xl">
         <SectionTitle
           eyebrow="Oferta"
           title="Proste usługi, które łatwo zrozumieć"
@@ -567,9 +582,9 @@ function ServicesSection() {
               key={service.title}
               variants={fadeUp}
               whileHover={{ y: -6 }}
-              className="group rounded-[2rem] border border-white/10 bg-white/[0.04] p-7 backdrop-blur transition hover:border-cyan-300/30 hover:bg-white/[0.07]"
+              className="group rounded-lg border border-white/10 bg-white/[0.045] p-7 backdrop-blur transition hover:-translate-y-1 hover:border-cyan-300/40 hover:bg-white/[0.07] hover:shadow-2xl hover:shadow-cyan-500/10"
             >
-              <div className="mb-6 flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-blue-500/25 to-violet-500/25 text-cyan-200 ring-1 ring-white/10 transition group-hover:scale-110">
+              <div className="mb-6 flex h-14 w-14 items-center justify-center rounded-lg bg-gradient-to-br from-blue-500/25 to-violet-500/25 text-cyan-200 ring-1 ring-white/10 transition group-hover:scale-110">
                 <Icon name={service.icon} className="h-6 w-6" />
               </div>
               <h3 className="text-xl font-bold text-white">{service.title}</h3>
@@ -584,8 +599,9 @@ function ServicesSection() {
 
 function BenefitsSection() {
   return (
-    <section id="korzysci" className="px-6 py-20 md:px-10 md:min-h-[calc(100vh-80px)] md:flex md:items-center scroll-mt-20 md:snap-center md:snap-always">
-      <div className="mx-auto grid max-w-7xl gap-10 rounded-[2rem] border border-white/10 bg-white/[0.04] p-7 backdrop-blur md:grid-cols-[0.85fr_1.15fr] md:p-10 card">
+    <section id="korzysci" className="relative overflow-hidden px-6 py-20 md:px-10 lg:py-24 scroll-mt-24">
+      <div className="pointer-events-none absolute -left-6 top-10 hidden opacity-40 md:block z-0"><AnimatedCircuit variant="vertical" className="h-72 w-44" /></div>
+      <div className="relative z-10 mx-auto grid max-w-7xl gap-10 rounded-lg border border-white/10 bg-white/[0.045] p-7 backdrop-blur md:grid-cols-[0.85fr_1.15fr] md:p-10 card">
         <motion.div
           initial="hidden"
           whileInView="visible"
@@ -611,7 +627,7 @@ function BenefitsSection() {
           className="grid gap-4 sm:grid-cols-2"
         >
           {benefits.map((item) => (
-            <motion.div key={item} variants={fadeUp} className="flex gap-3 rounded-2xl border border-white/10 bg-slate-950/35 p-4">
+            <motion.div key={item} variants={fadeUp} className="flex gap-3 rounded-lg border border-white/10 bg-slate-950/35 p-4">
               <div className="mt-1 flex h-6 w-6 flex-none items-center justify-center rounded-full bg-gradient-to-r from-blue-500 to-violet-500">
                 <Icon name="check" className="h-3.5 w-3.5 text-white" />
               </div>
@@ -626,8 +642,9 @@ function BenefitsSection() {
 
 function ProcessSection() {
   return (
-    <section id="proces" className="px-6 py-20 md:px-10 md:min-h-[calc(100vh-80px)] md:flex md:items-center scroll-mt-20 md:snap-center md:snap-always">
-      <div className="mx-auto max-w-7xl">
+    <section id="proces" className="relative overflow-hidden px-6 py-20 md:px-10 lg:py-24 scroll-mt-24">
+      <div className="pointer-events-none absolute right-8 top-28 hidden opacity-36 lg:block z-0"><AnimatedCircuit variant="branch" className="h-40 w-64" /></div>
+      <div className="relative z-10 mx-auto max-w-7xl">
         <SectionTitle
           eyebrow="Proces"
           title="Jak wygląda współpraca?"
@@ -644,8 +661,8 @@ function ProcessSection() {
             className="space-y-5"
           >
             {process.map((item) => (
-              <motion.div key={item.step} variants={fadeUp} className="relative rounded-[1.75rem] border border-white/10 bg-white/[0.04] p-6 backdrop-blur md:ml-16">
-                <div className="absolute -left-[4.55rem] top-6 hidden h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-r from-blue-500 to-violet-500 text-sm font-black text-white shadow-lg shadow-blue-500/30 md:flex">
+              <motion.div key={item.step} variants={fadeUp} className="relative rounded-lg border border-white/10 bg-white/[0.045] p-6 backdrop-blur transition hover:border-violet-300/35 hover:shadow-2xl hover:shadow-violet-500/10 md:ml-16">
+                <div className="absolute -left-[4.55rem] top-6 hidden h-12 w-12 items-center justify-center rounded-lg bg-gradient-to-r from-blue-500 to-violet-500 text-sm font-black text-white shadow-lg shadow-blue-500/30 md:flex">
                   {item.step}
                 </div>
                 <h3 className="text-xl font-bold text-white">{item.title}</h3>
@@ -661,12 +678,13 @@ function ProcessSection() {
 
 function PortfolioSection() {
   return (
-    <section id="realizacje" className="px-6 py-20 md:px-10 md:min-h-[calc(100vh-80px)] md:flex md:items-center scroll-mt-20 md:snap-center md:snap-always">
-      <div className="mx-auto max-w-7xl">
+    <section id="realizacje" className="relative overflow-hidden px-6 py-20 md:px-10 lg:py-24 scroll-mt-24">
+      <div className="pointer-events-none absolute left-4 bottom-8 hidden opacity-42 md:block z-0"><AnimatedCircuit variant="parallel" className="h-36 w-72" /></div>
+      <div className="relative z-10 mx-auto max-w-7xl">
         <SectionTitle
           eyebrow="Realizacje"
-          title="Przykładowy sposób pokazania projektów"
-          text="Na start nie trzeba udawać dużej agencji. Wystarczy kilka dobrze opisanych realizacji i jasny zakres prac."
+          title="Portfolio jest rozwijane"
+          text="Aktualnie przyjmuję pierwsze realizacje w atrakcyjnych warunkach. Poniżej zostawiam przykładowe typy projektów, które mogę przygotować."
         />
 
         <motion.div
@@ -677,11 +695,11 @@ function PortfolioSection() {
           className="grid gap-5 md:grid-cols-3"
         >
           {["Strona firmowa", "Wizytówka online", "Projekt wizytówki"].map((title, index) => (
-            <motion.article key={title} variants={fadeUp} whileHover={{ y: -6 }} className="overflow-hidden rounded-[2rem] border border-white/10 bg-white/[0.04] backdrop-blur">
+            <motion.article key={title} variants={fadeUp} whileHover={{ y: -6 }} className="overflow-hidden rounded-lg border border-white/10 bg-white/[0.045] backdrop-blur transition hover:border-cyan-300/35 hover:shadow-2xl hover:shadow-cyan-500/10">
               <div className="relative aspect-[16/10] overflow-hidden bg-slate-950">
                 <div className="absolute inset-0 bg-gradient-to-br from-blue-500/25 via-transparent to-violet-500/25" />
                 <div className="absolute left-6 top-6 rounded-full border border-cyan-300/30 bg-white/10 px-3 py-1 text-xs text-cyan-100">Projekt 0{index + 1}</div>
-                <div className="absolute bottom-6 left-6 right-6 rounded-2xl border border-white/10 bg-slate-950/70 p-4 backdrop-blur">
+                <div className="absolute bottom-6 left-6 right-6 rounded-lg border border-white/10 bg-slate-950/70 p-4 backdrop-blur">
                   <div className="mb-3 h-2 w-24 rounded-full bg-gradient-to-r from-blue-400 to-violet-400" />
                   <div className="h-2 w-3/4 rounded-full bg-white/25" />
                   <div className="mt-2 h-2 w-1/2 rounded-full bg-white/15" />
@@ -689,9 +707,9 @@ function PortfolioSection() {
               </div>
               <div className="p-6">
                 <h3 className="text-xl font-bold text-white">{title}</h3>
-                <p className="mt-2 leading-7 text-slate-400">Krótki opis projektu, cel strony i zakres wykonanych prac.</p>
+                <p className="mt-2 leading-7 text-slate-400">Miejsce na opis realizacji, cel strony i zakres wykonanych prac.</p>
                 <a className="mt-5 inline-flex items-center gap-2 text-sm font-semibold text-cyan-300" href="#kontakt">
-                  Zobacz szczegóły <Icon name="external-link" className="h-4 w-4" />
+                  Zapytaj o podobny projekt <Icon name="external-link" className="h-4 w-4" />
                 </a>
               </div>
             </motion.article>
@@ -704,13 +722,15 @@ function PortfolioSection() {
 
 function PackagesSection() {
   return (
-    <section id="pakiety" className="px-6 py-20 md:px-10 md:min-h-[calc(100vh-80px)] md:flex md:items-center scroll-mt-20 md:snap-center md:snap-always">
-      <div className="mx-auto max-w-7xl">
-        <SectionTitle eyebrow="Pakiety" title="Możesz zacząć od małego projektu" text="Cennik można zostawić jako wycenę indywidualną, ale pakiety pomagają klientowi zrozumieć, czego może potrzebować." />
+    <section id="pakiety" className="relative overflow-hidden px-6 py-20 md:px-10 lg:py-24 scroll-mt-24">
+      <div className="pointer-events-none absolute right-10 bottom-10 hidden opacity-44 md:block z-0"><AnimatedCircuit variant="corner" flip className="h-44 w-44" /></div>
+      <div className="pointer-events-none absolute left-12 top-10 hidden opacity-24 lg:block z-0"><AnimatedCircuit variant="mini" className="h-20 w-36" /></div>
+      <div className="relative z-10 mx-auto max-w-7xl">
+        <SectionTitle eyebrow="Pakiety" title="Możesz zacząć od małego projektu" text="Każdy projekt wyceniam indywidualnie po krótkiej rozmowie, ale pakiety pomagają szybko wybrać dobry kierunek." />
 
         <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0.25 }} variants={stagger} className="grid gap-5 md:grid-cols-3">
           {packages.map((pack) => (
-            <motion.div key={pack.name} variants={fadeUp} className={`relative rounded-[2rem] border p-7 backdrop-blur ${pack.highlighted ? "border-cyan-300/40 bg-gradient-to-br from-blue-500/15 to-violet-500/15 shadow-2xl shadow-blue-500/10" : "border-white/10 bg-white/[0.04]"}`}>
+            <motion.div key={pack.name} variants={fadeUp} className={`relative rounded-lg border p-7 backdrop-blur transition hover:-translate-y-1 hover:shadow-2xl ${pack.highlighted ? "border-cyan-300/40 bg-gradient-to-br from-blue-500/18 to-violet-500/18 shadow-2xl shadow-blue-500/10 hover:shadow-blue-500/15" : "border-white/10 bg-white/[0.045] hover:border-violet-300/35 hover:shadow-violet-500/10"}`}>
               {pack.highlighted && <div className="absolute -top-4 left-7 rounded-full bg-gradient-to-r from-blue-500 to-violet-500 px-4 py-1.5 text-xs font-bold text-white">Najczęściej wybierane</div>}
               <h3 className="text-2xl font-black text-white">{pack.name}</h3>
               <p className="mt-3 leading-7 text-slate-400">{pack.desc}</p>
@@ -722,6 +742,9 @@ function PackagesSection() {
                   </div>
                 ))}
               </div>
+              <a href="#kontakt" className="mt-7 inline-flex items-center gap-2 text-sm font-semibold text-cyan-300">
+                Zapytaj o wycenę <Icon name="arrow-right" className="h-4 w-4" />
+              </a>
             </motion.div>
           ))}
         </motion.div>
@@ -734,13 +757,15 @@ function FaqSection() {
   const [open, setOpen] = useState(0);
 
   return (
-    <section id="faq" className="px-6 py-20 md:px-10 md:min-h-[calc(100vh-80px)] md:flex md:items-center scroll-mt-20 md:snap-center md:snap-always">
-      <div className="mx-auto max-w-4xl">
+    <section id="faq" className="relative overflow-hidden px-6 py-20 md:px-10 lg:py-24 scroll-mt-24">
+      <div className="pointer-events-none absolute right-12 top-12 hidden opacity-32 md:block z-0"><AnimatedCircuit variant="mini" className="h-24 w-40" /></div>
+      <div className="pointer-events-none absolute left-4 bottom-0 hidden opacity-30 lg:block z-0"><AnimatedCircuit variant="corner" className="h-40 w-40" /></div>
+      <div className="relative z-10 mx-auto max-w-4xl">
         <SectionTitle eyebrow="FAQ" title="Najczęstsze pytania" text="Sekcja FAQ pomaga klientowi poczuć, że cały proces jest prosty i bezpieczny." />
 
         <div className="space-y-4">
           {faq.map((item, index) => (
-            <motion.div key={item.q} initial={{ opacity: 0, y: 18 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: index * 0.08 }} className="rounded-3xl border border-white/10 bg-white/[0.04] backdrop-blur">
+            <motion.div key={item.q} initial={{ opacity: 0, y: 18 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: index * 0.08 }} className="rounded-lg border border-white/10 bg-white/[0.045] backdrop-blur">
               <button type="button" onClick={() => setOpen(open === index ? -1 : index)} className="flex w-full items-center justify-between gap-4 p-6 text-left">
                 <span className="font-bold text-white">{item.q}</span>
                 <Icon name="chevron-down" className={`h-5 w-5 text-cyan-300 transition ${open === index ? "rotate-180" : ""}`} />
@@ -758,41 +783,42 @@ function FaqSection() {
 
 function ContactSection() {
   return (
-    <section id="kontakt" className="px-6 py-20 md:px-10 md:min-h-[calc(100vh-80px)] md:flex md:items-center scroll-mt-20 md:snap-center md:snap-always">
-      <div className="pointer-events-none absolute left-6 bottom-6 hidden md:block opacity-36 z-0"><AnimatedCircuit variant="small" flip className="w-44 h-24" /></div>
-      <div className="mx-auto max-w-7xl overflow-hidden rounded-[2rem] border border-white/10 bg-white/[0.04] p-7 backdrop-blur md:p-10">
+    <section id="kontakt" className="relative overflow-hidden px-6 py-20 md:px-10 lg:pb-24 lg:pt-20 scroll-mt-24">
+      <div className="pointer-events-none absolute left-6 bottom-8 hidden opacity-48 md:block z-0"><AnimatedCircuit variant="longDrop" flip className="h-28 w-80" /></div>
+      <div className="pointer-events-none absolute right-8 top-8 hidden opacity-28 lg:block z-0"><AnimatedCircuit variant="vertical" className="h-64 w-40" /></div>
+      <div className="relative z-10 mx-auto max-w-7xl overflow-hidden rounded-lg border border-white/10 bg-white/[0.045] p-7 backdrop-blur md:p-10">
         <div className="grid gap-10 md:grid-cols-[1fr_0.85fr] md:items-center">
           <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0.35 }} variants={stagger}>
             <motion.p variants={fadeUp} className="mb-3 text-sm font-semibold uppercase tracking-[0.26em] text-cyan-300">Kontakt</motion.p>
             <motion.h2 variants={fadeUp} className="text-3xl font-black tracking-tight text-white md:text-5xl">Masz pomysł na stronę?</motion.h2>
             <motion.p variants={fadeUp} className="mt-5 max-w-2xl text-lg leading-8 text-slate-300">Napisz, czego potrzebujesz. Odezwę się i podpowiem, jakie rozwiązanie będzie najlepsze na start.</motion.p>
             <motion.div variants={fadeUp} className="mt-8 flex flex-col gap-4 sm:flex-row">
-              <a className="inline-flex items-center justify-center gap-2 rounded-full bg-gradient-to-r from-blue-500 to-violet-500 px-7 py-4 text-sm font-bold shadow-xl shadow-blue-500/25 transition hover:scale-105" href="mailto:kontakt@twojadomena.pl">Napisz wiadomość <Icon name="mail" className="h-4 w-4" /></a>
-              <a className="inline-flex items-center justify-center gap-2 rounded-full border border-white/15 bg-white/5 px-7 py-4 text-sm font-semibold text-slate-100 backdrop-blur transition hover:border-cyan-300/50 hover:bg-white/10" href="tel:123456789">Zadzwoń <Icon name="phone" className="h-4 w-4" /></a>
+              <a className="inline-flex items-center justify-center gap-2 rounded-full gradient-button px-7 py-4 text-sm font-bold shadow-xl shadow-blue-500/25 transition hover:scale-105" href="mailto:kontakt@twojadomena.pl">Napisz wiadomość <Icon name="mail" className="h-4 w-4" /></a>
+              <a className="inline-flex items-center justify-center gap-2 rounded-full border border-white/15 bg-white/5 px-7 py-4 text-sm font-semibold text-slate-100 backdrop-blur transition hover:border-cyan-300/50 hover:bg-white/10" href="tel:+48123456789">Zadzwoń <Icon name="phone" className="h-4 w-4" /></a>
             </motion.div>
           </motion.div>
 
-          <motion.div initial={{ opacity: 0, x: 40 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true, amount: 0.35 }} transition={{ duration: 0.65 }} className="rounded-[1.75rem] border border-cyan-300/20 bg-slate-950/55 p-6 shadow-2xl shadow-blue-500/10">
+          <motion.div initial={{ opacity: 0, x: 40 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true, amount: 0.35 }} transition={{ duration: 0.65 }} className="rounded-lg border border-cyan-300/20 bg-slate-950/55 p-6 shadow-2xl shadow-blue-500/10">
             <div className="space-y-5">
               <div className="flex items-center gap-4">
-                <div className="flex h-12 w-12 items-center justify-center rounded-2xl border border-cyan-300/30 bg-white/5 text-cyan-200"><Icon name="phone" className="h-5 w-5" /></div>
+                <div className="flex h-12 w-12 items-center justify-center rounded-lg border border-cyan-300/30 bg-white/5 text-cyan-200"><Icon name="phone" className="h-5 w-5" /></div>
                 <div>
                   <p className="text-sm text-slate-400">Telefon</p>
-                  <p className="font-semibold text-white">123 456 789</p>
+                  <p className="font-semibold text-white">+48 123 456 789</p>
                 </div>
               </div>
               <div className="flex items-center gap-4">
-                <div className="flex h-12 w-12 items-center justify-center rounded-2xl border border-cyan-300/30 bg-white/5 text-cyan-200"><Icon name="mail" className="h-5 w-5" /></div>
+                <div className="flex h-12 w-12 items-center justify-center rounded-lg border border-cyan-300/30 bg-white/5 text-cyan-200"><Icon name="mail" className="h-5 w-5" /></div>
                 <div>
                   <p className="text-sm text-slate-400">E-mail</p>
                   <p className="font-semibold text-white">kontakt@twojadomena.pl</p>
                 </div>
               </div>
               <div className="flex items-center gap-4">
-                <div className="flex h-12 w-12 items-center justify-center rounded-2xl border border-cyan-300/30 bg-white/5 text-cyan-200"><Icon name="globe" className="h-5 w-5" /></div>
+                <div className="flex h-12 w-12 items-center justify-center rounded-lg border border-cyan-300/30 bg-white/5 text-cyan-200"><Icon name="globe" className="h-5 w-5" /></div>
                 <div>
                   <p className="text-sm text-slate-400">WWW</p>
-                  <p className="font-semibold text-white">www.twojadomena.pl</p>
+                  <p className="font-semibold text-white">dominik-sadzik.pl</p>
                 </div>
               </div>
             </div>
@@ -805,38 +831,12 @@ function ContactSection() {
 
 export default function LandingPage() {
   const selfTestErrors = useMemo(() => runContentSelfTests(), []);
-  const [activeSection, setActiveSection] = useState("hero");
-
-  useEffect(() => {
-    const ids = SECTION_IDS;
-    const rootEl = document.querySelector("main");
-    const obs = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) setActiveSection(entry.target.id);
-        });
-      },
-      { root: rootEl, rootMargin: "0px", threshold: 0.6 }
-    );
-
-    ids.forEach((id) => {
-      const el = document.getElementById(id);
-      if (el) obs.observe(el);
-    });
-
-    return () => obs.disconnect();
-  }, []);
-
-  const scrollToId = (id) => {
-    const el = document.getElementById(id);
-    if (el) el.scrollIntoView({ behavior: "smooth", block: "center" });
-  };
 
   return (
     <div className="relative min-h-screen overflow-x-hidden bg-[#050816] text-white">
       <div className="page-gradient" />
       {selfTestErrors.length > 0 && (
-        <div className="fixed bottom-4 left-4 z-50 max-w-sm rounded-2xl border border-red-400/40 bg-red-950/90 p-4 text-sm text-red-100 shadow-2xl">
+        <div className="fixed bottom-4 left-4 z-50 max-w-sm rounded-lg border border-red-400/40 bg-red-950/90 p-4 text-sm text-red-100 shadow-2xl">
           <p className="font-bold">Błąd testów treści:</p>
           <ul className="mt-2 list-disc pl-5">
             {selfTestErrors.map((error) => (
@@ -847,18 +847,7 @@ export default function LandingPage() {
       )}
       <Header />
 
-      <div className="hidden md:flex fixed right-6 top-1/2 z-50 -translate-y-1/2 flex-col gap-3">
-        {SECTION_IDS.map((id) => (
-          <button
-            key={id}
-            onClick={() => scrollToId(id)}
-            aria-label={`Przejdź do sekcji ${id}`}
-            className={`h-3 w-3 rounded-full transition ${activeSection === id ? "bg-gradient-to-br from-blue-500 to-violet-500 shadow-lg" : "bg-white/20"}`}
-          />
-        ))}
-      </div>
-
-      <main className="relative z-10 md:h-[calc(100vh-80px)] md:overflow-y-auto md:snap-y md:snap-mandatory scroll-smooth">
+      <main className="relative z-10 overflow-visible">
         <Hero />
         <ServicesSection />
         <BenefitsSection />
@@ -869,7 +858,7 @@ export default function LandingPage() {
         <ContactSection />
       </main>
       <footer className="relative z-10 border-t border-white/10 px-6 py-8 text-center text-sm text-slate-500 md:px-10">
-        © 2026 Imię Nazwisko — Projektowanie stron i wizytówek
+        © 2026 Dominik Sadzik — Projektowanie stron i wizytówek
       </footer>
     </div>
   );
