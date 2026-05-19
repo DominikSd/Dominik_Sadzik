@@ -6,6 +6,10 @@ const forbidden = [
   "OPENAI_API_KEY",
   "GEMINI_API_KEY",
   "SUPABASE_SERVICE_ROLE_KEY",
+  "GA4_PROPERTY_ID",
+  "GOOGLE_CLIENT_EMAIL",
+  "GOOGLE_PRIVATE_KEY",
+  "GOOGLE_SERVICE_ACCOUNT_JSON_BASE64",
 ];
 
 const distDir = join(process.cwd(), "dist");

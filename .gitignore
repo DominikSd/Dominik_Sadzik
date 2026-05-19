@@ -16,5 +16,8 @@ pnpm-debug.log*
 *.local
 *.tmp
 *.temp
+service-account*.json
+*service-account*.json
+google-service-account*.json
 Thumbs.db
 .DS_Store

@@ -1,7 +1,9 @@
 import React from 'react'
 import { createRoot } from 'react-dom/client'
 import AdminApp from './admin/AdminApp.jsx'
+import AnalyticsConsent from './components/AnalyticsConsent.jsx'
 import LandingPage from './LandingPage.jsx'
+import { initAnalytics, trackPageView } from './lib/analytics/ga4.js'
 import { adminHashPath } from './lib/supabaseClient.js'
 import './index.css'
 
@@ -14,11 +16,19 @@ function AppRouter() {
     return () => window.removeEventListener('hashchange', onHashChange)
   }, [])
 
-  if (hash === `#/${adminHashPath}`) {
-    return <AdminApp />
-  }
+  React.useEffect(() => {
+    initAnalytics()
+    trackPageView(`${window.location.pathname}${window.location.search}${window.location.hash}`, document.title)
+  }, [hash])
 
-  return <LandingPage />
+  const app = hash === `#/${adminHashPath}` ? <AdminApp /> : <LandingPage />
+
+  return (
+    <>
+      {app}
+      <AnalyticsConsent />
+    </>
+  )
 }
 
 createRoot(document.getElementById('root')).render(

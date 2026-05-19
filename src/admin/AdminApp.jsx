@@ -4,6 +4,7 @@ import { defaultSiteContent } from "../content/defaultSiteContent";
 import { validateSectionData } from "../content/siteContentSchema";
 import { getCurrentMembership, loadDraftSiteContent, publishContentEntry, saveContentDraft } from "../lib/contentApi";
 import { adminHashPath, isSupabaseConfigured, requireSupabase, siteId, supabase } from "../lib/supabaseClient";
+import AnalyticsPanel from "./AnalyticsPanel";
 import ContactSectionForm from "./sections/ContactSectionForm";
 import FaqSectionForm from "./sections/FaqSectionForm";
 import HeroSectionForm from "./sections/HeroSectionForm";
@@ -18,6 +19,7 @@ const sections = [
   { key: "contact", label: "Kontakt", Form: ContactSectionForm },
   { key: "seo", label: "SEO", Form: SeoSectionForm },
   { key: "settings", label: "Ustawienia", Form: SettingsSectionForm },
+  { key: "stats", label: "Statystyki", Form: null },
 ];
 
 function LoginForm() {
@@ -121,6 +123,7 @@ export default function AdminApp() {
   }, []);
 
   async function saveActiveSection() {
+    if (activeKey === "stats") return;
     setStatus("");
     setError("");
     try {
@@ -134,6 +137,7 @@ export default function AdminApp() {
   }
 
   async function publishActiveSection() {
+    if (activeKey === "stats") return;
     setStatus("");
     setError("");
     try {
@@ -182,6 +186,7 @@ export default function AdminApp() {
   }
 
   const ActiveForm = activeSection.Form;
+  const isStats = activeKey === "stats";
 
   return (
     <div className="min-h-screen bg-[#050816] text-white">
@@ -228,24 +233,24 @@ export default function AdminApp() {
               <h2 className="mt-1 text-3xl font-black">{activeSection.label}</h2>
             </div>
             <div className="flex flex-wrap gap-2">
-              <button
+              {!isStats && <button
                 disabled={!canWrite}
                 onClick={saveActiveSection}
                 className="inline-flex items-center gap-2 rounded-lg bg-cyan-400 px-4 py-2.5 text-sm font-black text-slate-950 hover:bg-cyan-300 disabled:cursor-not-allowed disabled:opacity-50"
               >
                 <Save className="h-4 w-4" /> Zapisz draft
-              </button>
-              <button
+              </button>}
+              {!isStats && <button
                 disabled={!canWrite}
                 onClick={publishActiveSection}
                 className="inline-flex items-center gap-2 rounded-lg border border-cyan-300/30 bg-cyan-400/10 px-4 py-2.5 text-sm font-bold text-cyan-100 hover:bg-cyan-400/15 disabled:cursor-not-allowed disabled:opacity-50"
               >
                 <UploadCloud className="h-4 w-4" /> Opublikuj
-              </button>
+              </button>}
             </div>
           </div>
 
-          {!canWrite && (
+          {!isStats && !canWrite && (
             <div className="mb-5 rounded-lg border border-amber-300/30 bg-amber-500/10 p-4 text-sm text-amber-50">
               Masz role viewer, wiec mozesz przegladac panel, ale nie zapiszesz zmian.
             </div>
@@ -253,12 +258,16 @@ export default function AdminApp() {
           {status && <div className="mb-5 rounded-lg border border-emerald-300/30 bg-emerald-500/10 p-4 text-sm text-emerald-50">{status}</div>}
           {error && <div className="mb-5 rounded-lg border border-red-300/30 bg-red-500/10 p-4 text-sm text-red-50">{error}</div>}
 
-          <ActiveForm
-            value={content[activeKey]}
-            onChange={(nextSection) => setContent((current) => ({ ...current, [activeKey]: nextSection }))}
-          />
+          {isStats ? (
+            <AnalyticsPanel />
+          ) : (
+            <ActiveForm
+              value={content[activeKey]}
+              onChange={(nextSection) => setContent((current) => ({ ...current, [activeKey]: nextSection }))}
+            />
+          )}
 
-          <div className="mt-8 border-t border-white/10 pt-5">
+          {!isStats && <div className="mt-8 border-t border-white/10 pt-5">
             <label className="inline-flex items-center gap-2 text-sm text-slate-300">
               <input type="checkbox" checked={developerMode} onChange={(event) => setDeveloperMode(event.target.checked)} />
               Tryb deweloperski
@@ -268,7 +277,7 @@ export default function AdminApp() {
                 {JSON.stringify(content[activeKey], null, 2)}
               </pre>
             )}
-          </div>
+          </div>}
         </section>
       </main>
     </div>

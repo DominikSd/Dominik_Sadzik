@@ -2,6 +2,7 @@ import React, { useEffect, useMemo, useState } from "react";
 import { motion } from "framer-motion";
 import AnimatedCircuit from "./components/AnimatedCircuit";
 import { defaultSiteContent } from "./content/defaultSiteContent";
+import { trackContactClick, trackCtaClick } from "./lib/analytics/ga4";
 import { loadPublishedSiteContent } from "./lib/contentApi";
 
 const fadeUp = {
@@ -109,7 +110,11 @@ function Header({ settings, hero }) {
             </a>
           ))}
         </nav>
-        <a href={hero.primaryCta.href} className="hidden rounded-full gradient-button px-5 py-2.5 text-sm font-semibold shadow-lg shadow-blue-500/25 transition hover:scale-105 md:inline-flex">
+        <a
+          href={hero.primaryCta.href}
+          onClick={() => trackCtaClick(hero.primaryCta.label, "header")}
+          className="hidden rounded-full gradient-button px-5 py-2.5 text-sm font-semibold shadow-lg shadow-blue-500/25 transition hover:scale-105 md:inline-flex"
+        >
           {hero.primaryCta.label}
         </a>
         <button type="button" onClick={() => setIsOpen((value) => !value)} className="rounded-lg border border-white/10 bg-white/5 p-3 text-white md:hidden" aria-label="Otworz menu" aria-expanded={isOpen}>
@@ -187,10 +192,18 @@ function Hero({ hero }) {
           </h1>
           <p className="mt-6 max-w-2xl text-lg leading-8 text-slate-300 md:text-xl">{hero.description}</p>
           <div className="mt-9 flex flex-col gap-4 sm:flex-row">
-            <a className="inline-flex items-center justify-center gap-2 rounded-full gradient-button px-7 py-4 text-sm font-bold shadow-xl shadow-blue-500/25 transition hover:scale-105" href={hero.primaryCta.href}>
+            <a
+              className="inline-flex items-center justify-center gap-2 rounded-full gradient-button px-7 py-4 text-sm font-bold shadow-xl shadow-blue-500/25 transition hover:scale-105"
+              href={hero.primaryCta.href}
+              onClick={() => trackCtaClick(hero.primaryCta.label, "hero")}
+            >
               {hero.primaryCta.label} <Icon name="arrow-right" className="h-4 w-4" />
             </a>
-            <a className="inline-flex items-center justify-center gap-2 rounded-full border border-white/15 bg-white/5 px-7 py-4 text-sm font-semibold text-slate-100 backdrop-blur transition hover:border-cyan-300/50 hover:bg-white/10" href={hero.secondaryCta.href}>
+            <a
+              className="inline-flex items-center justify-center gap-2 rounded-full border border-white/15 bg-white/5 px-7 py-4 text-sm font-semibold text-slate-100 backdrop-blur transition hover:border-cyan-300/50 hover:bg-white/10"
+              href={hero.secondaryCta.href}
+              onClick={() => trackCtaClick(hero.secondaryCta.label, "hero_secondary")}
+            >
               {hero.secondaryCta.label}
             </a>
           </div>
@@ -372,21 +385,39 @@ function ContactSection({ contact }) {
             <h2 className="text-3xl font-black tracking-tight text-white md:text-5xl">{contact.title}</h2>
             <p className="mt-5 max-w-2xl text-lg leading-8 text-slate-300">{contact.text}</p>
             <div className="mt-8 flex flex-col gap-4 sm:flex-row">
-              <a className="inline-flex items-center justify-center gap-2 rounded-full gradient-button px-7 py-4 text-sm font-bold shadow-xl shadow-blue-500/25 transition hover:scale-105" href={`mailto:${contact.email}`}>{contact.emailButtonLabel} <Icon name="mail" className="h-4 w-4" /></a>
-              <a className="inline-flex items-center justify-center gap-2 rounded-full border border-white/15 bg-white/5 px-7 py-4 text-sm font-semibold text-slate-100 backdrop-blur transition hover:border-cyan-300/50 hover:bg-white/10" href={`tel:${contact.phone.replace(/\s/g, "")}`}>{contact.phoneButtonLabel} <Icon name="phone" className="h-4 w-4" /></a>
+              <a
+                className="inline-flex items-center justify-center gap-2 rounded-full gradient-button px-7 py-4 text-sm font-bold shadow-xl shadow-blue-500/25 transition hover:scale-105"
+                href={`mailto:${contact.email}`}
+                onClick={() => trackContactClick("email_button")}
+              >
+                {contact.emailButtonLabel} <Icon name="mail" className="h-4 w-4" />
+              </a>
+              <a
+                className="inline-flex items-center justify-center gap-2 rounded-full border border-white/15 bg-white/5 px-7 py-4 text-sm font-semibold text-slate-100 backdrop-blur transition hover:border-cyan-300/50 hover:bg-white/10"
+                href={`tel:${contact.phone.replace(/\s/g, "")}`}
+                onClick={() => trackContactClick("phone_button")}
+              >
+                {contact.phoneButtonLabel} <Icon name="phone" className="h-4 w-4" />
+              </a>
             </div>
           </div>
           <div className="rounded-lg border border-cyan-300/20 bg-slate-950/55 p-6 shadow-2xl shadow-blue-500/10">
             {[
-              ["phone", "Telefon", contact.phone],
-              ["mail", "E-mail", contact.email],
-              ["globe", "WWW", contact.www],
-            ].map(([icon, label, value]) => (
+              ["phone", "Telefon", contact.phone, `tel:${contact.phone.replace(/\s/g, "")}`, "phone"],
+              ["mail", "E-mail", contact.email, `mailto:${contact.email}`, "email"],
+              ["globe", "WWW", contact.www, null, null],
+            ].map(([icon, label, value, href, contactType]) => (
               <div key={label} className="mb-5 flex items-center gap-4 last:mb-0">
                 <div className="flex h-12 w-12 items-center justify-center rounded-lg border border-cyan-300/30 bg-white/5 text-cyan-200"><Icon name={icon} className="h-5 w-5" /></div>
                 <div>
                   <p className="text-sm text-slate-400">{label}</p>
-                  <p className="font-semibold text-white">{value}</p>
+                  {href ? (
+                    <a className="font-semibold text-white hover:text-cyan-200" href={href} onClick={() => trackContactClick(contactType)}>
+                      {value}
+                    </a>
+                  ) : (
+                    <p className="font-semibold text-white">{value}</p>
+                  )}
                 </div>
               </div>
             ))}
