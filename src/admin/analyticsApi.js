@@ -22,6 +22,14 @@ export async function fetchGa4Report({ forceRefresh = false } = {}) {
   }
 
   const client = requireSupabase();
+  const { data: sessionData, error: sessionError } = await client.auth.getSession();
+
+  if (sessionError || !sessionData.session) {
+    const authError = new Error("Wymagana jest aktywna sesja Supabase.");
+    authError.code = "not_authenticated";
+    throw authError;
+  }
+
   const { data, error } = await client.functions.invoke("ga4-report", {
     body: {
       site_id: siteId,
@@ -30,7 +38,9 @@ export async function fetchGa4Report({ forceRefresh = false } = {}) {
   });
 
   if (error) {
-    throw error;
+    const functionError = new Error(error.message || "Nie udalo sie pobrac statystyk GA4.");
+    functionError.code = error.code || "edge_function_error";
+    throw functionError;
   }
 
   if (data?.error) {

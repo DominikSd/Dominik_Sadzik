@@ -11,7 +11,11 @@ function mergeEntries(entries) {
   const merged = { ...defaultSiteContent };
 
   for (const entry of entries || []) {
-    if (entry?.key && entry.data && Object.prototype.hasOwnProperty.call(defaultSiteContent, entry.key)) {
+    if (
+      entry?.key &&
+      entry.data &&
+      Object.prototype.hasOwnProperty.call(defaultSiteContent, entry.key)
+    ) {
       merged[entry.key] = entry.data;
     }
   }
@@ -45,18 +49,19 @@ export async function loadPublishedSiteContent() {
 export async function loadDraftSiteContent() {
   const client = requireSupabase();
 
-  const [{ data: published, error: publishedError }, { data: draft, error: draftError }] = await Promise.all([
-    client
-      .from("content_entries")
-      .select("collection,key,data,content_schema_version,updated_at")
-      .eq("site_id", siteId)
-      .eq("status", "published"),
-    client
-      .from("content_entries")
-      .select("collection,key,data,content_schema_version,updated_at")
-      .eq("site_id", siteId)
-      .eq("status", "draft"),
-  ]);
+  const [{ data: published, error: publishedError }, { data: draft, error: draftError }] =
+    await Promise.all([
+      client
+        .from("content_entries")
+        .select("collection,key,data,content_schema_version,updated_at")
+        .eq("site_id", siteId)
+        .eq("status", "published"),
+      client
+        .from("content_entries")
+        .select("collection,key,data,content_schema_version,updated_at")
+        .eq("site_id", siteId)
+        .eq("status", "draft"),
+    ]);
 
   if (publishedError) throw publishedError;
   if (draftError) throw draftError;

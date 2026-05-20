@@ -39,7 +39,13 @@ export function FormGrid({ children }) {
   return <div className="grid gap-4 md:grid-cols-2">{children}</div>;
 }
 
-export function ListEditor({ items, onChange, createItem, renderItem, addLabel = "Dodaj element" }) {
+export function ListEditor({
+  items,
+  onChange,
+  createItem,
+  renderItem,
+  addLabel = "Dodaj element",
+}) {
   const move = (index, direction) => {
     const next = [...items];
     const target = index + direction;
@@ -58,10 +64,18 @@ export function ListEditor({ items, onChange, createItem, renderItem, addLabel =
             onChange(next);
           })}
           <div className="mt-4 flex flex-wrap gap-2">
-            <button type="button" onClick={() => move(index, -1)} className="rounded-lg border border-white/10 px-3 py-2 text-xs text-slate-200 hover:bg-white/10">
+            <button
+              type="button"
+              onClick={() => move(index, -1)}
+              className="rounded-lg border border-white/10 px-3 py-2 text-xs text-slate-200 hover:bg-white/10"
+            >
               W gore
             </button>
-            <button type="button" onClick={() => move(index, 1)} className="rounded-lg border border-white/10 px-3 py-2 text-xs text-slate-200 hover:bg-white/10">
+            <button
+              type="button"
+              onClick={() => move(index, 1)}
+              className="rounded-lg border border-white/10 px-3 py-2 text-xs text-slate-200 hover:bg-white/10"
+            >
               W dol
             </button>
             <button

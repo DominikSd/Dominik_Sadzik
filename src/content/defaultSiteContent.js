@@ -36,8 +36,7 @@ export const defaultSiteContent = {
   services: {
     eyebrow: "Oferta",
     title: "Proste uslugi, ktore latwo zrozumiec",
-    text:
-      "Bez technicznego zargonu. Najpierw ustalamy, czego potrzebujesz, a potem dobieramy rozwiazanie do celu i budzetu.",
+    text: "Bez technicznego zargonu. Najpierw ustalamy, czego potrzebujesz, a potem dobieramy rozwiazanie do celu i budzetu.",
     items: [
       {
         icon: "monitor",
@@ -59,8 +58,7 @@ export const defaultSiteContent = {
   benefits: {
     eyebrow: "Co otrzymujesz",
     title: "Strone, ktora pomaga klientowi szybko podjac decyzje",
-    text:
-      "Najwazniejsze jest to, zeby odwiedzajacy od razu wiedzial, czym sie zajmujesz, co oferujesz i jak moze sie z Toba skontaktowac.",
+    text: "Najwazniejsze jest to, zeby odwiedzajacy od razu wiedzial, czym sie zajmujesz, co oferujesz i jak moze sie z Toba skontaktowac.",
     items: [
       "Responsywny wyglad na telefonie i komputerze",
       "Czytelna oferta bez technicznego chaosu",
@@ -78,45 +76,48 @@ export const defaultSiteContent = {
       {
         step: "01",
         title: "Rozmowa",
-        text:
-          "Mowisz, czego potrzebujesz. Ustalamy cel strony, grupe klientow i najwazniejsze informacje.",
+        text: "Mowisz, czego potrzebujesz. Ustalamy cel strony, grupe klientow i najwazniejsze informacje.",
       },
       {
         step: "02",
         title: "Plan strony",
-        text:
-          "Przygotowuje prosta strukture: co ma byc na stronie, w jakiej kolejnosci i jak to pokazac.",
+        text: "Przygotowuje prosta strukture: co ma byc na stronie, w jakiej kolejnosci i jak to pokazac.",
       },
       {
         step: "03",
         title: "Projekt i wykonanie",
-        text:
-          "Tworze nowoczesny wyglad, dopasowuje wersje mobilna i dbam o czytelnosc tresci.",
+        text: "Tworze nowoczesny wyglad, dopasowuje wersje mobilna i dbam o czytelnosc tresci.",
       },
       {
         step: "04",
         title: "Publikacja",
-        text:
-          "Pomagam uruchomic strone, podpiac domene, formularz i najwazniejsze ustawienia.",
+        text: "Pomagam uruchomic strone, podpiac domene, formularz i najwazniejsze ustawienia.",
       },
     ],
   },
   portfolio: {
     eyebrow: "Realizacje",
     title: "Portfolio jest rozwijane",
-    text:
-      "Aktualnie przyjmuje pierwsze realizacje w atrakcyjnych warunkach. Ponizej zostawiam przykladowe typy projektow, ktore moge przygotowac.",
+    text: "Aktualnie przyjmuje pierwsze realizacje w atrakcyjnych warunkach. Ponizej zostawiam przykladowe typy projektow, ktore moge przygotowac.",
     items: [
-      { title: "Strona firmowa", text: "Miejsce na opis realizacji, cel strony i zakres wykonanych prac." },
-      { title: "Wizytowka online", text: "Miejsce na opis realizacji, cel strony i zakres wykonanych prac." },
-      { title: "Projekt wizytowki", text: "Miejsce na opis realizacji, cel strony i zakres wykonanych prac." },
+      {
+        title: "Strona firmowa",
+        text: "Miejsce na opis realizacji, cel strony i zakres wykonanych prac.",
+      },
+      {
+        title: "Wizytowka online",
+        text: "Miejsce na opis realizacji, cel strony i zakres wykonanych prac.",
+      },
+      {
+        title: "Projekt wizytowki",
+        text: "Miejsce na opis realizacji, cel strony i zakres wykonanych prac.",
+      },
     ],
   },
   packages: {
     eyebrow: "Pakiety",
     title: "Mozesz zaczac od malego projektu",
-    text:
-      "Kazdy projekt wyceniam indywidualnie po krotkiej rozmowie, ale pakiety pomagaja szybko wybrac dobry kierunek.",
+    text: "Kazdy projekt wyceniam indywidualnie po krotkiej rozmowie, ale pakiety pomagaja szybko wybrac dobry kierunek.",
     items: [
       {
         name: "Wizytowka online",
@@ -126,7 +127,12 @@ export const defaultSiteContent = {
       {
         name: "Strona firmowa",
         desc: "Dla malych firm, specjalistow i uslug lokalnych.",
-        points: ["kilka sekcji", "portfolio lub realizacje", "formularz kontaktowy", "podstawy SEO"],
+        points: [
+          "kilka sekcji",
+          "portfolio lub realizacje",
+          "formularz kontaktowy",
+          "podstawy SEO",
+        ],
         highlighted: true,
       },
       {
@@ -148,11 +154,13 @@ export const defaultSiteContent = {
       },
       {
         question: "Czy strona bedzie dzialac na telefonie?",
-        answer: "Tak. Projekt od poczatku zaklada wersje mobilna, bo wielu klientow wchodzi na strone wlasnie z telefonu.",
+        answer:
+          "Tak. Projekt od poczatku zaklada wersje mobilna, bo wielu klientow wchodzi na strone wlasnie z telefonu.",
       },
       {
         question: "Czy pomagasz z domena i hostingiem?",
-        answer: "Tak. Moge pomoc wybrac domene, hosting i przejsc przez podstawowe ustawienia potrzebne do publikacji strony.",
+        answer:
+          "Tak. Moge pomoc wybrac domene, hosting i przejsc przez podstawowe ustawienia potrzebne do publikacji strony.",
       },
       {
         question: "Czy moge pozniej rozbudowac strone?",

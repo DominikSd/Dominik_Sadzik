@@ -19,7 +19,9 @@ export const supabase = isSupabaseConfigured
 
 export function requireSupabase() {
   if (!supabase || !siteId) {
-    throw new Error("Supabase CMS is not configured. Check VITE_SUPABASE_URL, VITE_SUPABASE_ANON_KEY and VITE_SITE_ID.");
+    throw new Error(
+      "Supabase CMS is not configured. Check VITE_SUPABASE_URL, VITE_SUPABASE_ANON_KEY and VITE_SITE_ID.",
+    );
   }
   return supabase;
 }

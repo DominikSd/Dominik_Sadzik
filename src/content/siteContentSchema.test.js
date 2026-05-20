@@ -1,6 +1,10 @@
 import { describe, expect, it } from "vitest";
 import { defaultSiteContent } from "./defaultSiteContent";
-import { getCollectionForKey, normalizeSiteContent, validateSectionData } from "./siteContentSchema";
+import {
+  getCollectionForKey,
+  normalizeSiteContent,
+  validateSectionData,
+} from "./siteContentSchema";
 
 describe("site content schema", () => {
   it("accepts the bundled fallback content", () => {

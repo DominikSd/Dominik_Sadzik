@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { ExternalLink, RefreshCw, ShieldAlert } from "lucide-react";
 import { getAnalyticsConfig } from "../lib/analytics/ga4";
 import { clearAnalyticsReportCache, fetchGa4Report } from "./analyticsApi";
@@ -110,10 +110,15 @@ export default function AnalyticsPanel() {
       <div className="rounded-lg border border-white/10 bg-slate-950/55 p-5">
         <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
           <div>
-            <p className="text-sm font-semibold uppercase tracking-[0.2em] text-cyan-300">Google Analytics 4</p>
-            <h3 className="mt-2 text-2xl font-black">{analytics.isConfigured ? "Raport GA4" : "GA4 nie jest skonfigurowane we frontendzie"}</h3>
+            <p className="text-sm font-semibold uppercase tracking-[0.2em] text-cyan-300">
+              Google Analytics 4
+            </p>
+            <h3 className="mt-2 text-2xl font-black">
+              {analytics.isConfigured ? "Raport GA4" : "GA4 nie jest skonfigurowane we frontendzie"}
+            </h3>
             <p className="mt-2 text-sm leading-6 text-slate-400">
-              Dane ponizej sa pobierane przez Supabase Edge Function `ga4-report`. Sekrety Google zostaja po stronie backendu.
+              Dane ponizej sa pobierane przez Supabase Edge Function `ga4-report`. Sekrety Google
+              zostaja po stronie backendu.
             </p>
           </div>
           <div className="flex flex-wrap gap-2">
@@ -138,16 +143,24 @@ export default function AnalyticsPanel() {
         <dl className="mt-5 grid gap-4 md:grid-cols-3">
           <div className="rounded-lg border border-white/10 bg-white/[0.035] p-4">
             <dt className="text-sm text-slate-400">Measurement ID</dt>
-            <dd className="mt-1 font-mono text-sm text-white">{analytics.measurementId || "Brak VITE_GA_MEASUREMENT_ID"}</dd>
+            <dd className="mt-1 font-mono text-sm text-white">
+              {analytics.measurementId || "Brak VITE_GA_MEASUREMENT_ID"}
+            </dd>
           </div>
           <div className="rounded-lg border border-white/10 bg-white/[0.035] p-4">
             <dt className="text-sm text-slate-400">Zgoda w tej przegladarce</dt>
-            <dd className="mt-1 text-sm font-semibold text-white">{analytics.consent || "Nie wybrano"}</dd>
+            <dd className="mt-1 text-sm font-semibold text-white">
+              {analytics.consent || "Nie wybrano"}
+            </dd>
           </div>
           <div className="rounded-lg border border-white/10 bg-white/[0.035] p-4">
             <dt className="text-sm text-slate-400">Cache raportu</dt>
             <dd className="mt-1 text-sm font-semibold text-white">
-              {report?.clientCache?.hit ? `UI cache, ${report.clientCache.ageSeconds}s` : report?.cache?.hit ? `Edge cache, ${report.cache.ageSeconds}s` : "Swieze dane"}
+              {report?.clientCache?.hit
+                ? `UI cache, ${report.clientCache.ageSeconds}s`
+                : report?.cache?.hit
+                  ? `Edge cache, ${report.cache.ageSeconds}s`
+                  : "Swieze dane"}
             </dd>
           </div>
         </dl>

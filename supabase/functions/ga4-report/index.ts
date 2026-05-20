@@ -44,9 +44,7 @@ function getPublishableKey() {
 }
 
 function base64Url(input: string | ArrayBuffer) {
-  const bytes = typeof input === "string"
-    ? new TextEncoder().encode(input)
-    : new Uint8Array(input);
+  const bytes = typeof input === "string" ? new TextEncoder().encode(input) : new Uint8Array(input);
 
   let binary = "";
   for (const byte of bytes) binary += String.fromCharCode(byte);
@@ -112,7 +110,11 @@ async function signJwt(clientEmail: string, privateKey: string) {
   const encodedHeader = base64Url(JSON.stringify(header));
   const encodedPayload = base64Url(JSON.stringify(payload));
   const unsignedToken = `${encodedHeader}.${encodedPayload}`;
-  const signature = await crypto.subtle.sign("RSASSA-PKCS1-v1_5", key, new TextEncoder().encode(unsignedToken));
+  const signature = await crypto.subtle.sign(
+    "RSASSA-PKCS1-v1_5",
+    key,
+    new TextEncoder().encode(unsignedToken),
+  );
 
   return `${unsignedToken}.${base64Url(signature)}`;
 }
@@ -260,7 +262,9 @@ async function authorizeRequest(req: Request, siteId: string) {
 
   const authHeader = req.headers.get("Authorization");
   if (!authHeader) {
-    return { error: errorResponse("not_authenticated", "Wymagana jest aktywna sesja Supabase.", 401) };
+    return {
+      error: errorResponse("not_authenticated", "Wymagana jest aktywna sesja Supabase.", 401),
+    };
   }
 
   const client = createClient(supabaseUrl, publishableKey, {
@@ -271,7 +275,13 @@ async function authorizeRequest(req: Request, siteId: string) {
 
   const { data: userResult, error: userError } = await client.auth.getUser();
   if (userError || !userResult.user) {
-    return { error: errorResponse("not_authenticated", "Sesja Supabase jest nieprawidlowa albo wygasla.", 401) };
+    return {
+      error: errorResponse(
+        "not_authenticated",
+        "Sesja Supabase jest nieprawidlowa albo wygasla.",
+        401,
+      ),
+    };
   }
 
   const { data: membership, error: membershipError } = await client
@@ -283,12 +293,20 @@ async function authorizeRequest(req: Request, siteId: string) {
     .maybeSingle();
 
   if (membershipError) {
-    return { error: errorResponse("membership_check_failed", "Nie udalo sie sprawdzic uprawnien uzytkownika.", 403) };
+    return {
+      error: errorResponse(
+        "membership_check_failed",
+        "Nie udalo sie sprawdzic uprawnien uzytkownika.",
+        403,
+      ),
+    };
   }
 
   const allowedRoles = ["owner", "editor", "viewer"];
   if (!membership || !allowedRoles.includes(membership.role)) {
-    return { error: errorResponse("not_authorized", "Brak uprawnien do statystyk tej strony.", 403) };
+    return {
+      error: errorResponse("not_authorized", "Brak uprawnien do statystyk tej strony.", 403),
+    };
   }
 
   return {
@@ -324,7 +342,11 @@ Deno.serve(async (req) => {
   try {
     credentials = getGoogleCredentials();
   } catch {
-    return errorResponse("ga4_not_configured", "Brakuje konfiguracji GA4 w sekretach Edge Function.", 503);
+    return errorResponse(
+      "ga4_not_configured",
+      "Brakuje konfiguracji GA4 w sekretach Edge Function.",
+      503,
+    );
   }
 
   const cacheKey = `${payload.site_id}:${credentials.propertyId}`;
@@ -333,7 +355,8 @@ Deno.serve(async (req) => {
 
   if (cached) {
     const age = now - cached.createdAt;
-    const shouldUseCache = age < CACHE_TTL_MS || (payload.force_refresh && age < FORCE_REFRESH_MIN_AGE_MS);
+    const shouldUseCache =
+      age < CACHE_TTL_MS || (payload.force_refresh && age < FORCE_REFRESH_MIN_AGE_MS);
     if (shouldUseCache) {
       return jsonResponse({
         ...cached.data,
@@ -370,13 +393,25 @@ Deno.serve(async (req) => {
   } catch (error) {
     const message = error instanceof Error ? error.message : String(error);
     if (message.includes("ga4_report_failed:403")) {
-      return errorResponse("ga4_access_denied", "Service account nie ma dostepu do GA4 property.", 403);
+      return errorResponse(
+        "ga4_access_denied",
+        "Service account nie ma dostepu do GA4 property.",
+        403,
+      );
     }
     if (message.includes("ga4_report_failed:429")) {
-      return errorResponse("ga4_rate_limited", "Przekroczono limit Google Analytics Data API.", 429);
+      return errorResponse(
+        "ga4_rate_limited",
+        "Przekroczono limit Google Analytics Data API.",
+        429,
+      );
     }
     if (message.includes("google_auth_failed")) {
-      return errorResponse("google_auth_failed", "Nie udalo sie uwierzytelnic service account Google.", 502);
+      return errorResponse(
+        "google_auth_failed",
+        "Nie udalo sie uwierzytelnic service account Google.",
+        502,
+      );
     }
     return errorResponse("ga4_report_failed", "Nie udalo sie pobrac statystyk GA4.", 502);
   }

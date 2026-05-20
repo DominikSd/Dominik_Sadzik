@@ -4,6 +4,18 @@ const CONSENT_KEY = "analytics_consent";
 const measurementId = import.meta.env.VITE_GA_MEASUREMENT_ID || "";
 let initialized = false;
 
+export function getSafeAnalyticsPath(path = "") {
+  const rawPath =
+    path || `${window.location.pathname}${window.location.search}${window.location.hash}`;
+  const hashIndex = rawPath.indexOf("#");
+  const beforeHash = hashIndex >= 0 ? rawPath.slice(0, hashIndex) : rawPath;
+  const hash = hashIndex >= 0 ? rawPath.slice(hashIndex) : "";
+  const cleanPath = beforeHash.split("?")[0] || "/";
+  const cleanHash = hash ? `#${hash.slice(1).split("?")[0].split("&")[0]}` : "";
+
+  return `${cleanPath}${cleanHash}`;
+}
+
 function getStoredConsent() {
   try {
     return window.localStorage.getItem(CONSENT_KEY);
@@ -92,7 +104,7 @@ export function initAnalytics() {
 export function trackPageView(path, title = document.title) {
   if (!initAnalytics()) return;
   window.gtag("event", "page_view", {
-    page_path: path,
+    page_path: getSafeAnalyticsPath(path),
     page_title: title,
   });
 }
@@ -109,9 +121,10 @@ export function trackCtaClick(label, location) {
   });
 }
 
-export function trackContactClick(type) {
+export function trackContactClick(type, location) {
   trackEvent("contact_click", {
     contact_type: type,
+    contact_location: location,
   });
 }
 

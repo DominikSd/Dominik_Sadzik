@@ -38,47 +38,76 @@ export const sectionSchemas = {
     description: z.string().trim().min(1).max(700),
     primaryCta: ctaSchema,
     secondaryCta: ctaSchema,
-    stats: z.array(z.object({
-      value: z.string().trim().min(1).max(20),
-      label: z.string().trim().min(1).max(80),
-    })).max(4),
+    stats: z
+      .array(
+        z.object({
+          value: z.string().trim().min(1).max(20),
+          label: z.string().trim().min(1).max(80),
+        }),
+      )
+      .max(4),
   }),
   services: sectionHeadingSchema.extend({
-    items: z.array(z.object({
-      icon: z.enum(["monitor", "palette", "sparkles", "globe"]),
-      title: z.string().trim().min(1).max(100),
-      text: z.string().trim().min(1).max(400),
-    })).min(1).max(8),
+    items: z
+      .array(
+        z.object({
+          icon: z.enum(["monitor", "palette", "sparkles", "globe"]),
+          title: z.string().trim().min(1).max(100),
+          text: z.string().trim().min(1).max(400),
+        }),
+      )
+      .min(1)
+      .max(8),
   }),
   benefits: sectionHeadingSchema.extend({
     items: z.array(z.string().trim().min(1).max(140)).min(1).max(12),
   }),
   process: sectionHeadingSchema.extend({
-    items: z.array(z.object({
-      step: z.string().trim().min(1).max(8),
-      title: z.string().trim().min(1).max(100),
-      text: z.string().trim().min(1).max(360),
-    })).min(1).max(8),
+    items: z
+      .array(
+        z.object({
+          step: z.string().trim().min(1).max(8),
+          title: z.string().trim().min(1).max(100),
+          text: z.string().trim().min(1).max(360),
+        }),
+      )
+      .min(1)
+      .max(8),
   }),
   portfolio: sectionHeadingSchema.extend({
-    items: z.array(z.object({
-      title: z.string().trim().min(1).max(100),
-      text: z.string().trim().min(1).max(360),
-    })).min(1).max(8),
+    items: z
+      .array(
+        z.object({
+          title: z.string().trim().min(1).max(100),
+          text: z.string().trim().min(1).max(360),
+        }),
+      )
+      .min(1)
+      .max(8),
   }),
   packages: sectionHeadingSchema.extend({
-    items: z.array(z.object({
-      name: z.string().trim().min(1).max(100),
-      desc: z.string().trim().min(1).max(360),
-      points: z.array(z.string().trim().min(1).max(80)).min(1).max(8),
-      highlighted: z.boolean().optional().default(false),
-    })).min(1).max(6),
+    items: z
+      .array(
+        z.object({
+          name: z.string().trim().min(1).max(100),
+          desc: z.string().trim().min(1).max(360),
+          points: z.array(z.string().trim().min(1).max(80)).min(1).max(8),
+          highlighted: z.boolean().optional().default(false),
+        }),
+      )
+      .min(1)
+      .max(6),
   }),
   faq: sectionHeadingSchema.extend({
-    items: z.array(z.object({
-      question: z.string().trim().min(1).max(180),
-      answer: z.string().trim().min(1).max(800),
-    })).min(1).max(12),
+    items: z
+      .array(
+        z.object({
+          question: z.string().trim().min(1).max(180),
+          answer: z.string().trim().min(1).max(800),
+        }),
+      )
+      .min(1)
+      .max(12),
   }),
   contact: sectionHeadingSchema.extend({
     email: z.string().trim().email().max(120),
