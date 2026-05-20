@@ -7,8 +7,12 @@
 - Apply Supabase migrations.
 - Confirm `sites` contains the target site.
 - Confirm first owner exists in `site_members`.
-- Confirm `VITE_SUPABASE_URL`, `VITE_SUPABASE_ANON_KEY`, and `VITE_SITE_ID` are set.
-- Confirm `VITE_GA_MEASUREMENT_ID` is set as a GitHub Actions variable if GA4 tracking is enabled.
+- Confirm GitHub Actions Variables are set:
+  - `VITE_SUPABASE_URL`
+  - `VITE_SUPABASE_ANON_KEY`
+  - `VITE_SITE_ID`
+  - `VITE_ADMIN_HASH_PATH`
+  - `VITE_GA_MEASUREMENT_ID`
 - Confirm Supabase Edge Function secrets are set:
   - `GA4_PROPERTY_ID`
   - `GOOGLE_SERVICE_ACCOUNT_JSON_BASE64`

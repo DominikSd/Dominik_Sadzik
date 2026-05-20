@@ -2,6 +2,7 @@ import React, { useEffect, useMemo, useState } from "react";
 import { Eye, LogOut, RefreshCw, Save, ShieldAlert, UploadCloud } from "lucide-react";
 import { defaultSiteContent } from "../content/defaultSiteContent";
 import { validateSectionData } from "../content/siteContentSchema";
+import { getCmsConfigurationHelpText } from "../lib/env";
 import {
   getCurrentMembership,
   loadDraftSiteContent,
@@ -11,6 +12,7 @@ import {
 import {
   adminHashPath,
   isSupabaseConfigured,
+  missingPublicEnvVars,
   requireSupabase,
   siteId,
   supabase,
@@ -244,10 +246,15 @@ export default function AdminApp() {
         <div className="max-w-xl rounded-lg border border-amber-300/30 bg-amber-500/10 p-6">
           <ShieldAlert className="mb-4 h-8 w-8 text-amber-200" />
           <h1 className="text-2xl font-black">CMS nie jest skonfigurowany</h1>
-          <p className="mt-3 leading-7 text-amber-50/85">
-            Uzupelnij zmienne z `.env.example`: `VITE_SUPABASE_URL`, `VITE_SUPABASE_ANON_KEY`,
-            `VITE_SITE_ID` oraz `VITE_ADMIN_HASH_PATH`.
-          </p>
+          <p className="mt-3 leading-7 text-amber-50/85">{getCmsConfigurationHelpText()}</p>
+          <div className="mt-4 rounded-lg border border-amber-200/20 bg-slate-950/40 p-4">
+            <p className="text-sm font-bold text-amber-100">Brakujace zmienne:</p>
+            <ul className="mt-2 list-inside list-disc font-mono text-sm text-amber-50/90">
+              {missingPublicEnvVars.map((name) => (
+                <li key={name}>{name}</li>
+              ))}
+            </ul>
+          </div>
         </div>
       </div>
     );

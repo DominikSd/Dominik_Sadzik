@@ -52,15 +52,16 @@ describe("GA4 privacy controls", () => {
     const ga4 = await loadGa4();
 
     ga4.setAnalyticsConsent(true);
-    ga4.trackContactClick("email", "footer");
+    ga4.trackContactClick("mailto:test@example.com", "+48123123123");
 
     const [event] = eventsNamed("contact_click");
     expect(event[2]).toEqual({
-      contact_type: "email",
-      contact_location: "footer",
+      contact_type: "unknown",
+      contact_location: "unknown",
     });
     expect(JSON.stringify(event[2])).not.toContain("@");
     expect(JSON.stringify(event[2])).not.toContain("+48");
+    expect(JSON.stringify(event[2])).not.toContain("123123123");
   });
 
   it("removes query params from page_view paths", async () => {
@@ -71,6 +72,18 @@ describe("GA4 privacy controls", () => {
 
     const [event] = eventsNamed("page_view");
     expect(event[2].page_path).toBe("/Dominik_Sadzik/#/panel-admin");
+    expect(JSON.stringify(event[2])).not.toContain("test@example.com");
+    expect(JSON.stringify(event[2])).not.toContain("secret");
+  });
+
+  it("does not send form field data in form submit events", async () => {
+    const ga4 = await loadGa4();
+
+    ga4.setAnalyticsConsent(true);
+    ga4.trackFormSubmit("contact?email=test@example.com&message=secret");
+
+    const [event] = eventsNamed("form_submit");
+    expect(event[2]).toEqual({ form_name: "unknown_form" });
     expect(JSON.stringify(event[2])).not.toContain("test@example.com");
     expect(JSON.stringify(event[2])).not.toContain("secret");
   });

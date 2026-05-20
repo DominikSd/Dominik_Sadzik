@@ -34,6 +34,10 @@ jobs:
 
       - name: Build
         env:
+          VITE_SUPABASE_URL: ${{ vars.VITE_SUPABASE_URL }}
+          VITE_SUPABASE_ANON_KEY: ${{ vars.VITE_SUPABASE_ANON_KEY }}
+          VITE_SITE_ID: ${{ vars.VITE_SITE_ID }}
+          VITE_ADMIN_HASH_PATH: ${{ vars.VITE_ADMIN_HASH_PATH }}
           VITE_GA_MEASUREMENT_ID: ${{ vars.VITE_GA_MEASUREMENT_ID }}
         run: npm run build
 

@@ -1,5 +1,6 @@
 const GA_SCRIPT_ID = "ga4-script";
 const CONSENT_KEY = "analytics_consent";
+const SAFE_TOKEN_PATTERN = /[^a-z0-9_-]/gi;
 
 const measurementId = import.meta.env.VITE_GA_MEASUREMENT_ID || "";
 let initialized = false;
@@ -14,6 +15,32 @@ export function getSafeAnalyticsPath(path = "") {
   const cleanHash = hash ? `#${hash.slice(1).split("?")[0].split("&")[0]}` : "";
 
   return `${cleanPath}${cleanHash}`;
+}
+
+function safeAnalyticsToken(value, fallback) {
+  const rawValue = String(value || "").trim();
+  const lowerValue = rawValue.toLowerCase();
+  const looksSensitive =
+    lowerValue.includes("@") ||
+    lowerValue.includes("mailto:") ||
+    lowerValue.includes("tel:") ||
+    /\+\d/.test(lowerValue) ||
+    /\d{5,}/.test(lowerValue);
+
+  if (looksSensitive) return fallback;
+
+  const normalized = rawValue
+    .trim()
+    .toLowerCase()
+    .split("?")[0]
+    .split("#")[0]
+    .replace(/mailto:|tel:/g, "")
+    .replace(SAFE_TOKEN_PATTERN, "_")
+    .replace(/_+/g, "_")
+    .replace(/^_|_$/g, "")
+    .slice(0, 48);
+
+  return normalized || fallback;
 }
 
 function getStoredConsent() {
@@ -123,13 +150,13 @@ export function trackCtaClick(label, location) {
 
 export function trackContactClick(type, location) {
   trackEvent("contact_click", {
-    contact_type: type,
-    contact_location: location,
+    contact_type: safeAnalyticsToken(type, "unknown"),
+    contact_location: safeAnalyticsToken(location, "unknown"),
   });
 }
 
 export function trackFormSubmit(formName) {
   trackEvent("form_submit", {
-    form_name: formName,
+    form_name: safeAnalyticsToken(formName, "unknown_form"),
   });
 }
