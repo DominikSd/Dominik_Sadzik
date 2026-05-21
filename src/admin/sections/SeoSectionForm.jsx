@@ -1,3 +1,4 @@
+import React from "react";
 import { Field, TextArea, TextInput } from "./FormPrimitives";
 
 export default function SeoSectionForm({ value, onChange }) {

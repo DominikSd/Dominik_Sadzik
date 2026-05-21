@@ -1,3 +1,4 @@
+import React from "react";
 import { Field, FormGrid, TextArea, TextInput } from "./FormPrimitives";
 
 export default function HeroSectionForm({ value, onChange }) {

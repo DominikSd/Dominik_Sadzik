@@ -1,3 +1,4 @@
+import React from "react";
 import { Field, FormGrid, ListEditor, TextArea, TextInput } from "./FormPrimitives";
 
 export default function FaqSectionForm({ value, onChange }) {

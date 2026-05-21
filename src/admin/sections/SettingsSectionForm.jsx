@@ -1,3 +1,4 @@
+import React from "react";
 import { Field, FormGrid, ListEditor, TextInput } from "./FormPrimitives";
 
 export default function SettingsSectionForm({ value, onChange }) {
