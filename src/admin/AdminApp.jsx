@@ -39,13 +39,39 @@ const sections = [
 function LoginForm() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loginMode, setLoginMode] = useState("password");
   const [error, setError] = useState("");
+  const [infoMessage, setInfoMessage] = useState("");
   const [busy, setBusy] = useState(false);
+
+  function getMagicLinkRedirectUrl() {
+    return `${window.location.origin}${import.meta.env.BASE_URL || "/"}#/${adminHashPath}`;
+  }
 
   async function submit(event) {
     event.preventDefault();
     setBusy(true);
     setError("");
+    setInfoMessage("");
+
+    if (loginMode === "magic") {
+      const { error: magicError } = await requireSupabase().auth.signInWithOtp({
+        email,
+        options: { emailRedirectTo: getMagicLinkRedirectUrl() },
+      });
+
+      if (magicError) {
+        setError(`Nie udalo sie wysłać magic linka. ${magicError.message}`);
+      } else {
+        setInfoMessage(
+          "Magic link został wysłany na Twój adres e-mail. Sprawdź skrzynkę pocztową i kliknij link.",
+        );
+      }
+
+      setBusy(false);
+      return;
+    }
+
     const { error: signInError } = await requireSupabase().auth.signInWithPassword({
       email,
       password,
@@ -64,6 +90,40 @@ function LoginForm() {
           Panel CMS
         </p>
         <h1 className="text-3xl font-black">Logowanie administratora</h1>
+
+        <div className="mt-5 flex flex-wrap gap-2">
+          <button
+            type="button"
+            onClick={() => {
+              setLoginMode("password");
+              setError("");
+              setInfoMessage("");
+            }}
+            className={`rounded-lg px-4 py-2 text-sm font-semibold transition ${
+              loginMode === "password"
+                ? "bg-cyan-400 text-slate-950"
+                : "border border-white/10 bg-white/[0.045] text-slate-200 hover:bg-white/10"
+            }`}
+          >
+            Hasło
+          </button>
+          <button
+            type="button"
+            onClick={() => {
+              setLoginMode("magic");
+              setError("");
+              setInfoMessage("");
+            }}
+            className={`rounded-lg px-4 py-2 text-sm font-semibold transition ${
+              loginMode === "magic"
+                ? "bg-cyan-400 text-slate-950"
+                : "border border-white/10 bg-white/[0.045] text-slate-200 hover:bg-white/10"
+            }`}
+          >
+            Magic link
+          </button>
+        </div>
+
         <div className="mt-6 space-y-4">
           <label className="block">
             <span className="mb-2 block text-sm text-slate-300">Email</span>
@@ -76,28 +136,43 @@ function LoginForm() {
               required
             />
           </label>
-          <label className="block">
-            <span className="mb-2 block text-sm text-slate-300">Haslo</span>
-            <input
-              className="w-full rounded-lg border border-white/10 bg-slate-950/70 px-3 py-3 text-white outline-none focus:border-cyan-300/70"
-              value={password}
-              onChange={(event) => setPassword(event.target.value)}
-              type="password"
-              autoComplete="current-password"
-              required
-            />
-          </label>
+          {loginMode === "password" && (
+            <label className="block">
+              <span className="mb-2 block text-sm text-slate-300">Haslo</span>
+              <input
+                className="w-full rounded-lg border border-white/10 bg-slate-950/70 px-3 py-3 text-white outline-none focus:border-cyan-300/70"
+                value={password}
+                onChange={(event) => setPassword(event.target.value)}
+                type="password"
+                autoComplete="current-password"
+                required
+              />
+            </label>
+          )}
         </div>
+
+        {infoMessage && (
+          <p className="mt-4 rounded-lg border border-emerald-400/30 bg-emerald-500/10 p-3 text-sm text-emerald-100">
+            {infoMessage}
+          </p>
+        )}
         {error && (
           <p className="mt-4 rounded-lg border border-red-400/30 bg-red-500/10 p-3 text-sm text-red-100">
             {error}
           </p>
         )}
+
         <button
           disabled={busy}
           className="mt-6 inline-flex w-full items-center justify-center gap-2 rounded-lg bg-cyan-400 px-4 py-3 text-sm font-black text-slate-950 transition hover:bg-cyan-300 disabled:opacity-60"
         >
-          {busy ? "Logowanie..." : "Zaloguj"}
+          {busy
+            ? loginMode === "magic"
+              ? "Wysyłanie..."
+              : "Logowanie..."
+            : loginMode === "magic"
+              ? "Wyślij magic link"
+              : "Zaloguj"}
         </button>
       </form>
     </div>
