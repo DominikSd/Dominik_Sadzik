@@ -7,6 +7,7 @@ Ta checklista sprawdza podstawowy przeplyw draft/published bez AI, Storage i bui
 3. Uruchom `npm run dev`.
 4. Wejdz na `http://localhost:5173/#/panel-admin`.
 5. Zaloguj sie uzytkownikiem z Supabase Auth.
+   - Jeśli nie pamiętasz hasła, użyj opcji `Reset hasła`, aby wysłać link resetujący.
 6. Upewnij sie, ze ten uzytkownik jest aktywny w `site_members` dla `VITE_SITE_ID`.
 7. Zmien tekst w sekcji Hero.
 8. Kliknij `Zapisz draft`.

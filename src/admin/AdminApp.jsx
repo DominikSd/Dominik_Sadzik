@@ -48,6 +48,10 @@ function LoginForm() {
     return `${window.location.origin}${import.meta.env.BASE_URL || "/"}#/${adminHashPath}`;
   }
 
+  function getRecoveryRedirectUrl() {
+    return `${window.location.origin}${import.meta.env.BASE_URL || "/"}#/${adminHashPath}`;
+  }
+
   async function submit(event) {
     event.preventDefault();
     setBusy(true);
@@ -65,6 +69,25 @@ function LoginForm() {
       } else {
         setInfoMessage(
           "Magic link został wysłany na Twój adres e-mail. Sprawdź skrzynkę pocztową i kliknij link.",
+        );
+      }
+
+      setBusy(false);
+      return;
+    }
+
+    if (loginMode === "recovery") {
+      const { error: recoverError } = await requireSupabase().auth.resend({
+        email,
+        type: "recovery",
+        options: { emailRedirectTo: getRecoveryRedirectUrl() },
+      });
+
+      if (recoverError) {
+        setError(`Nie udało się wysłać linku resetu hasła. ${recoverError.message}`);
+      } else {
+        setInfoMessage(
+          "Link resetu hasła został wysłany na Twój adres e-mail. Sprawdź skrzynkę i kliknij link.",
         );
       }
 
@@ -122,6 +145,21 @@ function LoginForm() {
           >
             Magic link
           </button>
+          <button
+            type="button"
+            onClick={() => {
+              setLoginMode("recovery");
+              setError("");
+              setInfoMessage("");
+            }}
+            className={`rounded-lg px-4 py-2 text-sm font-semibold transition ${
+              loginMode === "recovery"
+                ? "bg-cyan-400 text-slate-950"
+                : "border border-white/10 bg-white/[0.045] text-slate-200 hover:bg-white/10"
+            }`}
+          >
+            Reset hasła
+          </button>
         </div>
 
         <div className="mt-6 space-y-4">
@@ -169,10 +207,14 @@ function LoginForm() {
           {busy
             ? loginMode === "magic"
               ? "Wysyłanie..."
-              : "Logowanie..."
+              : loginMode === "recovery"
+                ? "Wysyłanie..."
+                : "Logowanie..."
             : loginMode === "magic"
               ? "Wyślij magic link"
-              : "Zaloguj"}
+              : loginMode === "recovery"
+                ? "Wyślij link resetu"
+                : "Zaloguj"}
         </button>
       </form>
     </div>

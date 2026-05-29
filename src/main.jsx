@@ -3,6 +3,7 @@ import { createRoot } from "react-dom/client";
 import AdminApp from "./admin/AdminApp.jsx";
 import AnalyticsConsent from "./components/AnalyticsConsent.jsx";
 import LandingPage from "./LandingPage.jsx";
+import PasswordRecoveryForm from "./admin/PasswordRecoveryForm.jsx";
 import { getSafeAnalyticsPath, initAnalytics, trackPageView } from "./lib/analytics/ga4.js";
 import { adminHashPath, supabase } from "./lib/supabaseClient.js";
 import { extractAuthHash, normalizeHash, pathToHash } from "./lib/routeUtils.js";
@@ -62,7 +63,14 @@ function AppRouter() {
     trackPageView(getSafeAnalyticsPath(), document.title);
   }, [hash]);
 
-  const app = hash === `#/${adminHashPath}` ? <AdminApp /> : <LandingPage />;
+  const isRecoveryHash = hash.includes("type=recovery");
+  const app = isRecoveryHash ? (
+    <PasswordRecoveryForm />
+  ) : hash === `#/${adminHashPath}` ? (
+    <AdminApp />
+  ) : (
+    <LandingPage />
+  );
 
   return (
     <>
