@@ -4,6 +4,21 @@ export function normalizeHash(hash) {
   return trimmed ? `#/${trimmed}` : "#/";
 }
 
+export function extractAuthHash(hash) {
+  if (typeof hash !== "string") return hash;
+  const accessIndex = hash.indexOf("access_token=");
+  if (accessIndex >= 0) {
+    return `#${hash.slice(accessIndex)}`;
+  }
+
+  const refreshIndex = hash.indexOf("refresh_token=");
+  if (refreshIndex >= 0) {
+    return `#${hash.slice(refreshIndex)}`;
+  }
+
+  return hash;
+}
+
 export function pathToHash(pathname, base = "/") {
   if (typeof pathname !== "string") return "#/";
   const pathSegments = pathname.split("/").filter(Boolean);

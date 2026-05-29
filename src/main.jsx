@@ -5,7 +5,7 @@ import AnalyticsConsent from "./components/AnalyticsConsent.jsx";
 import LandingPage from "./LandingPage.jsx";
 import { getSafeAnalyticsPath, initAnalytics, trackPageView } from "./lib/analytics/ga4.js";
 import { adminHashPath, supabase } from "./lib/supabaseClient.js";
-import { normalizeHash, pathToHash } from "./lib/routeUtils.js";
+import { extractAuthHash, normalizeHash, pathToHash } from "./lib/routeUtils.js";
 import "./index.css";
 import ErrorBoundary from "./components/ErrorBoundary.jsx";
 
@@ -17,18 +17,12 @@ function AppRouter() {
   useEffect(() => {
     const rawHash = window.location.hash;
     const pathnameHash = pathToHash(window.location.pathname, import.meta.env.BASE_URL || "/");
-    const isAuthRedirect =
-      rawHash.startsWith("#/access_token=") ||
-      rawHash.startsWith("#/refresh_token=") ||
-      rawHash.includes("type=recovery") ||
-      rawHash.includes("type=magiclink") ||
-      rawHash.includes("access_token=") ||
-      rawHash.includes("refresh_token=");
+    const authHash = extractAuthHash(rawHash);
+    const isAuthRedirect = authHash !== rawHash;
 
     if (isAuthRedirect) {
-      const fixedHash = rawHash.startsWith("#/") ? `#${rawHash.slice(2)}` : rawHash;
-      window.history.replaceState(null, "", fixedHash);
-      setHash(fixedHash);
+      window.history.replaceState(null, "", authHash);
+      setHash(authHash);
       return;
     }
 
@@ -49,6 +43,7 @@ function AppRouter() {
   useEffect(() => {
     const authHash =
       hash.startsWith("#access_token=") ||
+      hash.startsWith("#refresh_token=") ||
       hash.includes("type=recovery") ||
       hash.includes("type=magiclink");
     if (!authHash) return;
