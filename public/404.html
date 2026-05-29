@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="pl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="robots" content="noindex" />
+    <title>Przekierowywanie...</title>
+    <script>
+      (function () {
+        var pathSegments = location.pathname.split("/").filter(Boolean);
+        var base = "/";
+        var routePath = location.pathname;
+
+        if (pathSegments.length > 1) {
+          base = "/" + pathSegments[0] + "/";
+          routePath = "/" + pathSegments.slice(1).join("/");
+        }
+
+        if (!routePath.startsWith("/")) {
+          routePath = "/" + routePath;
+        }
+
+        var redirect = base + "#/" + routePath.replace(/^\//, "");
+        if (location.search) redirect += location.search;
+
+        location.replace(redirect);
+      })();
+    </script>
+  </head>
+  <body>
+    <p>
+      Przekierowuję do panelu. Jeśli nic się nie dzieje, przejdź do
+      <a id="redirect-link">panelu</a>.
+    </p>
+    <script>
+      var base = document.querySelector("base")?.getAttribute("href") || "/";
+      if (!base.endsWith("/")) base += "/";
+      document.getElementById("redirect-link").href = base + "#/panel-admin";
+    </script>
+  </body>
+</html>
