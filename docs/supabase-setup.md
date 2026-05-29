@@ -51,3 +51,23 @@ VITE_GA_MEASUREMENT_ID=
 ```
 
 Never put `SUPABASE_SERVICE_ROLE_KEY` in frontend code or any `VITE_*` variable.
+
+## 5. Auth redirect URLs
+
+In Supabase Authentication → URL Configuration add the callback and recovery URLs used by the CMS.
+
+Local:
+
+```text
+http://localhost:5173/?auth=callback
+http://localhost:5173/?auth=recovery
+http://localhost:5173/Dominik_Sadzik/?auth=callback
+http://localhost:5173/Dominik_Sadzik/?auth=recovery
+```
+
+Production:
+
+```text
+https://dominiksd.github.io/Dominik_Sadzik/?auth=callback
+https://dominiksd.github.io/Dominik_Sadzik/?auth=recovery
+```

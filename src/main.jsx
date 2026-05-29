@@ -3,10 +3,12 @@ import { createRoot } from "react-dom/client";
 import AdminApp from "./admin/AdminApp.jsx";
 import AnalyticsConsent from "./components/AnalyticsConsent.jsx";
 import LandingPage from "./LandingPage.jsx";
-import PasswordRecoveryForm from "./admin/PasswordRecoveryForm.jsx";
+import AuthCallbackHandler from "./admin/auth/AuthCallbackHandler.jsx";
+import UpdatePasswordForm from "./admin/auth/UpdatePasswordForm.jsx";
 import { getSafeAnalyticsPath, initAnalytics, trackPageView } from "./lib/analytics/ga4.js";
 import { adminHashPath, supabase } from "./lib/supabaseClient.js";
 import { extractAuthHash, normalizeHash, pathToHash } from "./lib/routeUtils.js";
+import { getAuthModeFromSearch } from "./admin/auth/authRedirects.js";
 import "./index.css";
 import ErrorBoundary from "./components/ErrorBoundary.jsx";
 
@@ -22,7 +24,8 @@ function AppRouter() {
     const isAuthRedirect = authHash !== rawHash;
 
     if (isAuthRedirect) {
-      window.history.replaceState(null, "", authHash);
+      const search = window.location.search || "";
+      window.history.replaceState(null, "", `${window.location.pathname}${search}${authHash}`);
       setHash(authHash);
       return;
     }
@@ -63,14 +66,17 @@ function AppRouter() {
     trackPageView(getSafeAnalyticsPath(), document.title);
   }, [hash]);
 
-  const isRecoveryHash = hash.includes("type=recovery");
-  const app = isRecoveryHash ? (
-    <PasswordRecoveryForm />
-  ) : hash === `#/${adminHashPath}` ? (
-    <AdminApp />
-  ) : (
-    <LandingPage />
-  );
+  const authMode = getAuthModeFromSearch(window.location.search);
+  const app =
+    authMode === "callback" ? (
+      <AuthCallbackHandler />
+    ) : authMode === "recovery" ? (
+      <UpdatePasswordForm />
+    ) : hash === `#/${adminHashPath}` ? (
+      <AdminApp />
+    ) : (
+      <LandingPage />
+    );
 
   return (
     <>

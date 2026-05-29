@@ -1,27 +1,28 @@
-import { useEffect, useState } from "react";
-import { adminHashPath, requireSupabase, supabase } from "../lib/supabaseClient";
+import React, { useEffect, useState } from "react";
+import { requireSupabase, supabase } from "../../lib/supabaseClient.js";
+import { clearAuthQueryParams, getAdminUrl } from "./authRedirects.js";
 
-export default function PasswordRecoveryForm() {
+export default function UpdatePasswordForm() {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [status, setStatus] = useState("");
   const [error, setError] = useState("");
-  const [isLoading, setIsLoading] = useState(true);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    let mounted = true;
+    let active = true;
     supabase.auth.getSession().then(({ data }) => {
-      if (!mounted) return;
+      if (!active) return;
       if (!data.session) {
         setError(
-          "Nie znaleziono sesji. Spróbuj ponownie kliknąć link resetu hasła lub wyślij go jeszcze raz.",
+          "Brak aktywnej sesji. Spróbuj ponownie wysłać link resetu hasła i otwórz go jeszcze raz.",
         );
       }
-      setIsLoading(false);
+      setLoading(false);
     });
 
     return () => {
-      mounted = false;
+      active = false;
     };
   }, []);
 
@@ -40,19 +41,22 @@ export default function PasswordRecoveryForm() {
       return;
     }
 
-    setIsLoading(true);
-    const { error: updateError } = await requireSupabase().auth.updateUser({
+    setLoading(true);
+
+    const { error } = await requireSupabase().auth.updateUser({
       password,
     });
-    setIsLoading(false);
 
-    if (updateError) {
-      setError(`Nie udało się zmienić hasła. ${updateError.message}`);
+    setLoading(false);
+
+    if (error) {
+      setError(`Nie udało się zaktualizować hasła. ${error.message}`);
       return;
     }
 
-    setStatus("Hasło zostało zmienione. Teraz przekierowuję do panelu.");
-    window.location.hash = `#/${adminHashPath}`;
+    setStatus("Hasło zostało zmienione. Przekierowuję do panelu...");
+    clearAuthQueryParams();
+    window.location.href = getAdminUrl();
   }
 
   return (
@@ -66,30 +70,30 @@ export default function PasswordRecoveryForm() {
         </p>
         <h1 className="text-3xl font-black">Ustaw nowe hasło</h1>
         <p className="mt-3 text-sm text-slate-400">
-          Użyj tego formularza, aby ustawić nowe hasło dla panelu CMS.
+          Wprowadź nowe hasło, aby dokończyć reset hasła.
         </p>
 
         <div className="mt-6 space-y-4">
           <label className="block">
             <span className="mb-2 block text-sm text-slate-300">Nowe hasło</span>
             <input
-              className="w-full rounded-lg border border-white/10 bg-slate-950/70 px-3 py-3 text-white outline-none focus:border-cyan-300/70"
-              value={password}
-              onChange={(event) => setPassword(event.target.value)}
               type="password"
               autoComplete="new-password"
               required
+              className="w-full rounded-lg border border-white/10 bg-slate-950/70 px-3 py-3 text-white outline-none focus:border-cyan-300/70"
+              value={password}
+              onChange={(event) => setPassword(event.target.value)}
             />
           </label>
           <label className="block">
             <span className="mb-2 block text-sm text-slate-300">Powtórz nowe hasło</span>
             <input
-              className="w-full rounded-lg border border-white/10 bg-slate-950/70 px-3 py-3 text-white outline-none focus:border-cyan-300/70"
-              value={confirmPassword}
-              onChange={(event) => setConfirmPassword(event.target.value)}
               type="password"
               autoComplete="new-password"
               required
+              className="w-full rounded-lg border border-white/10 bg-slate-950/70 px-3 py-3 text-white outline-none focus:border-cyan-300/70"
+              value={confirmPassword}
+              onChange={(event) => setConfirmPassword(event.target.value)}
             />
           </label>
         </div>
@@ -106,10 +110,11 @@ export default function PasswordRecoveryForm() {
         )}
 
         <button
-          disabled={isLoading}
+          type="submit"
+          disabled={loading}
           className="mt-6 inline-flex w-full items-center justify-center gap-2 rounded-lg bg-cyan-400 px-4 py-3 text-sm font-black text-slate-950 transition hover:bg-cyan-300 disabled:opacity-60"
         >
-          {isLoading ? "Przetwarzanie..." : "Ustaw nowe hasło"}
+          {loading ? "Sprawdzam..." : "Zapisz nowe hasło"}
         </button>
       </form>
     </div>
