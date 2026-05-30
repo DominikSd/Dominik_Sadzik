@@ -54,7 +54,23 @@ Never put `SUPABASE_SERVICE_ROLE_KEY` in frontend code or any `VITE_*` variable.
 
 ## 5. Auth redirect URLs
 
-In Supabase Authentication → URL Configuration add the callback and recovery URLs used by the CMS.
+In Supabase Authentication → URL Configuration add the callback and recovery URLs used by the
+CMS. These URLs intentionally use query params (`?auth=callback` and `?auth=recovery`) instead of
+hash routes, because Supabase Auth appends its own session data during magic-link and password-reset
+flows.
+
+Recommended local Site URL:
+
+```text
+http://localhost:5173
+```
+
+The Vite dev server is configured with `port: 5173` and `strictPort: true`, so a busy port should
+fail fast instead of silently switching to a different origin. If you intentionally run Vite on
+another host or port, add that exact origin to Supabase too. The redirect origin must match the URL
+opened in the browser.
+
+Allowed Redirect URLs:
 
 Local:
 
@@ -63,6 +79,8 @@ http://localhost:5173/?auth=callback
 http://localhost:5173/?auth=recovery
 http://localhost:5173/Dominik_Sadzik/?auth=callback
 http://localhost:5173/Dominik_Sadzik/?auth=recovery
+http://127.0.0.1:5174/Dominik_Sadzik/?auth=callback
+http://127.0.0.1:5174/Dominik_Sadzik/?auth=recovery
 ```
 
 Production:

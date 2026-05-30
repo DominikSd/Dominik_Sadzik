@@ -208,9 +208,10 @@ export default function AdminApp() {
       <div className="grid min-h-screen place-items-center bg-[#050816] px-6 text-white">
         <div className="max-w-xl rounded-lg border border-red-300/30 bg-red-500/10 p-6">
           <ShieldAlert className="mb-4 h-8 w-8 text-red-200" />
-          <h1 className="text-2xl font-black">Brak dostepu</h1>
+          <h1 className="text-2xl font-black">Brak dostępu</h1>
           <p className="mt-3 leading-7 text-red-50/85">
-            To konto nie znajduje sie na whitelist `site_members` dla tej strony.
+            To konto nie znajduje się na liście `site_members` dla tej strony. Poproś właściciela o
+            dodanie użytkownika z właściwym `user_id`.
           </p>
           <button
             onClick={() => supabase.auth.signOut()}

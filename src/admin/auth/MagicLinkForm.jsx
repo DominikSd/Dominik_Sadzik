@@ -25,7 +25,9 @@ export default function MagicLinkForm() {
     setBusy(false);
 
     if (error) {
-      setError("Nie udało się wysłać linku. Sprawdź adres e-mail i spróbuj ponownie.");
+      setError(
+        `Nie udało się wysłać linku. Sprawdź adres e-mail i spróbuj ponownie. Błąd Supabase Auth: ${error.message}`,
+      );
       return;
     }
 

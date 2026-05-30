@@ -20,7 +20,9 @@ export default function PasswordLoginForm({ onLogin }) {
     setBusy(false);
 
     if (error) {
-      setError("Nie udało się zalogować. Sprawdź dane i spróbuj ponownie.");
+      setError(
+        `Nie udało się zalogować. Sprawdź dane i spróbuj ponownie. Błąd Supabase Auth: ${error.message}`,
+      );
       return;
     }
 

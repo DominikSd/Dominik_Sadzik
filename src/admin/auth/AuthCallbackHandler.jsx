@@ -1,6 +1,30 @@
 import React, { useEffect, useState } from "react";
-import { supabase } from "../../lib/supabaseClient.js";
+import { requireSupabase } from "../../lib/supabaseClient.js";
 import { clearAuthQueryParams, getAdminUrl } from "./authRedirects.js";
+
+function getUrlAuthError() {
+  const params = new URLSearchParams(window.location.search);
+  return params.get("error_description") || params.get("error") || "";
+}
+
+async function restoreSessionFromHash(client) {
+  const hashParams = new URLSearchParams((window.location.hash || "").replace(/^#/, ""));
+  const accessToken = hashParams.get("access_token");
+  const refreshToken = hashParams.get("refresh_token");
+
+  if (!accessToken || !refreshToken) {
+    return;
+  }
+
+  const { error } = await client.auth.setSession({
+    access_token: accessToken,
+    refresh_token: refreshToken,
+  });
+
+  if (error) {
+    throw error;
+  }
+}
 
 export default function AuthCallbackHandler() {
   const [status, setStatus] = useState("Weryfikuję magic link...");
@@ -8,30 +32,76 @@ export default function AuthCallbackHandler() {
 
   useEffect(() => {
     let active = true;
+    let redirected = false;
+    let unsubscribe = () => {};
 
-    supabase.auth.getSession().then(({ data }) => {
-      if (!active) return;
-      if (data.session) {
-        clearAuthQueryParams();
-        window.location.href = getAdminUrl();
-        return;
+    function redirectToAdmin() {
+      if (redirected) return;
+      redirected = true;
+      clearAuthQueryParams();
+      window.location.href = getAdminUrl();
+    }
+
+    async function completeCallback() {
+      try {
+        const client = requireSupabase();
+        const urlError = getUrlAuthError();
+
+        if (urlError) {
+          throw new Error(urlError);
+        }
+
+        const { data: subscription } = client.auth.onAuthStateChange((_event, session) => {
+          if (!active || !session) return;
+          redirectToAdmin();
+        });
+
+        unsubscribe = () => subscription.subscription.unsubscribe();
+
+        const code = new URLSearchParams(window.location.search).get("code");
+        if (code) {
+          setStatus("Kończę logowanie przez Supabase Auth...");
+          const { error: exchangeError } = await client.auth.exchangeCodeForSession(code);
+
+          if (exchangeError) {
+            throw exchangeError;
+          }
+        }
+
+        await restoreSessionFromHash(client);
+        const { data, error: sessionError } = await client.auth.getSession();
+
+        if (sessionError) {
+          throw sessionError;
+        }
+
+        if (!active) return;
+
+        if (data.session) {
+          redirectToAdmin();
+          return;
+        }
+
+        setStatus("");
+        setError(
+          "Nie udało się zalogować. Callback logowania nie utworzył sesji. Link mógł wygasnąć albo został już użyty. Wyślij magic link ponownie.",
+        );
+      } catch (authError) {
+        if (!active) return;
+        setStatus("");
+        setError(
+          `Nie udało się zalogować. Link mógł wygasnąć albo zostać już użyty. Błąd Supabase Auth: ${
+            authError.message || "nieznany błąd"
+          }`,
+        );
       }
+    }
 
-      setStatus("");
-      setError("Nie udało się zalogować. Jeśli link wygasł, spróbuj ponownie wysłać magic link.");
-    });
-
-    const { data: subscription } = supabase.auth.onAuthStateChange((_event, session) => {
-      if (!active) return;
-      if (session) {
-        clearAuthQueryParams();
-        window.location.href = getAdminUrl();
-      }
-    });
+    completeCallback();
 
     return () => {
       active = false;
-      subscription.subscription.unsubscribe();
+      unsubscribe();
     };
   }, []);
 

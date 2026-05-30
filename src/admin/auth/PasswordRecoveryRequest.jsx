@@ -21,7 +21,9 @@ export default function PasswordRecoveryRequest() {
     setBusy(false);
 
     if (error) {
-      setError("Nie udało się wysłać linku resetu hasła. Spróbuj ponownie.");
+      setError(
+        `Nie udało się wysłać linku resetu hasła. Spróbuj ponownie. Błąd Supabase Auth: ${error.message}`,
+      );
       return;
     }
 
