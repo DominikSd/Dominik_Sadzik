@@ -222,6 +222,10 @@ Jeżeli zmieniasz konfigurację lub sposób uruchamiania, zaktualizuj właściwy
 - `docs/local-cms-test.md` — test lokalny CMS,
 - `docs/deployment-checklist.md` — checklista deployu,
 - `docs/client-handover.md` — przekazanie klientowi,
+- `docs/template-deployment-playbook.md` — proces użycia repo jako template’u dla klienta,
+- `docs/hosting-options.md` — wybór hostingu dla stron klientów,
+- `docs/client-ownership-model.md` — modele własności kont, domen i usług,
+- `docs/client-maintenance-checklist.md` — comiesięczna obsługa klienta,
 - `docs/roadmap.md` — przyszłe etapy.
 
 Warto dodać, jeśli jeszcze ich nie ma:
@@ -236,14 +240,25 @@ Warto dodać, jeśli jeszcze ich nie ma:
 
 Kod panelu ma być możliwy do przeniesienia do innych projektów.
 
+Traktuj ten projekt jako bazę/template pod płatne strony klientów z lekkim panelem CMS. Zmiany w
+logice panelu, konfiguracji i dokumentacji nie mogą utrudniać skopiowania projektu do innej marki,
+domeny albo instancji Supabase.
+
 Dlatego:
 
 - nie hardcoduj danych konkretnego klienta w logice,
+- nie hardcoduj domeny, nazwy klienta, ścieżki hostingu ani `site_id` w logice aplikacji,
 - używaj `VITE_SITE_ID`,
 - używaj `sites.slug` i `site_members`,
 - trzymaj konfigurację w `.env`/GitHub Variables/Supabase Secrets,
+- trzymaj treści specyficzne dla strony w `src/content/defaultSiteContent.js` albo w CMS,
+- trzymaj branding specyficzny dla klienta w warstwie treści/stylów, nie w logice CMS,
+- konfigurację specyficzną dla hostingu opisuj w dokumentacji i zmiennych środowiskowych,
 - oddzielaj logikę CMS od konkretnego designu strony,
 - dokumentuj kroki bootstrapu nowego projektu,
+- przed dodaniem nowego hardcodu zadaj pytanie, czy powinien być env/config/content,
+- nie zmieniaj RPC, RLS ani modelu `content_entries` w sposób utrudniający reuse bez osobnego etapu,
+- nie wprowadzaj zależności od jednej platformy hostingu, jeśli funkcja może zostać neutralna,
 - nie rozbudowuj panelu w kierunku buildera, jeśli zadanie dotyczy tylko lekkiej edycji tekstu.
 
 ## Kryteria gotowości przed kolejnym etapem

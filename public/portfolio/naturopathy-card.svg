@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 750" role="img" aria-labelledby="title desc">
+  <title id="title">Projekt wizytowki naturopatii</title>
+  <desc id="desc">Zielona wizytowka z motywem lisci i naturalnego brandingu.</desc>
+  <defs>
+    <linearGradient id="cream" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0" stop-color="#fffdf0"/>
+      <stop offset=".55" stop-color="#fbf7df"/>
+      <stop offset="1" stop-color="#e6f2d6"/>
+    </linearGradient>
+    <filter id="cardShadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="18" stdDeviation="24" flood-color="#001b08" flood-opacity=".32"/>
+    </filter>
+  </defs>
+  <rect width="1200" height="750" fill="#002f0b"/>
+  <rect x="162" y="134" width="876" height="482" rx="38" fill="url(#cream)" filter="url(#cardShadow)"/>
+  <g opacity=".55" fill="none" stroke="#5b8f50" stroke-width="3">
+    <path d="M184 173c80 46 120 95 154 174"/>
+    <path d="M216 168c-33 20-47 47-54 86M247 188c-43 22-58 58-60 104M285 226c-48 14-74 50-84 102"/>
+    <path d="M1010 520c-72-40-110-89-146-166"/>
+    <path d="M982 574c35-20 53-48 60-89M947 554c43-23 64-59 68-104M908 516c49-17 74-54 86-105"/>
+  </g>
+  <g transform="translate(410 190)">
+    <path d="M190 230c-42-56-36-142 2-197 38 55 42 141-2 197Z" fill="#0b4a17"/>
+    <path d="M190 230c45-71 94-119 168-152-8 91-73 149-168 152Z" fill="#2f7d25"/>
+    <path d="M190 230C145 159 96 111 22 78c8 91 73 149 168 152Z" fill="#3b8b2f"/>
+    <g fill="#79aa21">
+      <ellipse cx="190" cy="30" rx="14" ry="30"/>
+      <ellipse cx="240" cy="58" rx="14" ry="30" transform="rotate(35 240 58)"/>
+      <ellipse cx="286" cy="92" rx="14" ry="30" transform="rotate(52 286 92)"/>
+      <ellipse cx="140" cy="58" rx="14" ry="30" transform="rotate(-35 140 58)"/>
+      <ellipse cx="94" cy="92" rx="14" ry="30" transform="rotate(-52 94 92)"/>
+    </g>
+    <g fill="#fff8c8">
+      <circle cx="314" cy="134" r="11"/>
+      <circle cx="334" cy="152" r="8"/>
+      <circle cx="70" cy="138" r="9"/>
+      <circle cx="48" cy="158" r="7"/>
+    </g>
+  </g>
+  <text x="600" y="520" text-anchor="middle" fill="#063a12" font-family="Georgia, serif" font-size="43">Naturopatia i detoksykacja</text>
+  <line x1="420" y1="552" x2="780" y2="552" stroke="#b99424" stroke-width="4"/>
+  <circle cx="600" cy="552" r="10" fill="#b99424"/>
+  <text x="600" y="594" text-anchor="middle" fill="#244622" font-family="Inter, Arial, sans-serif" font-size="18" font-weight="700">projekt wizytowki i identyfikacji</text>
+</svg>

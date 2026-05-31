@@ -228,6 +228,10 @@ Build nie może zawierać nazw lub wartości prywatnych sekretów.
 - [Supabase RLS manual test](docs/supabase-rls-manual-test.md)
 - [Deployment checklist](docs/deployment-checklist.md)
 - [Client handover](docs/client-handover.md)
+- [Template deployment playbook](docs/template-deployment-playbook.md)
+- [Hosting options](docs/hosting-options.md)
+- [Client ownership model](docs/client-ownership-model.md)
+- [Client maintenance checklist](docs/client-maintenance-checklist.md)
 - [Roadmap](docs/roadmap.md)
 
 ## Zalecane dodatkowe dokumenty
@@ -236,7 +240,6 @@ Przed dalszym dużym rozwojem warto dodać lub dopracować:
 
 - `docs/project-brief.md` — opis wizji strony, grupy docelowej, usług i stylu marki,
 - `docs/design-system.md` — kolory, typografia, komponenty, zasady layoutu,
-- `docs/template-reuse.md` — jak kopiować panel CMS do kolejnego projektu,
 - `docs/manual-qa.md` — testy ręczne po każdej większej zmiany,
 - `docs/privacy-and-analytics.md` — zasady GA4, zgody, brak danych osobowych,
 - `docs/client-editing-guide.md` — krótka instrukcja dla klienta: jak zmieniać teksty i publikować.

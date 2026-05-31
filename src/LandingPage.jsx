@@ -531,40 +531,150 @@ function ProcessSection({ process }) {
   );
 }
 
+const portfolioMockupTones = {
+  cyan: {
+    frame: "from-cyan-400/30 via-blue-500/15 to-slate-950",
+    accent: "from-cyan-300 to-blue-400",
+    glow: "shadow-cyan-500/10",
+  },
+  violet: {
+    frame: "from-violet-400/30 via-fuchsia-500/15 to-slate-950",
+    accent: "from-violet-300 to-fuchsia-400",
+    glow: "shadow-violet-500/10",
+  },
+  blue: {
+    frame: "from-blue-400/30 via-indigo-500/15 to-slate-950",
+    accent: "from-blue-300 to-indigo-400",
+    glow: "shadow-blue-500/10",
+  },
+  emerald: {
+    frame: "from-emerald-400/30 via-cyan-500/15 to-slate-950",
+    accent: "from-emerald-300 to-cyan-400",
+    glow: "shadow-emerald-500/10",
+  },
+};
+
+function PortfolioMockup({ item }) {
+  const tone = portfolioMockupTones[item.mockupTone] || portfolioMockupTones.cyan;
+
+  if (item.screenshotUrl) {
+    return (
+      <img
+        src={item.screenshotUrl}
+        alt={`Podglad projektu: ${item.title}`}
+        className="h-full w-full object-cover"
+        loading="lazy"
+      />
+    );
+  }
+
+  return (
+    <div
+      className={`relative h-full overflow-hidden bg-gradient-to-br ${tone.frame} shadow-2xl ${tone.glow}`}
+    >
+      <div className="absolute left-4 right-4 top-4 flex items-center gap-1.5 rounded-lg border border-white/10 bg-slate-950/70 p-2">
+        <span className="h-2 w-2 rounded-full bg-red-300/80" />
+        <span className="h-2 w-2 rounded-full bg-amber-300/80" />
+        <span className="h-2 w-2 rounded-full bg-emerald-300/80" />
+        <span className="ml-2 h-2 min-w-0 flex-1 rounded-full bg-white/10" />
+      </div>
+      <div className="absolute inset-x-4 bottom-4 top-16 rounded-lg border border-white/10 bg-slate-950/60 p-4 backdrop-blur">
+        <div className={`mb-4 h-2 w-24 rounded-full bg-gradient-to-r ${tone.accent}`} />
+        <div className="grid h-[calc(100%-1.5rem)] min-h-0 gap-3">
+          <div className="rounded-lg border border-white/10 bg-white/10 p-3">
+            <div className="h-2 w-3/4 rounded-full bg-white/30" />
+            <div className="mt-2 h-2 w-1/2 rounded-full bg-white/15" />
+          </div>
+          <div className="grid min-h-0 grid-cols-3 gap-2">
+            <div className="rounded-lg bg-white/10" />
+            <div className="rounded-lg bg-white/10" />
+            <div className="rounded-lg bg-white/10" />
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function PortfolioSection({ portfolio }) {
   return (
     <section
       id="realizacje"
-      className="relative overflow-hidden px-6 py-20 md:px-10 lg:py-24 scroll-mt-24"
+      className="relative overflow-hidden px-4 py-20 sm:px-6 md:px-10 lg:py-24 scroll-mt-24"
     >
-      <div className="relative z-10 mx-auto max-w-7xl">
+      <div className="relative z-10 mx-auto w-full max-w-7xl">
         <SectionTitle eyebrow={portfolio.eyebrow} title={portfolio.title} text={portfolio.text} />
-        <div className="grid gap-5 md:grid-cols-3">
+        <div className="grid min-w-0 gap-5 md:grid-cols-2 xl:grid-cols-4">
           {portfolio.items.map((item, index) => (
             <article
               key={item.title}
-              className="overflow-hidden rounded-lg border border-white/10 bg-white/[0.045] backdrop-blur transition hover:border-cyan-300/35 hover:shadow-2xl hover:shadow-cyan-500/10"
+              className="group flex min-w-0 flex-col overflow-hidden rounded-lg border border-white/10 bg-white/[0.045] backdrop-blur transition hover:-translate-y-1 hover:border-cyan-300/35 hover:shadow-2xl hover:shadow-cyan-500/10"
             >
-              <div className="relative aspect-[16/10] overflow-hidden bg-slate-950">
-                <div className="absolute inset-0 bg-gradient-to-br from-blue-500/25 via-transparent to-violet-500/25" />
-                <div className="absolute left-6 top-6 rounded-full border border-cyan-300/30 bg-white/10 px-3 py-1 text-xs text-cyan-100">
+              <div className="relative aspect-[16/10] min-w-0 overflow-hidden bg-slate-950">
+                {item.href ? (
+                  <a
+                    href={item.href}
+                    target={item.href.startsWith("http") ? "_blank" : undefined}
+                    rel={item.href.startsWith("http") ? "noreferrer" : undefined}
+                    aria-label={`Otworz projekt: ${item.title}`}
+                    className="block h-full w-full"
+                  >
+                    <PortfolioMockup item={item} />
+                  </a>
+                ) : (
+                  <PortfolioMockup item={item} />
+                )}
+                <span className="absolute left-4 top-4 rounded-full border border-cyan-300/30 bg-slate-950/75 px-3 py-1 text-xs font-semibold text-cyan-100 backdrop-blur">
                   Projekt 0{index + 1}
-                </div>
-                <div className="absolute bottom-6 left-6 right-6 rounded-lg border border-white/10 bg-slate-950/70 p-4 backdrop-blur">
-                  <div className="mb-3 h-2 w-24 rounded-full bg-gradient-to-r from-blue-400 to-violet-400" />
-                  <div className="h-2 w-3/4 rounded-full bg-white/25" />
-                  <div className="mt-2 h-2 w-1/2 rounded-full bg-white/15" />
-                </div>
+                </span>
+                {item.href && (
+                  <span className="pointer-events-none absolute bottom-4 right-4 inline-flex h-9 w-9 items-center justify-center rounded-full border border-white/15 bg-slate-950/75 text-cyan-200 opacity-0 backdrop-blur transition group-hover:opacity-100">
+                    <Icon name="external-link" className="h-4 w-4" />
+                  </span>
+                )}
               </div>
-              <div className="p-6">
-                <h3 className="text-xl font-bold text-white">{item.title}</h3>
-                <p className="mt-2 leading-7 text-slate-400">{item.text}</p>
-                <a
-                  className="mt-5 inline-flex items-center gap-2 text-sm font-semibold text-cyan-300"
-                  href="#kontakt"
-                >
-                  Zapytaj o podobny projekt <Icon name="external-link" className="h-4 w-4" />
-                </a>
+              <div className="flex min-w-0 flex-1 flex-col p-5 sm:p-6">
+                <div className="mb-4 flex min-w-0 flex-wrap items-center gap-2">
+                  <span className="max-w-full rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs font-semibold text-slate-200">
+                    {item.type || "Projekt"}
+                  </span>
+                  <span
+                    className={`rounded-full px-3 py-1 text-xs font-semibold ${
+                      item.status === "realizacja"
+                        ? "border border-emerald-300/25 bg-emerald-400/10 text-emerald-100"
+                        : "border border-violet-300/25 bg-violet-400/10 text-violet-100"
+                    }`}
+                  >
+                    {item.status || "projekt koncepcyjny"}
+                  </span>
+                </div>
+                <h3 className="min-w-0 break-words text-xl font-bold text-white">{item.title}</h3>
+                <p className="mt-3 min-w-0 flex-1 break-words leading-7 text-slate-400">
+                  {item.text}
+                </p>
+                {item.tags?.length > 0 && (
+                  <div className="mt-5 flex min-w-0 flex-wrap gap-2">
+                    {item.tags.map((tag) => (
+                      <span
+                        key={`${item.title}-${tag}`}
+                        className="max-w-full break-words rounded-full bg-cyan-300/10 px-3 py-1 text-xs font-semibold text-cyan-100 ring-1 ring-cyan-300/15"
+                      >
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
+                )}
+                {item.href && (
+                  <a
+                    className="mt-6 inline-flex min-w-0 items-center gap-2 self-start break-words text-sm font-semibold text-cyan-300 hover:text-cyan-200"
+                    href={item.href}
+                    target={item.href.startsWith("http") ? "_blank" : undefined}
+                    rel={item.href.startsWith("http") ? "noreferrer" : undefined}
+                  >
+                    <span className="min-w-0">{item.linkLabel || "Zobacz projekt"}</span>
+                    <Icon name="external-link" className="h-4 w-4 flex-none" />
+                  </a>
+                )}
               </div>
             </article>
           ))}
@@ -652,11 +762,11 @@ function ContactSection({ contact }) {
   return (
     <section
       id="kontakt"
-      className="relative overflow-hidden px-6 py-20 md:px-10 lg:pb-24 lg:pt-20 scroll-mt-24"
+      className="relative overflow-hidden px-4 py-20 sm:px-6 md:px-10 lg:pb-24 lg:pt-20 scroll-mt-24"
     >
-      <div className="relative z-10 mx-auto max-w-7xl overflow-hidden rounded-lg border border-white/10 bg-white/[0.045] p-7 backdrop-blur md:p-10">
-        <div className="grid gap-10 md:grid-cols-[1fr_0.85fr] md:items-center">
-          <div>
+      <div className="relative z-10 mx-auto w-full max-w-7xl overflow-hidden rounded-lg border border-white/10 bg-white/[0.045] p-5 backdrop-blur sm:p-7 md:p-10">
+        <div className="grid min-w-0 gap-10 md:grid-cols-[minmax(0,1fr)_minmax(0,0.85fr)] md:items-center">
+          <div className="min-w-0">
             <p className="mb-3 text-sm font-semibold uppercase tracking-[0.26em] text-cyan-300">
               {contact.eyebrow}
             </p>
@@ -664,24 +774,26 @@ function ContactSection({ contact }) {
               {contact.title}
             </h2>
             <p className="mt-5 max-w-2xl text-lg leading-8 text-slate-300">{contact.text}</p>
-            <div className="mt-8 flex flex-col gap-4 sm:flex-row">
+            <div className="mt-8 flex min-w-0 flex-col gap-4 sm:flex-row sm:flex-wrap">
               <a
-                className="inline-flex items-center justify-center gap-2 rounded-full gradient-button px-7 py-4 text-sm font-bold shadow-xl shadow-blue-500/25 transition hover:scale-105"
+                className="inline-flex w-full min-w-0 items-center justify-center gap-2 rounded-full gradient-button px-5 py-4 text-center text-sm font-bold shadow-xl shadow-blue-500/25 transition hover:scale-105 sm:w-auto sm:px-7"
                 href={`mailto:${contact.email}`}
                 onClick={() => trackContactClick("email", "contact_cta")}
               >
-                {contact.emailButtonLabel} <Icon name="mail" className="h-4 w-4" />
+                <span className="min-w-0 break-words">{contact.emailButtonLabel}</span>
+                <Icon name="mail" className="h-4 w-4 flex-none" />
               </a>
               <a
-                className="inline-flex items-center justify-center gap-2 rounded-full border border-white/15 bg-white/5 px-7 py-4 text-sm font-semibold text-slate-100 backdrop-blur transition hover:border-cyan-300/50 hover:bg-white/10"
+                className="inline-flex w-full min-w-0 items-center justify-center gap-2 rounded-full border border-white/15 bg-white/5 px-5 py-4 text-center text-sm font-semibold text-slate-100 backdrop-blur transition hover:border-cyan-300/50 hover:bg-white/10 sm:w-auto sm:px-7"
                 href={`tel:${contact.phone.replace(/\s/g, "")}`}
                 onClick={() => trackContactClick("phone", "contact_cta")}
               >
-                {contact.phoneButtonLabel} <Icon name="phone" className="h-4 w-4" />
+                <span className="min-w-0 break-words">{contact.phoneButtonLabel}</span>
+                <Icon name="phone" className="h-4 w-4 flex-none" />
               </a>
             </div>
           </div>
-          <div className="rounded-lg border border-cyan-300/20 bg-slate-950/55 p-6 shadow-2xl shadow-blue-500/10">
+          <div className="w-full min-w-0 rounded-lg border border-cyan-300/20 bg-slate-950/55 p-4 shadow-2xl shadow-blue-500/10 sm:p-6">
             {[
               [
                 "phone",
@@ -693,22 +805,24 @@ function ContactSection({ contact }) {
               ["mail", "E-mail", contact.email, `mailto:${contact.email}`, "email"],
               ["globe", "WWW", contact.www, null, null],
             ].map(([icon, label, value, href, contactType]) => (
-              <div key={label} className="mb-5 flex items-center gap-4 last:mb-0">
-                <div className="flex h-12 w-12 items-center justify-center rounded-lg border border-cyan-300/30 bg-white/5 text-cyan-200">
+              <div key={label} className="mb-5 flex min-w-0 items-start gap-3 last:mb-0 sm:gap-4">
+                <div className="flex h-11 w-11 flex-none items-center justify-center rounded-lg border border-cyan-300/30 bg-white/5 text-cyan-200 sm:h-12 sm:w-12">
                   <Icon name={icon} className="h-5 w-5" />
                 </div>
-                <div>
+                <div className="min-w-0">
                   <p className="text-sm text-slate-400">{label}</p>
                   {href ? (
                     <a
-                      className="font-semibold text-white hover:text-cyan-200"
+                      className="break-words font-semibold text-white [overflow-wrap:anywhere] hover:text-cyan-200"
                       href={href}
                       onClick={() => trackContactClick(contactType, "contact_card")}
                     >
                       {value}
                     </a>
                   ) : (
-                    <p className="font-semibold text-white">{value}</p>
+                    <p className="break-words font-semibold text-white [overflow-wrap:anywhere]">
+                      {value}
+                    </p>
                   )}
                 </div>
               </div>

@@ -78,8 +78,18 @@ export const sectionSchemas = {
     items: z
       .array(
         z.object({
+          type: z.string().trim().min(1).max(80).optional().default("Projekt"),
           title: z.string().trim().min(1).max(100),
           text: z.string().trim().min(1).max(360),
+          status: z
+            .enum(["realizacja", "projekt koncepcyjny"])
+            .optional()
+            .default("projekt koncepcyjny"),
+          tags: z.array(z.string().trim().min(1).max(40)).max(8).optional().default([]),
+          href: z.string().trim().max(240).optional().default(""),
+          linkLabel: z.string().trim().max(80).optional().default("Zobacz projekt"),
+          screenshotUrl: z.string().trim().max(300).optional().default(""),
+          mockupTone: z.enum(["cyan", "violet", "blue", "emerald"]).optional().default("cyan"),
         }),
       )
       .min(1)

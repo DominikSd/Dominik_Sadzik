@@ -1,0 +1,96 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 750" role="img" aria-labelledby="title desc">
+  <title id="title">Podglad strony Centrum Terapii Neuronest</title>
+  <desc id="desc">Jasny mockup strony uslugowej z nawigacja, kartami oferty i sekcja szczegolow.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0" stop-color="#fff8fb"/>
+      <stop offset="1" stop-color="#f6f0ff"/>
+    </linearGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="16" stdDeviation="18" flood-color="#6f6097" flood-opacity=".16"/>
+    </filter>
+    <pattern id="dots" width="34" height="34" patternUnits="userSpaceOnUse">
+      <circle cx="8" cy="10" r="3.5" fill="#efd6e7" opacity=".45"/>
+    </pattern>
+  </defs>
+  <rect width="1200" height="750" fill="url(#bg)"/>
+  <rect y="88" width="1200" height="662" fill="url(#dots)" opacity=".55"/>
+  <rect width="1200" height="88" fill="#fffafc"/>
+  <line x1="0" y1="88" x2="1200" y2="88" stroke="#e8dfea" stroke-width="2"/>
+
+  <g transform="translate(42 19)">
+    <circle cx="29" cy="25" r="24" fill="#f5ebff" stroke="#8158aa" stroke-width="3"/>
+    <circle cx="29" cy="28" r="9" fill="none" stroke="#8158aa" stroke-width="3"/>
+    <path d="M18 19c8-14 28-13 35 2M15 42c8 10 24 16 39 2" fill="none" stroke="#8158aa" stroke-width="3" stroke-linecap="round"/>
+    <text x="74" y="19" fill="#2e293d" font-family="Inter, Arial, sans-serif" font-size="17" font-weight="800">Centrum Terapii</text>
+    <text x="74" y="43" fill="#7d748f" font-family="Inter, Arial, sans-serif" font-size="15">Neuronest</text>
+  </g>
+  <g fill="#6e6683" font-family="Inter, Arial, sans-serif" font-size="16" font-weight="700">
+    <text x="380" y="48">O mnie</text>
+    <text x="454" y="48">Oferta</text>
+    <text x="532" y="48">Cennik</text>
+    <text x="608" y="48">Opinie</text>
+    <text x="690" y="48">Kontakt</text>
+  </g>
+  <g transform="translate(870 18)">
+    <text x="38" y="31" fill="#2e293d" font-family="Inter, Arial, sans-serif" font-size="18" font-weight="800">667 003 580</text>
+    <path d="M17 11c5 11 13 19 25 24" fill="none" stroke="#6f6097" stroke-width="5" stroke-linecap="round"/>
+    <rect x="176" y="0" width="148" height="48" rx="24" fill="#73658f"/>
+    <text x="206" y="31" fill="#fff" font-family="Inter, Arial, sans-serif" font-size="17" font-weight="800">Umow wizyte</text>
+  </g>
+
+  <g transform="translate(44 112)" filter="url(#shadow)">
+    <g>
+      <rect width="210" height="284" rx="17" fill="#fff" stroke="#ece5ef"/>
+      <rect x="58" y="35" width="96" height="58" rx="18" fill="#f2edf6"/>
+      <path d="M86 50h41v28H86zM105 78v13M94 91h23" fill="none" stroke="#817794" stroke-width="4" stroke-linecap="round"/>
+      <text x="105" y="142" text-anchor="middle" fill="#141118" font-family="Inter, Arial, sans-serif" font-size="20" font-weight="900">Terapia</text>
+      <text x="105" y="170" text-anchor="middle" fill="#141118" font-family="Inter, Arial, sans-serif" font-size="20" font-weight="900">psychologiczna</text>
+      <text x="105" y="224" text-anchor="middle" fill="#726a86" font-family="Inter, Arial, sans-serif" font-size="16">Wsparcie emocji</text>
+    </g>
+    <g transform="translate(228)">
+      <rect width="210" height="284" rx="17" fill="#fff" stroke="#ece5ef"/>
+      <rect x="62" y="35" width="88" height="58" rx="18" fill="#f2edf6"/>
+      <path d="M86 50h42v43H86zM96 42h22M96 64h22M96 77h34" fill="none" stroke="#817794" stroke-width="4" stroke-linecap="round"/>
+      <text x="105" y="148" text-anchor="middle" fill="#141118" font-family="Inter, Arial, sans-serif" font-size="20" font-weight="900">Diagnoza</text>
+      <text x="105" y="212" text-anchor="middle" fill="#726a86" font-family="Inter, Arial, sans-serif" font-size="16">Wywiad i plan</text>
+    </g>
+    <g transform="translate(456)">
+      <rect width="210" height="284" rx="17" fill="#fff" stroke="#ece5ef"/>
+      <rect x="60" y="35" width="92" height="58" rx="18" fill="#f2edf6"/>
+      <path d="M78 76h66M92 44v40M125 44v40M104 76a18 18 0 1 0 1-1" fill="none" stroke="#817794" stroke-width="4" stroke-linecap="round"/>
+      <text x="105" y="148" text-anchor="middle" fill="#141118" font-family="Inter, Arial, sans-serif" font-size="20" font-weight="900">Terapia SI</text>
+      <text x="105" y="212" text-anchor="middle" fill="#726a86" font-family="Inter, Arial, sans-serif" font-size="16">Integracja sensoryczna</text>
+    </g>
+    <g transform="translate(684)">
+      <rect width="210" height="284" rx="17" fill="#fff" stroke="#ece5ef"/>
+      <rect x="62" y="35" width="88" height="58" rx="18" fill="#f2edf6"/>
+      <path d="M100 86V50M116 86V47M132 86V55M84 86V64M84 86c12 18 36 18 58 2" fill="none" stroke="#817794" stroke-width="4" stroke-linecap="round"/>
+      <text x="105" y="148" text-anchor="middle" fill="#141118" font-family="Inter, Arial, sans-serif" font-size="20" font-weight="900">Terapia reki</text>
+      <text x="105" y="212" text-anchor="middle" fill="#726a86" font-family="Inter, Arial, sans-serif" font-size="16">Motoryka mala</text>
+    </g>
+    <g transform="translate(912)">
+      <rect width="210" height="284" rx="17" fill="#fff" stroke="#ece5ef"/>
+      <rect x="62" y="35" width="88" height="58" rx="18" fill="#f2edf6"/>
+      <path d="M80 56h38M80 70h30M124 61h18M118 82l18 14" fill="none" stroke="#817794" stroke-width="4" stroke-linecap="round"/>
+      <text x="105" y="148" text-anchor="middle" fill="#141118" font-family="Inter, Arial, sans-serif" font-size="20" font-weight="900">TUS</text>
+      <text x="105" y="212" text-anchor="middle" fill="#726a86" font-family="Inter, Arial, sans-serif" font-size="16">Trening spoleczny</text>
+    </g>
+  </g>
+
+  <text x="44" y="528" fill="#282338" font-family="Inter, Arial, sans-serif" font-size="32" font-weight="900">Szczegoly oferty</text>
+  <g transform="translate(44 548)" filter="url(#shadow)">
+    <rect width="1118" height="54" rx="16" fill="#fff" stroke="#ece5ef"/>
+    <rect x="12" y="14" width="4" height="28" rx="2" fill="#96afd6"/>
+    <text x="30" y="35" fill="#3c364c" font-family="Inter, Arial, sans-serif" font-size="16">Terapia psychologiczna</text>
+    <rect x="1074" y="10" width="34" height="34" rx="10" fill="#f1edf5"/>
+    <text x="1085" y="34" fill="#6f6097" font-family="Inter, Arial, sans-serif" font-size="20" font-weight="900">+</text>
+  </g>
+  <g transform="translate(44 632)" filter="url(#shadow)">
+    <rect width="1118" height="54" rx="16" fill="#fff" stroke="#ece5ef"/>
+    <rect x="12" y="14" width="4" height="28" rx="2" fill="#96afd6"/>
+    <text x="30" y="35" fill="#3c364c" font-family="Inter, Arial, sans-serif" font-size="16">Diagnoza</text>
+    <rect x="1074" y="10" width="34" height="34" rx="10" fill="#f1edf5"/>
+    <text x="1085" y="34" fill="#6f6097" font-family="Inter, Arial, sans-serif" font-size="20" font-weight="900">+</text>
+  </g>
+</svg>
