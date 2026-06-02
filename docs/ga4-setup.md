@@ -96,6 +96,44 @@ supabase functions serve ga4-report --env-file ./supabase/functions/.env.local
 3. Click `Odswiez`.
 4. Confirm that metrics load or that the error message is actionable.
 
+The panel dashboard reads a simplified report from Supabase Edge Function `ga4-report`. It shows:
+
+- active users for the last 7 and 30 days,
+- page views for the last 7 and 30 days,
+- sessions for the last 7 and 30 days,
+- event count for the last 7 and 30 days,
+- top page paths,
+- safe tracked events such as `cta_click`, `contact_click`, and `form_submit`,
+- traffic sources by `sessionSourceMedium`,
+- device categories such as desktop, mobile, and tablet.
+
+The extra `Otworz pelny raport w Google Analytics` link may stay in the panel as a secondary action,
+but the primary stats should be visible inside the CMS panel.
+
+If the panel shows:
+
+```text
+Statystyki GA4 nie sa jeszcze skonfigurowane. Uzupelnij sekrety Edge Function i sprawdz GA4_PROPERTY_ID.
+```
+
+check:
+
+- `GA4_PROPERTY_ID` in Supabase Edge Function Secrets,
+- `GOOGLE_SERVICE_ACCOUNT_JSON_BASE64` in Supabase Edge Function Secrets,
+- service account access to the GA4 property,
+- deployed `ga4-report` Edge Function.
+
+If the panel shows no data, GA4 may still need time to collect traffic after tracking consent is
+granted.
+
+For a client template deployment, prefer a separate GA4 property and a separate Supabase project per
+client. At minimum configure these values for every client:
+
+- `VITE_GA_MEASUREMENT_ID` in frontend environment variables,
+- `GA4_PROPERTY_ID` in Supabase Edge Function Secrets,
+- `GOOGLE_SERVICE_ACCOUNT_JSON_BASE64` in Supabase Edge Function Secrets,
+- service account Viewer or Analyst access to the client's GA4 property.
+
 Manual endpoint test requires a logged-in Supabase user token:
 
 ```bash

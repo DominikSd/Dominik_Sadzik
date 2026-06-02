@@ -1,5 +1,9 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { clearAnalyticsReportCache, fetchGa4Report } from "./analyticsApi";
+import {
+  clearAnalyticsReportCache,
+  fetchGa4Report,
+  normalizeAnalyticsReport,
+} from "./analyticsApi";
 
 const mocks = vi.hoisted(() => ({
   client: {
@@ -23,10 +27,15 @@ const report = {
     users30d: 2,
     pageViews7d: 3,
     pageViews30d: 4,
+    sessions7d: 5,
+    sessions30d: 6,
+    eventCount7d: 7,
+    eventCount30d: 8,
   },
   topPages: [],
-  trackedEvents: [],
+  topEvents: [],
   trafficSources: [],
+  devices: [],
 };
 
 describe("analyticsApi", () => {
@@ -95,5 +104,22 @@ describe("analyticsApi", () => {
     expect(first.clientCache.hit).toBe(false);
     expect(second.clientCache.hit).toBe(true);
     expect(mocks.client.functions.invoke).toHaveBeenCalledTimes(1);
+  });
+
+  it("normalizes report shape and keeps compatibility with trackedEvents", () => {
+    const normalized = normalizeAnalyticsReport({
+      summary: {
+        users7d: "4",
+        users30d: "10",
+        pageViews7d: "20",
+        pageViews30d: "40",
+      },
+      trackedEvents: [{ eventName: "cta_click", count: "3" }],
+    });
+
+    expect(normalized.summary.users7d).toBe(4);
+    expect(normalized.summary.sessions30d).toBe(0);
+    expect(normalized.topEvents).toEqual([{ eventName: "cta_click", count: 3 }]);
+    expect(normalized.noData).toBe(false);
   });
 });

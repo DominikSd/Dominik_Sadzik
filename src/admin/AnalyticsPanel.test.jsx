@@ -28,10 +28,17 @@ const report = {
     users30d: 40,
     pageViews7d: 25,
     pageViews30d: 90,
+    sessions7d: 8,
+    sessions30d: 34,
+    eventCount7d: 12,
+    eventCount30d: 48,
   },
+  generatedAt: "2026-06-02T10:00:00.000Z",
   topPages: [{ path: "/", pageViews: 50, users: 20 }],
+  topEvents: [{ eventName: "cta_click", count: 7 }],
   trackedEvents: [{ eventName: "cta_click", count: 7 }],
   trafficSources: [{ sourceMedium: "google / organic", sessions: 12, users: 10 }],
+  devices: [{ deviceCategory: "mobile", users: 9, sessions: 11 }],
   noData: false,
   cache: { hit: false, ageSeconds: 0 },
 };
@@ -75,23 +82,35 @@ describe("AnalyticsPanel", () => {
     render(<AnalyticsPanel />);
 
     expect(
-      await screen.findByText("Brakuje konfiguracji GA4 w sekretach Supabase Edge Function."),
+      await screen.findByText(
+        "Statystyki GA4 nie sa jeszcze skonfigurowane. Uzupelnij sekrety Edge Function i sprawdz Property ID GA4.",
+      ),
     ).toBeTruthy();
   });
 
   it("shows empty data notice", async () => {
     mocks.report.mockResolvedValue({
       ...report,
-      summary: { users7d: 0, users30d: 0, pageViews7d: 0, pageViews30d: 0 },
+      summary: {
+        users7d: 0,
+        users30d: 0,
+        pageViews7d: 0,
+        pageViews30d: 0,
+        sessions7d: 0,
+        sessions30d: 0,
+        eventCount7d: 0,
+        eventCount30d: 0,
+      },
       topPages: [],
-      trackedEvents: [],
+      topEvents: [],
       trafficSources: [],
+      devices: [],
       noData: true,
     });
 
     render(<AnalyticsPanel />);
 
-    expect(await screen.findByText(/nie ma jeszcze danych/i)).toBeTruthy();
+    expect(await screen.findByText(/GA4 moze potrzebowac czasu/i)).toBeTruthy();
   });
 
   it("renders report data", async () => {
@@ -99,10 +118,13 @@ describe("AnalyticsPanel", () => {
 
     render(<AnalyticsPanel />);
 
-    expect(await screen.findByText("Users 7 dni")).toBeTruthy();
+    expect(await screen.findByText("Aktywni uzytkownicy 7 dni")).toBeTruthy();
+    expect(screen.getByText("Sesje 30 dni")).toBeTruthy();
+    expect(screen.getByText("Eventy 30 dni")).toBeTruthy();
     expect(screen.getByText("90")).toBeTruthy();
     expect(screen.getByText("/")).toBeTruthy();
     expect(screen.getByText("cta_click")).toBeTruthy();
     expect(screen.getByText("google / organic")).toBeTruthy();
+    expect(screen.getByText("Mobile")).toBeTruthy();
   });
 });

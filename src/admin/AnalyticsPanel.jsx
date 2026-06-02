@@ -1,10 +1,31 @@
 import React, { useEffect, useState } from "react";
-import { ExternalLink, RefreshCw, ShieldAlert } from "lucide-react";
+import { BarChart3, ExternalLink, RefreshCw, ShieldAlert } from "lucide-react";
 import { getAnalyticsConfig } from "../lib/analytics/ga4";
 import { clearAnalyticsReportCache, fetchGa4Report } from "./analyticsApi";
 
 function formatNumber(value) {
   return new Intl.NumberFormat("pl-PL").format(Number(value || 0));
+}
+
+function formatDateTime(value) {
+  if (!value) return "Brak daty";
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return "Brak daty";
+
+  return new Intl.DateTimeFormat("pl-PL", {
+    dateStyle: "short",
+    timeStyle: "short",
+  }).format(date);
+}
+
+function deviceLabel(value) {
+  const labels = {
+    desktop: "Desktop",
+    mobile: "Mobile",
+    tablet: "Tablet",
+  };
+
+  return labels[value] || value || "Nieznane";
 }
 
 function MetricCard({ label, value, hint }) {
@@ -17,10 +38,11 @@ function MetricCard({ label, value, hint }) {
   );
 }
 
-function DataTable({ title, emptyText, columns, rows }) {
+function DataTable({ title, description, emptyText, columns, rows }) {
   return (
     <div className="rounded-lg border border-white/10 bg-slate-950/45 p-5">
       <h3 className="text-lg font-black text-white">{title}</h3>
+      {description && <p className="mt-1 text-sm leading-6 text-slate-400">{description}</p>}
       {rows.length === 0 ? (
         <p className="mt-4 text-sm text-slate-400">{emptyText}</p>
       ) : (
@@ -53,13 +75,29 @@ function DataTable({ title, emptyText, columns, rows }) {
   );
 }
 
+function Notice({ title, text, tone = "cyan" }) {
+  const toneClass =
+    tone === "amber"
+      ? "border-amber-300/30 bg-amber-500/10 text-amber-50"
+      : "border-cyan-300/25 bg-cyan-500/10 text-cyan-50";
+
+  return (
+    <div className={`rounded-lg border p-4 ${toneClass}`}>
+      <p className="font-bold">{title}</p>
+      <p className="mt-1 text-sm leading-6">{text}</p>
+    </div>
+  );
+}
+
 function ErrorMessage({ error }) {
   const code = error?.code || "";
   const fallback = error?.message || "Nie udalo sie pobrac statystyk.";
   const messages = {
-    ga4_not_configured: "Brakuje konfiguracji GA4 w sekretach Supabase Edge Function.",
+    ga4_not_configured:
+      "Statystyki GA4 nie sa jeszcze skonfigurowane. Uzupelnij sekrety Edge Function i sprawdz Property ID GA4.",
     ga4_access_denied: "Service account nie ma dostepu do GA4 property.",
     ga4_rate_limited: "Przekroczono limit Google Analytics Data API. Sprobuj pozniej.",
+    google_auth_failed: "Nie udalo sie uwierzytelnic service account Google.",
     not_authenticated: "Sesja wygasla. Zaloguj sie ponownie.",
     not_authorized: "Twoje konto nie ma dostepu do statystyk tej strony.",
   };
@@ -105,6 +143,8 @@ export default function AnalyticsPanel() {
     loadReport({ forceRefresh: true });
   };
 
+  const summary = report?.summary || {};
+
   return (
     <div className="space-y-6">
       <div className="rounded-lg border border-white/10 bg-slate-950/55 p-5">
@@ -117,8 +157,8 @@ export default function AnalyticsPanel() {
               {analytics.isConfigured ? "Raport GA4" : "GA4 nie jest skonfigurowane we frontendzie"}
             </h3>
             <p className="mt-2 text-sm leading-6 text-slate-400">
-              Dane ponizej sa pobierane przez Supabase Edge Function `ga4-report`. Sekrety Google
-              zostaja po stronie backendu.
+              Dane ponizej sa pobierane przez Supabase Edge Function ga4-report. Sekrety Google
+              zostaja po stronie backendu, a raport moze miec opoznienie wzgledem Google Analytics.
             </p>
           </div>
           <div className="flex flex-wrap gap-2">
@@ -163,8 +203,22 @@ export default function AnalyticsPanel() {
                   : "Swieze dane"}
             </dd>
           </div>
+          <div className="rounded-lg border border-white/10 bg-white/[0.035] p-4">
+            <dt className="text-sm text-slate-400">Wygenerowano</dt>
+            <dd className="mt-1 text-sm font-semibold text-white">
+              {formatDateTime(report?.generatedAt)}
+            </dd>
+          </div>
         </dl>
       </div>
+
+      {!analytics.isConfigured && (
+        <Notice
+          title="Tracking frontendu nie jest jeszcze skonfigurowany"
+          text="Uzupelnij publiczne VITE_GA_MEASUREMENT_ID. Raport w panelu nadal wymaga sekretow Edge Function po stronie Supabase."
+          tone="amber"
+        />
+      )}
 
       {error && <ErrorMessage error={error} />}
 
@@ -175,23 +229,42 @@ export default function AnalyticsPanel() {
       )}
 
       {report?.noData && (
-        <div className="rounded-lg border border-amber-300/30 bg-amber-500/10 p-4 text-sm text-amber-50">
-          GA4 zwrocilo poprawna odpowiedz, ale dla wybranego zakresu nie ma jeszcze danych.
-        </div>
+        <Notice
+          title="Brak danych dla wybranego okresu"
+          text="Brak danych dla wybranego okresu. GA4 moze potrzebowac czasu na zebranie statystyk."
+          tone="amber"
+        />
       )}
 
       {report && (
         <>
-          <dl className="grid gap-4 md:grid-cols-4">
-            <MetricCard label="Users 7 dni" value={report.summary?.users7d} />
-            <MetricCard label="Users 30 dni" value={report.summary?.users30d} />
-            <MetricCard label="Page views 7 dni" value={report.summary?.pageViews7d} />
-            <MetricCard label="Page views 30 dni" value={report.summary?.pageViews30d} />
+          <div className="rounded-lg border border-white/10 bg-slate-950/45 p-5">
+            <div className="flex items-center gap-3">
+              <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-cyan-400/10 text-cyan-200">
+                <BarChart3 className="h-5 w-5" />
+              </div>
+              <div>
+                <h3 className="text-lg font-black text-white">Podsumowanie ruchu</h3>
+                <p className="text-sm text-slate-400">Zakresy: ostatnie 7 dni i ostatnie 30 dni.</p>
+              </div>
+            </div>
+          </div>
+
+          <dl className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+            <MetricCard label="Aktywni uzytkownicy 7 dni" value={summary.users7d} />
+            <MetricCard label="Aktywni uzytkownicy 30 dni" value={summary.users30d} />
+            <MetricCard label="Odslony 7 dni" value={summary.pageViews7d} />
+            <MetricCard label="Odslony 30 dni" value={summary.pageViews30d} />
+            <MetricCard label="Sesje 7 dni" value={summary.sessions7d} />
+            <MetricCard label="Sesje 30 dni" value={summary.sessions30d} />
+            <MetricCard label="Eventy 7 dni" value={summary.eventCount7d} />
+            <MetricCard label="Eventy 30 dni" value={summary.eventCount30d} />
           </dl>
 
           <div className="grid gap-5 xl:grid-cols-2">
             <DataTable
               title="Najpopularniejsze sciezki"
+              description="Najczesciej odwiedzane podstrony w ostatnich 30 dniach."
               emptyText="Brak danych o sciezkach."
               rows={report.topPages || []}
               columns={[
@@ -201,9 +274,10 @@ export default function AnalyticsPanel() {
               ]}
             />
             <DataTable
-              title="CTA i kontakt"
+              title="Akcje uzytkownikow"
+              description="Bezpieczne eventy: cta_click, contact_click i form_submit."
               emptyText="Brak eventow cta_click/contact_click/form_submit."
-              rows={report.trackedEvents || []}
+              rows={report.topEvents || report.trackedEvents || []}
               columns={[
                 { key: "eventName", label: "Event" },
                 { key: "count", label: "Liczba", format: formatNumber },
@@ -211,12 +285,24 @@ export default function AnalyticsPanel() {
             />
             <DataTable
               title="Zrodla ruchu"
+              description="Najczestsze source / medium wedlug sesji."
               emptyText="Brak danych o zrodlach ruchu."
               rows={report.trafficSources || []}
               columns={[
                 { key: "sourceMedium", label: "Source / medium" },
                 { key: "sessions", label: "Sessions", format: formatNumber },
                 { key: "users", label: "Users", format: formatNumber },
+              ]}
+            />
+            <DataTable
+              title="Urzadzenia"
+              description="Ogolny podzial ruchu bez profilowania pojedynczych uzytkownikow."
+              emptyText="Brak danych o urzadzeniach."
+              rows={report.devices || []}
+              columns={[
+                { key: "deviceCategory", label: "Urzadzenie", format: deviceLabel },
+                { key: "users", label: "Users", format: formatNumber },
+                { key: "sessions", label: "Sessions", format: formatNumber },
               ]}
             />
           </div>

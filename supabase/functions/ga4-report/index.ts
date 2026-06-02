@@ -175,6 +175,8 @@ function summaryFromReport(report: Record<string, unknown>) {
   return {
     users: row ? metric(row, 0) : 0,
     pageViews: row ? metric(row, 1) : 0,
+    sessions: row ? metric(row, 2) : 0,
+    eventCount: row ? metric(row, 3) : 0,
   };
 }
 
@@ -183,14 +185,24 @@ function rows(report: Record<string, unknown>) {
 }
 
 async function buildReport(propertyId: string, accessToken: string) {
-  const [summary7d, summary30d, pages, events, traffic] = await Promise.all([
+  const [summary7d, summary30d, pages, events, traffic, devices] = await Promise.all([
     runReport(accessToken, propertyId, {
       dateRanges: [{ startDate: "7daysAgo", endDate: "today" }],
-      metrics: [{ name: "activeUsers" }, { name: "screenPageViews" }],
+      metrics: [
+        { name: "activeUsers" },
+        { name: "screenPageViews" },
+        { name: "sessions" },
+        { name: "eventCount" },
+      ],
     }),
     runReport(accessToken, propertyId, {
       dateRanges: [{ startDate: "30daysAgo", endDate: "today" }],
-      metrics: [{ name: "activeUsers" }, { name: "screenPageViews" }],
+      metrics: [
+        { name: "activeUsers" },
+        { name: "screenPageViews" },
+        { name: "sessions" },
+        { name: "eventCount" },
+      ],
     }),
     runReport(accessToken, propertyId, {
       dateRanges: [{ startDate: "30daysAgo", endDate: "today" }],
@@ -221,6 +233,13 @@ async function buildReport(propertyId: string, accessToken: string) {
       orderBys: [{ metric: { metricName: "sessions" }, desc: true }],
       limit: 8,
     }),
+    runReport(accessToken, propertyId, {
+      dateRanges: [{ startDate: "30daysAgo", endDate: "today" }],
+      dimensions: [{ name: "deviceCategory" }],
+      metrics: [{ name: "activeUsers" }, { name: "sessions" }],
+      orderBys: [{ metric: { metricName: "activeUsers" }, desc: true }],
+      limit: 8,
+    }),
   ]);
 
   const sevenDays = summaryFromReport(summary7d);
@@ -228,19 +247,26 @@ async function buildReport(propertyId: string, accessToken: string) {
 
   return {
     generatedAt: new Date().toISOString(),
-    propertyId,
+    dateRanges: {
+      sevenDays: { startDate: "7daysAgo", endDate: "today" },
+      thirtyDays: { startDate: "30daysAgo", endDate: "today" },
+    },
     summary: {
       users7d: sevenDays.users,
       users30d: thirtyDays.users,
       pageViews7d: sevenDays.pageViews,
       pageViews30d: thirtyDays.pageViews,
+      sessions7d: sevenDays.sessions,
+      sessions30d: thirtyDays.sessions,
+      eventCount7d: sevenDays.eventCount,
+      eventCount30d: thirtyDays.eventCount,
     },
     topPages: rows(pages).map((row) => ({
       path: dimension(row, 0),
       pageViews: metric(row, 0),
       users: metric(row, 1),
     })),
-    trackedEvents: rows(events).map((row) => ({
+    topEvents: rows(events).map((row) => ({
       eventName: dimension(row, 0),
       count: metric(row, 0),
     })),
@@ -248,6 +274,11 @@ async function buildReport(propertyId: string, accessToken: string) {
       sourceMedium: dimension(row, 0),
       sessions: metric(row, 0),
       users: metric(row, 1),
+    })),
+    devices: rows(devices).map((row) => ({
+      deviceCategory: dimension(row, 0),
+      users: metric(row, 0),
+      sessions: metric(row, 1),
     })),
   };
 }
@@ -380,7 +411,7 @@ Deno.serve(async (req) => {
         report.summary.users30d === 0 &&
         report.summary.pageViews30d === 0 &&
         report.topPages.length === 0 &&
-        report.trackedEvents.length === 0,
+        report.topEvents.length === 0,
       cache: {
         hit: false,
         ageSeconds: 0,

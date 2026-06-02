@@ -648,7 +648,9 @@ function PortfolioSection({ portfolio }) {
                     {item.status || "projekt koncepcyjny"}
                   </span>
                 </div>
-                <h3 className="min-w-0 break-words text-xl font-bold text-white">{item.title}</h3>
+                <h3 className="min-w-0 whitespace-pre-line break-words text-xl font-bold text-white">
+                  {item.title}
+                </h3>
                 <p className="mt-3 min-w-0 flex-1 break-words leading-7 text-slate-400">
                   {item.text}
                 </p>
