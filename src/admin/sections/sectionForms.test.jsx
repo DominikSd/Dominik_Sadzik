@@ -4,7 +4,9 @@ import { describe, expect, it, vi } from "vitest";
 import { defaultSiteContent } from "../../content/defaultSiteContent";
 import ContactSectionForm from "./ContactSectionForm";
 import FaqSectionForm from "./FaqSectionForm";
+import FeatureCardsSectionForm from "./FeatureCardsSectionForm";
 import HeroSectionForm from "./HeroSectionForm";
+import PagesSectionForm from "./PagesSectionForm";
 import SeoSectionForm from "./SeoSectionForm";
 import ServicesSectionForm from "./ServicesSectionForm";
 import SettingsSectionForm from "./SettingsSectionForm";
@@ -12,6 +14,9 @@ import SettingsSectionForm from "./SettingsSectionForm";
 const forms = [
   ["hero", HeroSectionForm, "Naglowek"],
   ["services", ServicesSectionForm, "Opis sekcji"],
+  ["automationQa", FeatureCardsSectionForm, "CTA label"],
+  ["gamedevTeaser", FeatureCardsSectionForm, "Dodaj karte"],
+  ["pages", PagesSectionForm, "SEO podstrony"],
   ["faq", FaqSectionForm, "Dodaj pytanie"],
   ["contact", ContactSectionForm, "Telefon"],
   ["seo", SeoSectionForm, "Meta title"],

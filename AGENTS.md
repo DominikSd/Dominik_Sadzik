@@ -226,6 +226,7 @@ Jeżeli zmieniasz konfigurację lub sposób uruchamiania, zaktualizuj właściwy
 - `docs/hosting-options.md` — wybór hostingu dla stron klientów,
 - `docs/client-ownership-model.md` — modele własności kont, domen i usług,
 - `docs/client-maintenance-checklist.md` — comiesięczna obsługa klienta,
+- `docs/pages-and-cms-content.md` — predefiniowane podstrony i edycja ich treści w CMS,
 - `docs/roadmap.md` — przyszłe etapy.
 
 Warto dodać, jeśli jeszcze ich nie ma:

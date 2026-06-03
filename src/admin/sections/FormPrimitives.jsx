@@ -47,6 +47,7 @@ export function ListEditor({
   createItem,
   renderItem,
   addLabel = "Dodaj element",
+  maxItems = Infinity,
 }) {
   const move = (index, direction) => {
     const next = [...items];
@@ -93,10 +94,16 @@ export function ListEditor({
       <button
         type="button"
         onClick={() => onChange([...items, createItem()])}
+        disabled={items.length >= maxItems}
         className="rounded-lg border border-cyan-300/30 bg-cyan-400/10 px-4 py-2 text-sm font-semibold text-cyan-100 hover:bg-cyan-400/15"
       >
         {addLabel}
       </button>
+      {Number.isFinite(maxItems) && (
+        <p className="text-xs text-slate-500">
+          Limit elementow: {items.length}/{maxItems}
+        </p>
+      )}
     </div>
   );
 }

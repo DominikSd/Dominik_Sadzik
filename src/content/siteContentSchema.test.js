@@ -14,6 +14,9 @@ describe("site content schema", () => {
   it("maps editable keys to the expected CMS collections", () => {
     expect(getCollectionForKey("hero")).toBe("page_sections");
     expect(getCollectionForKey("services")).toBe("page_sections");
+    expect(getCollectionForKey("automationQa")).toBe("page_sections");
+    expect(getCollectionForKey("gamedevTeaser")).toBe("page_sections");
+    expect(getCollectionForKey("pages")).toBe("page_sections");
     expect(getCollectionForKey("faq")).toBe("page_sections");
     expect(getCollectionForKey("contact")).toBe("page_sections");
     expect(getCollectionForKey("seo")).toBe("seo");
@@ -36,5 +39,20 @@ describe("site content schema", () => {
     };
 
     expect(() => validateSectionData("faq", faq)).toThrow();
+  });
+
+  it("validates editable predefined detail pages", () => {
+    const pages = {
+      ...defaultSiteContent.pages,
+      automationTesting: {
+        ...defaultSiteContent.pages.automationTesting,
+        seo: {
+          ...defaultSiteContent.pages.automationTesting.seo,
+          title: "",
+        },
+      },
+    };
+
+    expect(() => validateSectionData("pages", pages)).toThrow();
   });
 });

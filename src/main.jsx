@@ -115,7 +115,7 @@ export function AppRouter() {
     ) : hash === `#/${adminHashPath}` ? (
       <AdminApp />
     ) : (
-      <LandingPage />
+      <LandingPage routeHash={hash} />
     );
 
   return (

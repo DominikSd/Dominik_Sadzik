@@ -55,6 +55,62 @@ export const defaultSiteContent = {
       },
     ],
   },
+  automationQa: {
+    eyebrow: "Jakosc i automatyzacja",
+    title: "Automatyzacja, QA i testowanie",
+    text: "Jako certyfikowany tester ISTQB patrze na strony nie tylko od strony wygladu, ale tez jakosci dzialania. Pomagam wykrywac bledy, porzadkowac scenariusze testowe i automatyzowac powtarzalne czynnosci, ktore oszczedzaja czas przy rozwoju projektu.",
+    certificateNote: "Certyfikowany tester ISTQB - praktyczne podejscie do jakosci.",
+    ctaLabel: "Zobacz podejscie QA",
+    ctaHref: "#/automatyzacja-testowanie",
+    secondaryCtaLabel: "Certyfikat i testy",
+    secondaryCtaHref: "#/tester-istqb",
+    cards: [
+      {
+        icon: "check",
+        title: "Testowanie stron i aplikacji",
+        text: "Sprawdzanie formularzy, linkow, responsywnosci, podstawowych scenariuszy uzytkownika i bledow UI.",
+      },
+      {
+        icon: "sparkles",
+        title: "Automatyzacja procesow",
+        text: "Tworzenie prostych narzedzi i skryptow, ktore oszczedzaja czas i ograniczaja powtarzalne czynnosci.",
+      },
+      {
+        icon: "globe",
+        title: "QA i raportowanie bledow",
+        text: "Przygotowanie przypadkow testowych, checklist, raportow bledow i rekomendacji napraw.",
+      },
+      {
+        icon: "monitor",
+        title: "Podstawy testow automatycznych",
+        text: "Automatyczne sprawdzanie wybranych sciezek uzytkownika i najwazniejszych elementow strony.",
+      },
+    ],
+  },
+  gamedevTeaser: {
+    eyebrow: "Interaktywne projekty",
+    title: "GameDev i projekty interaktywne",
+    text: "Od czasu do czasu rozwijam rowniez projekty zwiazane z tworzeniem gier i interaktywnych prototypow. To obszar, ktory laczy programowanie, logike, kreatywnosc i testowanie zachowan uzytkownika.",
+    ctaLabel: "Zobacz GameDev",
+    ctaHref: "#/gamedev",
+    cards: [
+      {
+        icon: "sparkles",
+        title: "Prototypy gier",
+        text: "Tworzenie prostych mechanik, poziomow i interaktywnych scen.",
+      },
+      {
+        icon: "monitor",
+        title: "Logika rozgrywki",
+        text: "Ruch postaci, kolizje, zbieranie punktow, przeciwnicy i podstawowe systemy gry.",
+      },
+      {
+        icon: "palette",
+        title: "Edukacja i eksperymenty",
+        text: "Wykorzystanie game devu w nauce programowania i kreatywnych projektach.",
+      },
+    ],
+  },
   benefits: {
     eyebrow: "Co otrzymujesz",
     title: "Strone, ktora pomaga klientowi szybko podjac decyzje",
@@ -133,12 +189,266 @@ export const defaultSiteContent = {
         type: "Panel CMS/template",
         title: "Lekki panel edycji tresci",
         text: "Template strony z prywatnym panelem CMS, logowaniem, draftami, publikacja oraz podstawowymi statystykami GA4.",
+        details:
+          "Przygotowalem przeplyw draft/published, autoryzacje Supabase i widok statystyk bez ujawniania sekretow w froncie.",
         status: "projekt koncepcyjny",
+        category: "CMS",
         tags: ["CMS", "Supabase", "Auth", "GA4"],
         screenshotUrl: "portfolio/cms-panel-template.svg",
         mockupTone: "emerald",
       },
+      {
+        type: "Automatyzacja",
+        title: "Smoke test strony po deployu",
+        text: "Projekt demo pokazujacy, jak mozna sprawdzac kluczowe elementy strony po publikacji: widocznosc sekcji, CTA, formularz i podstawowe linki.",
+        details:
+          "Zakres obejmuje checklisty QA, podstawowe scenariusze i pomysl na automatyczne kontrole regresji.",
+        status: "projekt demo",
+        category: "Automatyzacja",
+        tags: ["QA", "testy", "checklista", "automatyzacja"],
+        href: "#/automatyzacja-testowanie",
+        linkLabel: "Zobacz QA",
+        mockupTone: "blue",
+      },
+      {
+        type: "Testowanie / QA",
+        title: "Raport testow funkcjonalnych",
+        text: "Koncepcja uporzadkowanego raportu z testow: kroki odtworzenia, oczekiwany i rzeczywisty rezultat, priorytet oraz rekomendacja poprawki.",
+        details:
+          "Akcent na czytelna komunikacje z klientem i szybkie odtworzenie problemu przez developera.",
+        status: "koncepcja",
+        category: "Testowanie / QA",
+        tags: ["ISTQB", "test cases", "bug report", "regresja"],
+        href: "#/tester-istqb",
+        linkLabel: "Zobacz testowanie",
+        mockupTone: "cyan",
+      },
+      {
+        type: "GameDev",
+        title: "Interaktywny prototyp 2D",
+        text: "Projekt wlasny zwiazany z logika rozgrywki: sterowanie, kolizje, punkty i proste zachowania obiektow.",
+        details:
+          "GameDev traktuje jako przestrzen do cwiczenia logiki, interakcji i testowania zachowan uzytkownika.",
+        status: "prototyp",
+        category: "GameDev",
+        tags: ["GameDev", "prototyp", "2D", "interakcje"],
+        href: "#/gamedev",
+        linkLabel: "Zobacz GameDev",
+        mockupTone: "violet",
+      },
     ],
+  },
+  pages: {
+    automationTesting: {
+      slug: "automatyzacja-testowanie",
+      seo: {
+        title: "Automatyzacja i testowanie stron | Dominik Sadzik",
+        description:
+          "Automatyzacja procesow, testowanie stron internetowych i wsparcie QA dla nowoczesnych projektow webowych.",
+        ogTitle: "Automatyzacja i testowanie stron",
+        ogDescription:
+          "Praktyczne podejscie do QA, testow i automatyzacji powtarzalnych kontroli strony.",
+      },
+      hero: {
+        eyebrow: "Automatyzacja i QA",
+        title: "Automatyzacja i testowanie stron",
+        subtitle: "Praktyczne wsparcie jakosci dla stron i aplikacji",
+        description:
+          "Lacze podejscie testerskie z praktyczna automatyzacja, aby szybciej wykrywac problemy, ograniczac powtarzalna prace i zwiekszac jakosc stron oraz aplikacji.",
+        ctaLabel: "Porozmawiajmy o automatyzacji",
+        ctaHref: "#kontakt",
+      },
+      sections: {
+        whatCanBeAutomated: {
+          title: "Co moge automatyzowac",
+          description:
+            "Najlepiej zaczac od powtarzalnych kontroli, ktore czesto wracaja po zmianach w projekcie.",
+          items: [
+            "checklisty przed publikacja",
+            "testy powtarzalnych scenariuszy",
+            "formularze kontaktowe",
+            "linki i przyciski CTA",
+            "podstawowe procesy administracyjne",
+            "raportowanie wynikow",
+          ],
+        },
+        benefits: {
+          title: "Jak to pomaga stronie lub aplikacji",
+          description:
+            "Automatyzacja nie zastepuje myslenia, ale pomaga szybciej wychwycic typowe problemy.",
+          items: [
+            "mniej recznego sprawdzania",
+            "szybsze wykrywanie bledow",
+            "wieksza pewnosc po zmianach",
+            "lepsza jakosc wdrozen",
+          ],
+        },
+        examples: {
+          title: "Przykladowe zastosowania",
+          description:
+            "To praktyczne scenariusze, ktore mozna dopasowac do skali strony lub aplikacji.",
+          items: [
+            "automatyczne sprawdzenie formularza kontaktowego",
+            "sprawdzenie linkow i CTA",
+            "podstawowy smoke test po deployu",
+            "kontrola widocznosci najwazniejszych sekcji strony",
+            "proste skrypty wspierajace prace",
+          ],
+        },
+        finalCta: {
+          title: "Chcesz ograniczyc reczne sprawdzanie?",
+          description:
+            "Napisz, co najczesciej sprawdzasz recznie. Pomoge ocenic, co warto uporzadkowac lub zautomatyzowac na start.",
+          ctaLabel: "Skontaktuj sie",
+          ctaHref: "#kontakt",
+        },
+      },
+    },
+    istqbTesting: {
+      slug: "tester-istqb",
+      seo: {
+        title: "Certyfikowany tester ISTQB | Testowanie stron i aplikacji",
+        description:
+          "Testowanie funkcjonalne, raportowanie bledow i podejscie QA oparte o wiedze certyfikowanego testera ISTQB.",
+        ogTitle: "Certyfikowany tester ISTQB",
+        ogDescription:
+          "Podejscie do jakosci oparte na scenariuszach uzytkownika, ryzykach i czytelnym raportowaniu.",
+      },
+      hero: {
+        eyebrow: "Tester ISTQB",
+        title: "Certyfikowane podejscie do testowania",
+        subtitle: "Jakosc, scenariusze i raportowanie bledow",
+        description:
+          "Certyfikat ISTQB pomaga mi patrzec na projekt szerzej: przez scenariusze uzytkownika, ryzyka, przypadki testowe i jakosc wdrozenia.",
+        ctaLabel: "Chce sprawdzic strone",
+        ctaHref: "#kontakt",
+      },
+      sections: {
+        qaMindset: {
+          title: "Co oznacza podejscie testerskie",
+          description:
+            "Testowanie to nie tylko klikniecie strony. To uporzadkowane szukanie ryzyk i sprawdzanie, czy uzytkownik moze wykonac najwazniejsze zadania.",
+          items: [
+            "myslenie scenariuszami uzytkownika",
+            "szukanie ryzyk",
+            "dokladne raportowanie bledow",
+            "sprawdzanie dzialania na roznych urzadzeniach",
+            "weryfikacja po poprawkach",
+          ],
+        },
+        testScope: {
+          title: "Zakres testow",
+          description:
+            "Zakres dopasowuje do projektu: od podstawowej kontroli strony po bardziej szczegolowe testy po zmianach.",
+          items: [
+            "testy funkcjonalne",
+            "testy UI",
+            "testy responsywnosci",
+            "testy formularzy",
+            "testy podstawowego SEO i technicznego dzialania",
+            "testy regresji po zmianach",
+          ],
+        },
+        bugReport: {
+          title: "Jak wyglada raport z testow",
+          description:
+            "Raport powinien pomagac szybko zrozumiec problem i odtworzyc go bez zgadywania.",
+          items: [
+            "opis bledu",
+            "kroki odtworzenia",
+            "oczekiwany rezultat",
+            "rzeczywisty rezultat",
+            "priorytet",
+            "screenshot lub notatka, jesli dostepne",
+          ],
+        },
+        clientBenefits: {
+          title: "Dlaczego to wazne dla klienta",
+          description:
+            "Dobre testy zmniejszaja ryzyko, ze blad zobaczy dopiero uzytkownik koncowy.",
+          items: [
+            "mniej bledow po publikacji",
+            "lepszy odbior strony",
+            "wieksze zaufanie uzytkownikow",
+            "szybsze poprawki",
+          ],
+        },
+        finalCta: {
+          title: "Chcesz sprawdzic swoja strone?",
+          description:
+            "Moge przejsc przez najwazniejsze scenariusze, opisac problemy i przygotowac czytelna liste poprawek.",
+          ctaLabel: "Skontaktuj sie ze mna",
+          ctaHref: "#kontakt",
+        },
+      },
+    },
+    gamedev: {
+      slug: "gamedev",
+      seo: {
+        title: "GameDev i projekty interaktywne | Dominik Sadzik",
+        description:
+          "Prototypy gier, logika rozgrywki i interaktywne projekty rozwijane jako czesc techniczno-kreatywnego portfolio.",
+        ogTitle: "GameDev i projekty interaktywne",
+        ogDescription:
+          "Prototypy 2D, mechaniki, logika gry i interaktywne demo jako dodatkowy obszar portfolio.",
+      },
+      hero: {
+        eyebrow: "GameDev",
+        title: "GameDev i interaktywne prototypy",
+        subtitle: "Logika, interakcje i kreatywne eksperymenty",
+        description:
+          "GameDev rozwijam jako techniczno-kreatywny obszar portfolio - od prostych mechanik i logiki rozgrywki po eksperymenty edukacyjne i interaktywne demo.",
+        ctaLabel: "Porozmawiajmy o projekcie",
+        ctaHref: "#kontakt",
+      },
+      sections: {
+        whatIBuild: {
+          title: "Co tworze i testuje",
+          description:
+            "Najbardziej interesuja mnie male, konkretne prototypy, w ktorych widac logike i interakcje.",
+          items: [
+            "prototypy 2D",
+            "proste mechaniki",
+            "sterowanie postacia",
+            "kolizje",
+            "zbieranie punktow",
+            "przeciwnicy",
+            "poziomy",
+            "elementy edukacyjne",
+          ],
+        },
+        connectionToWeb: {
+          title: "Jak GameDev laczy sie z moja oferta",
+          description:
+            "Tworzenie gier dobrze rozwija myslenie o interakcji, stanie aplikacji i testowaniu zachowan.",
+          items: [
+            "logika aplikacji",
+            "praca z interakcja uzytkownika",
+            "testowanie zachowan",
+            "kreatywne UI",
+            "prototypowanie",
+          ],
+        },
+        demos: {
+          title: "Przykladowe projekty i demo",
+          description:
+            "To obszary projektow wlasnych i koncepcyjnych, bez danych prywatnych klientow.",
+          items: [
+            "platformowka 2D",
+            "prosta gra edukacyjna",
+            "interaktywny prototyp",
+            "system punktow i zbierania obiektow",
+          ],
+        },
+        finalCta: {
+          title: "Masz pomysl na interaktywny projekt?",
+          description:
+            "Napisz, czy chodzi o prototyp, demo, element edukacyjny czy kreatywna interakcje na stronie.",
+          ctaLabel: "Napisz w sprawie GameDev",
+          ctaHref: "#kontakt",
+        },
+      },
+    },
   },
   packages: {
     eyebrow: "Pakiety",

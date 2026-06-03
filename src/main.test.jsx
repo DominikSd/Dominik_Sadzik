@@ -31,7 +31,7 @@ vi.mock("./components/AnalyticsConsent.jsx", () => ({
 }));
 
 vi.mock("./LandingPage.jsx", () => ({
-  default: () => <div data-testid="landing-route">landing</div>,
+  default: ({ routeHash }) => <div data-testid="landing-route">landing {routeHash}</div>,
 }));
 
 vi.mock("./lib/analytics/ga4.js", () => ({
@@ -97,5 +97,13 @@ describe("AppRouter", () => {
     render(<AppRouter />);
 
     expect(screen.getByTestId("admin-route")).toBeTruthy();
+  });
+
+  it("passes public hash routes to the landing page", () => {
+    window.history.pushState(null, "", "/Dominik_Sadzik/#/gamedev");
+
+    render(<AppRouter />);
+
+    expect(screen.getByTestId("landing-route").textContent).toContain("#/gamedev");
   });
 });

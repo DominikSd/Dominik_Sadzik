@@ -2,7 +2,17 @@ import { z } from "zod";
 import { CONTENT_SCHEMA_VERSION, defaultSiteContent } from "./defaultSiteContent";
 
 export const allowedCollections = ["page_sections", "seo", "settings"];
-export const editableSectionKeys = ["hero", "services", "faq", "contact", "seo", "settings"];
+export const editableSectionKeys = [
+  "hero",
+  "services",
+  "automationQa",
+  "gamedevTeaser",
+  "pages",
+  "faq",
+  "contact",
+  "seo",
+  "settings",
+];
 
 const ctaSchema = z.object({
   label: z.string().trim().min(1).max(80),
@@ -18,6 +28,50 @@ const sectionHeadingSchema = z.object({
   eyebrow: z.string().trim().max(80).default(""),
   title: z.string().trim().min(1).max(180),
   text: z.string().trim().max(600).default(""),
+});
+
+const iconKeySchema = z.enum(["monitor", "palette", "sparkles", "globe", "check"]);
+
+const featureCardSchema = z.object({
+  icon: iconKeySchema.optional().default("sparkles"),
+  title: z.string().trim().min(1).max(100),
+  text: z.string().trim().min(1).max(420),
+});
+
+const editableListSectionSchema = z.object({
+  title: z.string().trim().min(1).max(140),
+  description: z.string().trim().max(520).default(""),
+  items: z.array(z.string().trim().min(1).max(160)).min(1).max(10),
+});
+
+const finalCtaSectionSchema = z.object({
+  title: z.string().trim().min(1).max(140),
+  description: z.string().trim().max(520).default(""),
+  ctaLabel: z.string().trim().min(1).max(60),
+  ctaHref: z.string().trim().min(1).max(220),
+});
+
+const pageSeoSchema = z.object({
+  title: z.string().trim().min(1).max(75),
+  description: z.string().trim().min(1).max(180),
+  ogTitle: z.string().trim().max(90).optional().default(""),
+  ogDescription: z.string().trim().max(220).optional().default(""),
+});
+
+const pageHeroSchema = z.object({
+  eyebrow: z.string().trim().max(80).default(""),
+  title: z.string().trim().min(1).max(140),
+  subtitle: z.string().trim().max(160).default(""),
+  description: z.string().trim().min(1).max(700),
+  ctaLabel: z.string().trim().min(1).max(60),
+  ctaHref: z.string().trim().min(1).max(220),
+});
+
+const editablePageSchema = z.object({
+  slug: z.string().trim().min(1).max(80),
+  seo: pageSeoSchema,
+  hero: pageHeroSchema,
+  sections: z.record(z.union([editableListSectionSchema, finalCtaSectionSchema])),
 });
 
 export const sectionSchemas = {
@@ -51,13 +105,26 @@ export const sectionSchemas = {
     items: z
       .array(
         z.object({
-          icon: z.enum(["monitor", "palette", "sparkles", "globe"]),
+          icon: iconKeySchema,
           title: z.string().trim().min(1).max(100),
           text: z.string().trim().min(1).max(400),
         }),
       )
       .min(1)
       .max(8),
+  }),
+  automationQa: sectionHeadingSchema.extend({
+    certificateNote: z.string().trim().max(220).default(""),
+    ctaLabel: z.string().trim().min(1).max(60),
+    ctaHref: z.string().trim().min(1).max(220),
+    secondaryCtaLabel: z.string().trim().max(60).default(""),
+    secondaryCtaHref: z.string().trim().max(220).default(""),
+    cards: z.array(featureCardSchema).min(1).max(6),
+  }),
+  gamedevTeaser: sectionHeadingSchema.extend({
+    ctaLabel: z.string().trim().min(1).max(60),
+    ctaHref: z.string().trim().min(1).max(220),
+    cards: z.array(featureCardSchema).min(1).max(6),
   }),
   benefits: sectionHeadingSchema.extend({
     items: z.array(z.string().trim().min(1).max(140)).min(1).max(12),
@@ -81,10 +148,19 @@ export const sectionSchemas = {
           type: z.string().trim().min(1).max(80).optional().default("Projekt"),
           title: z.string().trim().min(1).max(100),
           text: z.string().trim().min(1).max(360),
+          details: z.string().trim().max(420).optional().default(""),
           status: z
-            .enum(["realizacja", "projekt koncepcyjny"])
+            .enum([
+              "realizacja",
+              "projekt demo",
+              "koncepcja",
+              "prototyp",
+              "projekt wlasny",
+              "projekt koncepcyjny",
+            ])
             .optional()
             .default("projekt koncepcyjny"),
+          category: z.string().trim().max(80).optional().default(""),
           tags: z.array(z.string().trim().min(1).max(40)).max(8).optional().default([]),
           href: z.string().trim().max(240).optional().default(""),
           linkLabel: z.string().trim().max(80).optional().default("Zobacz projekt"),
@@ -93,7 +169,12 @@ export const sectionSchemas = {
         }),
       )
       .min(1)
-      .max(8),
+      .max(12),
+  }),
+  pages: z.object({
+    automationTesting: editablePageSchema,
+    istqbTesting: editablePageSchema,
+    gamedev: editablePageSchema,
   }),
   packages: sectionHeadingSchema.extend({
     items: z
@@ -135,9 +216,12 @@ export const siteContentSchema = z.object({
   seo: sectionSchemas.seo,
   hero: sectionSchemas.hero,
   services: sectionSchemas.services,
+  automationQa: sectionSchemas.automationQa,
+  gamedevTeaser: sectionSchemas.gamedevTeaser,
   benefits: sectionSchemas.benefits,
   process: sectionSchemas.process,
   portfolio: sectionSchemas.portfolio,
+  pages: sectionSchemas.pages,
   packages: sectionSchemas.packages,
   faq: sectionSchemas.faq,
   contact: sectionSchemas.contact,

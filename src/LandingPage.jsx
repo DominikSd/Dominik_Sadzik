@@ -19,6 +19,18 @@ const stagger = {
   },
 };
 
+const detailPageRoutes = {
+  "automatyzacja-testowanie": "automationTesting",
+  "tester-istqb": "istqbTesting",
+  gamedev: "gamedev",
+};
+
+function getRouteSlug(routeHash = "") {
+  return String(routeHash || "")
+    .replace(/^#\/?/, "")
+    .replace(/^\/+|\/+$/g, "");
+}
+
 function Icon({ name, className = "h-5 w-5" }) {
   const common = {
     width: "24",
@@ -171,6 +183,7 @@ function Header({ settings, hero }) {
   const [isOpen, setIsOpen] = useState(false);
 
   const scrollToHref = (event, href) => {
+    if (href.startsWith("#/")) return;
     event.preventDefault();
     const el = document.getElementById(href.replace("#", ""));
     if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
@@ -235,6 +248,25 @@ function Header({ settings, hero }) {
         </div>
       )}
     </header>
+  );
+}
+
+function CtaLink({ href, label, location, variant = "primary" }) {
+  const isPrimary = variant === "primary";
+
+  return (
+    <a
+      className={`inline-flex min-w-0 items-center justify-center gap-2 rounded-full px-6 py-3 text-sm font-bold transition ${
+        isPrimary
+          ? "gradient-button text-white shadow-xl shadow-blue-500/25 hover:scale-105"
+          : "border border-white/15 bg-white/5 text-slate-100 hover:border-cyan-300/50 hover:bg-white/10"
+      }`}
+      href={href}
+      onClick={() => trackCtaClick(label, location)}
+    >
+      <span className="min-w-0 break-words">{label}</span>
+      <Icon name="arrow-right" className="h-4 w-4 flex-none" />
+    </a>
   );
 }
 
@@ -467,6 +499,59 @@ function ServicesSection({ services }) {
   );
 }
 
+function FeatureCardsSection({ section, id, cardCountClass = "md:grid-cols-3" }) {
+  return (
+    <section
+      id={id}
+      className="relative overflow-hidden px-4 py-20 sm:px-6 md:px-10 lg:py-24 scroll-mt-24"
+    >
+      <div className="relative z-10 mx-auto w-full max-w-7xl">
+        <div className="grid min-w-0 gap-10 lg:grid-cols-[minmax(0,0.85fr)_minmax(0,1.15fr)] lg:items-start">
+          <div className="min-w-0">
+            <p className="mb-3 text-sm font-semibold uppercase tracking-[0.26em] text-cyan-300">
+              {section.eyebrow}
+            </p>
+            <h2 className="break-words text-3xl font-black tracking-tight text-white md:text-5xl">
+              {section.title}
+            </h2>
+            <p className="mt-5 text-lg leading-8 text-slate-300">{section.text}</p>
+            {section.certificateNote && (
+              <div className="mt-6 rounded-lg border border-emerald-300/25 bg-emerald-400/10 p-4 text-sm font-semibold text-emerald-100">
+                {section.certificateNote}
+              </div>
+            )}
+            <div className="mt-8 flex min-w-0 flex-col gap-3 sm:flex-row sm:flex-wrap">
+              <CtaLink href={section.ctaHref} label={section.ctaLabel} location={id} />
+              {section.secondaryCtaLabel && section.secondaryCtaHref && (
+                <CtaLink
+                  href={section.secondaryCtaHref}
+                  label={section.secondaryCtaLabel}
+                  location={`${id}_secondary`}
+                  variant="secondary"
+                />
+              )}
+            </div>
+          </div>
+          <div className={`grid min-w-0 gap-5 ${cardCountClass}`}>
+            {section.cards.map((card) => (
+              <article
+                key={card.title}
+                className="min-w-0 rounded-lg border border-white/10 bg-white/[0.045] p-6 backdrop-blur transition hover:-translate-y-1 hover:border-cyan-300/35 hover:shadow-2xl hover:shadow-cyan-500/10"
+              >
+                <div className="mb-5 flex h-12 w-12 items-center justify-center rounded-lg bg-gradient-to-br from-blue-500/25 to-violet-500/25 text-cyan-200 ring-1 ring-white/10">
+                  <Icon name={card.icon} className="h-5 w-5" />
+                </div>
+                <h3 className="break-words text-xl font-bold text-white">{card.title}</h3>
+                <p className="mt-3 break-words leading-7 text-slate-400">{card.text}</p>
+              </article>
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
 function BenefitsSection({ benefits }) {
   return (
     <section
@@ -654,6 +739,12 @@ function PortfolioSection({ portfolio }) {
                 <p className="mt-3 min-w-0 flex-1 break-words leading-7 text-slate-400">
                   {item.text}
                 </p>
+                {item.details && (
+                  <div className="mt-4 rounded-lg border border-white/10 bg-slate-950/45 p-3 text-sm leading-6 text-slate-300">
+                    <span className="font-semibold text-cyan-200">Co zrobilem: </span>
+                    {item.details}
+                  </div>
+                )}
                 {item.tags?.length > 0 && (
                   <div className="mt-5 flex min-w-0 flex-wrap gap-2">
                     {item.tags.map((tag) => (
@@ -836,7 +927,98 @@ function ContactSection({ contact }) {
   );
 }
 
-export default function LandingPage() {
+function PageHero({ page }) {
+  return (
+    <section className="relative overflow-hidden px-4 pb-16 pt-12 sm:px-6 md:px-10 md:pb-20 md:pt-16">
+      <div className="pointer-events-none absolute right-4 top-8 opacity-40 md:right-12">
+        <AnimatedCircuit variant="branch" flip className="h-36 w-64" />
+      </div>
+      <div className="relative z-10 mx-auto max-w-5xl">
+        <a
+          href="#"
+          className="mb-8 inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-sm font-semibold text-cyan-100 hover:bg-white/10"
+        >
+          <Icon name="arrow-right" className="h-4 w-4 rotate-180" />
+          Strona glowna
+        </a>
+        <p className="text-sm font-semibold uppercase tracking-[0.26em] text-cyan-300">
+          {page.hero.eyebrow}
+        </p>
+        <h1 className="mt-4 max-w-4xl break-words text-4xl font-black leading-tight tracking-tight text-white md:text-6xl">
+          {page.hero.title}
+        </h1>
+        {page.hero.subtitle && (
+          <p className="mt-4 text-xl font-semibold text-cyan-100">{page.hero.subtitle}</p>
+        )}
+        <p className="mt-6 max-w-3xl text-lg leading-8 text-slate-300 md:text-xl">
+          {page.hero.description}
+        </p>
+        <div className="mt-8">
+          <CtaLink href={page.hero.ctaHref} label={page.hero.ctaLabel} location={page.slug} />
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function PageSectionList({ section }) {
+  const isCta = Boolean(section.ctaLabel);
+
+  return (
+    <section className="px-4 py-10 sm:px-6 md:px-10">
+      <div
+        className={`mx-auto max-w-6xl rounded-lg border border-white/10 p-6 backdrop-blur md:p-8 ${
+          isCta ? "bg-cyan-400/10" : "bg-white/[0.045]"
+        }`}
+      >
+        <div className="grid min-w-0 gap-6 md:grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)]">
+          <div className="min-w-0">
+            <h2 className="break-words text-2xl font-black text-white md:text-3xl">
+              {section.title}
+            </h2>
+            {section.description && (
+              <p className="mt-4 break-words leading-7 text-slate-300">{section.description}</p>
+            )}
+            {isCta && (
+              <div className="mt-6">
+                <CtaLink href={section.ctaHref} label={section.ctaLabel} location="page_final" />
+              </div>
+            )}
+          </div>
+          {!isCta && (
+            <div className="grid min-w-0 gap-3 sm:grid-cols-2">
+              {section.items.map((item) => (
+                <div
+                  key={item}
+                  className="flex min-w-0 gap-3 rounded-lg border border-white/10 bg-slate-950/40 p-4"
+                >
+                  <div className="mt-1 flex h-6 w-6 flex-none items-center justify-center rounded-full bg-gradient-to-r from-blue-500 to-violet-500">
+                    <Icon name="check" className="h-3.5 w-3.5 text-white" />
+                  </div>
+                  <p className="min-w-0 break-words text-slate-200">{item}</p>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function ServiceDetailPage({ page, contact }) {
+  return (
+    <>
+      <PageHero page={page} />
+      {Object.entries(page.sections).map(([key, section]) => (
+        <PageSectionList key={key} section={section} />
+      ))}
+      <ContactSection contact={contact} />
+    </>
+  );
+}
+
+export default function LandingPage({ routeHash = "" }) {
   const [content, setContent] = useState(defaultSiteContent);
   const [cmsWarning, setCmsWarning] = useState("");
   const selfTestErrors = useMemo(() => runContentSelfTests(content), [content]);
@@ -857,11 +1039,29 @@ export default function LandingPage() {
     };
   }, []);
 
+  const routeSlug = getRouteSlug(routeHash);
+  const pageKey = detailPageRoutes[routeSlug];
+  const activePage = pageKey ? content.pages?.[pageKey] : null;
+
   useEffect(() => {
-    document.title = content.seo.metaTitle;
+    const seo = activePage?.seo;
+    document.title = seo?.title || content.seo.metaTitle;
     const description = document.querySelector('meta[name="description"]');
-    if (description) description.setAttribute("content", content.seo.metaDescription);
-  }, [content.seo]);
+    if (description)
+      description.setAttribute("content", seo?.description || content.seo.metaDescription);
+
+    const ogTitle = document.querySelector('meta[property="og:title"]');
+    if (ogTitle)
+      ogTitle.setAttribute("content", seo?.ogTitle || seo?.title || content.seo.metaTitle);
+
+    const ogDescription = document.querySelector('meta[property="og:description"]');
+    if (ogDescription) {
+      ogDescription.setAttribute(
+        "content",
+        seo?.ogDescription || seo?.description || content.seo.metaDescription,
+      );
+    }
+  }, [activePage, content.seo]);
 
   return (
     <div className="relative min-h-screen overflow-x-hidden bg-[#050816] text-white">
@@ -881,17 +1081,42 @@ export default function LandingPage() {
       )}
       <Header settings={content.settings} hero={content.hero} />
       <main className="relative z-10 overflow-visible">
-        <Hero hero={content.hero} />
-        <ServicesSection services={content.services} />
-        <BenefitsSection benefits={content.benefits} />
-        <ProcessSection process={content.process} />
-        <PortfolioSection portfolio={content.portfolio} />
-        <PackagesSection packages={content.packages} />
-        <FaqSection faq={content.faq} />
-        <ContactSection contact={content.contact} />
+        {activePage ? (
+          <ServiceDetailPage page={activePage} contact={content.contact} />
+        ) : (
+          <>
+            <Hero hero={content.hero} />
+            <ServicesSection services={content.services} />
+            <FeatureCardsSection section={content.automationQa} id="automatyzacja" />
+            <BenefitsSection benefits={content.benefits} />
+            <ProcessSection process={content.process} />
+            <PortfolioSection portfolio={content.portfolio} />
+            <FeatureCardsSection
+              section={content.gamedevTeaser}
+              id="gamedev"
+              cardCountClass="md:grid-cols-3"
+            />
+            <PackagesSection packages={content.packages} />
+            <FaqSection faq={content.faq} />
+            <ContactSection contact={content.contact} />
+          </>
+        )}
       </main>
       <footer className="relative z-10 border-t border-white/10 px-6 py-8 text-center text-sm text-slate-500 md:px-10">
-        {content.settings.footerText}
+        <div className="mx-auto flex max-w-7xl flex-col items-center gap-4 md:flex-row md:justify-between">
+          <span>{content.settings.footerText}</span>
+          <nav className="flex flex-wrap justify-center gap-4 text-slate-400">
+            <a href="#/automatyzacja-testowanie" className="hover:text-cyan-300">
+              Automatyzacja
+            </a>
+            <a href="#/tester-istqb" className="hover:text-cyan-300">
+              Tester ISTQB
+            </a>
+            <a href="#/gamedev" className="hover:text-cyan-300">
+              GameDev
+            </a>
+          </nav>
+        </div>
       </footer>
     </div>
   );

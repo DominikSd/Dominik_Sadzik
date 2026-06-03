@@ -19,7 +19,9 @@ import {
 import AnalyticsPanel from "./AnalyticsPanel";
 import ContactSectionForm from "./sections/ContactSectionForm";
 import FaqSectionForm from "./sections/FaqSectionForm";
+import FeatureCardsSectionForm from "./sections/FeatureCardsSectionForm";
 import HeroSectionForm from "./sections/HeroSectionForm";
+import PagesSectionForm from "./sections/PagesSectionForm";
 import SeoSectionForm from "./sections/SeoSectionForm";
 import ServicesSectionForm from "./sections/ServicesSectionForm";
 import SettingsSectionForm from "./sections/SettingsSectionForm";
@@ -29,6 +31,24 @@ import ErrorBoundary from "../components/ErrorBoundary.jsx";
 const sections = [
   { key: "hero", label: "Hero", Form: HeroSectionForm },
   { key: "services", label: "Oferta", Form: ServicesSectionForm },
+  {
+    key: "automationQa",
+    label: "Automatyzacja i QA",
+    Form: (props) => (
+      <FeatureCardsSectionForm
+        {...props}
+        addLabel="Dodaj karte QA"
+        showCertificate
+        showSecondaryCta
+      />
+    ),
+  },
+  {
+    key: "gamedevTeaser",
+    label: "GameDev",
+    Form: (props) => <FeatureCardsSectionForm {...props} addLabel="Dodaj karte GameDev" />,
+  },
+  { key: "pages", label: "Nowe podstrony", Form: PagesSectionForm },
   { key: "faq", label: "FAQ", Form: FaqSectionForm },
   { key: "contact", label: "Kontakt", Form: ContactSectionForm },
   { key: "seo", label: "SEO", Form: SeoSectionForm },
