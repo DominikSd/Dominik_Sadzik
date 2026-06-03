@@ -83,7 +83,31 @@ describe("AnalyticsPanel", () => {
 
     expect(
       await screen.findByText(
-        "Statystyki GA4 nie sa jeszcze skonfigurowane. Uzupelnij sekrety Edge Function i sprawdz Property ID GA4.",
+        "Statystyki GA4 nie są jeszcze skonfigurowane. Sprawdź sekrety Supabase Edge Function.",
+      ),
+    ).toBeTruthy();
+  });
+
+  it("shows diagnostics for unreachable Edge Function", async () => {
+    const error = new Error("Failed to send a request to the Edge Function");
+    error.code = "edge_function_unreachable";
+    error.endpoint = "https://example-ref.supabase.co/functions/v1/ga4-report";
+    error.checks = [
+      "Sprawdz, czy funkcja ga4-report zostala wdrozona w tym samym projekcie Supabase.",
+    ];
+    mocks.report.mockRejectedValue(error);
+
+    render(<AnalyticsPanel />);
+
+    expect(
+      await screen.findByText(/Nie mozna polaczyc sie z Supabase Edge Function/i),
+    ).toBeTruthy();
+    expect(
+      screen.getByText("https://example-ref.supabase.co/functions/v1/ga4-report"),
+    ).toBeTruthy();
+    expect(
+      screen.getByText(
+        "Sprawdz, czy funkcja ga4-report zostala wdrozona w tym samym projekcie Supabase.",
       ),
     ).toBeTruthy();
   });
@@ -113,18 +137,46 @@ describe("AnalyticsPanel", () => {
     expect(await screen.findByText(/GA4 moze potrzebowac czasu/i)).toBeTruthy();
   });
 
-  it("renders report data", async () => {
+  it("renders report data with customer-friendly labels", async () => {
     mocks.report.mockResolvedValue(report);
+
+    const { container } = render(<AnalyticsPanel />);
+
+    expect(await screen.findByText("Ruch na stronie")).toBeTruthy();
+    expect(screen.getByText("Odwiedzający (7 dni)")).toBeTruthy();
+    expect(screen.getByText("Wizyty (30 dni)")).toBeTruthy();
+    expect(screen.getByText("Akcje (30 dni)")).toBeTruthy();
+    expect(screen.getByText("90")).toBeTruthy();
+    expect(screen.getByText("Strona główna")).toBeTruthy();
+    expect(screen.getByText("Kliknięcie przycisku")).toBeTruthy();
+    expect(screen.getByText("Google")).toBeTruthy();
+    expect(screen.getByText("Telefon")).toBeTruthy();
+    expect(screen.queryByText("cta_click")).toBeNull();
+    expect(screen.queryByText("google / organic")).toBeNull();
+    expect(screen.queryByText("Mobile")).toBeNull();
+    expect(container.querySelector("table")).toBeNull();
+  });
+
+  it("maps common traffic sources, device names and empty states", async () => {
+    mocks.report.mockResolvedValue({
+      ...report,
+      topPages: [],
+      topEvents: [{ eventName: "custom_event_name", count: 3 }],
+      trafficSources: [
+        { sourceMedium: "(direct) / (none)", sessions: 5, users: 4 },
+        { sourceMedium: "(not set)", sessions: 2, users: 1 },
+      ],
+      devices: [{ deviceCategory: "desktop", users: 6, sessions: 7 }],
+    });
 
     render(<AnalyticsPanel />);
 
-    expect(await screen.findByText("Aktywni uzytkownicy 7 dni")).toBeTruthy();
-    expect(screen.getByText("Sesje 30 dni")).toBeTruthy();
-    expect(screen.getByText("Eventy 30 dni")).toBeTruthy();
-    expect(screen.getByText("90")).toBeTruthy();
-    expect(screen.getByText("/")).toBeTruthy();
-    expect(screen.getByText("cta_click")).toBeTruthy();
-    expect(screen.getByText("google / organic")).toBeTruthy();
-    expect(screen.getByText("Mobile")).toBeTruthy();
+    expect(
+      await screen.findByText("Brak danych o odwiedzanych stronach dla tego okresu."),
+    ).toBeTruthy();
+    expect(screen.getByText("Inna akcja: custom event name")).toBeTruthy();
+    expect(screen.getByText("Wejście bezpośrednie")).toBeTruthy();
+    expect(screen.getByText("Brak danych")).toBeTruthy();
+    expect(screen.getByText("Komputer")).toBeTruthy();
   });
 });

@@ -2,6 +2,7 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import {
   clearAnalyticsReportCache,
   fetchGa4Report,
+  getGa4FunctionEndpoint,
   normalizeAnalyticsReport,
 } from "./analyticsApi";
 
@@ -19,6 +20,12 @@ const mocks = vi.hoisted(() => ({
 vi.mock("../lib/supabaseClient", () => ({
   requireSupabase: () => mocks.client,
   siteId: "site-1",
+}));
+
+vi.mock("../lib/env", () => ({
+  publicEnv: {
+    VITE_SUPABASE_URL: "https://example-ref.supabase.co",
+  },
 }));
 
 const report = {
@@ -90,6 +97,29 @@ describe("analyticsApi", () => {
       code: "functions_error",
       message: "Edge function failed",
     });
+  });
+
+  it("maps unreachable Edge Function fetch errors with diagnostics", async () => {
+    const error = new Error("Failed to send a request to the Edge Function");
+    error.name = "FunctionsFetchError";
+    mocks.client.functions.invoke.mockResolvedValue({
+      data: null,
+      error,
+    });
+
+    await expect(fetchGa4Report()).rejects.toMatchObject({
+      code: "edge_function_unreachable",
+      endpoint: "https://example-ref.supabase.co/functions/v1/ga4-report",
+      checks: expect.arrayContaining([
+        "Sprawdz, czy funkcja ga4-report zostala wdrozona w tym samym projekcie Supabase.",
+      ]),
+    });
+  });
+
+  it("returns the expected Supabase Functions endpoint", () => {
+    expect(getGa4FunctionEndpoint()).toBe(
+      "https://example-ref.supabase.co/functions/v1/ga4-report",
+    );
   });
 
   it("caches successful reports on the client", async () => {

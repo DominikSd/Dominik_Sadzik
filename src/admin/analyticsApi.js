@@ -1,7 +1,9 @@
 import { requireSupabase, siteId } from "../lib/supabaseClient";
+import { publicEnv } from "../lib/env";
 import { z } from "zod";
 
 const CACHE_TTL_MS = 10 * 60 * 1000;
+const GA4_FUNCTION_NAME = "ga4-report";
 let cachedReport = null;
 
 const numberLikeSchema = z.coerce.number().catch(0);
@@ -129,6 +131,101 @@ export function clearAnalyticsReportCache() {
   cachedReport = null;
 }
 
+export function getGa4FunctionEndpoint(env = publicEnv) {
+  const supabaseUrl = String(env.VITE_SUPABASE_URL || "").replace(/\/+$/, "");
+  if (!supabaseUrl) return "";
+  return `${supabaseUrl}/functions/v1/${GA4_FUNCTION_NAME}`;
+}
+
+function analyticsError(code, message, details = {}) {
+  const error = new Error(message);
+  error.code = code;
+  Object.assign(error, details);
+  return error;
+}
+
+function getInvokeStatus(error) {
+  return error?.context?.status || error?.status || error?.response?.status || null;
+}
+
+function getInvokeName(error) {
+  return error?.name || error?.constructor?.name || "";
+}
+
+function classifyFunctionInvokeError(error) {
+  const message = error?.message || "Nie udalo sie pobrac statystyk GA4.";
+  const status = getInvokeStatus(error);
+  const name = getInvokeName(error);
+  const endpoint = getGa4FunctionEndpoint();
+  const baseDetails = {
+    endpoint,
+    status,
+    originalMessage: message,
+  };
+
+  if (
+    name === "FunctionsFetchError" ||
+    /failed to send a request|fetch failed|networkerror|load failed/i.test(message)
+  ) {
+    return analyticsError(
+      "edge_function_unreachable",
+      "Nie mozna polaczyc sie z Supabase Edge Function ga4-report.",
+      {
+        ...baseDetails,
+        checks: [
+          "Sprawdz, czy funkcja ga4-report zostala wdrozona w tym samym projekcie Supabase.",
+          "Sprawdz, czy VITE_SUPABASE_URL wskazuje na wlasciwy projekt.",
+          "Sprawdz, czy projekt Supabase nie jest wstrzymany i czy request nie jest blokowany w przegladarce.",
+        ],
+      },
+    );
+  }
+
+  if (status === 404) {
+    return analyticsError(
+      "edge_function_not_found",
+      "Supabase nie znalazl Edge Function ga4-report w tym projekcie.",
+      {
+        ...baseDetails,
+        checks: [
+          "Wdroz funkcje poleceniem: supabase functions deploy ga4-report.",
+          "Sprawdz, czy frontend uzywa tego samego projektu Supabase, w ktorym wdrozono funkcje.",
+        ],
+      },
+    );
+  }
+
+  if (status === 401 || status === 403) {
+    return analyticsError(
+      "edge_function_forbidden",
+      "Supabase odrzucil request do Edge Function.",
+      {
+        ...baseDetails,
+        checks: [
+          "Sprawdz aktywna sesje uzytkownika.",
+          "Sprawdz konfiguracje JWT Edge Function i uprawnienia site_members.",
+        ],
+      },
+    );
+  }
+
+  if (status && status >= 500) {
+    return analyticsError(
+      "edge_function_runtime_error",
+      "Edge Function ga4-report zwrocila blad serwera.",
+      {
+        ...baseDetails,
+        checks: [
+          "Sprawdz logi funkcji w Supabase.",
+          "Sprawdz sekrety Edge Function i dostep service account do GA4.",
+        ],
+      },
+    );
+  }
+
+  return analyticsError(error?.code || "edge_function_error", message, baseDetails);
+}
+
 export async function fetchGa4Report({ forceRefresh = false } = {}) {
   const now = Date.now();
 
@@ -143,13 +240,24 @@ export async function fetchGa4Report({ forceRefresh = false } = {}) {
     };
   }
 
-  const client = requireSupabase();
+  let client;
+  try {
+    client = requireSupabase();
+  } catch (error) {
+    throw analyticsError("supabase_not_configured", error.message, {
+      checks: [
+        "Ustaw publiczne zmienne VITE_SUPABASE_URL, VITE_SUPABASE_ANON_KEY i VITE_SITE_ID.",
+        "Po zmianie zmiennych przebuduj i wdroz frontend.",
+      ],
+    });
+  }
+
   const { data: sessionData, error: sessionError } = await client.auth.getSession();
 
   if (sessionError || !sessionData.session) {
-    const authError = new Error("Wymagana jest aktywna sesja Supabase.");
-    authError.code = "not_authenticated";
-    throw authError;
+    throw analyticsError("not_authenticated", "Wymagana jest aktywna sesja Supabase.", {
+      checks: ["Zaloguj sie ponownie do panelu CMS."],
+    });
   }
 
   const { data, error } = await client.functions.invoke("ga4-report", {
@@ -160,15 +268,17 @@ export async function fetchGa4Report({ forceRefresh = false } = {}) {
   });
 
   if (error) {
-    const functionError = new Error(error.message || "Nie udalo sie pobrac statystyk GA4.");
-    functionError.code = error.code || "edge_function_error";
-    throw functionError;
+    throw classifyFunctionInvokeError(error);
   }
 
   if (data?.error) {
-    const reportError = new Error(data.error.message || "Nie udalo sie pobrac statystyk GA4.");
-    reportError.code = data.error.code;
-    throw reportError;
+    throw analyticsError(
+      data.error.code,
+      data.error.message || "Nie udalo sie pobrac statystyk GA4.",
+      {
+        endpoint: getGa4FunctionEndpoint(),
+      },
+    );
   }
 
   const normalizedData = normalizeAnalyticsReport(data);

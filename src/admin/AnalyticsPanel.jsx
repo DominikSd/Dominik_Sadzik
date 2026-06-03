@@ -18,14 +18,102 @@ function formatDateTime(value) {
   }).format(date);
 }
 
-function deviceLabel(value) {
+function cleanPath(value) {
+  const rawPath = String(value || "").trim();
+  if (!rawPath || rawPath === "(not set)") return "";
+
+  const withoutQuery = rawPath.split(/[?#]/)[0] || "/";
+  const path = withoutQuery.startsWith("/") ? withoutQuery : `/${withoutQuery}`;
+  return path.replace(/\/{2,}/g, "/");
+}
+
+function normalizePath(value) {
+  const path = cleanPath(value);
+  if (!path) return "";
+  return path === "/" ? "/" : path.replace(/\/+$/, "");
+}
+
+function appRootPath() {
+  return normalizePath(import.meta.env.BASE_URL || "/");
+}
+
+function toSentence(value) {
+  const text = String(value || "")
+    .replace(/[_-]+/g, " ")
+    .replace(/\s+/g, " ")
+    .trim()
+    .toLowerCase();
+
+  if (!text) return "";
+  return `${text.charAt(0).toUpperCase()}${text.slice(1)}`;
+}
+
+function formatPagePath(value) {
+  const path = cleanPath(value);
+  const normalizedPath = normalizePath(path);
+  const normalizedRoot = appRootPath();
+
+  if (!path) {
+    return { label: "Nieznana strona", detail: "" };
+  }
+
+  if (normalizedPath === "/" || normalizedPath === normalizedRoot) {
+    return { label: "Strona główna", detail: path };
+  }
+
+  const segment = normalizedPath.split("/").filter(Boolean).pop();
+  return {
+    label: toSentence(segment) || "Nieznana strona",
+    detail: path,
+  };
+}
+
+function formatEventName(value) {
+  const eventName = String(value || "")
+    .trim()
+    .toLowerCase();
   const labels = {
-    desktop: "Desktop",
-    mobile: "Mobile",
+    cta_click: "Kliknięcie przycisku",
+    contact_click: "Kliknięcie kontaktu",
+    form_submit: "Wysłanie formularza",
+    page_view: "Wyświetlenie strony",
+  };
+
+  if (labels[eventName]) return labels[eventName];
+  return eventName ? `Inna akcja: ${toSentence(eventName).toLowerCase()}` : "Inna akcja";
+}
+
+function formatTrafficSource(value) {
+  const source = String(value || "")
+    .trim()
+    .toLowerCase();
+  const labels = {
+    "(direct) / (none)": "Wejście bezpośrednie",
+    "(not set)": "Brak danych",
+    "google / organic": "Google",
+    "google / cpc": "Reklama Google",
+    "facebook / referral": "Facebook",
+    "l.facebook.com / referral": "Facebook",
+    "instagram / referral": "Instagram",
+    "l.instagram.com / referral": "Instagram",
+    "github.com / referral": "GitHub",
+  };
+
+  if (labels[source]) return labels[source];
+  return toSentence(source.replace(/\s+\/\s+/g, " z ")) || "Brak danych";
+}
+
+function deviceLabel(value) {
+  const device = String(value || "")
+    .trim()
+    .toLowerCase();
+  const labels = {
+    desktop: "Komputer",
+    mobile: "Telefon",
     tablet: "Tablet",
   };
 
-  return labels[value] || value || "Nieznane";
+  return labels[device] || "Inne urządzenie";
 }
 
 function MetricCard({ label, value, hint }) {
@@ -38,37 +126,49 @@ function MetricCard({ label, value, hint }) {
   );
 }
 
+function renderColumnValue(column, row) {
+  if (column.render) return column.render(row);
+  const value = row[column.key];
+  return column.format ? column.format(value, row) : value;
+}
+
 function DataTable({ title, description, emptyText, columns, rows }) {
+  const safeRows = rows || [];
+  const [primaryColumn, ...metricColumns] = columns;
+
   return (
-    <div className="rounded-lg border border-white/10 bg-slate-950/45 p-5">
+    <div className="min-w-0 rounded-lg border border-white/10 bg-slate-950/45 p-5">
       <h3 className="text-lg font-black text-white">{title}</h3>
       {description && <p className="mt-1 text-sm leading-6 text-slate-400">{description}</p>}
-      {rows.length === 0 ? (
+      {safeRows.length === 0 ? (
         <p className="mt-4 text-sm text-slate-400">{emptyText}</p>
       ) : (
-        <div className="mt-4 overflow-x-auto">
-          <table className="w-full min-w-[520px] text-left text-sm">
-            <thead className="text-xs uppercase tracking-[0.16em] text-slate-500">
-              <tr>
-                {columns.map((column) => (
-                  <th key={column.key} className="border-b border-white/10 pb-3 font-semibold">
-                    {column.label}
-                  </th>
+        <div className="mt-4 space-y-3">
+          {safeRows.map((row, index) => (
+            <div
+              key={`${title}-${index}`}
+              className="min-w-0 rounded-lg border border-white/10 bg-white/[0.035] p-4 text-sm text-slate-200 sm:flex sm:items-center sm:justify-between sm:gap-4"
+            >
+              <div className="min-w-0 flex-1 break-words [overflow-wrap:anywhere]">
+                {renderColumnValue(primaryColumn, row)}
+              </div>
+              <div className="mt-3 grid min-w-0 grid-cols-2 gap-2 sm:mt-0 sm:flex sm:flex-wrap sm:justify-end">
+                {metricColumns.map((column) => (
+                  <div
+                    key={column.key}
+                    className="min-w-0 rounded-md bg-slate-950/45 px-3 py-2 sm:min-w-[5.75rem]"
+                  >
+                    <p className="text-[0.68rem] font-semibold uppercase tracking-[0.12em] text-slate-500">
+                      {column.label}
+                    </p>
+                    <p className="mt-1 break-words font-black text-white [overflow-wrap:anywhere]">
+                      {renderColumnValue(column, row)}
+                    </p>
+                  </div>
                 ))}
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-white/10">
-              {rows.map((row, index) => (
-                <tr key={`${title}-${index}`} className="text-slate-200">
-                  {columns.map((column) => (
-                    <td key={column.key} className="py-3 pr-4">
-                      {column.format ? column.format(row[column.key]) : row[column.key]}
-                    </td>
-                  ))}
-                </tr>
-              ))}
-            </tbody>
-          </table>
+              </div>
+            </div>
+          ))}
         </div>
       )}
     </div>
@@ -91,15 +191,27 @@ function Notice({ title, text, tone = "cyan" }) {
 
 function ErrorMessage({ error }) {
   const code = error?.code || "";
-  const fallback = error?.message || "Nie udalo sie pobrac statystyk.";
+  const fallback = "Nie udało się pobrać statystyk. Spróbuj ponownie za chwilę.";
   const messages = {
     ga4_not_configured:
-      "Statystyki GA4 nie sa jeszcze skonfigurowane. Uzupelnij sekrety Edge Function i sprawdz Property ID GA4.",
-    ga4_access_denied: "Service account nie ma dostepu do GA4 property.",
+      "Statystyki GA4 nie są jeszcze skonfigurowane. Sprawdź sekrety Supabase Edge Function.",
+    ga4_access_denied:
+      "Konto serwisowe nie ma dostępu do tej usługi Google Analytics albo Google Analytics Data API nie jest włączone.",
     ga4_rate_limited: "Przekroczono limit Google Analytics Data API. Sprobuj pozniej.",
     google_auth_failed: "Nie udalo sie uwierzytelnic service account Google.",
-    not_authenticated: "Sesja wygasla. Zaloguj sie ponownie.",
+    not_authenticated: "Zaloguj się ponownie, aby zobaczyć statystyki.",
     not_authorized: "Twoje konto nie ma dostepu do statystyk tej strony.",
+    supabase_not_configured: "Publiczna konfiguracja Supabase dla frontendu jest niekompletna.",
+    edge_function_unreachable:
+      "Nie mozna polaczyc sie z Supabase Edge Function. Funkcja moze nie byc wdrozona, projekt Supabase moze byc nieosiagalny albo frontend moze wskazywac inny projekt.",
+    edge_function_not_found:
+      "Supabase nie znalazl funkcji ga4-report. Najczesciej oznacza to brak deployu funkcji w tym projekcie Supabase.",
+    edge_function_forbidden:
+      "Supabase odrzucil request do funkcji. Sprawdz sesje uzytkownika, JWT funkcji i uprawnienia site_members.",
+    edge_function_runtime_error:
+      "Funkcja ga4-report zwrocila blad serwera. Sprawdz logi funkcji w Supabase.",
+    edge_supabase_not_configured:
+      "Edge Function nie ma wymaganej konfiguracji Supabase. Sprawdz sekrety i zmienne funkcji w projekcie Supabase.",
   };
 
   return (
@@ -109,6 +221,27 @@ function ErrorMessage({ error }) {
         <div>
           <p className="font-bold">Nie mozna wyswietlic raportu</p>
           <p className="mt-1 text-sm leading-6">{messages[code] || fallback}</p>
+          {(error?.endpoint || error?.status || error?.checks?.length > 0) && (
+            <div className="mt-3 rounded-lg border border-red-200/20 bg-red-950/25 p-3 text-xs leading-5 text-red-50/90">
+              {error?.endpoint && (
+                <p className="break-all">
+                  <span className="font-semibold">Endpoint:</span> {error.endpoint}
+                </p>
+              )}
+              {error?.status && (
+                <p>
+                  <span className="font-semibold">HTTP status:</span> {error.status}
+                </p>
+              )}
+              {error?.checks?.length > 0 && (
+                <ul className="mt-2 list-disc space-y-1 pl-4">
+                  {error.checks.map((check) => (
+                    <li key={check}>{check}</li>
+                  ))}
+                </ul>
+              )}
+            </div>
+          )}
         </div>
       </div>
     </div>
@@ -166,9 +299,10 @@ export default function AnalyticsPanel() {
               type="button"
               onClick={refresh}
               disabled={loading}
+              aria-label="Odśwież dane statystyk"
               className="inline-flex items-center gap-2 rounded-lg border border-white/10 px-3 py-2 text-sm font-semibold text-slate-100 hover:bg-white/10 disabled:opacity-60"
             >
-              <RefreshCw className="h-4 w-4" /> {loading ? "Odswiezanie..." : "Odswiez"}
+              <RefreshCw className="h-4 w-4" /> {loading ? "Odświeżanie..." : "Odśwież dane"}
             </button>
             <a
               href="https://analytics.google.com/analytics/web/"
@@ -244,65 +378,114 @@ export default function AnalyticsPanel() {
                 <BarChart3 className="h-5 w-5" />
               </div>
               <div>
-                <h3 className="text-lg font-black text-white">Podsumowanie ruchu</h3>
-                <p className="text-sm text-slate-400">Zakresy: ostatnie 7 dni i ostatnie 30 dni.</p>
+                <h3 className="text-lg font-black text-white">Ruch na stronie</h3>
+                <p className="text-sm leading-6 text-slate-400">
+                  Dane z ostatnich 7 i 30 dni. Sprawdź, ile osób odwiedza stronę i które elementy
+                  przyciągają najwięcej uwagi.
+                </p>
               </div>
             </div>
           </div>
 
           <dl className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-            <MetricCard label="Aktywni uzytkownicy 7 dni" value={summary.users7d} />
-            <MetricCard label="Aktywni uzytkownicy 30 dni" value={summary.users30d} />
-            <MetricCard label="Odslony 7 dni" value={summary.pageViews7d} />
-            <MetricCard label="Odslony 30 dni" value={summary.pageViews30d} />
-            <MetricCard label="Sesje 7 dni" value={summary.sessions7d} />
-            <MetricCard label="Sesje 30 dni" value={summary.sessions30d} />
-            <MetricCard label="Eventy 7 dni" value={summary.eventCount7d} />
-            <MetricCard label="Eventy 30 dni" value={summary.eventCount30d} />
+            <MetricCard
+              label="Odwiedzający (7 dni)"
+              value={summary.users7d}
+              hint="Liczba osób odwiedzających stronę."
+            />
+            <MetricCard
+              label="Odwiedzający (30 dni)"
+              value={summary.users30d}
+              hint="Liczba osób odwiedzających stronę."
+            />
+            <MetricCard
+              label="Odsłony (7 dni)"
+              value={summary.pageViews7d}
+              hint="Ile razy wyświetlono strony."
+            />
+            <MetricCard
+              label="Odsłony (30 dni)"
+              value={summary.pageViews30d}
+              hint="Ile razy wyświetlono strony."
+            />
+            <MetricCard
+              label="Wizyty (7 dni)"
+              value={summary.sessions7d}
+              hint="Liczba sesji na stronie."
+            />
+            <MetricCard
+              label="Wizyty (30 dni)"
+              value={summary.sessions30d}
+              hint="Liczba sesji na stronie."
+            />
+            <MetricCard
+              label="Akcje (7 dni)"
+              value={summary.eventCount7d}
+              hint="Kliknięcia i inne mierzone działania."
+            />
+            <MetricCard
+              label="Akcje (30 dni)"
+              value={summary.eventCount30d}
+              hint="Kliknięcia i inne mierzone działania."
+            />
           </dl>
 
-          <div className="grid gap-5 xl:grid-cols-2">
+          <div className="grid min-w-0 gap-5 xl:grid-cols-2">
             <DataTable
-              title="Najpopularniejsze sciezki"
-              description="Najczesciej odwiedzane podstrony w ostatnich 30 dniach."
-              emptyText="Brak danych o sciezkach."
+              title="Najczęściej odwiedzane strony"
+              description="Strony, które odwiedzano najczęściej w ostatnich 30 dniach."
+              emptyText="Brak danych o odwiedzanych stronach dla tego okresu."
               rows={report.topPages || []}
               columns={[
-                { key: "path", label: "Sciezka" },
-                { key: "pageViews", label: "Views", format: formatNumber },
-                { key: "users", label: "Users", format: formatNumber },
+                {
+                  key: "path",
+                  label: "Strona",
+                  render: (row) => {
+                    const page = formatPagePath(row.path);
+                    return (
+                      <div>
+                        <p className="font-black text-white">{page.label}</p>
+                        {page.detail && (
+                          <p className="mt-1 text-xs text-slate-500">{page.detail}</p>
+                        )}
+                      </div>
+                    );
+                  },
+                },
+                { key: "pageViews", label: "Odsłony", format: formatNumber },
+                { key: "users", label: "Odwiedzający", format: formatNumber },
               ]}
             />
             <DataTable
-              title="Akcje uzytkownikow"
-              description="Bezpieczne eventy: cta_click, contact_click i form_submit."
-              emptyText="Brak eventow cta_click/contact_click/form_submit."
+              title="Najczęstsze działania"
+              description="Najczęściej klikane elementy i wysłane formularze."
+              emptyText="Nie zarejestrowano jeszcze kliknięć ani wysłanych formularzy."
               rows={report.topEvents || report.trackedEvents || []}
               columns={[
-                { key: "eventName", label: "Event" },
+                { key: "eventName", label: "Działanie", format: formatEventName },
                 { key: "count", label: "Liczba", format: formatNumber },
               ]}
             />
             <DataTable
-              title="Zrodla ruchu"
-              description="Najczestsze source / medium wedlug sesji."
-              emptyText="Brak danych o zrodlach ruchu."
+              title="Skąd trafiają odwiedzający"
+              description="Najczęstsze źródła wejść na stronę."
+              emptyText="Brak danych o źródłach ruchu."
               rows={report.trafficSources || []}
               columns={[
-                { key: "sourceMedium", label: "Source / medium" },
-                { key: "sessions", label: "Sessions", format: formatNumber },
-                { key: "users", label: "Users", format: formatNumber },
+                { key: "sourceMedium", label: "Źródło", format: formatTrafficSource },
+                { key: "sessions", label: "Wizyty", format: formatNumber },
+                { key: "users", label: "Odwiedzający", format: formatNumber },
               ]}
             />
             <DataTable
-              title="Urzadzenia"
-              description="Ogolny podzial ruchu bez profilowania pojedynczych uzytkownikow."
-              emptyText="Brak danych o urzadzeniach."
+              title="Z jakich urządzeń korzystają odwiedzający"
+              description="Podział ruchu według typu urządzenia."
+              emptyText="Brak danych o urządzeniach."
               rows={report.devices || []}
               columns={[
-                { key: "deviceCategory", label: "Urzadzenie", format: deviceLabel },
-                { key: "users", label: "Users", format: formatNumber },
-                { key: "sessions", label: "Sessions", format: formatNumber },
+                { key: "deviceCategory", label: "Urządzenie", format: deviceLabel },
+                { key: "users", label: "Odwiedzający", format: formatNumber },
+                { key: "sessions", label: "Wizyty", format: formatNumber },
               ]}
             />
           </div>

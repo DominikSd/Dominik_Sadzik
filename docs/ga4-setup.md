@@ -79,9 +79,26 @@ Never add `GOOGLE_PRIVATE_KEY` or `GOOGLE_SERVICE_ACCOUNT_JSON_BASE64` to fronte
 
 ## 8. Deploy Edge Function
 
+Deploy strony przez GitHub Pages nie wdraża Supabase Edge Functions. Obecny workflow
+`.github/workflows/deploy.yml` buduje i publikuje tylko frontend z katalogu `dist`.
+
+Po pierwszej konfiguracji albo po każdej zmianie pliku:
+
+```text
+supabase/functions/ga4-report/index.ts
+```
+
+wdroż funkcję osobno:
+
 ```bash
 supabase functions deploy ga4-report
 ```
+
+Upewnij się, że polecenie wykonujesz dla tego samego projektu Supabase, którego URL jest ustawiony
+w `VITE_SUPABASE_URL` na produkcji.
+
+W przyszłości można dodać osobny manualny workflow do deployu Supabase Functions, ale token
+Supabase musi wtedy trafić wyłącznie do GitHub Actions Secrets. Nie commituj tokenów do repo.
 
 Local function testing:
 
@@ -95,6 +112,36 @@ supabase functions serve ga4-report --env-file ./supabase/functions/.env.local
 2. Open `Statystyki`.
 3. Click `Odswiez`.
 4. Confirm that metrics load or that the error message is actionable.
+
+In browser DevTools:
+
+1. Open `Network`.
+2. Filter by `ga4-report`.
+3. Confirm that the request goes to the Supabase Edge Function endpoint for the same project as
+   `VITE_SUPABASE_URL`.
+
+With the current Supabase JS client the request usually looks like:
+
+```text
+https://<project-ref>.supabase.co/functions/v1/ga4-report
+```
+
+Depending on Supabase routing/proxying you may also see a functions-domain request such as:
+
+```text
+https://<project-ref>.functions.supabase.co/ga4-report
+```
+
+Useful status hints:
+
+- no request at all: frontend did not reach `fetchGa4Report`, check login/session and console errors,
+- network/CORS/fetch failure: function endpoint is unreachable, project may be paused, blocked, or URL
+  may point to the wrong project,
+- `404`: function is not deployed in this Supabase project,
+- `401`/`403`: session/JWT or `site_members` authorization problem,
+- `503` with `ga4_not_configured`: missing Edge Function secrets,
+- `403` with `ga4_access_denied`: service account lacks access to the GA4 property,
+- `200` with `noData`: GA4 is reachable but has no matching data yet.
 
 The panel dashboard reads a simplified report from Supabase Edge Function `ga4-report`. It shows:
 

@@ -366,7 +366,16 @@ Deno.serve(async (req) => {
     return errorResponse("site_id_required", "Brakuje site_id.", 400);
   }
 
-  const auth = await authorizeRequest(req, payload.site_id);
+  let auth;
+  try {
+    auth = await authorizeRequest(req, payload.site_id);
+  } catch {
+    return errorResponse(
+      "edge_supabase_not_configured",
+      "Brakuje konfiguracji Supabase w Edge Function.",
+      503,
+    );
+  }
   if ("error" in auth) return auth.error;
 
   let credentials;
