@@ -101,21 +101,21 @@ describe("AnalyticsPanel", () => {
     error.code = "edge_function_unreachable";
     error.endpoint = "https://example-ref.supabase.co/functions/v1/ga4-report";
     error.checks = [
-      "Sprawdz, czy funkcja ga4-report zostala wdrozona w tym samym projekcie Supabase.",
+      "Sprawdź, czy funkcja ga4-report została wdrożona w tym samym projekcie Supabase.",
     ];
     mocks.report.mockRejectedValue(error);
 
     render(<AnalyticsPanel />);
 
     expect(
-      await screen.findByText(/Nie mozna polaczyc sie z Supabase Edge Function/i),
+      await screen.findByText(/Nie można połączyć się z Supabase Edge Function/i),
     ).toBeTruthy();
     expect(
       screen.getByText("https://example-ref.supabase.co/functions/v1/ga4-report"),
     ).toBeTruthy();
     expect(
       screen.getByText(
-        "Sprawdz, czy funkcja ga4-report zostala wdrozona w tym samym projekcie Supabase.",
+        "Sprawdź, czy funkcja ga4-report została wdrożona w tym samym projekcie Supabase.",
       ),
     ).toBeTruthy();
   });
@@ -150,7 +150,7 @@ describe("AnalyticsPanel", () => {
 
     render(<AnalyticsPanel />);
 
-    expect(await screen.findByText(/GA4 moze potrzebowac czasu/i)).toBeTruthy();
+    expect(await screen.findByText(/GA4 może potrzebować czasu/i)).toBeTruthy();
   });
 
   it("renders report data with customer-friendly labels", async () => {

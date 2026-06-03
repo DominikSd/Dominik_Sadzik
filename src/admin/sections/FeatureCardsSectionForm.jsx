@@ -12,7 +12,7 @@ const iconOptions = [
 export default function FeatureCardsSectionForm({
   value,
   onChange,
-  addLabel = "Dodaj karte",
+  addLabel = "Dodaj kartę",
   showCertificate = false,
   showSecondaryCta = false,
 }) {
@@ -27,7 +27,7 @@ export default function FeatureCardsSectionForm({
             onChange={(event) => update({ eyebrow: event.target.value })}
           />
         </Field>
-        <Field label="Naglowek">
+        <Field label="Nagłówek">
           <TextInput
             value={value.title}
             onChange={(event) => update({ title: event.target.value })}
@@ -38,7 +38,7 @@ export default function FeatureCardsSectionForm({
         <TextArea value={value.text} onChange={(event) => update({ text: event.target.value })} />
       </Field>
       {showCertificate && (
-        <Field label="Informacja o certyfikacie / wiarygodnosci">
+        <Field label="Informacja o certyfikacie / wiarygodności">
           <TextInput
             value={value.certificateNote || ""}
             onChange={(event) => update({ certificateNote: event.target.value })}
@@ -84,7 +84,7 @@ export default function FeatureCardsSectionForm({
         renderItem={(item, index, updateItem) => (
           <div className="space-y-4">
             <FormGrid>
-              <Field label={`Tytul karty ${index + 1}`}>
+              <Field label={`Tytuł karty ${index + 1}`}>
                 <TextInput
                   value={item.title}
                   onChange={(event) => updateItem({ ...item, title: event.target.value })}

@@ -13,7 +13,7 @@ export default function SettingsSectionForm({ value, onChange }) {
             onChange={(event) => update({ siteName: event.target.value })}
           />
         </Field>
-        <Field label="Dopisek w naglowku">
+        <Field label="Dopisek w nagłówku">
           <TextInput
             value={value.tagline}
             onChange={(event) => update({ tagline: event.target.value })}

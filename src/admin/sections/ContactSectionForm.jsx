@@ -13,7 +13,7 @@ export default function ContactSectionForm({ value, onChange }) {
             onChange={(event) => update({ eyebrow: event.target.value })}
           />
         </Field>
-        <Field label="Naglowek">
+        <Field label="Nagłówek">
           <TextInput
             value={value.title}
             onChange={(event) => update({ title: event.target.value })}

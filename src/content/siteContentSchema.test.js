@@ -35,7 +35,7 @@ describe("site content schema", () => {
   it("validates FAQ items as normal fields, not raw JSON blobs", () => {
     const faq = {
       ...defaultSiteContent.faq,
-      items: [{ question: "Czy moge edytowac strone?", answer: "" }],
+      items: [{ question: "Czy mogę edytować stronę?", answer: "" }],
     };
 
     expect(() => validateSectionData("faq", faq)).toThrow();

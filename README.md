@@ -221,15 +221,6 @@ Build nie może zawierać nazw lub wartości prywatnych sekretów.
 
 ## Dokumentacja projektu
 
-Przy dalszym rozwijaniu template'u przydatne są m.in.:
-
-- `docs/template-deployment-playbook.md` - użycie repo jako baza dla nowego klienta,
-- `docs/cms-template-setup.md` - pełna notatka konfiguracji CMS, Supabase i GA4,
-- `docs/pages-and-cms-content.md` - nowe predefiniowane podstrony i ich edycja w CMS,
-- `docs/ga4-setup.md` - konfiguracja GA4 i Edge Function.
-
-## Dokumentacja projektu
-
 - [Configuration map](docs/configuration-map.md)
 - [Supabase setup](docs/supabase-setup.md)
 - [GA4 setup](docs/ga4-setup.md)
@@ -237,6 +228,8 @@ Przy dalszym rozwijaniu template'u przydatne są m.in.:
 - [Supabase RLS manual test](docs/supabase-rls-manual-test.md)
 - [Deployment checklist](docs/deployment-checklist.md)
 - [Client handover](docs/client-handover.md)
+- [CMS template setup](docs/cms-template-setup.md)
+- [Pages and CMS content](docs/pages-and-cms-content.md)
 - [Template deployment playbook](docs/template-deployment-playbook.md)
 - [Hosting options](docs/hosting-options.md)
 - [Client ownership model](docs/client-ownership-model.md)

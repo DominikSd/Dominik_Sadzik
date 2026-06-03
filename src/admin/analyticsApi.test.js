@@ -119,7 +119,7 @@ describe("analyticsApi", () => {
       code: "edge_function_unreachable",
       endpoint: "https://example-ref.supabase.co/functions/v1/ga4-report",
       checks: expect.arrayContaining([
-        "Sprawdz, czy funkcja ga4-report zostala wdrozona w tym samym projekcie Supabase.",
+        "Sprawdź, czy funkcja ga4-report została wdrożona w tym samym projekcie Supabase.",
       ]),
     });
   });

@@ -197,21 +197,21 @@ function ErrorMessage({ error }) {
       "Statystyki GA4 nie są jeszcze skonfigurowane. Sprawdź sekrety Supabase Edge Function.",
     ga4_access_denied:
       "Konto serwisowe nie ma dostępu do tej usługi Google Analytics albo Google Analytics Data API nie jest włączone.",
-    ga4_rate_limited: "Przekroczono limit Google Analytics Data API. Sprobuj pozniej.",
-    google_auth_failed: "Nie udalo sie uwierzytelnic service account Google.",
+    ga4_rate_limited: "Przekroczono limit Google Analytics Data API. Spróbuj później.",
+    google_auth_failed: "Nie udało się uwierzytelnić service account Google.",
     not_authenticated: "Zaloguj się ponownie, aby zobaczyć statystyki.",
-    not_authorized: "Twoje konto nie ma dostepu do statystyk tej strony.",
+    not_authorized: "Twoje konto nie ma dostępu do statystyk tej strony.",
     supabase_not_configured: "Publiczna konfiguracja Supabase dla frontendu jest niekompletna.",
     edge_function_unreachable:
-      "Nie mozna polaczyc sie z Supabase Edge Function. Funkcja moze nie byc wdrozona, projekt Supabase moze byc nieosiagalny albo frontend moze wskazywac inny projekt.",
+      "Nie można połączyć się z Supabase Edge Function. Funkcja może nie być wdrożona, projekt Supabase może być nieosiągalny albo frontend może wskazywać inny projekt.",
     edge_function_not_found:
-      "Supabase nie znalazl funkcji ga4-report. Najczesciej oznacza to brak deployu funkcji w tym projekcie Supabase.",
+      "Supabase nie znalazł funkcji ga4-report. Najczęściej oznacza to brak deployu funkcji w tym projekcie Supabase.",
     edge_function_forbidden:
-      "Supabase odrzucil request do funkcji. Sprawdz sesje uzytkownika, JWT funkcji i uprawnienia site_members.",
+      "Supabase odrzucił request do funkcji. Sprawdź sesję użytkownika, JWT funkcji i uprawnienia site_members.",
     edge_function_runtime_error:
-      "Funkcja ga4-report zwrocila blad serwera. Sprawdz logi funkcji w Supabase.",
+      "Funkcja ga4-report zwróciła błąd serwera. Sprawdź logi funkcji w Supabase.",
     edge_supabase_not_configured:
-      "Edge Function nie ma wymaganej konfiguracji Supabase. Sprawdz sekrety i zmienne funkcji w projekcie Supabase.",
+      "Edge Function nie ma wymaganej konfiguracji Supabase. Sprawdź sekrety i zmienne funkcji w projekcie Supabase.",
   };
 
   return (
@@ -219,7 +219,7 @@ function ErrorMessage({ error }) {
       <div className="flex gap-3">
         <ShieldAlert className="mt-0.5 h-5 w-5 flex-none" />
         <div>
-          <p className="font-bold">Nie mozna wyswietlic raportu</p>
+          <p className="font-bold">Nie można wyświetlić raportu</p>
           <p className="mt-1 text-sm leading-6">{messages[code] || fallback}</p>
           {(error?.endpoint || error?.status || error?.checks?.length > 0) && (
             <div className="mt-3 rounded-lg border border-red-200/20 bg-red-950/25 p-3 text-xs leading-5 text-red-50/90">
@@ -290,8 +290,8 @@ export default function AnalyticsPanel() {
               {analytics.isConfigured ? "Raport GA4" : "GA4 nie jest skonfigurowane we frontendzie"}
             </h3>
             <p className="mt-2 text-sm leading-6 text-slate-400">
-              Dane ponizej sa pobierane przez Supabase Edge Function ga4-report. Sekrety Google
-              zostaja po stronie backendu, a raport moze miec opoznienie wzgledem Google Analytics.
+              Dane poniżej są pobierane przez Supabase Edge Function ga4-report. Sekrety Google
+              zostają po stronie backendu, a raport może mieć opóźnienie względem Google Analytics.
             </p>
           </div>
           <div className="flex flex-wrap gap-2">
@@ -322,7 +322,7 @@ export default function AnalyticsPanel() {
             </dd>
           </div>
           <div className="rounded-lg border border-white/10 bg-white/[0.035] p-4">
-            <dt className="text-sm text-slate-400">Zgoda w tej przegladarce</dt>
+            <dt className="text-sm text-slate-400">Zgoda w tej przeglądarce</dt>
             <dd className="mt-1 text-sm font-semibold text-white">
               {analytics.consent || "Nie wybrano"}
             </dd>
@@ -334,7 +334,7 @@ export default function AnalyticsPanel() {
                 ? `UI cache, ${report.clientCache.ageSeconds}s`
                 : report?.cache?.hit
                   ? `Edge cache, ${report.cache.ageSeconds}s`
-                  : "Swieze dane"}
+                  : "Świeże dane"}
             </dd>
           </div>
           <div className="rounded-lg border border-white/10 bg-white/[0.035] p-4">
@@ -349,7 +349,7 @@ export default function AnalyticsPanel() {
       {!analytics.isConfigured && (
         <Notice
           title="Tracking frontendu nie jest jeszcze skonfigurowany"
-          text="Uzupelnij publiczne VITE_GA_MEASUREMENT_ID. Raport w panelu nadal wymaga sekretow Edge Function po stronie Supabase."
+          text="Uzupełnij publiczne VITE_GA_MEASUREMENT_ID. Raport w panelu nadal wymaga sekretów Edge Function po stronie Supabase."
           tone="amber"
         />
       )}
@@ -365,7 +365,7 @@ export default function AnalyticsPanel() {
       {report?.noData && (
         <Notice
           title="Brak danych dla wybranego okresu"
-          text="Brak danych dla wybranego okresu. GA4 moze potrzebowac czasu na zebranie statystyk."
+          text="Brak danych dla wybranego okresu. GA4 może potrzebować czasu na zebranie statystyk."
           tone="amber"
         />
       )}

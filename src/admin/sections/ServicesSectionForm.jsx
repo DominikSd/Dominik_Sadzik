@@ -13,7 +13,7 @@ export default function ServicesSectionForm({ value, onChange }) {
             onChange={(event) => update({ eyebrow: event.target.value })}
           />
         </Field>
-        <Field label="Naglowek">
+        <Field label="Nagłówek">
           <TextInput
             value={value.title}
             onChange={(event) => update({ title: event.target.value })}
@@ -26,12 +26,12 @@ export default function ServicesSectionForm({ value, onChange }) {
       <ListEditor
         items={value.items}
         onChange={(items) => update({ items })}
-        createItem={() => ({ icon: "monitor", title: "Nowa usluga", text: "Opis uslugi" })}
-        addLabel="Dodaj usluge"
+        createItem={() => ({ icon: "monitor", title: "Nowa usługa", text: "Opis usługi" })}
+        addLabel="Dodaj usługę"
         renderItem={(item, index, updateItem) => (
           <div className="space-y-4">
             <FormGrid>
-              <Field label={`Tytul uslugi ${index + 1}`}>
+              <Field label={`Tytuł usługi ${index + 1}`}>
                 <TextInput
                   value={item.title}
                   onChange={(event) => updateItem({ ...item, title: event.target.value })}

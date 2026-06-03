@@ -25,10 +25,40 @@ const detailPageRoutes = {
   gamedev: "gamedev",
 };
 
+const homeRouteSlugs = new Set(["", "/"]);
+
 function getRouteSlug(routeHash = "") {
   return String(routeHash || "")
     .replace(/^#\/?/, "")
     .replace(/^\/+|\/+$/g, "");
+}
+
+function isRouteHref(href = "") {
+  return String(href).startsWith("#/");
+}
+
+function getSectionIdFromHref(href = "") {
+  const value = String(href || "");
+  if (!value.startsWith("#") || isRouteHref(value)) return "";
+  return value.replace(/^#/, "").trim();
+}
+
+function getRouteSlugFromHref(href = "") {
+  return isRouteHref(href) ? getRouteSlug(href) : "";
+}
+
+function isHomeRoute(routeSlug = "") {
+  return homeRouteSlugs.has(routeSlug);
+}
+
+function isNavItemActive(item, { routeSlug, activeSectionId }) {
+  const itemRouteSlug = getRouteSlugFromHref(item.href);
+  if (itemRouteSlug) return routeSlug === itemRouteSlug;
+
+  const sectionId = getSectionIdFromHref(item.href);
+  if (sectionId) return !detailPageRoutes[routeSlug] && activeSectionId === sectionId;
+
+  return isHomeRoute(routeSlug) && activeSectionId === "start";
 }
 
 function Icon({ name, className = "h-5 w-5" }) {
@@ -96,6 +126,13 @@ function Icon({ name, className = "h-5 w-5" }) {
           <path d="M4 18h16" />
         </svg>
       );
+    case "x":
+      return (
+        <svg {...common}>
+          <path d="M18 6 6 18" />
+          <path d="m6 6 12 12" />
+        </svg>
+      );
     case "monitor":
       return (
         <svg {...common}>
@@ -139,13 +176,13 @@ function Icon({ name, className = "h-5 w-5" }) {
 function runContentSelfTests(content) {
   const errors = [];
   if (content.services.items.length < 1)
-    errors.push("services powinno zawierac przynajmniej 1 element");
+    errors.push("services powinno zawierać przynajmniej 1 element");
   if (content.benefits.items.length < 4)
-    errors.push("benefits powinno zawierac przynajmniej 4 elementy");
-  if (content.process.items.length < 2) errors.push("process powinno miec przynajmniej 2 kroki");
+    errors.push("benefits powinno zawierać przynajmniej 4 elementy");
+  if (content.process.items.length < 2) errors.push("process powinno mieć przynajmniej 2 kroki");
   if (!content.packages.items.some((pack) => pack.highlighted))
-    errors.push("jeden pakiet powinien byc wyrozniony");
-  if (content.faq.items.length < 3) errors.push("FAQ powinno miec przynajmniej 3 pytania");
+    errors.push("jeden pakiet powinien być wyróżniony");
+  if (content.faq.items.length < 3) errors.push("FAQ powinno mieć przynajmniej 3 pytania");
   return errors;
 }
 
@@ -179,15 +216,106 @@ function SectionTitle({ eyebrow, title, text }) {
   );
 }
 
-function Header({ settings, hero }) {
+function Header({ settings, hero, routeHash }) {
   const [isOpen, setIsOpen] = useState(false);
+  const routeSlug = getRouteSlug(routeHash);
+  const isDetailPage = Boolean(detailPageRoutes[routeSlug]);
+  const routeSectionId = isDetailPage || isHomeRoute(routeSlug) ? "start" : routeSlug;
+  const [activeSectionId, setActiveSectionId] = useState(routeSectionId || "start");
+
+  useEffect(() => {
+    setIsOpen(false);
+    setActiveSectionId(routeSectionId || "start");
+  }, [routeSectionId, routeHash]);
+
+  useEffect(() => {
+    if (isDetailPage || typeof IntersectionObserver === "undefined") return undefined;
+
+    const sectionIds = settings.navItems
+      .map((item) => getSectionIdFromHref(item.href))
+      .filter(Boolean);
+    const sections = sectionIds
+      .map((sectionId) => document.getElementById(sectionId))
+      .filter(Boolean);
+
+    if (!sections.length) return undefined;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const visibleEntry = entries
+          .filter((entry) => entry.isIntersecting)
+          .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
+
+        if (visibleEntry?.target?.id) {
+          setActiveSectionId(visibleEntry.target.id);
+        }
+      },
+      {
+        rootMargin: "-35% 0px -55% 0px",
+        threshold: [0.05, 0.25, 0.5],
+      },
+    );
+
+    sections.forEach((section) => observer.observe(section));
+
+    return () => observer.disconnect();
+  }, [isDetailPage, settings.navItems]);
 
   const scrollToHref = (event, href) => {
-    if (href.startsWith("#/")) return;
+    if (href.startsWith("#/")) {
+      setIsOpen(false);
+      return;
+    }
+
     event.preventDefault();
-    const el = document.getElementById(href.replace("#", ""));
-    if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+    const sectionId = getSectionIdFromHref(href);
+
+    if (!sectionId) {
+      window.history.replaceState(null, "", `${window.location.pathname}${window.location.search}`);
+      window.scrollTo({ top: 0, behavior: "smooth" });
+      setActiveSectionId("start");
+      setIsOpen(false);
+      return;
+    }
+
+    const el = document.getElementById(sectionId);
+    if (el) {
+      el.scrollIntoView({ behavior: "smooth", block: "start" });
+      window.history.replaceState(
+        null,
+        "",
+        `${window.location.pathname}${window.location.search}#/${sectionId}`,
+      );
+      setActiveSectionId(sectionId);
+    } else {
+      window.location.hash = `#/${sectionId}`;
+    }
+
     setIsOpen(false);
+  };
+
+  const renderNavLink = (item, variant = "desktop") => {
+    const active = isNavItemActive(item, { routeSlug, activeSectionId });
+    const baseClass =
+      "min-w-0 rounded-full font-semibold transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-300";
+    const desktopClass = active
+      ? "bg-cyan-300/15 px-3 py-2 text-cyan-100 ring-1 ring-cyan-300/30"
+      : "px-3 py-2 text-slate-300 hover:bg-white/5 hover:text-cyan-300";
+    const mobileClass = active
+      ? "bg-cyan-300/15 px-4 py-3 text-cyan-100 ring-1 ring-cyan-300/30"
+      : "bg-white/5 px-4 py-3 text-slate-200 hover:bg-white/10 hover:text-cyan-200";
+
+    return (
+      <a
+        key={`${item.label}-${item.href}`}
+        href={item.href}
+        onClick={(event) => scrollToHref(event, item.href)}
+        aria-current={active ? "page" : undefined}
+        className={`${baseClass} ${variant === "desktop" ? desktopClass : mobileClass}`}
+      >
+        <span className="block min-w-0 break-words">{item.label}</span>
+      </a>
+    );
   };
 
   return (
@@ -202,48 +330,33 @@ function Header({ settings, hero }) {
             <p className="text-xs text-cyan-200/70">{settings.tagline}</p>
           </div>
         </div>
-        <nav className="hidden items-center gap-8 text-sm text-slate-300 md:flex">
-          {settings.navItems.map((item) => (
-            <a
-              key={`${item.label}-${item.href}`}
-              href={item.href}
-              onClick={(event) => scrollToHref(event, item.href)}
-              className="transition hover:text-cyan-300"
-            >
-              {item.label}
-            </a>
-          ))}
+        <nav aria-label="Główna nawigacja" className="hidden items-center gap-1 text-sm lg:flex">
+          {settings.navItems.map((item) => renderNavLink(item))}
         </nav>
         <a
           href={hero.primaryCta.href}
-          onClick={() => trackCtaClick(hero.primaryCta.label, "header")}
-          className="hidden rounded-full gradient-button px-5 py-2.5 text-sm font-semibold shadow-lg shadow-blue-500/25 transition hover:scale-105 md:inline-flex"
+          onClick={(event) => {
+            trackCtaClick(hero.primaryCta.label, "header");
+            scrollToHref(event, hero.primaryCta.href);
+          }}
+          className="hidden rounded-full gradient-button px-5 py-2.5 text-sm font-semibold shadow-lg shadow-blue-500/25 transition hover:scale-105 lg:inline-flex"
         >
           {hero.primaryCta.label}
         </a>
         <button
           type="button"
           onClick={() => setIsOpen((value) => !value)}
-          className="rounded-lg border border-white/10 bg-white/5 p-3 text-white md:hidden"
-          aria-label="Otworz menu"
+          className="rounded-lg border border-white/10 bg-white/5 p-3 text-white lg:hidden"
+          aria-label={isOpen ? "Zamknij menu" : "Otwórz menu"}
           aria-expanded={isOpen}
         >
-          <Icon name="menu" className="h-5 w-5" />
+          <Icon name={isOpen ? "x" : "menu"} className="h-5 w-5" />
         </button>
       </div>
       {isOpen && (
-        <div className="border-t border-white/10 bg-[#050816]/95 px-6 py-4 md:hidden">
-          <nav className="flex flex-col gap-3 text-sm text-slate-200">
-            {settings.navItems.map((item) => (
-              <a
-                key={`${item.label}-${item.href}`}
-                href={item.href}
-                onClick={(event) => scrollToHref(event, item.href)}
-                className="rounded-lg bg-white/5 px-4 py-3 transition hover:bg-white/10"
-              >
-                {item.label}
-              </a>
-            ))}
+        <div className="border-t border-white/10 bg-[#050816]/95 px-6 py-4 lg:hidden">
+          <nav aria-label="Menu mobilne" className="flex flex-col gap-3 text-sm text-slate-200">
+            {settings.navItems.map((item) => renderNavLink(item, "mobile"))}
           </nav>
         </div>
       )}
@@ -701,7 +814,7 @@ function PortfolioSection({ portfolio }) {
                     href={item.href}
                     target={item.href.startsWith("http") ? "_blank" : undefined}
                     rel={item.href.startsWith("http") ? "noreferrer" : undefined}
-                    aria-label={`Otworz projekt: ${item.title}`}
+                    aria-label={`Otwórz projekt: ${item.title}`}
                     className="block h-full w-full"
                   >
                     <PortfolioMockup item={item} />
@@ -793,7 +906,7 @@ function PackagesSection({ packages }) {
             >
               {pack.highlighted && (
                 <div className="absolute -top-4 left-7 rounded-full bg-gradient-to-r from-blue-500 to-violet-500 px-4 py-1.5 text-xs font-bold text-white">
-                  Najczesciej wybierane
+                  Najczęściej wybierane
                 </div>
               )}
               <h3 className="text-2xl font-black text-white">{pack.name}</h3>
@@ -939,7 +1052,7 @@ function PageHero({ page }) {
           className="mb-8 inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-sm font-semibold text-cyan-100 hover:bg-white/10"
         >
           <Icon name="arrow-right" className="h-4 w-4 rotate-180" />
-          Strona glowna
+          Strona główna
         </a>
         <p className="text-sm font-semibold uppercase tracking-[0.26em] text-cyan-300">
           {page.hero.eyebrow}
@@ -1030,7 +1143,7 @@ export default function LandingPage({ routeHash = "" }) {
       setContent(result.content);
       setCmsWarning(
         result.usedFallback
-          ? "CMS jest niedostepny lub nieskonfigurowany. Strona uzywa tresci domyslnej."
+          ? "CMS jest niedostępny lub nieskonfigurowany. Strona używa treści domyślnej."
           : "",
       );
     });
@@ -1042,6 +1155,22 @@ export default function LandingPage({ routeHash = "" }) {
   const routeSlug = getRouteSlug(routeHash);
   const pageKey = detailPageRoutes[routeSlug];
   const activePage = pageKey ? content.pages?.[pageKey] : null;
+
+  useEffect(() => {
+    if (activePage) {
+      window.scrollTo({ top: 0 });
+      return undefined;
+    }
+
+    if (isHomeRoute(routeSlug)) return undefined;
+
+    const frame = window.requestAnimationFrame(() => {
+      const section = document.getElementById(routeSlug);
+      if (section) section.scrollIntoView({ block: "start" });
+    });
+
+    return () => window.cancelAnimationFrame(frame);
+  }, [activePage, routeSlug]);
 
   useEffect(() => {
     const seo = activePage?.seo;
@@ -1068,7 +1197,7 @@ export default function LandingPage({ routeHash = "" }) {
       <div className="page-gradient" />
       {(selfTestErrors.length > 0 || cmsWarning) && (
         <div className="fixed bottom-4 left-4 z-50 max-w-sm rounded-lg border border-amber-400/40 bg-amber-950/90 p-4 text-sm text-amber-100 shadow-2xl">
-          <p className="font-bold">Ostrzezenie CMS:</p>
+          <p className="font-bold">Ostrzeżenie CMS:</p>
           {cmsWarning && <p className="mt-2">{cmsWarning}</p>}
           {selfTestErrors.length > 0 && (
             <ul className="mt-2 list-disc pl-5">
@@ -1079,7 +1208,7 @@ export default function LandingPage({ routeHash = "" }) {
           )}
         </div>
       )}
-      <Header settings={content.settings} hero={content.hero} />
+      <Header settings={content.settings} hero={content.hero} routeHash={routeHash} />
       <main className="relative z-10 overflow-visible">
         {activePage ? (
           <ServiceDetailPage page={activePage} contact={content.contact} />

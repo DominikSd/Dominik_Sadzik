@@ -8,17 +8,17 @@ const pageLabels = [
 ];
 
 const sectionLabels = {
-  whatCanBeAutomated: "Co moge automatyzowac",
+  whatCanBeAutomated: "Co mogę automatyzować",
   benefits: "Korzyści",
-  examples: "Przyklady zastosowan",
-  qaMindset: "Podejscie testerskie",
-  testScope: "Zakres testow",
-  bugReport: "Raport z testow",
+  examples: "Przykłady zastosowań",
+  qaMindset: "Podejście testerskie",
+  testScope: "Zakres testów",
+  bugReport: "Raport z testów",
   clientBenefits: "Korzyści dla klienta",
-  whatIBuild: "Co tworze",
-  connectionToWeb: "Polaczenie z oferta web",
+  whatIBuild: "Co tworzę",
+  connectionToWeb: "Połączenie z ofertą web",
   demos: "Projekty i demo",
-  finalCta: "CTA koncowe",
+  finalCta: "CTA końcowe",
 };
 
 function PageSeoEditor({ page, updatePage }) {
@@ -28,7 +28,7 @@ function PageSeoEditor({ page, updatePage }) {
     <div className="space-y-4 rounded-lg border border-white/10 bg-white/[0.035] p-4">
       <h3 className="text-lg font-bold text-white">SEO podstrony</h3>
       <FormGrid>
-        <Field label="SEO title" hint="Najlepiej ok. 60-70 znakow.">
+        <Field label="SEO title" hint="Najlepiej ok. 60-70 znaków.">
           <TextInput
             value={page.seo.title}
             onChange={(event) => updateSeo({ title: event.target.value })}
@@ -41,7 +41,7 @@ function PageSeoEditor({ page, updatePage }) {
           />
         </Field>
       </FormGrid>
-      <Field label="SEO description" hint="Najlepiej ok. 150-170 znakow.">
+      <Field label="SEO description" hint="Najlepiej ok. 150-170 znaków.">
         <TextArea
           value={page.seo.description}
           onChange={(event) => updateSeo({ description: event.target.value })}
@@ -77,13 +77,13 @@ function PageHeroEditor({ page, updatePage }) {
           />
         </Field>
       </FormGrid>
-      <Field label="Tytul">
+      <Field label="Tytuł">
         <TextInput
           value={page.hero.title}
           onChange={(event) => updateHero({ title: event.target.value })}
         />
       </Field>
-      <Field label="Podtytul">
+      <Field label="Podtytuł">
         <TextInput
           value={page.hero.subtitle}
           onChange={(event) => updateHero({ subtitle: event.target.value })}
@@ -119,7 +119,7 @@ function PageContentSectionEditor({ sectionKey, section, updateSection }) {
   return (
     <div className="space-y-4 rounded-lg border border-white/10 bg-white/[0.035] p-4">
       <h3 className="text-lg font-bold text-white">{sectionLabels[sectionKey] || sectionKey}</h3>
-      <Field label="Tytul">
+      <Field label="Tytuł">
         <TextInput
           value={section.title}
           onChange={(event) => updateSection({ ...section, title: event.target.value })}

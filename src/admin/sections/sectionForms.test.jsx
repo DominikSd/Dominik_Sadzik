@@ -12,10 +12,10 @@ import ServicesSectionForm from "./ServicesSectionForm";
 import SettingsSectionForm from "./SettingsSectionForm";
 
 const forms = [
-  ["hero", HeroSectionForm, "Naglowek"],
+  ["hero", HeroSectionForm, "Nagłówek"],
   ["services", ServicesSectionForm, "Opis sekcji"],
   ["automationQa", FeatureCardsSectionForm, "CTA label"],
-  ["gamedevTeaser", FeatureCardsSectionForm, "Dodaj karte"],
+  ["gamedevTeaser", FeatureCardsSectionForm, "Dodaj kartę"],
   ["pages", PagesSectionForm, "SEO podstrony"],
   ["faq", FaqSectionForm, "Dodaj pytanie"],
   ["contact", ContactSectionForm, "Telefon"],

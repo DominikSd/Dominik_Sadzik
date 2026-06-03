@@ -13,7 +13,7 @@ export default function FaqSectionForm({ value, onChange }) {
             onChange={(event) => update({ eyebrow: event.target.value })}
           />
         </Field>
-        <Field label="Naglowek">
+        <Field label="Nagłówek">
           <TextInput
             value={value.title}
             onChange={(event) => update({ title: event.target.value })}
@@ -26,7 +26,7 @@ export default function FaqSectionForm({ value, onChange }) {
       <ListEditor
         items={value.items}
         onChange={(items) => update({ items })}
-        createItem={() => ({ question: "Nowe pytanie", answer: "Odpowiedz" })}
+        createItem={() => ({ question: "Nowe pytanie", answer: "Odpowiedź" })}
         addLabel="Dodaj pytanie"
         renderItem={(item, index, updateItem) => (
           <div className="space-y-4">
@@ -36,7 +36,7 @@ export default function FaqSectionForm({ value, onChange }) {
                 onChange={(event) => updateItem({ ...item, question: event.target.value })}
               />
             </Field>
-            <Field label="Odpowiedz">
+            <Field label="Odpowiedź">
               <TextArea
                 value={item.answer}
                 onChange={(event) => updateItem({ ...item, answer: event.target.value })}

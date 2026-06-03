@@ -217,13 +217,13 @@ function classifyFunctionInvokeError(error) {
   ) {
     return analyticsError(
       "edge_function_unreachable",
-      "Nie mozna polaczyc sie z Supabase Edge Function ga4-report.",
+      "Nie można połączyć się z Supabase Edge Function ga4-report.",
       {
         ...baseDetails,
         checks: [
-          "Sprawdz, czy funkcja ga4-report zostala wdrozona w tym samym projekcie Supabase.",
-          "Sprawdz, czy VITE_SUPABASE_URL wskazuje na wlasciwy projekt.",
-          "Sprawdz, czy projekt Supabase nie jest wstrzymany i czy request nie jest blokowany w przegladarce.",
+          "Sprawdź, czy funkcja ga4-report została wdrożona w tym samym projekcie Supabase.",
+          "Sprawdź, czy VITE_SUPABASE_URL wskazuje na właściwy projekt.",
+          "Sprawdź, czy projekt Supabase nie jest wstrzymany i czy request nie jest blokowany w przeglądarce.",
         ],
       },
     );
@@ -232,12 +232,12 @@ function classifyFunctionInvokeError(error) {
   if (status === 404) {
     return analyticsError(
       "edge_function_not_found",
-      "Supabase nie znalazl Edge Function ga4-report w tym projekcie.",
+      "Supabase nie znalazł Edge Function ga4-report w tym projekcie.",
       {
         ...baseDetails,
         checks: [
-          "Wdroz funkcje poleceniem: supabase functions deploy ga4-report.",
-          "Sprawdz, czy frontend uzywa tego samego projektu Supabase, w ktorym wdrozono funkcje.",
+          "Wdróż funkcję poleceniem: supabase functions deploy ga4-report.",
+          "Sprawdź, czy frontend używa tego samego projektu Supabase, w którym wdrożono funkcję.",
         ],
       },
     );
@@ -246,12 +246,12 @@ function classifyFunctionInvokeError(error) {
   if (status === 401 || status === 403) {
     return analyticsError(
       "edge_function_forbidden",
-      "Supabase odrzucil request do Edge Function.",
+      "Supabase odrzucił request do Edge Function.",
       {
         ...baseDetails,
         checks: [
-          "Sprawdz aktywna sesje uzytkownika.",
-          "Sprawdz konfiguracje JWT Edge Function i uprawnienia site_members.",
+          "Sprawdź aktywną sesję użytkownika.",
+          "Sprawdź konfigurację JWT Edge Function i uprawnienia site_members.",
         ],
       },
     );
@@ -260,12 +260,12 @@ function classifyFunctionInvokeError(error) {
   if (status && status >= 500) {
     return analyticsError(
       "edge_function_runtime_error",
-      "Edge Function ga4-report zwrocila blad serwera.",
+      "Edge Function ga4-report zwróciła błąd serwera.",
       {
         ...baseDetails,
         checks: [
-          "Sprawdz logi funkcji w Supabase.",
-          "Sprawdz sekrety Edge Function i dostep service account do GA4.",
+          "Sprawdź logi funkcji w Supabase.",
+          "Sprawdź sekrety Edge Function i dostęp service account do GA4.",
         ],
       },
     );
@@ -295,7 +295,7 @@ export async function fetchGa4Report({ forceRefresh = false } = {}) {
     throw analyticsError("supabase_not_configured", error.message, {
       checks: [
         "Ustaw publiczne zmienne VITE_SUPABASE_URL, VITE_SUPABASE_ANON_KEY i VITE_SITE_ID.",
-        "Po zmianie zmiennych przebuduj i wdroz frontend.",
+        "Po zmianie zmiennych przebuduj i wdróż frontend.",
       ],
     });
   }

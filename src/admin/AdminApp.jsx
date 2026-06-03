@@ -37,7 +37,7 @@ const sections = [
     Form: (props) => (
       <FeatureCardsSectionForm
         {...props}
-        addLabel="Dodaj karte QA"
+        addLabel="Dodaj kartę QA"
         showCertificate
         showSecondaryCta
       />
@@ -46,7 +46,7 @@ const sections = [
   {
     key: "gamedevTeaser",
     label: "GameDev",
-    Form: (props) => <FeatureCardsSectionForm {...props} addLabel="Dodaj karte GameDev" />,
+    Form: (props) => <FeatureCardsSectionForm {...props} addLabel="Dodaj kartę GameDev" />,
   },
   { key: "pages", label: "Nowe podstrony", Form: PagesSectionForm },
   { key: "faq", label: "FAQ", Form: FaqSectionForm },
@@ -154,7 +154,7 @@ export default function AdminApp() {
     try {
       if (!canWrite) {
         setError(
-          "Nie masz uprawnien do zapisu. Popros wlasciciela strony o role owner albo editor.",
+          "Nie masz uprawnień do zapisu. Poproś właściciela strony o rolę owner albo editor.",
         );
         return;
       }
@@ -175,7 +175,7 @@ export default function AdminApp() {
     try {
       if (!canWrite) {
         setError(
-          "Nie masz uprawnien do publikacji. Popros wlasciciela strony o role owner albo editor.",
+          "Nie masz uprawnień do publikacji. Poproś właściciela strony o rolę owner albo editor.",
         );
         return;
       }
@@ -258,7 +258,7 @@ export default function AdminApp() {
               <p className="text-xs font-semibold uppercase tracking-[0.22em] text-cyan-300">
                 CMS Etap 1A
               </p>
-              <h1 className="text-2xl font-black">Panel zarzadzania trescia</h1>
+              <h1 className="text-2xl font-black">Panel zarządzania treścią</h1>
               <p className="mt-1 text-sm text-slate-400">
                 Site ID: {siteId} | Rola: {membership.role}
               </p>
@@ -274,7 +274,7 @@ export default function AdminApp() {
                 onClick={refresh}
                 className="inline-flex items-center gap-2 rounded-lg border border-white/10 px-3 py-2 text-sm text-slate-200 hover:bg-white/10"
               >
-                <RefreshCw className="h-4 w-4" /> Odswiez
+                <RefreshCw className="h-4 w-4" /> Odśwież
               </button>
               <button
                 onClick={() => supabase.auth.signOut()}
@@ -335,14 +335,14 @@ export default function AdminApp() {
 
             {!isStats && !canWrite && (
               <div className="mb-5 rounded-lg border border-amber-300/30 bg-amber-500/10 p-4 text-sm text-amber-50">
-                Nie masz uprawnien do zapisu. Rola viewer moze przegladac panel, ale nie moze
-                zapisywac ani publikowac zmian.
+                Nie masz uprawnień do zapisu. Rola viewer może przeglądać panel, ale nie może
+                zapisywać ani publikować zmian.
               </div>
             )}
             {hasUnsavedChanges && (
               <div className="mb-5 rounded-lg border border-cyan-300/30 bg-cyan-400/10 p-4 text-sm text-cyan-50">
-                Masz nieopublikowane zmiany w tej sekcji. Zapisz draft, a potem opublikuj, zeby
-                zmiana pojawila sie na stronie.
+                Masz nieopublikowane zmiany w tej sekcji. Zapisz draft, a potem opublikuj, żeby
+                zmiana pojawiła się na stronie.
               </div>
             )}
             {status && (
@@ -367,7 +367,7 @@ export default function AdminApp() {
               />
             ) : (
               <div className="rounded-lg border border-red-300/30 bg-red-500/10 p-6 text-red-50">
-                Nie mozna wyswietlic formularza tej sekcji. Odswiez strone lub wybierz inna sekcje.
+                Nie można wyświetlić formularza tej sekcji. Odśwież stronę lub wybierz inną sekcję.
               </div>
             )}
 

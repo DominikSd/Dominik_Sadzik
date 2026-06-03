@@ -29,9 +29,9 @@ export const isPublicEnvConfigured = missingPublicEnvVars.length === 0;
 
 export function getCmsConfigurationHelpText() {
   return [
-    "CMS nie jest skonfigurowany. Utworz lokalny plik `.env` na podstawie `.env.example` i uzupelnij wymagane zmienne.",
-    "Plik `.env.example` jest tylko wzorem i nie powinien zawierac prawdziwych wartosci.",
+    "CMS nie jest skonfigurowany. Utwórz lokalny plik `.env` na podstawie `.env.example` i uzupełnij wymagane zmienne.",
+    "Plik `.env.example` jest tylko wzorem i nie powinien zawierać prawdziwych wartości.",
     "Po zmianie `.env` uruchom ponownie `npm run dev`.",
-    "Na produkcji ustaw te wartosci w GitHub Actions Variables.",
+    "Na produkcji ustaw te wartości w GitHub Actions Variables.",
   ].join(" ");
 }
