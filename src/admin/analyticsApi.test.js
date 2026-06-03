@@ -30,8 +30,16 @@ vi.mock("../lib/env", () => ({
 
 const report = {
   summary: {
+    totalUsers7d: 1,
+    totalUsers30d: 2,
+    activeUsers7d: 1,
+    activeUsers30d: 2,
     users7d: 1,
     users30d: 2,
+    newUsers7d: 1,
+    newUsers30d: 1,
+    returningUsers7d: 0,
+    returningUsers30d: 1,
     pageViews7d: 3,
     pageViews30d: 4,
     sessions7d: 5,
@@ -147,9 +155,33 @@ describe("analyticsApi", () => {
       trackedEvents: [{ eventName: "cta_click", count: "3" }],
     });
 
+    expect(normalized.summary.totalUsers7d).toBe(4);
+    expect(normalized.summary.activeUsers7d).toBe(4);
     expect(normalized.summary.users7d).toBe(4);
     expect(normalized.summary.sessions30d).toBe(0);
     expect(normalized.topEvents).toEqual([{ eventName: "cta_click", count: 3 }]);
+    expect(normalized.noData).toBe(false);
+  });
+
+  it("normalizes expanded GA4 user metrics and estimates returning users", () => {
+    const normalized = normalizeAnalyticsReport({
+      summary: {
+        totalUsers7d: "12",
+        totalUsers30d: "40",
+        activeUsers7d: "10",
+        activeUsers30d: "34",
+        newUsers7d: "8",
+        newUsers30d: "22",
+        pageViews30d: "50",
+      },
+    });
+
+    expect(normalized.summary.totalUsers7d).toBe(12);
+    expect(normalized.summary.activeUsers30d).toBe(34);
+    expect(normalized.summary.users30d).toBe(34);
+    expect(normalized.summary.newUsers30d).toBe(22);
+    expect(normalized.summary.returningUsers7d).toBe(4);
+    expect(normalized.summary.returningUsers30d).toBe(18);
     expect(normalized.noData).toBe(false);
   });
 });

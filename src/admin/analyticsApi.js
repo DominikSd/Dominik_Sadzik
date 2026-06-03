@@ -42,8 +42,16 @@ const analyticsReportSchema = z
       .default({}),
     summary: z
       .object({
+        totalUsers7d: numberLikeSchema.optional().default(0),
+        totalUsers30d: numberLikeSchema.optional().default(0),
+        activeUsers7d: numberLikeSchema.optional().default(0),
+        activeUsers30d: numberLikeSchema.optional().default(0),
         users7d: numberLikeSchema.optional().default(0),
         users30d: numberLikeSchema.optional().default(0),
+        newUsers7d: numberLikeSchema.optional().default(0),
+        newUsers30d: numberLikeSchema.optional().default(0),
+        returningUsers7d: numberLikeSchema.optional().default(0),
+        returningUsers30d: numberLikeSchema.optional().default(0),
         pageViews7d: numberLikeSchema.optional().default(0),
         pageViews30d: numberLikeSchema.optional().default(0),
         sessions7d: numberLikeSchema.optional().default(0),
@@ -108,18 +116,58 @@ const analyticsReportSchema = z
 
 export function normalizeAnalyticsReport(candidate) {
   const parsed = analyticsReportSchema.parse(candidate || {});
+  const rawSummary =
+    candidate?.summary && typeof candidate.summary === "object" ? candidate.summary : {};
+  const hasMetric = (key) => Object.prototype.hasOwnProperty.call(rawSummary, key);
+  const metric = (key, fallback = 0) =>
+    hasMetric(key) ? Number(rawSummary[key] || 0) : Number(fallback || 0);
+
+  const activeUsers7d = metric("activeUsers7d", metric("users7d"));
+  const activeUsers30d = metric("activeUsers30d", metric("users30d"));
+  const totalUsers7d = metric("totalUsers7d", activeUsers7d);
+  const totalUsers30d = metric("totalUsers30d", activeUsers30d);
+  const newUsers7d = metric("newUsers7d");
+  const newUsers30d = metric("newUsers30d");
+  const returningUsers7d = metric(
+    "returningUsers7d",
+    hasMetric("totalUsers7d") && hasMetric("newUsers7d")
+      ? Math.max(totalUsers7d - newUsers7d, 0)
+      : 0,
+  );
+  const returningUsers30d = metric(
+    "returningUsers30d",
+    hasMetric("totalUsers30d") && hasMetric("newUsers30d")
+      ? Math.max(totalUsers30d - newUsers30d, 0)
+      : 0,
+  );
+  const summary = {
+    ...parsed.summary,
+    totalUsers7d,
+    totalUsers30d,
+    activeUsers7d,
+    activeUsers30d,
+    users7d: metric("users7d", activeUsers7d),
+    users30d: metric("users30d", activeUsers30d),
+    newUsers7d,
+    newUsers30d,
+    returningUsers7d,
+    returningUsers30d,
+  };
   const topEvents = parsed.topEvents.length > 0 ? parsed.topEvents : parsed.trackedEvents;
 
   return {
     ...parsed,
+    summary,
     topEvents,
     trackedEvents: topEvents,
     noData:
       parsed.noData ||
-      (parsed.summary.users30d === 0 &&
-        parsed.summary.pageViews30d === 0 &&
-        parsed.summary.sessions30d === 0 &&
-        parsed.summary.eventCount30d === 0 &&
+      (summary.totalUsers30d === 0 &&
+        summary.activeUsers30d === 0 &&
+        summary.newUsers30d === 0 &&
+        summary.pageViews30d === 0 &&
+        summary.sessions30d === 0 &&
+        summary.eventCount30d === 0 &&
         parsed.topPages.length === 0 &&
         topEvents.length === 0 &&
         parsed.trafficSources.length === 0 &&

@@ -173,10 +173,12 @@ function dimension(row: Record<string, unknown>, index: number) {
 function summaryFromReport(report: Record<string, unknown>) {
   const row = (report.rows as Record<string, unknown>[] | undefined)?.[0];
   return {
-    users: row ? metric(row, 0) : 0,
-    pageViews: row ? metric(row, 1) : 0,
-    sessions: row ? metric(row, 2) : 0,
-    eventCount: row ? metric(row, 3) : 0,
+    totalUsers: row ? metric(row, 0) : 0,
+    activeUsers: row ? metric(row, 1) : 0,
+    newUsers: row ? metric(row, 2) : 0,
+    sessions: row ? metric(row, 3) : 0,
+    pageViews: row ? metric(row, 4) : 0,
+    eventCount: row ? metric(row, 5) : 0,
   };
 }
 
@@ -189,18 +191,22 @@ async function buildReport(propertyId: string, accessToken: string) {
     runReport(accessToken, propertyId, {
       dateRanges: [{ startDate: "7daysAgo", endDate: "today" }],
       metrics: [
+        { name: "totalUsers" },
         { name: "activeUsers" },
-        { name: "screenPageViews" },
+        { name: "newUsers" },
         { name: "sessions" },
+        { name: "screenPageViews" },
         { name: "eventCount" },
       ],
     }),
     runReport(accessToken, propertyId, {
       dateRanges: [{ startDate: "30daysAgo", endDate: "today" }],
       metrics: [
+        { name: "totalUsers" },
         { name: "activeUsers" },
-        { name: "screenPageViews" },
+        { name: "newUsers" },
         { name: "sessions" },
+        { name: "screenPageViews" },
         { name: "eventCount" },
       ],
     }),
@@ -252,8 +258,16 @@ async function buildReport(propertyId: string, accessToken: string) {
       thirtyDays: { startDate: "30daysAgo", endDate: "today" },
     },
     summary: {
-      users7d: sevenDays.users,
-      users30d: thirtyDays.users,
+      totalUsers7d: sevenDays.totalUsers,
+      totalUsers30d: thirtyDays.totalUsers,
+      activeUsers7d: sevenDays.activeUsers,
+      activeUsers30d: thirtyDays.activeUsers,
+      users7d: sevenDays.activeUsers,
+      users30d: thirtyDays.activeUsers,
+      newUsers7d: sevenDays.newUsers,
+      newUsers30d: thirtyDays.newUsers,
+      returningUsers7d: Math.max(sevenDays.totalUsers - sevenDays.newUsers, 0),
+      returningUsers30d: Math.max(thirtyDays.totalUsers - thirtyDays.newUsers, 0),
       pageViews7d: sevenDays.pageViews,
       pageViews30d: thirtyDays.pageViews,
       sessions7d: sevenDays.sessions,
@@ -417,7 +431,8 @@ Deno.serve(async (req) => {
       ...report,
       role: auth.role,
       noData:
-        report.summary.users30d === 0 &&
+        report.summary.totalUsers30d === 0 &&
+        report.summary.activeUsers30d === 0 &&
         report.summary.pageViews30d === 0 &&
         report.topPages.length === 0 &&
         report.topEvents.length === 0,

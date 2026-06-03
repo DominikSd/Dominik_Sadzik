@@ -389,14 +389,44 @@ export default function AnalyticsPanel() {
 
           <dl className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
             <MetricCard
-              label="Odwiedzający (7 dni)"
-              value={summary.users7d}
-              hint="Liczba osób odwiedzających stronę."
+              label="Unikalni odwiedzający (7 dni)"
+              value={summary.totalUsers7d}
+              hint="Osoby, które odwiedziły stronę w wybranym okresie."
             />
             <MetricCard
-              label="Odwiedzający (30 dni)"
-              value={summary.users30d}
-              hint="Liczba osób odwiedzających stronę."
+              label="Unikalni odwiedzający (30 dni)"
+              value={summary.totalUsers30d}
+              hint="Osoby, które odwiedziły stronę w wybranym okresie."
+            />
+            <MetricCard
+              label="Aktywni odwiedzający (7 dni)"
+              value={summary.activeUsers7d}
+              hint="Osoby aktywne według definicji GA4."
+            />
+            <MetricCard
+              label="Aktywni odwiedzający (30 dni)"
+              value={summary.activeUsers30d}
+              hint="Osoby aktywne według definicji GA4."
+            />
+            <MetricCard
+              label="Nowi odwiedzający (7 dni)"
+              value={summary.newUsers7d}
+              hint="Osoby, które pierwszy raz odwiedziły stronę."
+            />
+            <MetricCard
+              label="Nowi odwiedzający (30 dni)"
+              value={summary.newUsers30d}
+              hint="Osoby, które pierwszy raz odwiedziły stronę."
+            />
+            <MetricCard
+              label="Powracający odwiedzający (7 dni)"
+              value={summary.returningUsers7d}
+              hint="Osoby, które prawdopodobnie wróciły. Szacunkowo: unikalni odwiedzający minus nowi odwiedzający."
+            />
+            <MetricCard
+              label="Powracający odwiedzający (30 dni)"
+              value={summary.returningUsers30d}
+              hint="Osoby, które prawdopodobnie wróciły. Szacunkowo: unikalni odwiedzający minus nowi odwiedzający."
             />
             <MetricCard
               label="Odsłony (7 dni)"

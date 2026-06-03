@@ -24,8 +24,16 @@ vi.mock("../lib/analytics/ga4", () => ({
 
 const report = {
   summary: {
+    totalUsers7d: 12,
+    totalUsers30d: 44,
+    activeUsers7d: 10,
+    activeUsers30d: 40,
     users7d: 10,
     users30d: 40,
+    newUsers7d: 7,
+    newUsers30d: 28,
+    returningUsers7d: 5,
+    returningUsers30d: 16,
     pageViews7d: 25,
     pageViews30d: 90,
     sessions7d: 8,
@@ -116,8 +124,16 @@ describe("AnalyticsPanel", () => {
     mocks.report.mockResolvedValue({
       ...report,
       summary: {
+        totalUsers7d: 0,
+        totalUsers30d: 0,
+        activeUsers7d: 0,
+        activeUsers30d: 0,
         users7d: 0,
         users30d: 0,
+        newUsers7d: 0,
+        newUsers30d: 0,
+        returningUsers7d: 0,
+        returningUsers30d: 0,
         pageViews7d: 0,
         pageViews30d: 0,
         sessions7d: 0,
@@ -143,10 +159,19 @@ describe("AnalyticsPanel", () => {
     const { container } = render(<AnalyticsPanel />);
 
     expect(await screen.findByText("Ruch na stronie")).toBeTruthy();
-    expect(screen.getByText("Odwiedzający (7 dni)")).toBeTruthy();
+    expect(screen.getByText("Unikalni odwiedzający (7 dni)")).toBeTruthy();
+    expect(screen.getByText("Unikalni odwiedzający (30 dni)")).toBeTruthy();
+    expect(screen.getByText("Aktywni odwiedzający (7 dni)")).toBeTruthy();
+    expect(screen.getByText("Nowi odwiedzający (30 dni)")).toBeTruthy();
+    expect(screen.getByText("Powracający odwiedzający (30 dni)")).toBeTruthy();
+    expect(screen.getAllByText("Osoby, które pierwszy raz odwiedziły stronę.")).toHaveLength(2);
+    expect(screen.getAllByText(/Szacunkowo: unikalni odwiedzający minus nowi/i)).toHaveLength(2);
     expect(screen.getByText("Wizyty (30 dni)")).toBeTruthy();
     expect(screen.getByText("Akcje (30 dni)")).toBeTruthy();
     expect(screen.getByText("90")).toBeTruthy();
+    expect(screen.getByText("44")).toBeTruthy();
+    expect(screen.getByText("28")).toBeTruthy();
+    expect(screen.getByText("16")).toBeTruthy();
     expect(screen.getByText("Strona główna")).toBeTruthy();
     expect(screen.getByText("Kliknięcie przycisku")).toBeTruthy();
     expect(screen.getByText("Google")).toBeTruthy();
