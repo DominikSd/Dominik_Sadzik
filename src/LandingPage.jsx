@@ -27,10 +27,32 @@ const detailPageRoutes = {
 
 const routeSectionMatches = {
   "automatyzacja-testowanie": "qa-automation",
+  "tester-istqb": "qa-automation",
   gamedev: "gamedev-area",
 };
 
 const homeRouteSlugs = new Set(["", "/"]);
+
+const sectionAliases = {
+  oferta: "web-cms",
+  realizacje: "projects",
+  kontakt: "contact",
+};
+
+const sectionLabelsById = {
+  start: "Start",
+  "web-cms": "Strony i CMS",
+  projects: "Projekty",
+  "qa-automation": "QA i automatyzacja",
+  "gamedev-area": "GameDev",
+  contact: "Kontakt",
+};
+
+const routeLabelsBySlug = {
+  "automatyzacja-testowanie": "QA i automatyzacja",
+  "tester-istqb": "ISTQB",
+  gamedev: "GameDev",
+};
 
 function getRouteSlug(routeHash = "") {
   return String(routeHash || "")
@@ -42,10 +64,15 @@ function isRouteHref(href = "") {
   return String(href).startsWith("#/");
 }
 
+function normalizeSectionId(sectionId = "") {
+  const value = String(sectionId || "").trim();
+  return sectionAliases[value] || value;
+}
+
 function getSectionIdFromHref(href = "") {
   const value = String(href || "");
   if (!value.startsWith("#") || isRouteHref(value)) return "";
-  return value.replace(/^#/, "").trim();
+  return normalizeSectionId(value.replace(/^#/, ""));
 }
 
 function getRouteSlugFromHref(href = "") {
@@ -56,9 +83,20 @@ function isHomeRoute(routeSlug = "") {
   return homeRouteSlugs.has(routeSlug);
 }
 
+function getInitialActiveSectionId(routeSlug = "") {
+  if (detailPageRoutes[routeSlug]) return routeSectionMatches[routeSlug] || "start";
+  if (isHomeRoute(routeSlug)) return "start";
+  return normalizeSectionId(routeSlug) || "start";
+}
+
+function getActiveSectionLabel({ routeSlug, activeSectionId }) {
+  return routeLabelsBySlug[routeSlug] || sectionLabelsById[activeSectionId] || "Start";
+}
+
 function isNavItemActive(item, { routeSlug, activeSectionId }) {
   const itemRouteSlug = getRouteSlugFromHref(item.href);
   if (itemRouteSlug) {
+    if (detailPageRoutes[routeSlug]) return routeSlug === itemRouteSlug;
     return routeSlug === itemRouteSlug || routeSectionMatches[itemRouteSlug] === activeSectionId;
   }
 
@@ -225,36 +263,36 @@ function SectionTitle({ eyebrow, title, text }) {
 
 const areaToneClasses = {
   cyan: {
-    shell: "from-cyan-400/10 via-blue-500/[0.035] to-transparent",
+    shell: "from-cyan-400/15 via-blue-500/[0.07] to-transparent",
     number: "from-cyan-300 to-blue-400",
-    ring: "border-cyan-300/15",
+    ring: "border-cyan-300/25 shadow-cyan-500/10",
   },
   violet: {
-    shell: "from-violet-400/10 via-fuchsia-500/[0.035] to-transparent",
+    shell: "from-violet-400/15 via-fuchsia-500/[0.07] to-transparent",
     number: "from-violet-300 to-fuchsia-400",
-    ring: "border-violet-300/15",
+    ring: "border-violet-300/25 shadow-violet-500/10",
   },
   blue: {
-    shell: "from-blue-400/10 via-cyan-500/[0.035] to-transparent",
+    shell: "from-blue-400/15 via-cyan-500/[0.07] to-transparent",
     number: "from-blue-300 to-cyan-400",
-    ring: "border-blue-300/15",
+    ring: "border-blue-300/25 shadow-blue-500/10",
   },
 };
 
 function SectionDecor({ variant = "parallel", position = "right", className = "" }) {
   const positionClass =
     position === "left"
-      ? "left-0 top-16 -translate-x-1/4"
+      ? "left-0 top-16 -translate-x-1/3"
       : position === "center"
         ? "left-1/2 top-10 -translate-x-1/2"
-        : "right-0 top-16 translate-x-1/4";
+        : "right-0 top-16 translate-x-1/3";
 
   return (
     <div
       aria-hidden="true"
-      className={`pointer-events-none absolute z-0 hidden opacity-45 md:block ${positionClass} ${className}`}
+      className={`pointer-events-none absolute z-0 block opacity-28 sm:opacity-35 md:opacity-55 ${positionClass} ${className}`}
     >
-      <AnimatedCircuit variant={variant} className="h-40 w-80" />
+      <AnimatedCircuit variant={variant} className="h-28 w-52 sm:h-32 sm:w-64 md:h-44 md:w-96" />
     </div>
   );
 }
@@ -273,9 +311,9 @@ function CompetencyArea({ id, number, eyebrow, title, text, tone = "cyan", child
         className={`pointer-events-none absolute inset-0 z-0 bg-gradient-to-br ${toneClass.shell}`}
       />
       {decor}
-      <div className="relative z-10 px-4 pt-16 sm:px-6 md:px-10 lg:pt-20">
+      <div className="relative z-10 px-4 pt-20 sm:px-6 md:px-10 lg:pt-28">
         <div
-          className={`mx-auto grid max-w-7xl gap-6 rounded-lg border ${toneClass.ring} bg-slate-950/28 p-5 backdrop-blur-sm md:grid-cols-[auto_minmax(0,1fr)] md:p-7`}
+          className={`mx-auto grid max-w-7xl gap-6 rounded-lg border ${toneClass.ring} bg-slate-950/40 p-5 shadow-2xl backdrop-blur-sm md:grid-cols-[auto_minmax(0,1fr)] md:p-8`}
         >
           <div
             className={`flex h-12 w-12 items-center justify-center rounded-lg bg-gradient-to-br ${toneClass.number} text-sm font-black text-slate-950 shadow-lg shadow-cyan-950/20`}
@@ -298,204 +336,76 @@ function CompetencyArea({ id, number, eyebrow, title, text, tone = "cyan", child
   );
 }
 
-function Header({ settings, hero, routeHash }) {
-  const [isOpen, setIsOpen] = useState(false);
-  const [isCompact, setIsCompact] = useState(false);
-  const routeSlug = getRouteSlug(routeHash);
-  const isDetailPage = Boolean(detailPageRoutes[routeSlug]);
-  const routeSectionId = isDetailPage || isHomeRoute(routeSlug) ? "start" : routeSlug;
-  const [activeSectionId, setActiveSectionId] = useState(routeSectionId || "start");
-
-  useEffect(() => {
-    const updateCompactState = () => {
-      setIsCompact(window.scrollY > 110);
-    };
-
-    updateCompactState();
-    window.addEventListener("scroll", updateCompactState, { passive: true });
-
-    return () => window.removeEventListener("scroll", updateCompactState);
-  }, []);
-
-  useEffect(() => {
-    setIsOpen(false);
-    setActiveSectionId(routeSectionId || "start");
-  }, [routeSectionId, routeHash]);
-
-  useEffect(() => {
-    if (isDetailPage || typeof IntersectionObserver === "undefined") return undefined;
-
-    const sectionIds = settings.navItems
-      .map((item) => getSectionIdFromHref(item.href))
-      .filter(Boolean)
-      .concat(Object.values(routeSectionMatches));
-    const sections = sectionIds
-      .map((sectionId) => document.getElementById(sectionId))
-      .filter(Boolean);
-
-    if (!sections.length) return undefined;
-
-    const syncStartSection = () => {
-      if (window.scrollY < 160) setActiveSectionId("start");
-    };
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        const visibleEntry = entries
-          .filter((entry) => entry.isIntersecting)
-          .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
-
-        if (visibleEntry?.target?.id) {
-          setActiveSectionId(visibleEntry.target.id);
-        }
-      },
-      {
-        rootMargin: "-35% 0px -55% 0px",
-        threshold: [0.05, 0.25, 0.5],
-      },
-    );
-
-    sections.forEach((section) => observer.observe(section));
-    window.addEventListener("scroll", syncStartSection, { passive: true });
-
-    return () => {
-      observer.disconnect();
-      window.removeEventListener("scroll", syncStartSection);
-    };
-  }, [isDetailPage, settings.navItems]);
-
-  const scrollToHref = (event, href) => {
-    if (href.startsWith("#/")) {
-      setIsOpen(false);
-      return;
-    }
-
-    event.preventDefault();
-    const sectionId = getSectionIdFromHref(href);
-
-    if (!sectionId) {
-      if (isDetailPage) {
-        window.location.hash = "#/";
-      } else {
-        window.history.replaceState(
-          null,
-          "",
-          `${window.location.pathname}${window.location.search}`,
-        );
-        window.scrollTo({ top: 0, behavior: "smooth" });
-      }
-      setActiveSectionId("start");
-      setIsOpen(false);
-      return;
-    }
-
-    const el = document.getElementById(sectionId);
-    if (el) {
-      el.scrollIntoView({ behavior: "smooth", block: "start" });
-      window.history.replaceState(
-        null,
-        "",
-        `${window.location.pathname}${window.location.search}#/${sectionId}`,
-      );
-      setActiveSectionId(sectionId);
-    } else {
-      window.location.hash = `#/${sectionId}`;
-    }
-
-    setIsOpen(false);
-  };
-
-  const renderNavLink = (item, variant = "desktop") => {
-    const active = isNavItemActive(item, { routeSlug, activeSectionId });
-    const baseClass =
-      "min-w-0 rounded-full font-semibold transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-300";
-    const desktopClass = active
-      ? "bg-cyan-300/15 px-3 py-2 text-cyan-100 ring-1 ring-cyan-300/30"
-      : "px-3 py-2 text-slate-300 hover:bg-white/5 hover:text-cyan-300";
-    const mobileClass = active
-      ? "bg-cyan-300/15 px-4 py-3 text-cyan-100 ring-1 ring-cyan-300/30"
-      : "bg-white/5 px-4 py-3 text-slate-200 hover:bg-white/10 hover:text-cyan-200";
-
-    const compactDesktopClass = isCompact ? "px-2.5 py-1.5 text-xs" : "px-3 py-2";
-    const compactMobileClass = isCompact ? "px-4 py-2.5" : "px-4 py-3";
-
-    return (
-      <a
-        key={`${item.label}-${item.href}`}
-        href={item.href}
-        onClick={(event) => scrollToHref(event, item.href)}
-        aria-current={active ? "page" : undefined}
-        className={`${baseClass} ${
-          variant === "desktop"
-            ? `${desktopClass} ${compactDesktopClass}`
-            : `${mobileClass} ${compactMobileClass}`
-        }`}
-      >
-        <span className="block min-w-0 break-words">{item.label}</span>
-      </a>
-    );
-  };
+function NavLink({ item, active, variant = "desktop", onNavigate }) {
+  const isFloating = variant === "floating";
+  const isMobile = variant === "mobile";
+  const baseClass =
+    "min-w-0 rounded-full font-semibold transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-300";
+  const stateClass = active
+    ? isFloating
+      ? "bg-gradient-to-r from-cyan-300 to-violet-300 px-3 py-2 text-slate-950 shadow-lg shadow-cyan-400/25 ring-1 ring-white/40"
+      : "bg-cyan-300/15 px-3 py-2 text-cyan-100 ring-1 ring-cyan-300/35"
+    : isFloating
+      ? "px-3 py-2 text-slate-300 hover:bg-white/[0.08] hover:text-cyan-200"
+      : isMobile
+        ? "bg-white/5 px-4 py-3 text-slate-200 hover:bg-white/10 hover:text-cyan-200"
+        : "px-3 py-2 text-slate-300 hover:bg-white/5 hover:text-cyan-300";
 
   return (
-    <header
-      className={`sticky top-0 z-50 border-b transition-all duration-300 ${
-        isCompact
-          ? "border-cyan-300/15 bg-[#050816]/60 shadow-2xl shadow-cyan-950/20 backdrop-blur-2xl"
-          : "border-white/10 bg-[#050816]/75 backdrop-blur-xl"
-      }`}
+    <a
+      href={item.href}
+      onClick={(event) => onNavigate(event, item.href)}
+      aria-current={active ? "page" : undefined}
+      className={`${baseClass} ${stateClass} ${isFloating ? "text-xs sm:text-sm" : ""}`}
     >
-      <div
-        className={`mx-auto flex max-w-7xl items-center justify-between px-4 transition-all duration-300 sm:px-6 md:px-10 ${
-          isCompact ? "py-2.5" : "py-4"
-        }`}
-      >
+      <span className="block min-w-0 break-words">{item.label}</span>
+    </a>
+  );
+}
+
+function Header({ settings, hero, routeSlug, activeSectionId, onNavigate }) {
+  const [isOpen, setIsOpen] = useState(false);
+
+  useEffect(() => {
+    setIsOpen(false);
+  }, [routeSlug]);
+
+  return (
+    <header className="relative z-40 border-b border-white/10 bg-[#050816]/75 backdrop-blur-xl">
+      <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-4 sm:px-6 md:px-10">
         <div className="flex items-center gap-3">
-          <div
-            className={`flex items-center justify-center rounded-lg border border-cyan-400/40 bg-slate-950/70 shadow-lg shadow-blue-500/20 transition-all duration-300 ${
-              isCompact ? "h-9 w-9" : "h-11 w-11"
-            }`}
-          >
-            <Icon
-              name="globe"
-              className={isCompact ? "h-4 w-4 text-cyan-300" : "h-5 w-5 text-cyan-300"}
-            />
+          <div className="flex h-11 w-11 items-center justify-center rounded-lg border border-cyan-400/40 bg-slate-950/70 shadow-lg shadow-blue-500/20">
+            <Icon name="globe" className="h-5 w-5 text-cyan-300" />
           </div>
           <div>
-            <p
-              className={`font-bold tracking-wide text-white ${isCompact ? "text-xs" : "text-sm"}`}
-            >
-              {settings.siteName}
-            </p>
-            <p
-              className={`text-xs text-cyan-200/70 transition-all duration-300 ${
-                isCompact ? "h-0 overflow-hidden opacity-0" : "h-auto opacity-100"
-              }`}
-            >
-              {settings.tagline}
-            </p>
+            <p className="text-sm font-bold tracking-wide text-white">{settings.siteName}</p>
+            <p className="text-xs text-cyan-200/70">{settings.tagline}</p>
           </div>
         </div>
         <nav aria-label="Główna nawigacja" className="hidden items-center gap-1 text-sm lg:flex">
-          {settings.navItems.map((item) => renderNavLink(item))}
+          {settings.navItems.map((item) => (
+            <NavLink
+              key={`${item.label}-${item.href}`}
+              item={item}
+              active={isNavItemActive(item, { routeSlug, activeSectionId })}
+              onNavigate={onNavigate}
+            />
+          ))}
         </nav>
         <a
           href={hero.primaryCta.href}
           onClick={(event) => {
             trackCtaClick(hero.primaryCta.label, "header");
-            scrollToHref(event, hero.primaryCta.href);
+            onNavigate(event, hero.primaryCta.href);
           }}
-          className={`hidden rounded-full gradient-button text-sm font-semibold shadow-lg shadow-blue-500/25 transition hover:scale-105 lg:inline-flex ${
-            isCompact ? "px-4 py-2" : "px-5 py-2.5"
-          }`}
+          className="hidden rounded-full gradient-button px-5 py-2.5 text-sm font-semibold shadow-lg shadow-blue-500/25 transition hover:scale-105 lg:inline-flex"
         >
           {hero.primaryCta.label}
         </a>
         <button
           type="button"
           onClick={() => setIsOpen((value) => !value)}
-          className={`rounded-lg border border-white/10 bg-white/5 text-white transition-all lg:hidden ${
-            isCompact ? "p-2.5" : "p-3"
-          }`}
+          className="rounded-lg border border-white/10 bg-white/5 p-3 text-white transition-all lg:hidden"
           aria-label={isOpen ? "Zamknij menu" : "Otwórz menu"}
           aria-expanded={isOpen}
         >
@@ -505,7 +415,18 @@ function Header({ settings, hero, routeHash }) {
       {isOpen && (
         <div className="border-t border-white/10 bg-[#050816]/95 px-6 py-4 lg:hidden">
           <nav aria-label="Menu mobilne" className="flex flex-col gap-3 text-sm text-slate-200">
-            {settings.navItems.map((item) => renderNavLink(item, "mobile"))}
+            {settings.navItems.map((item) => (
+              <NavLink
+                key={`${item.label}-${item.href}`}
+                item={item}
+                active={isNavItemActive(item, { routeSlug, activeSectionId })}
+                variant="mobile"
+                onNavigate={(event, href) => {
+                  onNavigate(event, href);
+                  setIsOpen(false);
+                }}
+              />
+            ))}
           </nav>
         </div>
       )}
@@ -513,7 +434,42 @@ function Header({ settings, hero, routeHash }) {
   );
 }
 
-function CtaLink({ href, label, location, variant = "primary" }) {
+function FloatingSectionNav({ items, activeSectionId, routeSlug, visible, onNavigate }) {
+  const activeLabel = getActiveSectionLabel({ routeSlug, activeSectionId });
+
+  return (
+    <div
+      className={`fixed left-1/2 top-3 z-[60] w-[min(calc(100%-1rem),76rem)] -translate-x-1/2 transition duration-300 ${
+        visible ? "translate-y-0 opacity-100" : "pointer-events-none -translate-y-5 opacity-0"
+      }`}
+    >
+      <div className="rounded-lg border border-cyan-300/20 bg-slate-950/75 px-3 py-2 shadow-2xl shadow-cyan-500/15 backdrop-blur-2xl ring-1 ring-violet-300/10">
+        <div className="flex min-w-0 flex-col gap-2 lg:flex-row lg:items-center">
+          <div className="inline-flex max-w-full flex-none items-center gap-2 self-start rounded-full border border-cyan-300/25 bg-cyan-300/10 px-3 py-1.5 text-xs font-semibold text-cyan-100">
+            <span className="h-1.5 w-1.5 rounded-full bg-cyan-300 shadow-[0_0_12px_rgba(34,211,238,0.9)]" />
+            <span className="min-w-0 break-words">Aktualnie: {activeLabel}</span>
+          </div>
+          <nav
+            aria-label="Pływająca nawigacja sekcji"
+            className="flex min-w-0 gap-1 overflow-x-auto pb-1 text-sm [scrollbar-width:none] lg:flex-wrap lg:justify-end lg:pb-0"
+          >
+            {items.map((item) => (
+              <NavLink
+                key={`${item.label}-${item.href}`}
+                item={item}
+                active={isNavItemActive(item, { routeSlug, activeSectionId })}
+                variant="floating"
+                onNavigate={onNavigate}
+              />
+            ))}
+          </nav>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function CtaLink({ href, label, location, variant = "primary", onNavigate }) {
   const isPrimary = variant === "primary";
 
   return (
@@ -524,7 +480,10 @@ function CtaLink({ href, label, location, variant = "primary" }) {
           : "border border-white/15 bg-white/5 text-slate-100 hover:border-cyan-300/50 hover:bg-white/10"
       }`}
       href={href}
-      onClick={() => trackCtaClick(label, location)}
+      onClick={(event) => {
+        trackCtaClick(label, location);
+        if (onNavigate) onNavigate(event, href);
+      }}
     >
       <span className="min-w-0 break-words">{label}</span>
       <Icon name="arrow-right" className="h-4 w-4 flex-none" />
@@ -653,7 +612,7 @@ function NetworkMonitorLogo() {
   );
 }
 
-function Hero({ hero }) {
+function Hero({ hero, onNavigate }) {
   return (
     <section
       id="hero"
@@ -691,14 +650,20 @@ function Hero({ hero }) {
             <a
               className="inline-flex items-center justify-center gap-2 rounded-full gradient-button px-7 py-4 text-sm font-bold shadow-xl shadow-blue-500/25 transition hover:scale-105"
               href={hero.primaryCta.href}
-              onClick={() => trackCtaClick(hero.primaryCta.label, "hero")}
+              onClick={(event) => {
+                trackCtaClick(hero.primaryCta.label, "hero");
+                onNavigate(event, hero.primaryCta.href);
+              }}
             >
               {hero.primaryCta.label} <Icon name="arrow-right" className="h-4 w-4" />
             </a>
             <a
               className="inline-flex items-center justify-center gap-2 rounded-full border border-white/15 bg-white/5 px-7 py-4 text-sm font-semibold text-slate-100 backdrop-blur transition hover:border-cyan-300/50 hover:bg-white/10"
               href={hero.secondaryCta.href}
-              onClick={() => trackCtaClick(hero.secondaryCta.label, "hero_secondary")}
+              onClick={(event) => {
+                trackCtaClick(hero.secondaryCta.label, "hero_secondary");
+                onNavigate(event, hero.secondaryCta.href);
+              }}
             >
               {hero.secondaryCta.label}
             </a>
@@ -1121,9 +1086,11 @@ function FaqSection({ faq }) {
 function ContactSection({ contact }) {
   return (
     <section
-      id="kontakt"
+      id="contact"
       className="relative overflow-hidden px-4 py-20 sm:px-6 md:px-10 lg:pb-24 lg:pt-20 scroll-mt-24"
     >
+      <SectionDecor variant="branch" position="right" className="top-10 opacity-35" />
+      <SectionDecor variant="mini" position="left" className="top-[58%] opacity-30" />
       <div className="relative z-10 mx-auto w-full max-w-7xl overflow-hidden rounded-lg border border-white/10 bg-white/[0.045] p-5 backdrop-blur sm:p-7 md:p-10">
         <div className="grid min-w-0 gap-10 md:grid-cols-[minmax(0,1fr)_minmax(0,0.85fr)] md:items-center">
           <div className="min-w-0">
@@ -1194,7 +1161,7 @@ function ContactSection({ contact }) {
   );
 }
 
-function PageHero({ page }) {
+function PageHero({ page, onNavigate }) {
   return (
     <section className="relative overflow-hidden px-4 pb-16 pt-12 sm:px-6 md:px-10 md:pb-20 md:pt-16">
       <div className="pointer-events-none absolute right-4 top-8 opacity-40 md:right-12">
@@ -1221,14 +1188,19 @@ function PageHero({ page }) {
           {page.hero.description}
         </p>
         <div className="mt-8">
-          <CtaLink href={page.hero.ctaHref} label={page.hero.ctaLabel} location={page.slug} />
+          <CtaLink
+            href={page.hero.ctaHref}
+            label={page.hero.ctaLabel}
+            location={page.slug}
+            onNavigate={onNavigate}
+          />
         </div>
       </div>
     </section>
   );
 }
 
-function PageSectionList({ section }) {
+function PageSectionList({ section, onNavigate }) {
   const isCta = Boolean(section.ctaLabel);
 
   return (
@@ -1248,7 +1220,12 @@ function PageSectionList({ section }) {
             )}
             {isCta && (
               <div className="mt-6">
-                <CtaLink href={section.ctaHref} label={section.ctaLabel} location="page_final" />
+                <CtaLink
+                  href={section.ctaHref}
+                  label={section.ctaLabel}
+                  location="page_final"
+                  onNavigate={onNavigate}
+                />
               </div>
             )}
           </div>
@@ -1273,12 +1250,12 @@ function PageSectionList({ section }) {
   );
 }
 
-function ServiceDetailPage({ page, contact }) {
+function ServiceDetailPage({ page, contact, onNavigate }) {
   return (
     <>
-      <PageHero page={page} />
+      <PageHero page={page} onNavigate={onNavigate} />
       {Object.entries(page.sections).map(([key, section]) => (
-        <PageSectionList key={key} section={section} />
+        <PageSectionList key={key} section={section} onNavigate={onNavigate} />
       ))}
       <ContactSection contact={contact} />
     </>
@@ -1288,6 +1265,8 @@ function ServiceDetailPage({ page, contact }) {
 export default function LandingPage({ routeHash = "" }) {
   const [content, setContent] = useState(defaultSiteContent);
   const [cmsWarning, setCmsWarning] = useState("");
+  const [activeSectionId, setActiveSectionId] = useState("start");
+  const [isFloatingNavVisible, setIsFloatingNavVisible] = useState(false);
   const selfTestErrors = useMemo(() => runContentSelfTests(content), [content]);
 
   useEffect(() => {
@@ -1311,6 +1290,58 @@ export default function LandingPage({ routeHash = "" }) {
   const activePage = pageKey ? content.pages?.[pageKey] : null;
 
   useEffect(() => {
+    setActiveSectionId(getInitialActiveSectionId(routeSlug));
+  }, [routeSlug]);
+
+  useEffect(() => {
+    const updateFloatingNav = () => {
+      const showNav = window.scrollY > 160;
+      setIsFloatingNavVisible(showNav);
+      if (!showNav && !activePage) setActiveSectionId("start");
+    };
+
+    updateFloatingNav();
+    window.addEventListener("scroll", updateFloatingNav, { passive: true });
+
+    return () => window.removeEventListener("scroll", updateFloatingNav);
+  }, [activePage]);
+
+  useEffect(() => {
+    if (activePage || typeof IntersectionObserver === "undefined") return undefined;
+
+    const sectionIds = new Set([
+      ...content.settings.navItems.map((item) => getSectionIdFromHref(item.href)).filter(Boolean),
+      ...Object.values(routeSectionMatches),
+      ...Object.keys(sectionLabelsById).filter((sectionId) => sectionId !== "start"),
+    ]);
+    const sections = Array.from(sectionIds)
+      .map((sectionId) => document.getElementById(sectionId))
+      .filter(Boolean);
+
+    if (!sections.length) return undefined;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const visibleEntry = entries
+          .filter((entry) => entry.isIntersecting)
+          .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
+
+        if (visibleEntry?.target?.id) {
+          setActiveSectionId(normalizeSectionId(visibleEntry.target.id));
+        }
+      },
+      {
+        rootMargin: "-32% 0px -52% 0px",
+        threshold: [0.05, 0.2, 0.45],
+      },
+    );
+
+    sections.forEach((section) => observer.observe(section));
+
+    return () => observer.disconnect();
+  }, [activePage, content.settings.navItems]);
+
+  useEffect(() => {
     if (activePage) {
       window.scrollTo({ top: 0 });
       return undefined;
@@ -1319,7 +1350,7 @@ export default function LandingPage({ routeHash = "" }) {
     if (isHomeRoute(routeSlug)) return undefined;
 
     const frame = window.requestAnimationFrame(() => {
-      const section = document.getElementById(routeSlug);
+      const section = document.getElementById(normalizeSectionId(routeSlug));
       if (section) section.scrollIntoView({ block: "start" });
     });
 
@@ -1346,6 +1377,45 @@ export default function LandingPage({ routeHash = "" }) {
     }
   }, [activePage, content.seo]);
 
+  const handleNavigate = (event, href) => {
+    if (String(href || "").startsWith("#/")) return;
+
+    event.preventDefault();
+    const sectionId = getSectionIdFromHref(href);
+
+    if (!sectionId) {
+      setActiveSectionId("start");
+      if (activePage) {
+        window.location.hash = "#/";
+        return;
+      }
+
+      window.history.replaceState(null, "", `${window.location.pathname}${window.location.search}`);
+      window.scrollTo({ top: 0, behavior: "smooth" });
+      return;
+    }
+
+    if (activePage) {
+      setActiveSectionId(sectionId);
+      window.location.hash = `#${sectionId}`;
+      return;
+    }
+
+    const section = document.getElementById(sectionId);
+    if (section) {
+      section.scrollIntoView({ behavior: "smooth", block: "start" });
+      window.history.replaceState(
+        null,
+        "",
+        `${window.location.pathname}${window.location.search}#${sectionId}`,
+      );
+      setActiveSectionId(sectionId);
+      return;
+    }
+
+    window.location.hash = `#${sectionId}`;
+  };
+
   return (
     <div className="relative min-h-screen overflow-x-hidden bg-[#050816] text-white">
       <div className="page-gradient" />
@@ -1362,13 +1432,30 @@ export default function LandingPage({ routeHash = "" }) {
           )}
         </div>
       )}
-      <Header settings={content.settings} hero={content.hero} routeHash={routeHash} />
+      <Header
+        settings={content.settings}
+        hero={content.hero}
+        routeSlug={routeSlug}
+        activeSectionId={activeSectionId}
+        onNavigate={handleNavigate}
+      />
+      <FloatingSectionNav
+        items={content.settings.navItems}
+        activeSectionId={activeSectionId}
+        routeSlug={routeSlug}
+        visible={isFloatingNavVisible}
+        onNavigate={handleNavigate}
+      />
       <main className="relative z-10 overflow-visible">
         {activePage ? (
-          <ServiceDetailPage page={activePage} contact={content.contact} />
+          <ServiceDetailPage
+            page={activePage}
+            contact={content.contact}
+            onNavigate={handleNavigate}
+          />
         ) : (
           <>
-            <Hero hero={content.hero} />
+            <Hero hero={content.hero} onNavigate={handleNavigate} />
             <CompetencyArea
               id="web-cms"
               number="01"

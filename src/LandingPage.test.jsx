@@ -3,12 +3,9 @@ import { render, screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import LandingPage from "./LandingPage";
-import { defaultSiteContent } from "./content/defaultSiteContent";
 
 vi.mock("./lib/contentApi", () => ({
-  loadPublishedSiteContent: vi.fn(() =>
-    Promise.resolve({ content: defaultSiteContent, usedFallback: false }),
-  ),
+  loadPublishedSiteContent: vi.fn(() => new Promise(() => {})),
 }));
 
 vi.mock("./lib/analytics/ga4", () => ({
@@ -30,24 +27,42 @@ describe("LandingPage navigation", () => {
   it("renders concise links to the new portfolio pages", () => {
     render(<LandingPage routeHash="#/" />);
 
-    expect(screen.getByRole("link", { name: "Start" })).toBeTruthy();
-    expect(screen.getByRole("link", { name: "Strony i CMS" }).getAttribute("href")).toBe(
+    const mainNav = screen.getByRole("navigation", { name: "Główna nawigacja" });
+
+    expect(within(mainNav).getByRole("link", { name: "Start" })).toBeTruthy();
+    expect(within(mainNav).getByRole("link", { name: "Strony i CMS" }).getAttribute("href")).toBe(
       "#web-cms",
     );
-    expect(screen.getByRole("link", { name: "Projekty" }).getAttribute("href")).toBe("#projects");
-    expect(screen.getByRole("link", { name: "QA i automatyzacja" }).getAttribute("href")).toBe(
-      "#/automatyzacja-testowanie",
+    expect(within(mainNav).getByRole("link", { name: "Projekty" }).getAttribute("href")).toBe(
+      "#projects",
     );
-    expect(screen.getByRole("link", { name: "ISTQB" }).getAttribute("href")).toBe("#/tester-istqb");
-    expect(screen.getAllByRole("link", { name: "GameDev" })[0].getAttribute("href")).toBe(
+    expect(
+      within(mainNav).getByRole("link", { name: "QA i automatyzacja" }).getAttribute("href"),
+    ).toBe("#/automatyzacja-testowanie");
+    expect(within(mainNav).getByRole("link", { name: "ISTQB" }).getAttribute("href")).toBe(
+      "#/tester-istqb",
+    );
+    expect(within(mainNav).getByRole("link", { name: "GameDev" }).getAttribute("href")).toBe(
       "#/gamedev",
+    );
+    expect(within(mainNav).getByRole("link", { name: "Kontakt" }).getAttribute("href")).toBe(
+      "#contact",
     );
   });
 
   it("marks the active detail page link", () => {
     render(<LandingPage routeHash="#/tester-istqb" />);
 
-    expect(screen.getByRole("link", { name: "ISTQB" }).getAttribute("aria-current")).toBe("page");
+    const mainNav = screen.getByRole("navigation", { name: "Główna nawigacja" });
+
+    expect(within(mainNav).getByRole("link", { name: "ISTQB" }).getAttribute("aria-current")).toBe(
+      "page",
+    );
+    expect(
+      within(mainNav)
+        .getByRole("link", { name: "QA i automatyzacja" })
+        .getAttribute("aria-current"),
+    ).toBeNull();
   });
 
   it("closes the mobile menu after selecting a route link", async () => {
@@ -63,5 +78,50 @@ describe("LandingPage navigation", () => {
     await user.click(within(mobileMenu).getByRole("link", { name: "GameDev" }));
 
     expect(menuButton.getAttribute("aria-expanded")).toBe("false");
+  });
+
+  it("renders the main portfolio area sections with stable ids", () => {
+    render(<LandingPage routeHash="#/" />);
+
+    expect(document.getElementById("web-cms")).toBeTruthy();
+    expect(document.getElementById("projects")).toBeTruthy();
+    expect(document.getElementById("qa-automation")).toBeTruthy();
+    expect(document.getElementById("gamedev-area")).toBeTruthy();
+    expect(document.getElementById("contact")).toBeTruthy();
+  });
+
+  it("renders the floating section nav with the readable active section label", () => {
+    render(<LandingPage routeHash="#/" />);
+
+    const floatingNav = screen.getByRole("navigation", {
+      name: "Pływająca nawigacja sekcji",
+    });
+
+    expect(screen.getByText("Aktualnie: Start")).toBeTruthy();
+    expect(within(floatingNav).getByRole("link", { name: "Strony i CMS" })).toBeTruthy();
+    expect(within(floatingNav).getByRole("link", { name: "Kontakt" }).getAttribute("href")).toBe(
+      "#contact",
+    );
+  });
+
+  it("renders the automation detail route without a blank screen", () => {
+    render(<LandingPage routeHash="#/automatyzacja-testowanie" />);
+
+    expect(screen.getByRole("heading", { name: "Automatyzacja i testowanie stron" })).toBeTruthy();
+  });
+
+  it("renders the ISTQB detail route without a blank screen", () => {
+    render(<LandingPage routeHash="#/tester-istqb" />);
+
+    expect(
+      screen.getByRole("heading", { name: "Certyfikowane podejście do testowania" }),
+    ).toBeTruthy();
+    expect(screen.getByText("Aktualnie: ISTQB")).toBeTruthy();
+  });
+
+  it("renders the GameDev detail route without a blank screen", () => {
+    render(<LandingPage routeHash="#/gamedev" />);
+
+    expect(screen.getByRole("heading", { name: "GameDev i interaktywne prototypy" })).toBeTruthy();
   });
 });

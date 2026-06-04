@@ -13,7 +13,7 @@ export const defaultSiteContent = {
       { label: "QA i automatyzacja", href: "#/automatyzacja-testowanie" },
       { label: "ISTQB", href: "#/tester-istqb" },
       { label: "GameDev", href: "#/gamedev" },
-      { label: "Kontakt", href: "#kontakt" },
+      { label: "Kontakt", href: "#contact" },
     ],
   },
   seo: {
