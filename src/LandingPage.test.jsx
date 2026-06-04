@@ -31,6 +31,10 @@ describe("LandingPage navigation", () => {
     render(<LandingPage routeHash="#/" />);
 
     expect(screen.getByRole("link", { name: "Start" })).toBeTruthy();
+    expect(screen.getByRole("link", { name: "Strony i CMS" }).getAttribute("href")).toBe(
+      "#web-cms",
+    );
+    expect(screen.getByRole("link", { name: "Projekty" }).getAttribute("href")).toBe("#projects");
     expect(screen.getByRole("link", { name: "QA i automatyzacja" }).getAttribute("href")).toBe(
       "#/automatyzacja-testowanie",
     );

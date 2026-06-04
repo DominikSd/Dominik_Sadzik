@@ -25,6 +25,11 @@ const detailPageRoutes = {
   gamedev: "gamedev",
 };
 
+const routeSectionMatches = {
+  "automatyzacja-testowanie": "qa-automation",
+  gamedev: "gamedev-area",
+};
+
 const homeRouteSlugs = new Set(["", "/"]);
 
 function getRouteSlug(routeHash = "") {
@@ -53,7 +58,9 @@ function isHomeRoute(routeSlug = "") {
 
 function isNavItemActive(item, { routeSlug, activeSectionId }) {
   const itemRouteSlug = getRouteSlugFromHref(item.href);
-  if (itemRouteSlug) return routeSlug === itemRouteSlug;
+  if (itemRouteSlug) {
+    return routeSlug === itemRouteSlug || routeSectionMatches[itemRouteSlug] === activeSectionId;
+  }
 
   const sectionId = getSectionIdFromHref(item.href);
   if (sectionId) return !detailPageRoutes[routeSlug] && activeSectionId === sectionId;
@@ -216,12 +223,99 @@ function SectionTitle({ eyebrow, title, text }) {
   );
 }
 
+const areaToneClasses = {
+  cyan: {
+    shell: "from-cyan-400/10 via-blue-500/[0.035] to-transparent",
+    number: "from-cyan-300 to-blue-400",
+    ring: "border-cyan-300/15",
+  },
+  violet: {
+    shell: "from-violet-400/10 via-fuchsia-500/[0.035] to-transparent",
+    number: "from-violet-300 to-fuchsia-400",
+    ring: "border-violet-300/15",
+  },
+  blue: {
+    shell: "from-blue-400/10 via-cyan-500/[0.035] to-transparent",
+    number: "from-blue-300 to-cyan-400",
+    ring: "border-blue-300/15",
+  },
+};
+
+function SectionDecor({ variant = "parallel", position = "right", className = "" }) {
+  const positionClass =
+    position === "left"
+      ? "left-0 top-16 -translate-x-1/4"
+      : position === "center"
+        ? "left-1/2 top-10 -translate-x-1/2"
+        : "right-0 top-16 translate-x-1/4";
+
+  return (
+    <div
+      aria-hidden="true"
+      className={`pointer-events-none absolute z-0 hidden opacity-45 md:block ${positionClass} ${className}`}
+    >
+      <AnimatedCircuit variant={variant} className="h-40 w-80" />
+    </div>
+  );
+}
+
+function CompetencyArea({ id, number, eyebrow, title, text, tone = "cyan", children, decor }) {
+  const toneClass = areaToneClasses[tone] || areaToneClasses.cyan;
+
+  return (
+    <section id={id} className="relative overflow-hidden scroll-mt-28">
+      <div
+        aria-hidden="true"
+        className={`pointer-events-none absolute inset-x-0 top-0 z-0 h-px bg-gradient-to-r from-transparent via-white/15 to-transparent`}
+      />
+      <div
+        aria-hidden="true"
+        className={`pointer-events-none absolute inset-0 z-0 bg-gradient-to-br ${toneClass.shell}`}
+      />
+      {decor}
+      <div className="relative z-10 px-4 pt-16 sm:px-6 md:px-10 lg:pt-20">
+        <div
+          className={`mx-auto grid max-w-7xl gap-6 rounded-lg border ${toneClass.ring} bg-slate-950/28 p-5 backdrop-blur-sm md:grid-cols-[auto_minmax(0,1fr)] md:p-7`}
+        >
+          <div
+            className={`flex h-12 w-12 items-center justify-center rounded-lg bg-gradient-to-br ${toneClass.number} text-sm font-black text-slate-950 shadow-lg shadow-cyan-950/20`}
+          >
+            {number}
+          </div>
+          <div className="min-w-0">
+            <p className="text-sm font-semibold uppercase tracking-[0.26em] text-cyan-300">
+              {eyebrow}
+            </p>
+            <h2 className="mt-3 break-words text-3xl font-black tracking-tight text-white md:text-5xl">
+              {title}
+            </h2>
+            <p className="mt-4 max-w-4xl break-words text-lg leading-8 text-slate-300">{text}</p>
+          </div>
+        </div>
+      </div>
+      <div className="relative z-10">{children}</div>
+    </section>
+  );
+}
+
 function Header({ settings, hero, routeHash }) {
   const [isOpen, setIsOpen] = useState(false);
+  const [isCompact, setIsCompact] = useState(false);
   const routeSlug = getRouteSlug(routeHash);
   const isDetailPage = Boolean(detailPageRoutes[routeSlug]);
   const routeSectionId = isDetailPage || isHomeRoute(routeSlug) ? "start" : routeSlug;
   const [activeSectionId, setActiveSectionId] = useState(routeSectionId || "start");
+
+  useEffect(() => {
+    const updateCompactState = () => {
+      setIsCompact(window.scrollY > 110);
+    };
+
+    updateCompactState();
+    window.addEventListener("scroll", updateCompactState, { passive: true });
+
+    return () => window.removeEventListener("scroll", updateCompactState);
+  }, []);
 
   useEffect(() => {
     setIsOpen(false);
@@ -233,12 +327,17 @@ function Header({ settings, hero, routeHash }) {
 
     const sectionIds = settings.navItems
       .map((item) => getSectionIdFromHref(item.href))
-      .filter(Boolean);
+      .filter(Boolean)
+      .concat(Object.values(routeSectionMatches));
     const sections = sectionIds
       .map((sectionId) => document.getElementById(sectionId))
       .filter(Boolean);
 
     if (!sections.length) return undefined;
+
+    const syncStartSection = () => {
+      if (window.scrollY < 160) setActiveSectionId("start");
+    };
 
     const observer = new IntersectionObserver(
       (entries) => {
@@ -257,8 +356,12 @@ function Header({ settings, hero, routeHash }) {
     );
 
     sections.forEach((section) => observer.observe(section));
+    window.addEventListener("scroll", syncStartSection, { passive: true });
 
-    return () => observer.disconnect();
+    return () => {
+      observer.disconnect();
+      window.removeEventListener("scroll", syncStartSection);
+    };
   }, [isDetailPage, settings.navItems]);
 
   const scrollToHref = (event, href) => {
@@ -271,8 +374,16 @@ function Header({ settings, hero, routeHash }) {
     const sectionId = getSectionIdFromHref(href);
 
     if (!sectionId) {
-      window.history.replaceState(null, "", `${window.location.pathname}${window.location.search}`);
-      window.scrollTo({ top: 0, behavior: "smooth" });
+      if (isDetailPage) {
+        window.location.hash = "#/";
+      } else {
+        window.history.replaceState(
+          null,
+          "",
+          `${window.location.pathname}${window.location.search}`,
+        );
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      }
       setActiveSectionId("start");
       setIsOpen(false);
       return;
@@ -305,13 +416,20 @@ function Header({ settings, hero, routeHash }) {
       ? "bg-cyan-300/15 px-4 py-3 text-cyan-100 ring-1 ring-cyan-300/30"
       : "bg-white/5 px-4 py-3 text-slate-200 hover:bg-white/10 hover:text-cyan-200";
 
+    const compactDesktopClass = isCompact ? "px-2.5 py-1.5 text-xs" : "px-3 py-2";
+    const compactMobileClass = isCompact ? "px-4 py-2.5" : "px-4 py-3";
+
     return (
       <a
         key={`${item.label}-${item.href}`}
         href={item.href}
         onClick={(event) => scrollToHref(event, item.href)}
         aria-current={active ? "page" : undefined}
-        className={`${baseClass} ${variant === "desktop" ? desktopClass : mobileClass}`}
+        className={`${baseClass} ${
+          variant === "desktop"
+            ? `${desktopClass} ${compactDesktopClass}`
+            : `${mobileClass} ${compactMobileClass}`
+        }`}
       >
         <span className="block min-w-0 break-words">{item.label}</span>
       </a>
@@ -319,15 +437,42 @@ function Header({ settings, hero, routeHash }) {
   };
 
   return (
-    <header className="sticky top-0 z-40 border-b border-white/10 bg-[#050816]/75 backdrop-blur-xl">
-      <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4 md:px-10">
+    <header
+      className={`sticky top-0 z-50 border-b transition-all duration-300 ${
+        isCompact
+          ? "border-cyan-300/15 bg-[#050816]/60 shadow-2xl shadow-cyan-950/20 backdrop-blur-2xl"
+          : "border-white/10 bg-[#050816]/75 backdrop-blur-xl"
+      }`}
+    >
+      <div
+        className={`mx-auto flex max-w-7xl items-center justify-between px-4 transition-all duration-300 sm:px-6 md:px-10 ${
+          isCompact ? "py-2.5" : "py-4"
+        }`}
+      >
         <div className="flex items-center gap-3">
-          <div className="flex h-11 w-11 items-center justify-center rounded-lg border border-cyan-400/40 bg-slate-950/70 shadow-lg shadow-blue-500/20">
-            <Icon name="globe" className="h-5 w-5 text-cyan-300" />
+          <div
+            className={`flex items-center justify-center rounded-lg border border-cyan-400/40 bg-slate-950/70 shadow-lg shadow-blue-500/20 transition-all duration-300 ${
+              isCompact ? "h-9 w-9" : "h-11 w-11"
+            }`}
+          >
+            <Icon
+              name="globe"
+              className={isCompact ? "h-4 w-4 text-cyan-300" : "h-5 w-5 text-cyan-300"}
+            />
           </div>
           <div>
-            <p className="text-sm font-bold tracking-wide text-white">{settings.siteName}</p>
-            <p className="text-xs text-cyan-200/70">{settings.tagline}</p>
+            <p
+              className={`font-bold tracking-wide text-white ${isCompact ? "text-xs" : "text-sm"}`}
+            >
+              {settings.siteName}
+            </p>
+            <p
+              className={`text-xs text-cyan-200/70 transition-all duration-300 ${
+                isCompact ? "h-0 overflow-hidden opacity-0" : "h-auto opacity-100"
+              }`}
+            >
+              {settings.tagline}
+            </p>
           </div>
         </div>
         <nav aria-label="Główna nawigacja" className="hidden items-center gap-1 text-sm lg:flex">
@@ -339,14 +484,18 @@ function Header({ settings, hero, routeHash }) {
             trackCtaClick(hero.primaryCta.label, "header");
             scrollToHref(event, hero.primaryCta.href);
           }}
-          className="hidden rounded-full gradient-button px-5 py-2.5 text-sm font-semibold shadow-lg shadow-blue-500/25 transition hover:scale-105 lg:inline-flex"
+          className={`hidden rounded-full gradient-button text-sm font-semibold shadow-lg shadow-blue-500/25 transition hover:scale-105 lg:inline-flex ${
+            isCompact ? "px-4 py-2" : "px-5 py-2.5"
+          }`}
         >
           {hero.primaryCta.label}
         </a>
         <button
           type="button"
           onClick={() => setIsOpen((value) => !value)}
-          className="rounded-lg border border-white/10 bg-white/5 p-3 text-white lg:hidden"
+          className={`rounded-lg border border-white/10 bg-white/5 text-white transition-all lg:hidden ${
+            isCompact ? "p-2.5" : "p-3"
+          }`}
           aria-label={isOpen ? "Zamknij menu" : "Otwórz menu"}
           aria-expanded={isOpen}
         >
@@ -759,7 +908,7 @@ function PortfolioMockup({ item }) {
     return (
       <img
         src={item.screenshotUrl}
-        alt={`Podglad projektu: ${item.title}`}
+        alt={`Podgląd projektu: ${item.title}`}
         className="h-full w-full object-cover"
         loading="lazy"
       />
@@ -836,6 +985,11 @@ function PortfolioSection({ portfolio }) {
                   <span className="max-w-full rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs font-semibold text-slate-200">
                     {item.type || "Projekt"}
                   </span>
+                  {item.category && (
+                    <span className="max-w-full rounded-full border border-cyan-300/20 bg-cyan-300/10 px-3 py-1 text-xs font-semibold text-cyan-100">
+                      {item.category}
+                    </span>
+                  )}
                   <span
                     className={`rounded-full px-3 py-1 text-xs font-semibold ${
                       item.status === "realizacja"
@@ -854,7 +1008,7 @@ function PortfolioSection({ portfolio }) {
                 </p>
                 {item.details && (
                   <div className="mt-4 rounded-lg border border-white/10 bg-slate-950/45 p-3 text-sm leading-6 text-slate-300">
-                    <span className="font-semibold text-cyan-200">Co zrobilem: </span>
+                    <span className="font-semibold text-cyan-200">Co zrobiłem: </span>
                     {item.details}
                   </div>
                 )}
@@ -1215,17 +1369,73 @@ export default function LandingPage({ routeHash = "" }) {
         ) : (
           <>
             <Hero hero={content.hero} />
-            <ServicesSection services={content.services} />
-            <FeatureCardsSection section={content.automationQa} id="automatyzacja" />
-            <BenefitsSection benefits={content.benefits} />
-            <ProcessSection process={content.process} />
-            <PortfolioSection portfolio={content.portfolio} />
-            <FeatureCardsSection
-              section={content.gamedevTeaser}
-              id="gamedev"
-              cardCountClass="md:grid-cols-3"
-            />
-            <PackagesSection packages={content.packages} />
+            <CompetencyArea
+              id="web-cms"
+              number="01"
+              eyebrow="Strony, wizytówki, CMS"
+              title="Strony internetowe, wizytówki online i lekki CMS"
+              text="Najpierw pokazuję główną ofertę webową: projekt strony, czytelny układ, edycję treści, proces współpracy i pakiety startowe."
+              tone="cyan"
+              decor={
+                <>
+                  <SectionDecor variant="parallel" position="right" />
+                  <SectionDecor variant="corner" position="left" className="top-[52%] opacity-30" />
+                </>
+              }
+            >
+              <ServicesSection services={content.services} />
+              <BenefitsSection benefits={content.benefits} />
+              <ProcessSection process={content.process} />
+              <PackagesSection packages={content.packages} />
+            </CompetencyArea>
+
+            <CompetencyArea
+              id="qa-automation"
+              number="02"
+              eyebrow="QA, testowanie, automatyzacja"
+              title="Testowanie stron, raportowanie błędów i automatyzacja"
+              text="Osobny obszar kompetencji testerskich: certyfikat ISTQB, scenariusze użytkownika, smoke testy po wdrożeniu i porządkowanie powtarzalnych kontroli."
+              tone="blue"
+              decor={
+                <>
+                  <SectionDecor variant="vertical" position="left" className="top-24 opacity-40" />
+                  <SectionDecor
+                    variant="longDrop"
+                    position="right"
+                    className="top-[58%] opacity-35"
+                  />
+                </>
+              }
+            >
+              <FeatureCardsSection section={content.automationQa} id="automatyzacja" />
+            </CompetencyArea>
+
+            <CompetencyArea
+              id="gamedev-area"
+              number="03"
+              eyebrow="GameDev i interakcje"
+              title="GameDev i projekty interaktywne"
+              text="Trzeci obszar pokazuje techniczno-kreatywne myślenie: prototypy, logikę rozgrywki, interakcję użytkownika i testowanie zachowań."
+              tone="violet"
+              decor={
+                <>
+                  <SectionDecor variant="branch" position="right" className="top-20 opacity-40" />
+                  <SectionDecor variant="mini" position="left" className="top-[60%] opacity-35" />
+                </>
+              }
+            >
+              <FeatureCardsSection
+                section={content.gamedevTeaser}
+                id="gamedev"
+                cardCountClass="md:grid-cols-3"
+              />
+            </CompetencyArea>
+
+            <section id="projects" className="relative overflow-hidden scroll-mt-28">
+              <SectionDecor variant="parallel" position="left" className="top-20 opacity-30" />
+              <PortfolioSection portfolio={content.portfolio} />
+            </section>
+
             <FaqSection faq={content.faq} />
             <ContactSection contact={content.contact} />
           </>
