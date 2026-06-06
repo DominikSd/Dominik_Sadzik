@@ -956,7 +956,7 @@ function AreasSection({ services, automationQa, gamedevTeaser }) {
         <SectionTitle
           eyebrow="Obszary pracy"
           title="Główna oferta jest webowa, a dodatkowe kompetencje rozwijają temat"
-          text="Na stronie głównej pokazuję krótko trzy obszary. Szczegóły QA i GameDev są na osobnych podstronach, żeby nie mieszać głównego przekazu."
+          text="Możesz zacząć od strony internetowej z panelem CMS, a dodatkowo skorzystać z mojego podejścia do jakości, testowania i projektów interaktywnych."
         />
         <div className="grid gap-5 lg:grid-cols-3">
           {areas.map((area) => (

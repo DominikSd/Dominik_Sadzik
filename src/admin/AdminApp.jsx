@@ -49,7 +49,7 @@ const sections = [
     label: "GameDev",
     Form: (props) => <FeatureCardsSectionForm {...props} addLabel="Dodaj kartę GameDev" />,
   },
-  { key: "pages", label: "Nowe podstrony", Form: PagesSectionForm },
+  { key: "pages", label: "Treści podstron", Form: PagesSectionForm },
   { key: "portfolio", label: "Projekty", Form: PortfolioSectionForm },
   { key: "faq", label: "FAQ", Form: FaqSectionForm },
   { key: "contact", label: "Kontakt", Form: ContactSectionForm },

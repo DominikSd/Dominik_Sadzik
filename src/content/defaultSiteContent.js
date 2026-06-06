@@ -25,7 +25,7 @@ export const defaultSiteContent = {
     title: "Nowoczesne strony internetowe i",
     highlightedTitle: "lekki CMS dla Twojej firmy",
     description:
-      "Projektuję estetyczne, responsywne strony i wizytówki online z prostym panelem edycji treści. Dodatkowo korzystam z doświadczenia QA/ISTQB i GameDev, żeby lepiej myśleć o jakości, interakcji i testowaniu.",
+      "Projektuję estetyczne, responsywne strony i wizytówki online z prostym panelem edycji treści. Dbam o czytelny układ, wygodę korzystania i sprawne działanie strony po publikacji.",
     primaryCta: { label: "Wycena projektu", href: "#contact" },
     secondaryCta: { label: "Zobacz projekty", href: "#projects" },
     stats: [
@@ -91,7 +91,7 @@ export const defaultSiteContent = {
   gamedevTeaser: {
     eyebrow: "Interaktywne projekty",
     title: "GameDev i projekty interaktywne",
-    text: "GameDev traktuję jako dodatkowy obszar rozwoju: prototypy, logika, interakcje i kreatywne testowanie zachowań użytkownika.",
+    text: "Projekty interaktywne pokazują moje podejście do logiki, reakcji na działania użytkownika i tworzenia angażujących doświadczeń.",
     ctaLabel: "Zobacz GameDev",
     ctaHref: "#/gamedev",
     cards: [
@@ -232,7 +232,7 @@ export const defaultSiteContent = {
         title: "Interaktywny prototyp 2D",
         text: "Projekt własny związany z logiką rozgrywki: sterowanie, kolizje, punkty i proste zachowania obiektów.",
         details:
-          "GameDev traktuję jako przestrzeń do ćwiczenia logiki, interakcji i testowania zachowań użytkownika.",
+          "Prototyp pokazuje pracę z interakcją, stanem aplikacji i czytelną reakcją systemu na decyzje użytkownika.",
         status: "prototyp",
         category: "GameDev",
         tags: ["GameDev", "prototyp", "2D", "interakcje"],
@@ -312,7 +312,7 @@ export const defaultSiteContent = {
             "usługodawcy",
             "lokalne biznesy",
             "portfolio osobiste",
-            "osoby, które nie chcą ciężkiego WordPressa",
+            "osoby, które szukają prostszej alternatywy dla rozbudowanego CMS-a",
           ],
         },
         finalCta: {
@@ -419,25 +419,25 @@ export const defaultSiteContent = {
       seo: {
         title: "GameDev i projekty interaktywne | Dominik Sadzik",
         description:
-          "Prototypy gier, logika rozgrywki i interaktywne projekty rozwijane jako część techniczno-kreatywnego portfolio.",
+          "Prototypy gier i interaktywne demo pokazujące pracę z logiką, reakcją na działania użytkownika oraz kreatywnym UI.",
         ogTitle: "GameDev i projekty interaktywne",
         ogDescription:
-          "Prototypy 2D, mechaniki, logika gry i interaktywne demo jako dodatkowy obszar portfolio.",
+          "Prototypy 2D, mechaniki i interaktywne demo pokazujące pracę z logiką oraz reakcją na działania użytkownika.",
       },
       hero: {
         eyebrow: "GameDev",
         title: "GameDev i interaktywne prototypy",
         subtitle: "Logika, interakcje i kreatywne eksperymenty",
         description:
-          "GameDev rozwijam jako techniczno-kreatywny obszar portfolio - od prostych mechanik i logiki rozgrywki po eksperymenty edukacyjne i interaktywne demo.",
+          "W tej części portfolio pokazuję prototypy i interaktywne demo, które łączą logikę, czytelne sterowanie i kreatywne podejście do doświadczenia użytkownika.",
         ctaLabel: "Porozmawiajmy o projekcie",
         ctaHref: "#contact",
       },
       sections: {
         whatIBuild: {
-          title: "Co tworzę i testuję",
+          title: "Co pokazują prototypy",
           description:
-            "Najbardziej interesują mnie małe, konkretne prototypy, w których widać logikę i interakcje.",
+            "Najlepiej sprawdzają się małe, konkretne demo, w których od razu widać pomysł, zasady działania i reakcję na decyzje użytkownika.",
           items: [
             "prototypy 2D",
             "proste mechaniki",
@@ -452,7 +452,7 @@ export const defaultSiteContent = {
         connectionToWeb: {
           title: "Jak GameDev łączy się z moją ofertą",
           description:
-            "Tworzenie gier dobrze rozwija myślenie o interakcji, stanie aplikacji i testowaniu zachowań.",
+            "Projekty interaktywne wzmacniają umiejętności przydatne także w stronach i aplikacjach: logikę, płynne reakcje UI oraz przewidywanie zachowań użytkownika.",
           items: [
             "logika aplikacji",
             "praca z interakcją użytkownika",
@@ -464,7 +464,7 @@ export const defaultSiteContent = {
         demos: {
           title: "Przykładowe projekty i demo",
           description:
-            "To obszary projektów własnych i koncepcyjnych, bez danych prywatnych klientów.",
+            "To koncepcyjne projekty portfolio, które pokazują kierunek pracy i zakres możliwych interakcji.",
           items: [
             "platformówka 2D",
             "prosta gra edukacyjna",
@@ -513,7 +513,7 @@ export const defaultSiteContent = {
   faq: {
     eyebrow: "FAQ",
     title: "Najczęstsze pytania",
-    text: "Sekcja FAQ pomaga klientowi poczuć, że cały proces jest prosty i bezpieczny.",
+    text: "Zebrałem odpowiedzi na pytania, które najczęściej pojawiają się przed rozpoczęciem strony internetowej.",
     items: [
       {
         question: "Czy muszę mieć gotowe teksty na stronę?",
