@@ -33,7 +33,7 @@ describe("LandingPage navigation", () => {
       "#start",
     );
     expect(within(mainNav).getByRole("link", { name: "Strony i CMS" }).getAttribute("href")).toBe(
-      "#web-cms",
+      "#/strony-cms",
     );
     expect(within(mainNav).getByRole("link", { name: "QA" }).getAttribute("href")).toBe(
       "#/qa-automatyzacja",
@@ -96,7 +96,7 @@ describe("LandingPage navigation", () => {
     expect(within(floatingNav).getByRole("link", { name: "Start" })).toBeTruthy();
     expect(
       within(floatingNav).getByRole("link", { name: "Strony i CMS" }).getAttribute("href"),
-    ).toBe("#web-cms");
+    ).toBe("#/strony-cms");
     expect(
       within(floatingNav).getByRole("link", { name: "QA i automatyzacja" }).getAttribute("href"),
     ).toBe("#/qa-automatyzacja");
@@ -117,7 +117,13 @@ describe("LandingPage navigation", () => {
   it("renders the web CMS detail route without a blank screen", () => {
     render(<LandingPage routeHash="#/strony-cms" />);
 
+    const mainNav = screen.getByRole("navigation", { name: "Główna nawigacja" });
+
     expect(screen.getByRole("heading", { name: "Strony internetowe i lekki CMS" })).toBeTruthy();
+    expect(
+      within(mainNav).getByRole("link", { name: "Strony i CMS" }).getAttribute("aria-current"),
+    ).toBe("page");
+    expect(screen.getByText("Aktualnie: Strony i CMS")).toBeTruthy();
   });
 
   it("renders the QA detail route without a blank screen", () => {

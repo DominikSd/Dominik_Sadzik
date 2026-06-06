@@ -51,8 +51,8 @@ const HOME_SECTIONS = [
 ];
 
 const floatingNavItems = [
-  { label: "Start", shortLabel: "Start", href: "#", icon: "home" },
-  { label: "Strony i CMS", shortLabel: "CMS", href: "#web-cms", icon: "monitor" },
+  { label: "Start", shortLabel: "Start", href: "#start", icon: "home" },
+  { label: "Strony i CMS", shortLabel: "CMS", href: "#/strony-cms", icon: "monitor" },
   {
     label: "QA i automatyzacja",
     shortLabel: "QA",

@@ -29,7 +29,7 @@ export default function SettingsSectionForm({ value, onChange }) {
       <ListEditor
         items={value.navItems}
         onChange={(navItems) => update({ navItems })}
-        createItem={() => ({ label: "Nowa pozycja", href: "#kontakt" })}
+        createItem={() => ({ label: "Nowa pozycja", href: "#contact" })}
         addLabel="Dodaj link"
         renderItem={(item, index, updateItem) => (
           <FormGrid>

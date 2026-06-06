@@ -8,7 +8,7 @@ export const defaultSiteContent = {
     footerText: "© 2026 Dominik Sadzik - Projektowanie stron i wizytówek",
     navItems: [
       { label: "Start", href: "#start" },
-      { label: "Strony i CMS", href: "#web-cms" },
+      { label: "Strony i CMS", href: "#/strony-cms" },
       { label: "QA", href: "#/qa-automatyzacja" },
       { label: "GameDev", href: "#/gamedev" },
       { label: "Projekty", href: "#projects" },
@@ -26,7 +26,7 @@ export const defaultSiteContent = {
     highlightedTitle: "lekki CMS dla Twojej firmy",
     description:
       "Projektuję estetyczne, responsywne strony i wizytówki online z prostym panelem edycji treści. Dodatkowo korzystam z doświadczenia QA/ISTQB i GameDev, żeby lepiej myśleć o jakości, interakcji i testowaniu.",
-    primaryCta: { label: "Wycena projektu", href: "#kontakt" },
+    primaryCta: { label: "Wycena projektu", href: "#contact" },
     secondaryCta: { label: "Zobacz projekty", href: "#projects" },
     stats: [
       { value: "100%", label: "responsywny projekt" },
@@ -260,7 +260,7 @@ export const defaultSiteContent = {
         description:
           "Tworzę responsywne strony, wizytówki online i proste panele CMS, dzięki którym możesz edytować najważniejsze treści bez przebudowy strony.",
         ctaLabel: "Zapytaj o stronę",
-        ctaHref: "#kontakt",
+        ctaHref: "#contact",
       },
       sections: {
         whatICanBuild: {
@@ -320,7 +320,7 @@ export const defaultSiteContent = {
           description:
             "Napisz, czego potrzebujesz: prostej wizytówki, strony firmowej, portfolio albo panelu CMS do treści.",
           ctaLabel: "Skontaktuj się",
-          ctaHref: "#kontakt",
+          ctaHref: "#contact",
         },
       },
     },
@@ -341,7 +341,7 @@ export const defaultSiteContent = {
         description:
           "Łączę praktyczne testowanie z automatyzacją powtarzalnych kontroli. ISTQB pomaga mi patrzeć na projekt przez scenariusze użytkownika, ryzyka i jakość wdrożenia.",
         ctaLabel: "Porozmawiajmy o QA",
-        ctaHref: "#kontakt",
+        ctaHref: "#contact",
       },
       sections: {
         istqbCertificate: {
@@ -410,7 +410,7 @@ export const defaultSiteContent = {
           description:
             "Napisz, co najczęściej sprawdzasz ręcznie. Pomogę ocenić, co warto uporządkować lub zautomatyzować.",
           ctaLabel: "Skontaktuj się",
-          ctaHref: "#kontakt",
+          ctaHref: "#contact",
         },
       },
     },
@@ -431,7 +431,7 @@ export const defaultSiteContent = {
         description:
           "GameDev rozwijam jako techniczno-kreatywny obszar portfolio - od prostych mechanik i logiki rozgrywki po eksperymenty edukacyjne i interaktywne demo.",
         ctaLabel: "Porozmawiajmy o projekcie",
-        ctaHref: "#kontakt",
+        ctaHref: "#contact",
       },
       sections: {
         whatIBuild: {
@@ -477,7 +477,7 @@ export const defaultSiteContent = {
           description:
             "Napisz, czy chodzi o prototyp, demo, element edukacyjny czy kreatywną interakcję na stronie.",
           ctaLabel: "Napisz w sprawie GameDev",
-          ctaHref: "#kontakt",
+          ctaHref: "#contact",
         },
       },
     },
