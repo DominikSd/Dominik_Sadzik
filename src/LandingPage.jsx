@@ -27,14 +27,6 @@ const detailPageRoutes = {
   gamedev: "gamedev",
 };
 
-const routeSectionMatches = {
-  "strony-cms": "web-cms",
-};
-
-const detailRouteActiveSections = {
-  "strony-cms": "web-cms",
-};
-
 const routeActiveAliases = {
   "automatyzacja-testowanie": "qa-automatyzacja",
   "tester-istqb": "qa-automatyzacja",
@@ -44,7 +36,6 @@ const homeRouteSlugs = new Set(["", "/"]);
 
 const HOME_SECTIONS = [
   { id: "start", label: "Start" },
-  { id: "web-cms", label: "Strony i CMS" },
   { id: "projects", label: "Projekty" },
   { id: "faq", label: "FAQ" },
   { id: "contact", label: "Kontakt" },
@@ -66,7 +57,7 @@ const floatingNavItems = [
 ];
 
 const sectionAliases = {
-  oferta: "web-cms",
+  oferta: "oferta",
   realizacje: "projects",
   kontakt: "contact",
 };
@@ -77,9 +68,9 @@ const sectionLabelsById = Object.fromEntries(
 
 const routeLabelsBySlug = {
   "strony-cms": "Strony i CMS",
-  "qa-automatyzacja": "QA i automatyzacja",
-  "automatyzacja-testowanie": "QA i automatyzacja",
-  "tester-istqb": "QA i automatyzacja",
+  "qa-automatyzacja": "QA",
+  "automatyzacja-testowanie": "QA",
+  "tester-istqb": "QA",
   gamedev: "GameDev",
 };
 
@@ -113,7 +104,7 @@ function isHomeRoute(routeSlug = "") {
 }
 
 function getInitialActiveSectionId(routeSlug = "") {
-  if (detailPageRoutes[routeSlug]) return routeSectionMatches[routeSlug] || "start";
+  if (detailPageRoutes[routeSlug]) return "start";
   if (isHomeRoute(routeSlug)) return "start";
   return normalizeSectionId(routeSlug) || "start";
 }
@@ -127,12 +118,12 @@ function isNavItemActive(item, { routeSlug, activeSectionId }) {
   if (itemRouteSlug) {
     if (detailPageRoutes[routeSlug])
       return routeSlug === itemRouteSlug || routeActiveAliases[routeSlug] === itemRouteSlug;
-    return routeSlug === itemRouteSlug || routeSectionMatches[itemRouteSlug] === activeSectionId;
+    return routeSlug === itemRouteSlug;
   }
 
   const sectionId = getSectionIdFromHref(item.href);
   if (sectionId) {
-    if (detailPageRoutes[routeSlug]) return detailRouteActiveSections[routeSlug] === sectionId;
+    if (detailPageRoutes[routeSlug]) return false;
     return activeSectionId === sectionId;
   }
 
@@ -362,24 +353,6 @@ function SectionTitle({ eyebrow, title, text }) {
   );
 }
 
-const areaToneClasses = {
-  cyan: {
-    shell: "from-cyan-400/15 via-blue-500/[0.07] to-transparent",
-    number: "from-cyan-300 to-blue-400",
-    ring: "border-cyan-300/25 shadow-cyan-500/10",
-  },
-  violet: {
-    shell: "from-violet-400/15 via-fuchsia-500/[0.07] to-transparent",
-    number: "from-violet-300 to-fuchsia-400",
-    ring: "border-violet-300/25 shadow-violet-500/10",
-  },
-  blue: {
-    shell: "from-blue-400/15 via-cyan-500/[0.07] to-transparent",
-    number: "from-blue-300 to-cyan-400",
-    ring: "border-blue-300/25 shadow-blue-500/10",
-  },
-};
-
 function SectionDecor({ variant = "parallel", position = "right", className = "" }) {
   const positionClass =
     position === "left"
@@ -395,45 +368,6 @@ function SectionDecor({ variant = "parallel", position = "right", className = ""
     >
       <AnimatedCircuit variant={variant} className="h-28 w-52 sm:h-32 sm:w-64 md:h-44 md:w-96" />
     </div>
-  );
-}
-
-function CompetencyArea({ id, number, eyebrow, title, text, tone = "cyan", children, decor }) {
-  const toneClass = areaToneClasses[tone] || areaToneClasses.cyan;
-
-  return (
-    <section id={id} className="relative overflow-hidden scroll-mt-28">
-      <div
-        aria-hidden="true"
-        className={`pointer-events-none absolute inset-x-0 top-0 z-0 h-px bg-gradient-to-r from-transparent via-white/15 to-transparent`}
-      />
-      <div
-        aria-hidden="true"
-        className={`pointer-events-none absolute inset-0 z-0 bg-gradient-to-br ${toneClass.shell}`}
-      />
-      {decor}
-      <div className="relative z-10 px-4 pt-20 sm:px-6 md:px-10 lg:pt-28">
-        <div
-          className={`mx-auto grid max-w-7xl gap-6 rounded-lg border ${toneClass.ring} bg-slate-950/40 p-5 shadow-2xl backdrop-blur-sm md:grid-cols-[auto_minmax(0,1fr)] md:p-8`}
-        >
-          <div
-            className={`flex h-12 w-12 items-center justify-center rounded-lg bg-gradient-to-br ${toneClass.number} text-sm font-black text-slate-950 shadow-lg shadow-cyan-950/20`}
-          >
-            {number}
-          </div>
-          <div className="min-w-0">
-            <p className="text-sm font-semibold uppercase tracking-[0.26em] text-cyan-300">
-              {eyebrow}
-            </p>
-            <h2 className="mt-3 break-words text-3xl font-black tracking-tight text-white md:text-5xl">
-              {title}
-            </h2>
-            <p className="mt-4 max-w-4xl break-words text-lg leading-8 text-slate-300">{text}</p>
-          </div>
-        </div>
-      </div>
-      <div className="relative z-10">{children}</div>
-    </section>
   );
 }
 
@@ -546,7 +480,7 @@ function FloatingNavIconLink({ item, active, onNavigate }) {
       aria-label={item.label}
       aria-current={active ? "page" : undefined}
       title={item.label}
-      className={`flex h-10 w-10 flex-none items-center justify-center rounded-lg border text-current transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-300 ${
+      className={`flex h-9 w-9 flex-none items-center justify-center rounded-lg border text-current transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-300 ${
         active
           ? "border-cyan-200/70 bg-gradient-to-br from-cyan-300 to-violet-300 text-slate-950 shadow-lg shadow-cyan-400/30"
           : "border-white/10 bg-white/[0.06] text-slate-300 hover:border-cyan-300/35 hover:bg-white/[0.1] hover:text-cyan-100"
@@ -562,13 +496,13 @@ function FloatingSectionNav({ items, activeSectionId, routeSlug, visible, onNavi
 
   return (
     <div
-      className={`fixed left-1/2 top-3 z-[60] w-[min(calc(100vw-1rem),76rem)] -translate-x-1/2 transition duration-300 ${
+      className={`fixed left-1/2 top-3 z-[60] w-fit max-w-[calc(100vw-1rem)] -translate-x-1/2 transition duration-300 sm:max-w-[calc(100vw-2rem)] ${
         visible ? "translate-y-0 opacity-100" : "pointer-events-none -translate-y-5 opacity-0"
       }`}
     >
-      <div className="overflow-hidden rounded-lg border border-cyan-300/20 bg-slate-950/75 px-2.5 py-2 shadow-2xl shadow-cyan-500/15 backdrop-blur-2xl ring-1 ring-violet-300/10 sm:px-3">
+      <div className="max-w-full overflow-hidden rounded-2xl border border-cyan-300/20 bg-slate-950/75 px-2.5 py-2 shadow-[0_0_30px_rgba(34,211,238,0.12)] backdrop-blur-2xl ring-1 ring-violet-300/10 sm:px-3">
         <div className="flex min-w-0 flex-col gap-2 lg:flex-row lg:items-center">
-          <div className="inline-flex max-w-full flex-none items-center justify-center gap-2 self-center rounded-full border border-cyan-300/25 bg-cyan-300/10 px-3 py-1.5 text-xs font-semibold text-cyan-100 lg:self-start">
+          <div className="inline-flex max-w-full flex-none items-center justify-center gap-2 self-center rounded-full border border-cyan-300/25 bg-cyan-300/10 px-3 py-1.5 text-xs font-semibold text-cyan-100">
             <span className="h-1.5 w-1.5 rounded-full bg-cyan-300 shadow-[0_0_12px_rgba(34,211,238,0.9)]" />
             <span className="min-w-0 truncate">Aktualnie: {activeLabel}</span>
           </div>
@@ -584,7 +518,7 @@ function FloatingSectionNav({ items, activeSectionId, routeSlug, visible, onNavi
           </div>
           <nav
             aria-label="Pływająca nawigacja sekcji"
-            className="hidden min-w-0 gap-1 overflow-x-auto pb-1 text-sm [scrollbar-width:none] sm:flex lg:flex-wrap lg:justify-end lg:pb-0"
+            className="hidden min-w-0 justify-center gap-1 overflow-x-auto pb-1 text-sm [scrollbar-width:none] sm:flex lg:flex-wrap lg:pb-0"
           >
             {items.map((item) => (
               <NavLink
@@ -1674,22 +1608,7 @@ export default function LandingPage({ routeHash = "" }) {
         ) : (
           <>
             <Hero hero={content.hero} onNavigate={handleNavigate} />
-            <CompetencyArea
-              id="web-cms"
-              number="01"
-              eyebrow="Strony, wizytówki, CMS"
-              title="Strony internetowe, wizytówki online i lekki CMS"
-              text="Najpierw pokazuję główną ofertę webową: projekt strony, czytelny układ, edycję treści, proces współpracy i pakiety startowe."
-              tone="cyan"
-              decor={
-                <>
-                  <SectionDecor variant="parallel" position="right" />
-                  <SectionDecor variant="corner" position="left" className="top-[52%] opacity-30" />
-                </>
-              }
-            >
-              <ServicesSection services={content.services} />
-            </CompetencyArea>
+            <ServicesSection services={content.services} />
 
             <AreasSection
               services={content.services}

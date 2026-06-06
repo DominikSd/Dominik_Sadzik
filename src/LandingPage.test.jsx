@@ -75,14 +75,14 @@ describe("LandingPage navigation", () => {
     expect(menuButton.getAttribute("aria-expanded")).toBe("false");
   });
 
-  it("renders the main portfolio area sections with stable ids", () => {
+  it("renders the homepage scroll-spy sections with stable ids", () => {
     render(<LandingPage routeHash="#/" />);
 
     expect(document.getElementById("start")).toBeTruthy();
-    expect(document.getElementById("web-cms")).toBeTruthy();
     expect(document.getElementById("projects")).toBeTruthy();
     expect(document.getElementById("faq")).toBeTruthy();
     expect(document.getElementById("contact")).toBeTruthy();
+    expect(screen.queryByText(/Najpierw pokazuję główną ofertę webową/)).toBeNull();
   });
 
   it("renders the floating section nav with the readable active section label", () => {
@@ -114,6 +114,19 @@ describe("LandingPage navigation", () => {
     );
   });
 
+  it("does not mark CMS active from a homepage web CMS section hash", () => {
+    render(<LandingPage routeHash="#web-cms" />);
+
+    const floatingNav = screen.getByRole("navigation", {
+      name: "Pływająca nawigacja sekcji",
+    });
+
+    expect(screen.getByText("Aktualnie: Start")).toBeTruthy();
+    expect(
+      within(floatingNav).getByRole("link", { name: "Strony i CMS" }).getAttribute("aria-current"),
+    ).toBeNull();
+  });
+
   it("renders the web CMS detail route without a blank screen", () => {
     render(<LandingPage routeHash="#/strony-cms" />);
 
@@ -123,6 +136,15 @@ describe("LandingPage navigation", () => {
     expect(
       within(mainNav).getByRole("link", { name: "Strony i CMS" }).getAttribute("aria-current"),
     ).toBe("page");
+    expect(
+      within(
+        screen.getByRole("navigation", {
+          name: "Pływająca nawigacja sekcji",
+        }),
+      )
+        .getByRole("link", { name: "Strony i CMS" })
+        .getAttribute("aria-current"),
+    ).toBe("page");
     expect(screen.getByText("Aktualnie: Strony i CMS")).toBeTruthy();
   });
 
@@ -130,13 +152,23 @@ describe("LandingPage navigation", () => {
     render(<LandingPage routeHash="#/qa-automatyzacja" />);
 
     expect(screen.getByRole("heading", { name: "QA, testowanie i automatyzacja" })).toBeTruthy();
+    expect(
+      within(
+        screen.getByRole("navigation", {
+          name: "Pływająca nawigacja sekcji",
+        }),
+      )
+        .getByRole("link", { name: "QA i automatyzacja" })
+        .getAttribute("aria-current"),
+    ).toBe("page");
+    expect(screen.getByText("Aktualnie: QA")).toBeTruthy();
   });
 
   it("keeps the old ISTQB route as a QA alias", () => {
     render(<LandingPage routeHash="#/tester-istqb" />);
 
     expect(screen.getByRole("heading", { name: "QA, testowanie i automatyzacja" })).toBeTruthy();
-    expect(screen.getByText("Aktualnie: QA i automatyzacja")).toBeTruthy();
+    expect(screen.getByText("Aktualnie: QA")).toBeTruthy();
     expect(screen.getByText("Certyfikat ISTQB")).toBeTruthy();
   });
 
@@ -144,6 +176,15 @@ describe("LandingPage navigation", () => {
     render(<LandingPage routeHash="#/gamedev" />);
 
     expect(screen.getByRole("heading", { name: "GameDev i interaktywne prototypy" })).toBeTruthy();
+    expect(
+      within(
+        screen.getByRole("navigation", {
+          name: "Pływająca nawigacja sekcji",
+        }),
+      )
+        .getByRole("link", { name: "GameDev" })
+        .getAttribute("aria-current"),
+    ).toBe("page");
     expect(screen.getByText("Aktualnie: GameDev")).toBeTruthy();
   });
 });
