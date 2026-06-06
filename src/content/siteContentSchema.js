@@ -203,7 +203,7 @@ export const sectionSchemas = {
   }),
   contact: sectionHeadingSchema.extend({
     email: z.string().trim().email().max(120),
-    phone: z.string().trim().min(3).max(40),
+    phone: z.string().trim().max(40),
     www: z.string().trim().max(120),
     address: z.string().trim().max(180),
     emailButtonLabel: z.string().trim().min(1).max(80),

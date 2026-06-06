@@ -1302,6 +1302,37 @@ function FaqSection({ faq }) {
 }
 
 function ContactSection({ contact }) {
+  const contactActions = [
+    contact.email
+      ? {
+          className:
+            "inline-flex w-full min-w-0 items-center justify-center gap-2 rounded-full gradient-button px-5 py-4 text-center text-sm font-bold shadow-xl shadow-blue-500/25 transition hover:scale-105 sm:w-auto sm:px-7",
+          href: `mailto:${contact.email}`,
+          icon: "mail",
+          label: contact.emailButtonLabel,
+          type: "email",
+        }
+      : null,
+    contact.phone
+      ? {
+          className:
+            "inline-flex w-full min-w-0 items-center justify-center gap-2 rounded-full border border-white/15 bg-white/5 px-5 py-4 text-center text-sm font-semibold text-slate-100 backdrop-blur transition hover:border-cyan-300/50 hover:bg-white/10 sm:w-auto sm:px-7",
+          href: `tel:${contact.phone.replace(/\s/g, "")}`,
+          icon: "phone",
+          label: contact.phoneButtonLabel,
+          type: "phone",
+        }
+      : null,
+  ].filter(Boolean);
+
+  const contactRows = [
+    contact.phone
+      ? ["phone", "Telefon", contact.phone, `tel:${contact.phone.replace(/\s/g, "")}`, "phone"]
+      : null,
+    contact.email ? ["mail", "E-mail", contact.email, `mailto:${contact.email}`, "email"] : null,
+    contact.www ? ["globe", "WWW", contact.www, null, null] : null,
+  ].filter(Boolean);
+
   return (
     <section
       id="contact"
@@ -1320,36 +1351,21 @@ function ContactSection({ contact }) {
             </h2>
             <p className="mt-5 max-w-2xl text-lg leading-8 text-slate-300">{contact.text}</p>
             <div className="mt-8 flex min-w-0 flex-col gap-4 sm:flex-row sm:flex-wrap">
-              <a
-                className="inline-flex w-full min-w-0 items-center justify-center gap-2 rounded-full gradient-button px-5 py-4 text-center text-sm font-bold shadow-xl shadow-blue-500/25 transition hover:scale-105 sm:w-auto sm:px-7"
-                href={`mailto:${contact.email}`}
-                onClick={() => trackContactClick("email", "contact_cta")}
-              >
-                <span className="min-w-0 break-words">{contact.emailButtonLabel}</span>
-                <Icon name="mail" className="h-4 w-4 flex-none" />
-              </a>
-              <a
-                className="inline-flex w-full min-w-0 items-center justify-center gap-2 rounded-full border border-white/15 bg-white/5 px-5 py-4 text-center text-sm font-semibold text-slate-100 backdrop-blur transition hover:border-cyan-300/50 hover:bg-white/10 sm:w-auto sm:px-7"
-                href={`tel:${contact.phone.replace(/\s/g, "")}`}
-                onClick={() => trackContactClick("phone", "contact_cta")}
-              >
-                <span className="min-w-0 break-words">{contact.phoneButtonLabel}</span>
-                <Icon name="phone" className="h-4 w-4 flex-none" />
-              </a>
+              {contactActions.map((action) => (
+                <a
+                  key={action.type}
+                  className={action.className}
+                  href={action.href}
+                  onClick={() => trackContactClick(action.type, "contact_cta")}
+                >
+                  <span className="min-w-0 break-words">{action.label}</span>
+                  <Icon name={action.icon} className="h-4 w-4 flex-none" />
+                </a>
+              ))}
             </div>
           </div>
           <div className="w-full min-w-0 rounded-lg border border-cyan-300/20 bg-slate-950/55 p-4 shadow-2xl shadow-blue-500/10 sm:p-6">
-            {[
-              [
-                "phone",
-                "Telefon",
-                contact.phone,
-                `tel:${contact.phone.replace(/\s/g, "")}`,
-                "phone",
-              ],
-              ["mail", "E-mail", contact.email, `mailto:${contact.email}`, "email"],
-              ["globe", "WWW", contact.www, null, null],
-            ].map(([icon, label, value, href, contactType]) => (
+            {contactRows.map(([icon, label, value, href, contactType]) => (
               <div key={label} className="mb-5 flex min-w-0 items-start gap-3 last:mb-0 sm:gap-4">
                 <div className="flex h-11 w-11 flex-none items-center justify-center rounded-lg border border-cyan-300/30 bg-white/5 text-cyan-200 sm:h-12 sm:w-12">
                   <Icon name={icon} className="h-5 w-5" />
