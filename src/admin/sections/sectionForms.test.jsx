@@ -7,6 +7,7 @@ import FaqSectionForm from "./FaqSectionForm";
 import FeatureCardsSectionForm from "./FeatureCardsSectionForm";
 import HeroSectionForm from "./HeroSectionForm";
 import PagesSectionForm from "./PagesSectionForm";
+import PortfolioSectionForm from "./PortfolioSectionForm";
 import SeoSectionForm from "./SeoSectionForm";
 import ServicesSectionForm from "./ServicesSectionForm";
 import SettingsSectionForm from "./SettingsSectionForm";
@@ -17,6 +18,7 @@ const forms = [
   ["automationQa", FeatureCardsSectionForm, "CTA label"],
   ["gamedevTeaser", FeatureCardsSectionForm, "Dodaj kartę"],
   ["pages", PagesSectionForm, "SEO podstrony"],
+  ["portfolio", PortfolioSectionForm, "Dodaj projekt"],
   ["faq", FaqSectionForm, "Dodaj pytanie"],
   ["contact", ContactSectionForm, "Telefon"],
   ["seo", SeoSectionForm, "Meta title"],

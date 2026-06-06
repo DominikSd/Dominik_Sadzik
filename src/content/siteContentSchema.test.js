@@ -17,6 +17,7 @@ describe("site content schema", () => {
     expect(getCollectionForKey("automationQa")).toBe("page_sections");
     expect(getCollectionForKey("gamedevTeaser")).toBe("page_sections");
     expect(getCollectionForKey("pages")).toBe("page_sections");
+    expect(getCollectionForKey("portfolio")).toBe("page_sections");
     expect(getCollectionForKey("faq")).toBe("page_sections");
     expect(getCollectionForKey("contact")).toBe("page_sections");
     expect(getCollectionForKey("seo")).toBe("seo");
@@ -44,10 +45,10 @@ describe("site content schema", () => {
   it("validates editable predefined detail pages", () => {
     const pages = {
       ...defaultSiteContent.pages,
-      automationTesting: {
-        ...defaultSiteContent.pages.automationTesting,
+      qaAutomation: {
+        ...defaultSiteContent.pages.qaAutomation,
         seo: {
-          ...defaultSiteContent.pages.automationTesting.seo,
+          ...defaultSiteContent.pages.qaAutomation.seo,
           title: "",
         },
       },

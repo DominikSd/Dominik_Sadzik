@@ -1,10 +1,13 @@
 # Podstrony ofertowe i edycja w CMS
 
-Ten etap dodaje trzy predefiniowane podstrony portfolio/oferty:
+Ten etap porządkuje trzy predefiniowane podstrony portfolio/oferty:
 
-- `#/automatyzacja-testowanie` - automatyzacja, QA i testowanie stron.
-- `#/tester-istqb` - certyfikowane podejscie testerskie i raportowanie bledow.
+- `#/strony-cms` - pelne rozwiniecie glownej oferty: strony, wizytowki online i lekki CMS.
+- `#/qa-automatyzacja` - QA, testowanie, automatyzacja oraz sekcja certyfikatu ISTQB.
 - `#/gamedev` - GameDev, prototypy i projekty interaktywne.
+
+Stare adresy `#/automatyzacja-testowanie` i `#/tester-istqb` nie sa martwe: prowadza do
+podstrony QA. `#/tester-istqb` przewija do sekcji certyfikatu ISTQB.
 
 Projekt uzywa hash routingu, zeby podstrony dzialaly stabilnie na GitHub Pages bez dodatkowej
 konfiguracji serwera.
@@ -19,9 +22,10 @@ Tresci sa w tym samym modelu CMS co reszta strony:
 
 W panelu CMS dodano zakladki:
 
-- `Automatyzacja i QA` - sekcja na stronie glownej z kartami i CTA.
-- `GameDev` - sekcja na stronie glownej z kartami i CTA.
+- `Automatyzacja i QA` - krotka zajawka kompetencji QA na stronie glownej.
+- `GameDev` - krotka zajawka kompetencji GameDev na stronie glownej.
 - `Nowe podstrony` - SEO, hero, listy punktow i CTA dla trzech podstron.
+- `Projekty` - edycja kart projektow/przykladow prac.
 
 Nie dodano bloga, buildera, uploadu mediow ani Supabase Storage.
 
@@ -31,8 +35,8 @@ Nowe dane sa czescia `defaultSiteContent`:
 
 - `automationQa` - sekcja home dla automatyzacji i testowania.
 - `gamedevTeaser` - sekcja home dla GameDev.
-- `pages.automationTesting` - podstrona automatyzacji i QA.
-- `pages.istqbTesting` - podstrona testera ISTQB.
+- `pages.webCms` - podstrona stron, wizytowek online i lekkiego CMS.
+- `pages.qaAutomation` - podstrona QA, automatyzacji i ISTQB.
 - `pages.gamedev` - podstrona GameDev.
 
 Kazda podstrona ma:

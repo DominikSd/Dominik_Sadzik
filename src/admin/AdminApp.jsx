@@ -22,6 +22,7 @@ import FaqSectionForm from "./sections/FaqSectionForm";
 import FeatureCardsSectionForm from "./sections/FeatureCardsSectionForm";
 import HeroSectionForm from "./sections/HeroSectionForm";
 import PagesSectionForm from "./sections/PagesSectionForm";
+import PortfolioSectionForm from "./sections/PortfolioSectionForm";
 import SeoSectionForm from "./sections/SeoSectionForm";
 import ServicesSectionForm from "./sections/ServicesSectionForm";
 import SettingsSectionForm from "./sections/SettingsSectionForm";
@@ -49,6 +50,7 @@ const sections = [
     Form: (props) => <FeatureCardsSectionForm {...props} addLabel="Dodaj kartę GameDev" />,
   },
   { key: "pages", label: "Nowe podstrony", Form: PagesSectionForm },
+  { key: "portfolio", label: "Projekty", Form: PortfolioSectionForm },
   { key: "faq", label: "FAQ", Form: FaqSectionForm },
   { key: "contact", label: "Kontakt", Form: ContactSectionForm },
   { key: "seo", label: "SEO", Form: SeoSectionForm },

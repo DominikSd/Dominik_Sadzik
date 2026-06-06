@@ -2,15 +2,23 @@ import React, { useState } from "react";
 import { Field, FormGrid, ListEditor, TextArea, TextInput } from "./FormPrimitives";
 
 const pageLabels = [
-  ["automationTesting", "Automatyzacja i QA"],
-  ["istqbTesting", "Tester ISTQB"],
+  ["webCms", "Strony i CMS"],
+  ["qaAutomation", "QA i automatyzacja"],
   ["gamedev", "GameDev"],
 ];
 
 const sectionLabels = {
+  whatICanBuild: "Co mogę przygotować",
+  cmsPanel: "Panel CMS",
+  process: "Proces współpracy",
+  audience: "Dla kogo",
   whatCanBeAutomated: "Co mogę automatyzować",
   benefits: "Korzyści",
   examples: "Przykłady zastosowań",
+  istqbCertificate: "Certyfikat ISTQB",
+  testing: "Testowanie stron i aplikacji",
+  automation: "Automatyzacja procesów",
+  bugReports: "Raportowanie błędów",
   qaMindset: "Podejście testerskie",
   testScope: "Zakres testów",
   bugReport: "Raport z testów",
@@ -165,7 +173,7 @@ function PageContentSectionEditor({ sectionKey, section, updateSection }) {
 }
 
 export default function PagesSectionForm({ value, onChange }) {
-  const [activePageKey, setActivePageKey] = useState("automationTesting");
+  const [activePageKey, setActivePageKey] = useState("webCms");
   const activePage = value[activePageKey];
 
   const updatePage = (patch) =>

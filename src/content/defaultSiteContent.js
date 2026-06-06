@@ -7,12 +7,11 @@ export const defaultSiteContent = {
     tagline: "Strony internetowe i wizytówki online",
     footerText: "© 2026 Dominik Sadzik - Projektowanie stron i wizytówek",
     navItems: [
-      { label: "Start", href: "#" },
+      { label: "Start", href: "#start" },
       { label: "Strony i CMS", href: "#web-cms" },
-      { label: "Projekty", href: "#projects" },
-      { label: "QA i automatyzacja", href: "#/automatyzacja-testowanie" },
-      { label: "ISTQB", href: "#/tester-istqb" },
+      { label: "QA", href: "#/qa-automatyzacja" },
       { label: "GameDev", href: "#/gamedev" },
+      { label: "Projekty", href: "#projects" },
       { label: "Kontakt", href: "#contact" },
     ],
   },
@@ -22,13 +21,13 @@ export const defaultSiteContent = {
       "Projektuję nowoczesne strony internetowe, wizytówki online i proste rozwiązania dla małych firm, specjalistów oraz lokalnych usług.",
   },
   hero: {
-    eyebrow: "Strony internetowe - Wizytówki online",
+    eyebrow: "Strony internetowe - lekki CMS - QA",
     title: "Nowoczesne strony internetowe i",
-    highlightedTitle: "wizytówki dla Twojej firmy",
+    highlightedTitle: "lekki CMS dla Twojej firmy",
     description:
-      "Projektuję estetyczne, czytelne i responsywne strony oraz wizytówki online dla małych firm, specjalistów i lokalnych usług.",
+      "Projektuję estetyczne, responsywne strony i wizytówki online z prostym panelem edycji treści. Dodatkowo korzystam z doświadczenia QA/ISTQB i GameDev, żeby lepiej myśleć o jakości, interakcji i testowaniu.",
     primaryCta: { label: "Wycena projektu", href: "#kontakt" },
-    secondaryCta: { label: "Zobacz ofertę", href: "#oferta" },
+    secondaryCta: { label: "Zobacz projekty", href: "#projects" },
     stats: [
       { value: "100%", label: "responsywny projekt" },
       { value: "SEO", label: "podstawy widoczności" },
@@ -36,36 +35,36 @@ export const defaultSiteContent = {
     ],
   },
   services: {
-    eyebrow: "Oferta",
-    title: "Proste usługi, które łatwo zrozumieć",
-    text: "Bez technicznego żargonu. Najpierw ustalamy, czego potrzebujesz, a potem dobieramy rozwiązanie do celu i budżetu.",
+    eyebrow: "Główna oferta",
+    title: "Strony internetowe, wizytówki online i lekki CMS",
+    text: "To główny obszar strony: przejrzysta oferta, responsywny projekt, podstawy SEO, panel edycji treści i statystyki GA4 w prywatnym panelu.",
     items: [
       {
         icon: "monitor",
         title: "Strony internetowe",
-        text: "Nowoczesna strona, która prezentuje ofertę i ułatwia kontakt z klientem.",
+        text: "Nowoczesna strona firmowa, landing page albo portfolio, które jasno prowadzi użytkownika do kontaktu.",
       },
       {
         icon: "palette",
         title: "Wizytówki online",
-        text: "Prosta wizytówka online z najważniejszymi informacjami o firmie.",
+        text: "Krótka, estetyczna strona z ofertą, danymi kontaktowymi, grafiką i dopasowaniem do branży.",
       },
       {
         icon: "sparkles",
-        title: "Odświeżenie strony",
-        text: "Poprawa wyglądu, układu i czytelności istniejącej strony.",
+        title: "Lekki CMS",
+        text: "Prywatny panel do edycji treści, SEO, FAQ, danych kontaktowych i publikacji zmian bez ruszania kodu.",
       },
     ],
   },
   automationQa: {
-    eyebrow: "Jakość i automatyzacja",
-    title: "Automatyzacja, QA i testowanie",
-    text: "Jako certyfikowany tester ISTQB patrzę na strony nie tylko od strony wyglądu, ale też jakości działania. Pomagam wykrywać błędy, porządkować scenariusze testowe i automatyzować powtarzalne czynności, które oszczędzają czas przy rozwoju projektu.",
+    eyebrow: "Dodatkowa kompetencja",
+    title: "QA i automatyzacja",
+    text: "Testowanie, myślenie scenariuszami i automatyzacja pomagają mi tworzyć stabilniejsze strony oraz szybciej wychwytywać problemy przed publikacją.",
     certificateNote: "Certyfikowany tester ISTQB - praktyczne podejście do jakości.",
-    ctaLabel: "Zobacz podejście QA",
-    ctaHref: "#/automatyzacja-testowanie",
-    secondaryCtaLabel: "Certyfikat i testy",
-    secondaryCtaHref: "#/tester-istqb",
+    ctaLabel: "Zobacz QA",
+    ctaHref: "#/qa-automatyzacja",
+    secondaryCtaLabel: "",
+    secondaryCtaHref: "",
     cards: [
       {
         icon: "check",
@@ -92,7 +91,7 @@ export const defaultSiteContent = {
   gamedevTeaser: {
     eyebrow: "Interaktywne projekty",
     title: "GameDev i projekty interaktywne",
-    text: "Od czasu do czasu rozwijam również projekty związane z tworzeniem gier i interaktywnych prototypów. To obszar, który łączy programowanie, logikę, kreatywność i testowanie zachowań użytkownika.",
+    text: "GameDev traktuję jako dodatkowy obszar rozwoju: prototypy, logika, interakcje i kreatywne testowanie zachowań użytkownika.",
     ctaLabel: "Zobacz GameDev",
     ctaHref: "#/gamedev",
     cards: [
@@ -211,7 +210,7 @@ export const defaultSiteContent = {
         status: "projekt demo",
         category: "Automatyzacja",
         tags: ["QA", "testy", "checklista", "automatyzacja"],
-        href: "#/automatyzacja-testowanie",
+        href: "#/qa-automatyzacja",
         linkLabel: "Zobacz QA",
         mockupTone: "blue",
       },
@@ -224,8 +223,8 @@ export const defaultSiteContent = {
         status: "koncepcja",
         category: "Testowanie / QA",
         tags: ["ISTQB", "test cases", "bug report", "regresja"],
-        href: "#/tester-istqb",
-        linkLabel: "Zobacz testowanie",
+        href: "#/qa-automatyzacja",
+        linkLabel: "Zobacz QA",
         mockupTone: "cyan",
       },
       {
@@ -244,118 +243,145 @@ export const defaultSiteContent = {
     ],
   },
   pages: {
-    automationTesting: {
-      slug: "automatyzacja-testowanie",
+    webCms: {
+      slug: "strony-cms",
       seo: {
-        title: "Automatyzacja i testowanie stron | Dominik Sadzik",
+        title: "Strony internetowe i lekki CMS | Dominik Sadzik",
         description:
-          "Automatyzacja procesów, testowanie stron internetowych i wsparcie QA dla nowoczesnych projektów webowych.",
-        ogTitle: "Automatyzacja i testowanie stron",
+          "Nowoczesne strony internetowe, wizytówki online i lekki panel CMS do edycji treści, SEO, FAQ, kontaktu i statystyk.",
+        ogTitle: "Strony internetowe i lekki CMS",
         ogDescription:
-          "Praktyczne podejście do QA, testów i automatyzacji powtarzalnych kontroli strony.",
+          "Strony dla małych firm, specjalistów i usługodawców z prostym panelem edycji treści.",
       },
       hero: {
-        eyebrow: "Automatyzacja i QA",
-        title: "Automatyzacja i testowanie stron",
-        subtitle: "Praktyczne wsparcie jakości dla stron i aplikacji",
+        eyebrow: "Strony i CMS",
+        title: "Strony internetowe i lekki CMS",
+        subtitle: "Nowoczesna strona z możliwością edycji treści",
         description:
-          "Łączę podejście testerskie z praktyczną automatyzacją, aby szybciej wykrywać problemy, ograniczać powtarzalną pracę i zwiększać jakość stron oraz aplikacji.",
-        ctaLabel: "Porozmawiajmy o automatyzacji",
+          "Tworzę responsywne strony, wizytówki online i proste panele CMS, dzięki którym możesz edytować najważniejsze treści bez przebudowy strony.",
+        ctaLabel: "Zapytaj o stronę",
         ctaHref: "#kontakt",
       },
       sections: {
-        whatCanBeAutomated: {
-          title: "Co mogę automatyzować",
+        whatICanBuild: {
+          title: "Co mogę przygotować",
           description:
-            "Najlepiej zacząć od powtarzalnych kontroli, które często wracają po zmianach w projekcie.",
+            "Zakres dobieram do celu strony, branży i budżetu. Można zacząć od małej wizytówki i rozbudować ją etapami.",
           items: [
-            "checklisty przed publikacją",
-            "testy powtarzalnych scenariuszy",
-            "formularze kontaktowe",
-            "linki i przyciski CTA",
-            "podstawowe procesy administracyjne",
-            "raportowanie wyników",
+            "strona firmowa",
+            "portfolio",
+            "landing page",
+            "wizytówka online",
+            "lekki CMS",
+            "panel statystyk GA4",
           ],
         },
-        benefits: {
-          title: "Jak to pomaga stronie lub aplikacji",
+        cmsPanel: {
+          title: "Panel CMS",
           description:
-            "Automatyzacja nie zastępuje myślenia, ale pomaga szybciej wychwycić typowe problemy.",
+            "Panel ma być prosty i bezpieczny: właściciel edytuje treści, ale nie rozbija layoutu strony.",
           items: [
-            "mniej ręcznego sprawdzania",
-            "szybsze wykrywanie błędów",
-            "większa pewność po zmianach",
-            "lepsza jakość wdrożeń",
+            "edycja treści i sekcji oferty",
+            "FAQ i dane kontaktowe",
+            "podstawowe SEO",
+            "tryb draft/published",
+            "statystyki GA4 w panelu",
+            "role owner/editor/viewer",
           ],
         },
-        examples: {
-          title: "Przykładowe zastosowania",
+        process: {
+          title: "Proces współpracy",
           description:
-            "To praktyczne scenariusze, które można dopasować do skali strony lub aplikacji.",
+            "Pracę prowadzę etapami, żeby od początku było jasne, co powstaje i co jest potrzebne do publikacji.",
           items: [
-            "automatyczne sprawdzenie formularza kontaktowego",
-            "sprawdzenie linków i CTA",
-            "podstawowy smoke test po deployu",
-            "kontrola widoczności najważniejszych sekcji strony",
-            "proste skrypty wspierające pracę",
+            "rozmowa i cel strony",
+            "struktura treści",
+            "projekt i wykonanie",
+            "testy responsywności",
+            "publikacja",
+            "wsparcie po wdrożeniu",
+          ],
+        },
+        audience: {
+          title: "Dla kogo",
+          description:
+            "Najlepiej sprawdza się przy stronach, które mają jasno pokazać ofertę i ułatwić kontakt.",
+          items: [
+            "małe firmy",
+            "specjaliści",
+            "usługodawcy",
+            "lokalne biznesy",
+            "portfolio osobiste",
+            "osoby, które nie chcą ciężkiego WordPressa",
           ],
         },
         finalCta: {
-          title: "Chcesz ograniczyć ręczne sprawdzanie?",
+          title: "Chcesz stronę, którą da się później edytować?",
           description:
-            "Napisz, co najczęściej sprawdzasz ręcznie. Pomogę ocenić, co warto uporządkować lub zautomatyzować na start.",
+            "Napisz, czego potrzebujesz: prostej wizytówki, strony firmowej, portfolio albo panelu CMS do treści.",
           ctaLabel: "Skontaktuj się",
           ctaHref: "#kontakt",
         },
       },
     },
-    istqbTesting: {
-      slug: "tester-istqb",
+    qaAutomation: {
+      slug: "qa-automatyzacja",
       seo: {
-        title: "Certyfikowany tester ISTQB | Testowanie stron i aplikacji",
+        title: "QA, testowanie i automatyzacja | Dominik Sadzik",
         description:
-          "Testowanie funkcjonalne, raportowanie błędów i podejście QA oparte o wiedzę certyfikowanego testera ISTQB.",
-        ogTitle: "Certyfikowany tester ISTQB",
+          "QA, testowanie stron i aplikacji, certyfikat ISTQB, automatyzacja powtarzalnych kontroli i raportowanie błędów.",
+        ogTitle: "QA, testowanie i automatyzacja",
         ogDescription:
-          "Podejście do jakości oparte na scenariuszach użytkownika, ryzykach i czytelnym raportowaniu.",
+          "Praktyczne podejście do jakości stron, scenariuszy użytkownika i powtarzalnych kontroli.",
       },
       hero: {
-        eyebrow: "Tester ISTQB",
-        title: "Certyfikowane podejście do testowania",
-        subtitle: "Jakość, scenariusze i raportowanie błędów",
+        eyebrow: "QA i automatyzacja",
+        title: "QA, testowanie i automatyzacja",
+        subtitle: "Certyfikat ISTQB, scenariusze i stabilniejsze wdrożenia",
         description:
-          "Certyfikat ISTQB pomaga mi patrzeć na projekt szerzej: przez scenariusze użytkownika, ryzyka, przypadki testowe i jakość wdrożenia.",
-        ctaLabel: "Chcę sprawdzić stronę",
+          "Łączę praktyczne testowanie z automatyzacją powtarzalnych kontroli. ISTQB pomaga mi patrzeć na projekt przez scenariusze użytkownika, ryzyka i jakość wdrożenia.",
+        ctaLabel: "Porozmawiajmy o QA",
         ctaHref: "#kontakt",
       },
       sections: {
-        qaMindset: {
-          title: "Co oznacza podejście testerskie",
+        istqbCertificate: {
+          title: "Certyfikat ISTQB",
           description:
-            "Testowanie to nie tylko kliknięcie strony. To uporządkowane szukanie ryzyk i sprawdzanie, czy użytkownik może wykonać najważniejsze zadania.",
+            "Certyfikat porządkuje podejście do jakości: pomaga myśleć scenariuszami, ryzykiem, przypadkami testowymi i czytelnym raportowaniem.",
           items: [
             "myślenie scenariuszami użytkownika",
             "szukanie ryzyk",
-            "dokładne raportowanie błędów",
-            "sprawdzanie działania na różnych urządzeniach",
-            "weryfikacja po poprawkach",
+            "priorytetyzacja błędów",
+            "testy regresji",
+            "komunikacja z developerem i klientem",
           ],
         },
-        testScope: {
-          title: "Zakres testów",
+        testing: {
+          title: "Testowanie stron i aplikacji",
           description:
-            "Zakres dopasowuję do projektu: od podstawowej kontroli strony po bardziej szczegółowe testy po zmianach.",
+            "Sprawdzam najważniejsze ścieżki użytkownika, formularze, linki, responsywność i podstawowe problemy UI.",
           items: [
             "testy funkcjonalne",
-            "testy UI",
-            "testy responsywności",
             "testy formularzy",
-            "testy podstawowego SEO i technicznego działania",
-            "testy regresji po zmianach",
+            "testy responsywności",
+            "kontrola linków i CTA",
+            "podstawowy smoke test po deployu",
           ],
         },
-        bugReport: {
-          title: "Jak wygląda raport z testów",
+        automation: {
+          title: "Automatyzacja powtarzalnych procesów",
+          description:
+            "Automatyzacja ma sens tam, gdzie te same kontrole wracają po każdej zmianie.",
+          items: [
+            "powtarzalne scenariusze",
+            "checklisty przed publikacją",
+            "proste skrypty wspierające pracę",
+            "kontrole regresji",
+            "raportowanie wyników",
+          ],
+        },
+        bugReports: {
+          title: "Raportowanie błędów",
           description:
             "Raport powinien pomagać szybko zrozumieć problem i odtworzyć go bez zgadywania.",
           items: [
@@ -364,25 +390,26 @@ export const defaultSiteContent = {
             "oczekiwany rezultat",
             "rzeczywisty rezultat",
             "priorytet",
-            "screenshot lub notatka, jeśli dostępne",
+            "rekomendacja poprawki",
           ],
         },
-        clientBenefits: {
-          title: "Dlaczego to ważne dla klienta",
+        examples: {
+          title: "Przykładowe zastosowania",
           description:
-            "Dobre testy zmniejszają ryzyko, że błąd zobaczy dopiero użytkownik końcowy.",
+            "Zakres można dopasować do strony, aplikacji albo procesu, który często wymaga ręcznego sprawdzania.",
           items: [
-            "mniej błędów po publikacji",
-            "lepszy odbiór strony",
-            "większe zaufanie użytkowników",
-            "szybsze poprawki",
+            "formularz kontaktowy",
+            "linki i przyciski CTA",
+            "publikacja nowej wersji strony",
+            "sprawdzenie widoczności sekcji",
+            "raport błędów po zmianach",
           ],
         },
         finalCta: {
-          title: "Chcesz sprawdzić swoją stronę?",
+          title: "Chcesz sprawdzić stronę przed publikacją?",
           description:
-            "Mogę przejść przez najważniejsze scenariusze, opisać problemy i przygotować czytelną listę poprawek.",
-          ctaLabel: "Skontaktuj się ze mną",
+            "Napisz, co najczęściej sprawdzasz ręcznie. Pomogę ocenić, co warto uporządkować lub zautomatyzować.",
+          ctaLabel: "Skontaktuj się",
           ctaHref: "#kontakt",
         },
       },

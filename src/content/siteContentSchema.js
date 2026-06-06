@@ -8,6 +8,7 @@ export const editableSectionKeys = [
   "automationQa",
   "gamedevTeaser",
   "pages",
+  "portfolio",
   "faq",
   "contact",
   "seo",
@@ -172,8 +173,8 @@ export const sectionSchemas = {
       .max(12),
   }),
   pages: z.object({
-    automationTesting: editablePageSchema,
-    istqbTesting: editablePageSchema,
+    webCms: editablePageSchema,
+    qaAutomation: editablePageSchema,
     gamedev: editablePageSchema,
   }),
   packages: sectionHeadingSchema.extend({
@@ -242,9 +243,23 @@ export function validateSectionData(key, data) {
 }
 
 export function normalizeSiteContent(candidate) {
+  const candidatePages = candidate?.pages || {};
+  const pages = {
+    ...defaultSiteContent.pages,
+    ...candidatePages,
+    webCms: candidatePages.webCms || defaultSiteContent.pages.webCms,
+    qaAutomation:
+      candidatePages.qaAutomation ||
+      candidatePages.automationTesting ||
+      candidatePages.istqbTesting ||
+      defaultSiteContent.pages.qaAutomation,
+    gamedev: candidatePages.gamedev || defaultSiteContent.pages.gamedev,
+  };
+
   return siteContentSchema.parse({
     ...defaultSiteContent,
     ...candidate,
+    pages,
     schemaVersion: CONTENT_SCHEMA_VERSION,
   });
 }

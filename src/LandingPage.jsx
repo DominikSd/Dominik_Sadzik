@@ -20,18 +20,50 @@ const stagger = {
 };
 
 const detailPageRoutes = {
-  "automatyzacja-testowanie": "automationTesting",
-  "tester-istqb": "istqbTesting",
+  "strony-cms": "webCms",
+  "qa-automatyzacja": "qaAutomation",
+  "automatyzacja-testowanie": "qaAutomation",
+  "tester-istqb": "qaAutomation",
   gamedev: "gamedev",
 };
 
 const routeSectionMatches = {
-  "automatyzacja-testowanie": "qa-automation",
-  "tester-istqb": "qa-automation",
-  gamedev: "gamedev-area",
+  "strony-cms": "web-cms",
+};
+
+const detailRouteActiveSections = {
+  "strony-cms": "web-cms",
+};
+
+const routeActiveAliases = {
+  "automatyzacja-testowanie": "qa-automatyzacja",
+  "tester-istqb": "qa-automatyzacja",
 };
 
 const homeRouteSlugs = new Set(["", "/"]);
+
+const HOME_SECTIONS = [
+  { id: "start", label: "Start" },
+  { id: "web-cms", label: "Strony i CMS" },
+  { id: "projects", label: "Projekty" },
+  { id: "faq", label: "FAQ" },
+  { id: "contact", label: "Kontakt" },
+];
+
+const floatingNavItems = [
+  { label: "Start", shortLabel: "Start", href: "#", icon: "home" },
+  { label: "Strony i CMS", shortLabel: "CMS", href: "#web-cms", icon: "monitor" },
+  {
+    label: "QA i automatyzacja",
+    shortLabel: "QA",
+    href: "#/qa-automatyzacja",
+    icon: "shield-check",
+  },
+  { label: "GameDev", shortLabel: "Game", href: "#/gamedev", icon: "gamepad" },
+  { label: "Projekty", shortLabel: "Projekty", href: "#projects", icon: "folder" },
+  { label: "FAQ", shortLabel: "FAQ", href: "#faq", icon: "badge" },
+  { label: "Kontakt", shortLabel: "Kontakt", href: "#contact", icon: "phone" },
+];
 
 const sectionAliases = {
   oferta: "web-cms",
@@ -39,18 +71,15 @@ const sectionAliases = {
   kontakt: "contact",
 };
 
-const sectionLabelsById = {
-  start: "Start",
-  "web-cms": "Strony i CMS",
-  projects: "Projekty",
-  "qa-automation": "QA i automatyzacja",
-  "gamedev-area": "GameDev",
-  contact: "Kontakt",
-};
+const sectionLabelsById = Object.fromEntries(
+  HOME_SECTIONS.map((section) => [section.id, section.label]),
+);
 
 const routeLabelsBySlug = {
+  "strony-cms": "Strony i CMS",
+  "qa-automatyzacja": "QA i automatyzacja",
   "automatyzacja-testowanie": "QA i automatyzacja",
-  "tester-istqb": "ISTQB",
+  "tester-istqb": "QA i automatyzacja",
   gamedev: "GameDev",
 };
 
@@ -96,14 +125,47 @@ function getActiveSectionLabel({ routeSlug, activeSectionId }) {
 function isNavItemActive(item, { routeSlug, activeSectionId }) {
   const itemRouteSlug = getRouteSlugFromHref(item.href);
   if (itemRouteSlug) {
-    if (detailPageRoutes[routeSlug]) return routeSlug === itemRouteSlug;
+    if (detailPageRoutes[routeSlug])
+      return routeSlug === itemRouteSlug || routeActiveAliases[routeSlug] === itemRouteSlug;
     return routeSlug === itemRouteSlug || routeSectionMatches[itemRouteSlug] === activeSectionId;
   }
 
   const sectionId = getSectionIdFromHref(item.href);
-  if (sectionId) return !detailPageRoutes[routeSlug] && activeSectionId === sectionId;
+  if (sectionId) {
+    if (detailPageRoutes[routeSlug]) return detailRouteActiveSections[routeSlug] === sectionId;
+    return activeSectionId === sectionId;
+  }
 
   return isHomeRoute(routeSlug) && activeSectionId === "start";
+}
+
+function getActiveHomeSectionId() {
+  if (typeof window === "undefined" || typeof document === "undefined") return "start";
+
+  const checkpoint = window.innerHeight * 0.35;
+  let activeId = "start";
+  let closestDistance = Number.POSITIVE_INFINITY;
+
+  for (const section of HOME_SECTIONS) {
+    const element = document.getElementById(section.id);
+    if (!element) continue;
+
+    const rect = element.getBoundingClientRect();
+    const distance = Math.abs(rect.top - checkpoint);
+
+    if (rect.top <= checkpoint) {
+      activeId = section.id;
+      closestDistance = distance;
+      continue;
+    }
+
+    if (activeId === "start" && distance < closestDistance) {
+      activeId = section.id;
+      closestDistance = distance;
+    }
+  }
+
+  return activeId;
 }
 
 function Icon({ name, className = "h-5 w-5" }) {
@@ -128,6 +190,14 @@ function Icon({ name, className = "h-5 w-5" }) {
           <path d="m13 5 7 7-7 7" />
         </svg>
       );
+    case "badge":
+      return (
+        <svg {...common}>
+          <path d="M8 2h8l2 4-6 4-6-4 2-4z" />
+          <path d="M12 10v12" />
+          <path d="m8 15-3 5 7-2 7 2-3-5" />
+        </svg>
+      );
     case "check":
       return (
         <svg {...common}>
@@ -148,12 +218,36 @@ function Icon({ name, className = "h-5 w-5" }) {
           <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
         </svg>
       );
+    case "folder":
+      return (
+        <svg {...common}>
+          <path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7z" />
+        </svg>
+      );
+    case "gamepad":
+      return (
+        <svg {...common}>
+          <path d="M6 12h4" />
+          <path d="M8 10v4" />
+          <path d="M15 13h.01" />
+          <path d="M18 11h.01" />
+          <path d="M7 8h10a5 5 0 0 1 4.8 6.4l-.7 2.3a2.2 2.2 0 0 1-3.7.9L15 15H9l-2.4 2.6a2.2 2.2 0 0 1-3.7-.9l-.7-2.3A5 5 0 0 1 7 8z" />
+        </svg>
+      );
     case "globe":
       return (
         <svg {...common}>
           <circle cx="12" cy="12" r="10" />
           <path d="M2 12h20" />
           <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
+        </svg>
+      );
+    case "home":
+      return (
+        <svg {...common}>
+          <path d="m3 11 9-8 9 8" />
+          <path d="M5 10v10h14V10" />
+          <path d="M9 20v-6h6v6" />
         </svg>
       );
     case "mail":
@@ -199,6 +293,13 @@ function Icon({ name, className = "h-5 w-5" }) {
       return (
         <svg {...common}>
           <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.8 19.8 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.12 4.18 2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.12.9.32 1.77.59 2.61a2 2 0 0 1-.45 2.11L8 9.69a16 16 0 0 0 6.31 6.31l1.25-1.25a2 2 0 0 1 2.11-.45c.84.27 1.71.47 2.61.59A2 2 0 0 1 22 16.92z" />
+        </svg>
+      );
+    case "shield-check":
+      return (
+        <svg {...common}>
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+          <path d="m9 12 2 2 4-5" />
         </svg>
       );
     case "sparkles":
@@ -355,10 +456,13 @@ function NavLink({ item, active, variant = "desktop", onNavigate }) {
     <a
       href={item.href}
       onClick={(event) => onNavigate(event, item.href)}
+      aria-label={isFloating ? item.label : undefined}
       aria-current={active ? "page" : undefined}
       className={`${baseClass} ${stateClass} ${isFloating ? "text-xs sm:text-sm" : ""}`}
     >
-      <span className="block min-w-0 break-words">{item.label}</span>
+      <span className="block min-w-0 break-words">
+        {isFloating && item.shortLabel ? item.shortLabel : item.label}
+      </span>
     </a>
   );
 }
@@ -434,24 +538,53 @@ function Header({ settings, hero, routeSlug, activeSectionId, onNavigate }) {
   );
 }
 
+function FloatingNavIconLink({ item, active, onNavigate }) {
+  return (
+    <a
+      href={item.href}
+      onClick={(event) => onNavigate(event, item.href)}
+      aria-label={item.label}
+      aria-current={active ? "page" : undefined}
+      title={item.label}
+      className={`flex h-10 w-10 flex-none items-center justify-center rounded-lg border text-current transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-300 ${
+        active
+          ? "border-cyan-200/70 bg-gradient-to-br from-cyan-300 to-violet-300 text-slate-950 shadow-lg shadow-cyan-400/30"
+          : "border-white/10 bg-white/[0.06] text-slate-300 hover:border-cyan-300/35 hover:bg-white/[0.1] hover:text-cyan-100"
+      }`}
+    >
+      <Icon name={item.icon} className="h-5 w-5" />
+    </a>
+  );
+}
+
 function FloatingSectionNav({ items, activeSectionId, routeSlug, visible, onNavigate }) {
   const activeLabel = getActiveSectionLabel({ routeSlug, activeSectionId });
 
   return (
     <div
-      className={`fixed left-1/2 top-3 z-[60] w-[min(calc(100%-1rem),76rem)] -translate-x-1/2 transition duration-300 ${
+      className={`fixed left-1/2 top-3 z-[60] w-[min(calc(100vw-1rem),76rem)] -translate-x-1/2 transition duration-300 ${
         visible ? "translate-y-0 opacity-100" : "pointer-events-none -translate-y-5 opacity-0"
       }`}
     >
-      <div className="rounded-lg border border-cyan-300/20 bg-slate-950/75 px-3 py-2 shadow-2xl shadow-cyan-500/15 backdrop-blur-2xl ring-1 ring-violet-300/10">
+      <div className="overflow-hidden rounded-lg border border-cyan-300/20 bg-slate-950/75 px-2.5 py-2 shadow-2xl shadow-cyan-500/15 backdrop-blur-2xl ring-1 ring-violet-300/10 sm:px-3">
         <div className="flex min-w-0 flex-col gap-2 lg:flex-row lg:items-center">
-          <div className="inline-flex max-w-full flex-none items-center gap-2 self-start rounded-full border border-cyan-300/25 bg-cyan-300/10 px-3 py-1.5 text-xs font-semibold text-cyan-100">
+          <div className="inline-flex max-w-full flex-none items-center justify-center gap-2 self-center rounded-full border border-cyan-300/25 bg-cyan-300/10 px-3 py-1.5 text-xs font-semibold text-cyan-100 lg:self-start">
             <span className="h-1.5 w-1.5 rounded-full bg-cyan-300 shadow-[0_0_12px_rgba(34,211,238,0.9)]" />
-            <span className="min-w-0 break-words">Aktualnie: {activeLabel}</span>
+            <span className="min-w-0 truncate">Aktualnie: {activeLabel}</span>
+          </div>
+          <div className="grid min-w-0 grid-cols-7 justify-items-center gap-1 sm:hidden">
+            {items.map((item) => (
+              <FloatingNavIconLink
+                key={`${item.label}-${item.href}`}
+                item={item}
+                active={isNavItemActive(item, { routeSlug, activeSectionId })}
+                onNavigate={onNavigate}
+              />
+            ))}
           </div>
           <nav
             aria-label="Pływająca nawigacja sekcji"
-            className="flex min-w-0 gap-1 overflow-x-auto pb-1 text-sm [scrollbar-width:none] lg:flex-wrap lg:justify-end lg:pb-0"
+            className="hidden min-w-0 gap-1 overflow-x-auto pb-1 text-sm [scrollbar-width:none] sm:flex lg:flex-wrap lg:justify-end lg:pb-0"
           >
             {items.map((item) => (
               <NavLink
@@ -615,7 +748,7 @@ function NetworkMonitorLogo() {
 function Hero({ hero, onNavigate }) {
   return (
     <section
-      id="hero"
+      id="start"
       className="relative overflow-x-hidden px-6 pb-16 pt-12 md:min-h-[calc(100vh-80px)] md:px-10 md:pb-20 md:pt-16 md:flex md:items-center scroll-mt-24"
     >
       <div className="pointer-events-none absolute left-4 top-6 z-0 md:left-12 md:top-10">
@@ -773,6 +906,91 @@ function FeatureCardsSection({ section, id, cardCountClass = "md:grid-cols-3" })
               </article>
             ))}
           </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function AreasSection({ services, automationQa, gamedevTeaser }) {
+  const areas = [
+    {
+      icon: "monitor",
+      eyebrow: "Główna oferta",
+      title: "Strony i CMS",
+      text: "Strony internetowe, wizytówki online i lekki panel do edycji najważniejszych treści.",
+      href: "#/strony-cms",
+      cta: "Zobacz ofertę CMS",
+      tone: "from-cyan-400/20 to-blue-500/15",
+      points: services.items.slice(0, 3).map((item) => item.title),
+    },
+    {
+      icon: "shield-check",
+      eyebrow: "Dodatkowa kompetencja",
+      title: "QA i automatyzacja",
+      text: automationQa.text,
+      href: "#/qa-automatyzacja",
+      cta: "Zobacz QA",
+      tone: "from-blue-400/20 to-indigo-500/15",
+      points: ["ISTQB", "testy stron", "raportowanie błędów"],
+    },
+    {
+      icon: "gamepad",
+      eyebrow: "Projekty interaktywne",
+      title: "GameDev",
+      text: gamedevTeaser.text,
+      href: "#/gamedev",
+      cta: "Zobacz GameDev",
+      tone: "from-violet-400/20 to-fuchsia-500/15",
+      points: ["prototypy", "logika", "interakcje"],
+    },
+  ];
+
+  return (
+    <section
+      id="areas"
+      className="relative overflow-hidden px-4 py-20 sm:px-6 md:px-10 lg:py-24 scroll-mt-24"
+    >
+      <SectionDecor variant="parallel" position="right" className="top-24 opacity-30" />
+      <div className="relative z-10 mx-auto max-w-7xl">
+        <SectionTitle
+          eyebrow="Obszary pracy"
+          title="Główna oferta jest webowa, a dodatkowe kompetencje rozwijają temat"
+          text="Na stronie głównej pokazuję krótko trzy obszary. Szczegóły QA i GameDev są na osobnych podstronach, żeby nie mieszać głównego przekazu."
+        />
+        <div className="grid gap-5 lg:grid-cols-3">
+          {areas.map((area) => (
+            <article
+              key={area.title}
+              className={`group min-w-0 rounded-lg border border-white/10 bg-gradient-to-br ${area.tone} p-6 backdrop-blur transition hover:-translate-y-1 hover:border-cyan-300/35 hover:shadow-2xl hover:shadow-cyan-500/10`}
+            >
+              <div className="mb-5 flex h-12 w-12 items-center justify-center rounded-lg border border-white/10 bg-slate-950/55 text-cyan-200">
+                <Icon name={area.icon} className="h-5 w-5" />
+              </div>
+              <p className="text-xs font-semibold uppercase tracking-[0.22em] text-cyan-200">
+                {area.eyebrow}
+              </p>
+              <h3 className="mt-3 text-2xl font-black text-white">{area.title}</h3>
+              <p className="mt-3 min-w-0 break-words leading-7 text-slate-300">{area.text}</p>
+              <div className="mt-5 flex flex-wrap gap-2">
+                {area.points.map((point) => (
+                  <span
+                    key={`${area.title}-${point}`}
+                    className="rounded-full bg-slate-950/45 px-3 py-1 text-xs font-semibold text-cyan-100 ring-1 ring-white/10"
+                  >
+                    {point}
+                  </span>
+                ))}
+              </div>
+              <a
+                href={area.href}
+                className="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-cyan-200 hover:text-cyan-100"
+              >
+                {area.cta}
+                <Icon name="arrow-right" className="h-4 w-4" />
+              </a>
+            </article>
+          ))}
         </div>
       </div>
     </section>
@@ -1200,11 +1418,11 @@ function PageHero({ page, onNavigate }) {
   );
 }
 
-function PageSectionList({ section, onNavigate }) {
+function PageSectionList({ sectionKey, section, onNavigate }) {
   const isCta = Boolean(section.ctaLabel);
 
   return (
-    <section className="px-4 py-10 sm:px-6 md:px-10">
+    <section id={sectionKey} className="px-4 py-10 scroll-mt-28 sm:px-6 md:px-10">
       <div
         className={`mx-auto max-w-6xl rounded-lg border border-white/10 p-6 backdrop-blur md:p-8 ${
           isCta ? "bg-cyan-400/10" : "bg-white/[0.045]"
@@ -1255,7 +1473,7 @@ function ServiceDetailPage({ page, contact, onNavigate }) {
     <>
       <PageHero page={page} onNavigate={onNavigate} />
       {Object.entries(page.sections).map(([key, section]) => (
-        <PageSectionList key={key} section={section} onNavigate={onNavigate} />
+        <PageSectionList key={key} sectionKey={key} section={section} onNavigate={onNavigate} />
       ))}
       <ContactSection contact={contact} />
     </>
@@ -1294,57 +1512,41 @@ export default function LandingPage({ routeHash = "" }) {
   }, [routeSlug]);
 
   useEffect(() => {
-    const updateFloatingNav = () => {
-      const showNav = window.scrollY > 160;
-      setIsFloatingNavVisible(showNav);
-      if (!showNav && !activePage) setActiveSectionId("start");
+    let frame = 0;
+
+    const updateNavigationState = () => {
+      frame = 0;
+      setIsFloatingNavVisible(window.scrollY > 160);
+      if (!activePage) setActiveSectionId(getActiveHomeSectionId());
     };
 
-    updateFloatingNav();
-    window.addEventListener("scroll", updateFloatingNav, { passive: true });
+    const scheduleUpdate = () => {
+      if (frame) return;
+      frame = window.requestAnimationFrame(updateNavigationState);
+    };
 
-    return () => window.removeEventListener("scroll", updateFloatingNav);
-  }, [activePage]);
+    scheduleUpdate();
+    window.addEventListener("scroll", scheduleUpdate, { passive: true });
+    window.addEventListener("resize", scheduleUpdate);
 
-  useEffect(() => {
-    if (activePage || typeof IntersectionObserver === "undefined") return undefined;
-
-    const sectionIds = new Set([
-      ...content.settings.navItems.map((item) => getSectionIdFromHref(item.href)).filter(Boolean),
-      ...Object.values(routeSectionMatches),
-      ...Object.keys(sectionLabelsById).filter((sectionId) => sectionId !== "start"),
-    ]);
-    const sections = Array.from(sectionIds)
-      .map((sectionId) => document.getElementById(sectionId))
-      .filter(Boolean);
-
-    if (!sections.length) return undefined;
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        const visibleEntry = entries
-          .filter((entry) => entry.isIntersecting)
-          .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
-
-        if (visibleEntry?.target?.id) {
-          setActiveSectionId(normalizeSectionId(visibleEntry.target.id));
-        }
-      },
-      {
-        rootMargin: "-32% 0px -52% 0px",
-        threshold: [0.05, 0.2, 0.45],
-      },
-    );
-
-    sections.forEach((section) => observer.observe(section));
-
-    return () => observer.disconnect();
-  }, [activePage, content.settings.navItems]);
+    return () => {
+      if (frame) window.cancelAnimationFrame(frame);
+      window.removeEventListener("scroll", scheduleUpdate);
+      window.removeEventListener("resize", scheduleUpdate);
+    };
+  }, [activePage, routeSlug]);
 
   useEffect(() => {
     if (activePage) {
-      window.scrollTo({ top: 0 });
-      return undefined;
+      const frame = window.requestAnimationFrame(() => {
+        if (routeSlug === "tester-istqb") {
+          document.getElementById("istqbCertificate")?.scrollIntoView({ block: "start" });
+          return;
+        }
+        window.scrollTo({ top: 0 });
+      });
+
+      return () => window.cancelAnimationFrame(frame);
     }
 
     if (isHomeRoute(routeSlug)) return undefined;
@@ -1440,7 +1642,7 @@ export default function LandingPage({ routeHash = "" }) {
         onNavigate={handleNavigate}
       />
       <FloatingSectionNav
-        items={content.settings.navItems}
+        items={floatingNavItems}
         activeSectionId={activeSectionId}
         routeSlug={routeSlug}
         visible={isFloatingNavVisible}
@@ -1471,52 +1673,13 @@ export default function LandingPage({ routeHash = "" }) {
               }
             >
               <ServicesSection services={content.services} />
-              <BenefitsSection benefits={content.benefits} />
-              <ProcessSection process={content.process} />
-              <PackagesSection packages={content.packages} />
             </CompetencyArea>
 
-            <CompetencyArea
-              id="qa-automation"
-              number="02"
-              eyebrow="QA, testowanie, automatyzacja"
-              title="Testowanie stron, raportowanie błędów i automatyzacja"
-              text="Osobny obszar kompetencji testerskich: certyfikat ISTQB, scenariusze użytkownika, smoke testy po wdrożeniu i porządkowanie powtarzalnych kontroli."
-              tone="blue"
-              decor={
-                <>
-                  <SectionDecor variant="vertical" position="left" className="top-24 opacity-40" />
-                  <SectionDecor
-                    variant="longDrop"
-                    position="right"
-                    className="top-[58%] opacity-35"
-                  />
-                </>
-              }
-            >
-              <FeatureCardsSection section={content.automationQa} id="automatyzacja" />
-            </CompetencyArea>
-
-            <CompetencyArea
-              id="gamedev-area"
-              number="03"
-              eyebrow="GameDev i interakcje"
-              title="GameDev i projekty interaktywne"
-              text="Trzeci obszar pokazuje techniczno-kreatywne myślenie: prototypy, logikę rozgrywki, interakcję użytkownika i testowanie zachowań."
-              tone="violet"
-              decor={
-                <>
-                  <SectionDecor variant="branch" position="right" className="top-20 opacity-40" />
-                  <SectionDecor variant="mini" position="left" className="top-[60%] opacity-35" />
-                </>
-              }
-            >
-              <FeatureCardsSection
-                section={content.gamedevTeaser}
-                id="gamedev"
-                cardCountClass="md:grid-cols-3"
-              />
-            </CompetencyArea>
+            <AreasSection
+              services={content.services}
+              automationQa={content.automationQa}
+              gamedevTeaser={content.gamedevTeaser}
+            />
 
             <section id="projects" className="relative overflow-hidden scroll-mt-28">
               <SectionDecor variant="parallel" position="left" className="top-20 opacity-30" />
@@ -1532,11 +1695,11 @@ export default function LandingPage({ routeHash = "" }) {
         <div className="mx-auto flex max-w-7xl flex-col items-center gap-4 md:flex-row md:justify-between">
           <span>{content.settings.footerText}</span>
           <nav className="flex flex-wrap justify-center gap-4 text-slate-400">
-            <a href="#/automatyzacja-testowanie" className="hover:text-cyan-300">
-              Automatyzacja
+            <a href="#/strony-cms" className="hover:text-cyan-300">
+              Strony i CMS
             </a>
-            <a href="#/tester-istqb" className="hover:text-cyan-300">
-              Tester ISTQB
+            <a href="#/qa-automatyzacja" className="hover:text-cyan-300">
+              QA
             </a>
             <a href="#/gamedev" className="hover:text-cyan-300">
               GameDev
