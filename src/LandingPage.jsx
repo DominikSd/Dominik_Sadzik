@@ -480,7 +480,7 @@ function FloatingNavIconLink({ item, active, onNavigate }) {
       aria-label={item.label}
       aria-current={active ? "page" : undefined}
       title={item.label}
-      className={`flex h-9 w-9 flex-none items-center justify-center rounded-lg border text-current transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-300 ${
+      className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border text-current transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-300 ${
         active
           ? "border-cyan-200/70 bg-gradient-to-br from-cyan-300 to-violet-300 text-slate-950 shadow-lg shadow-cyan-400/30"
           : "border-white/10 bg-white/[0.06] text-slate-300 hover:border-cyan-300/35 hover:bg-white/[0.1] hover:text-cyan-100"
@@ -506,7 +506,7 @@ function FloatingSectionNav({ items, activeSectionId, routeSlug, visible, onNavi
             <span className="h-1.5 w-1.5 rounded-full bg-cyan-300 shadow-[0_0_12px_rgba(34,211,238,0.9)]" />
             <span className="min-w-0 truncate">Aktualnie: {activeLabel}</span>
           </div>
-          <div className="grid min-w-0 grid-cols-7 justify-items-center gap-1 sm:hidden">
+          <div className="flex w-full max-w-full min-w-0 items-center justify-start gap-2 overflow-x-auto px-1 pb-1 [scrollbar-width:none] min-[390px]:justify-center sm:hidden [&::-webkit-scrollbar]:hidden">
             {items.map((item) => (
               <FloatingNavIconLink
                 key={`${item.label}-${item.href}`}
