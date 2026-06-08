@@ -2,6 +2,8 @@ import React from "react";
 import { render, screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { beforeEach, describe, expect, it, vi } from "vitest";
+import { defaultSiteContent } from "./content/defaultSiteContent";
+import { DRAFT_PREVIEW_STORAGE_KEY } from "./lib/draftPreview";
 import LandingPage from "./LandingPage";
 
 vi.mock("./lib/contentApi", () => ({
@@ -16,12 +18,35 @@ vi.mock("./lib/analytics/ga4", () => ({
 describe("LandingPage navigation", () => {
   beforeEach(() => {
     window.history.replaceState(null, "", "/Dominik_Sadzik/");
+    window.localStorage.clear();
     window.scrollTo = vi.fn();
     window.IntersectionObserver = vi.fn(() => ({
       observe: vi.fn(),
       disconnect: vi.fn(),
       unobserve: vi.fn(),
     }));
+  });
+
+  it("renders local draft preview content from ?preview=draft", () => {
+    window.history.replaceState(null, "", "/Dominik_Sadzik/?preview=draft#/");
+    window.localStorage.setItem(
+      DRAFT_PREVIEW_STORAGE_KEY,
+      JSON.stringify({
+        savedAt: new Date().toISOString(),
+        content: {
+          ...defaultSiteContent,
+          hero: {
+            ...defaultSiteContent.hero,
+            title: "Draft preview title",
+          },
+        },
+      }),
+    );
+
+    render(<LandingPage routeHash="#/" />);
+
+    expect(screen.getByText("Draft preview title")).toBeTruthy();
+    expect(screen.getByText(/Podgląd draftu CMS/)).toBeTruthy();
   });
 
   it("renders consistent main navigation categories without a separate ISTQB link", () => {

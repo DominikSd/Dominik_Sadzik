@@ -4,6 +4,7 @@ import AnimatedCircuit from "./components/AnimatedCircuit";
 import { defaultSiteContent } from "./content/defaultSiteContent";
 import { trackContactClick, trackCtaClick } from "./lib/analytics/ga4";
 import { loadPublishedSiteContent } from "./lib/contentApi";
+import { isDraftPreviewRequest, loadDraftPreviewContent } from "./lib/draftPreview";
 
 const fadeUp = {
   hidden: { opacity: 1, y: 0 },
@@ -1431,13 +1432,27 @@ function ServiceDetailPage({ page, contact, onNavigate }) {
 }
 
 export default function LandingPage({ routeHash = "" }) {
-  const [content, setContent] = useState(defaultSiteContent);
+  const draftPreview = useMemo(() => {
+    if (typeof window === "undefined" || !isDraftPreviewRequest(window.location.search)) {
+      return null;
+    }
+
+    return loadDraftPreviewContent();
+  }, []);
+  const [content, setContent] = useState(() => draftPreview?.content || defaultSiteContent);
   const [cmsWarning, setCmsWarning] = useState("");
   const [activeSectionId, setActiveSectionId] = useState("start");
   const [isFloatingNavVisible, setIsFloatingNavVisible] = useState(false);
   const selfTestErrors = useMemo(() => runContentSelfTests(content), [content]);
 
   useEffect(() => {
+    if (draftPreview?.content) {
+      setCmsWarning(
+        "Podgląd draftu CMS. Ta wersja jest widoczna tylko lokalnie w tej przeglądarce.",
+      );
+      return undefined;
+    }
+
     let cancelled = false;
     loadPublishedSiteContent().then((result) => {
       if (cancelled) return;
@@ -1451,7 +1466,7 @@ export default function LandingPage({ routeHash = "" }) {
     return () => {
       cancelled = true;
     };
-  }, []);
+  }, [draftPreview]);
 
   const routeSlug = getRouteSlug(routeHash);
   const pageKey = detailPageRoutes[routeSlug];

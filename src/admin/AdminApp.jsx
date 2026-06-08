@@ -10,7 +10,6 @@ import {
   saveContentDraft,
 } from "../lib/contentApi";
 import {
-  adminHashPath,
   isSupabaseConfigured,
   missingPublicEnvVars,
   siteId,
@@ -28,6 +27,7 @@ import ServicesSectionForm from "./sections/ServicesSectionForm";
 import SettingsSectionForm from "./sections/SettingsSectionForm";
 import LoginPanel from "./auth/LoginPanel.jsx";
 import ErrorBoundary from "../components/ErrorBoundary.jsx";
+import { saveDraftPreviewContent } from "../lib/draftPreview.js";
 
 const sections = [
   { key: "hero", label: "Hero", Form: HeroSectionForm },
@@ -195,6 +195,33 @@ export default function AdminApp() {
     }
   }
 
+  function openDraftPreview() {
+    setStatus("");
+    setError("");
+
+    try {
+      saveDraftPreviewContent(savedContent);
+      const basePath = import.meta.env.BASE_URL || "/";
+      const normalizedBasePath = basePath.endsWith("/") ? basePath : `${basePath}/`;
+      const previewUrl = `${window.location.origin}${normalizedBasePath}?preview=draft#/`;
+      const previewWindow = window.open(previewUrl, "_blank", "noopener,noreferrer");
+
+      if (!previewWindow) {
+        setError("Przeglądarka zablokowała nowe okno. Zezwól na popupy i spróbuj ponownie.");
+        return;
+      }
+
+      setStatus(
+        hasAnyUnsavedChanges
+          ? "Podgląd otwarty. Pokazuje ostatnio zapisany draft; niezapisane zmiany nie są jeszcze uwzględnione."
+          : "Podgląd otwarty w nowej karcie. Pokazuje ostatnio zapisany draft, bez publikowania zmian.",
+      );
+    } catch (previewError) {
+      console.error("Draft preview failed.", previewError);
+      setError(previewError.message || "Nie udało się przygotować podglądu draftu.");
+    }
+  }
+
   if (!isSupabaseConfigured) {
     return (
       <div className="grid min-h-screen place-items-center bg-[#050816] px-6 text-white">
@@ -266,12 +293,13 @@ export default function AdminApp() {
               </p>
             </div>
             <div className="flex flex-wrap gap-2">
-              <a
-                href={`#/${adminHashPath}`}
+              <button
+                type="button"
+                onClick={openDraftPreview}
                 className="inline-flex items-center gap-2 rounded-lg border border-white/10 px-3 py-2 text-sm text-slate-200 hover:bg-white/10"
               >
-                <Eye className="h-4 w-4" /> Panel
-              </a>
+                <Eye className="h-4 w-4" /> Podgląd
+              </button>
               <button
                 onClick={refresh}
                 className="inline-flex items-center gap-2 rounded-lg border border-white/10 px-3 py-2 text-sm text-slate-200 hover:bg-white/10"

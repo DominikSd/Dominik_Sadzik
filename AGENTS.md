@@ -168,6 +168,33 @@ npm run build
 
 Jeżeli `npm run build` zatrzyma się na `EPERM`/`esbuild` w sandboxie, napisz to jasno i spróbuj ponownie normalnie. Nie ukrywaj błędów.
 
+## Uruchamianie komend w WSL
+
+Ten projekt używa `npm` (`package-lock.json`). Jeżeli agent działa już w Linuksie/WSL i ścieżka
+repo wygląda jak `/home/.../Dominik_Sadzik`, uruchamiaj komendy normalnie:
+
+```bash
+npm run format:check
+npm test
+npm run build
+```
+
+Jeżeli natomiast agent działa z Windows PowerShell na repo otwartym przez UNC, np.
+`\\wsl.localhost\<distro>\home\...\Dominik_Sadzik`, nie uruchamiaj `npm` bezpośrednio na ścieżce
+UNC. Wejdź do WSL przez interaktywny bash, żeby załadować `nvm`/`fnm` i poprawny `PATH`:
+
+```bash
+wsl -d <distro> bash -ic "cd /home/.../Dominik_Sadzik && npm test"
+```
+
+Zasada:
+
+- `/home/...` w shellu Linuksa/WSL → zwykłe `npm ...`.
+- `\\wsl.localhost\...` z PowerShella → `wsl -d <distro> bash -ic "cd <linux-path> && npm ..."`.
+- Nie mieszaj Windowsowej ścieżki UNC z poleceniami Node uruchamianymi bezpośrednio w PowerShellu.
+- `npm run test:e2e` wymaga osobnego, poprawnego zestawu testów Playwright; nie traktuj go jako
+  zamiennika dla `npm test`, dopóki e2e nie jest skonfigurowane.
+
 ## Diagnostyka blank screen
 
 Jeśli strona lub panel pokazuje tylko gradient/tło:
