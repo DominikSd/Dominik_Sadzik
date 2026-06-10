@@ -176,7 +176,7 @@ export const defaultSiteContent = {
         status: "projekt koncepcyjny",
         category: "Grafika / wizytówki",
         tags: ["branding", "wizytówki", "grafika", "druk"],
-        screenshotUrl: "portfolio/naturopathy-card.svg?v=2",
+        screenshotUrl: "portfolio/naturopathy-card.png?v=2",
         mockupTone: "emerald",
       },
       {
