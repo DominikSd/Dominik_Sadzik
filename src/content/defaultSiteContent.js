@@ -471,6 +471,35 @@ export const defaultSiteContent = {
             "interaktywny prototyp",
             "system punktów i zbierania obiektów",
           ],
+          mediaItems: [
+            {
+              title: "Prototyp 3D z punktami",
+              description:
+                "Krótki podgląd mechaniki zbierania obiektów, licznika punktów i prostego HUD-u w scenie 3D.",
+              src: "portfolio/gamedev-stones-screen.webp",
+              demoSrc: "portfolio/gamedev-stones-demo.gif",
+              alt: "Screen prototypu 3D ze zbieraniem obiektów i licznikiem punktów.",
+              tags: ["3D", "HUD", "punkty"],
+            },
+            {
+              title: "Model i animacja postaci",
+              description:
+                "Pionowy podgląd prostego modelu postaci pokazujący eksperyment z formą, ruchem i prezentacją obiektu.",
+              src: "portfolio/gamedev-pizza-character-screen.webp",
+              demoSrc: "portfolio/gamedev-pizza-character.gif",
+              alt: "Screen modelu postaci w kształcie kawałka pizzy.",
+              tags: ["model", "animacja", "prototyp"],
+            },
+            {
+              title: "Interakcja z otoczeniem",
+              description:
+                "Demo reakcji świata gry na działanie gracza: ruch, fizyka obiektów i czytelny efekt interakcji.",
+              src: "portfolio/gamedev-arena-screen.webp",
+              demoSrc: "portfolio/gamedev-destruction-demo.gif",
+              alt: "Screen interakcji z obiektami w środowisku 3D.",
+              tags: ["fizyka", "interakcja", "3D"],
+            },
+          ],
         },
         finalCta: {
           title: "Masz pomysł na interaktywny projekt?",

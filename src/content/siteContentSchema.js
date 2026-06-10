@@ -43,6 +43,21 @@ const editableListSectionSchema = z.object({
   title: z.string().trim().min(1).max(140),
   description: z.string().trim().max(520).default(""),
   items: z.array(z.string().trim().min(1).max(160)).min(1).max(10),
+  mediaItems: z
+    .array(
+      z.object({
+        title: z.string().trim().min(1).max(100),
+        description: z.string().trim().max(260).default(""),
+        src: z.string().trim().min(1).max(300),
+        demoSrc: z.string().trim().max(300).optional().default(""),
+        demoLabel: z.string().trim().max(80).optional().default("Zobacz animację"),
+        alt: z.string().trim().min(1).max(180),
+        tags: z.array(z.string().trim().min(1).max(40)).max(6).optional().default([]),
+      }),
+    )
+    .max(6)
+    .optional()
+    .default([]),
 });
 
 const finalCtaSectionSchema = z.object({

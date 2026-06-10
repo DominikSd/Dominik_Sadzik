@@ -110,6 +110,28 @@ describe("LandingPage navigation", () => {
     expect(screen.queryByText(/Najpierw pokazuję główną ofertę webową/)).toBeNull();
   });
 
+  it("uses full area cards as links to the detail pages", () => {
+    render(<LandingPage routeHash="#/" />);
+
+    const areasSection = document.getElementById("areas");
+
+    expect(
+      within(areasSection).getByRole("link", {
+        name: "Zobacz ofertę CMS: Strony i CMS",
+      }).href,
+    ).toContain("#/strony-cms");
+    expect(
+      within(areasSection).getByRole("link", {
+        name: "Zobacz QA: QA i automatyzacja",
+      }).href,
+    ).toContain("#/qa-automatyzacja");
+    expect(
+      within(areasSection).getByRole("link", {
+        name: "Zobacz GameDev: GameDev",
+      }).href,
+    ).toContain("#/gamedev");
+  });
+
   it("renders the floating section nav with the readable active section label", () => {
     render(<LandingPage routeHash="#/" />);
 
@@ -211,5 +233,31 @@ describe("LandingPage navigation", () => {
         .getAttribute("aria-current"),
     ).toBe("page");
     expect(screen.getByText("Aktualnie: GameDev")).toBeTruthy();
+  });
+
+  it("renders local GameDev screenshots with optional GIF previews and no YouTube embeds", () => {
+    render(<LandingPage routeHash="#/gamedev" />);
+
+    expect(
+      screen
+        .getByRole("img", {
+          name: "Screen prototypu 3D ze zbieraniem obiektów i licznikiem punktów.",
+        })
+        .getAttribute("src"),
+    ).toBe("portfolio/gamedev-stones-screen.webp");
+    expect(
+      screen
+        .getByRole("img", {
+          name: "Screen modelu postaci w kształcie kawałka pizzy.",
+        })
+        .getAttribute("src"),
+    ).toBe("portfolio/gamedev-pizza-character-screen.webp");
+    const animationLinks = screen.getAllByRole("link", { name: /Zobacz animację/ });
+
+    expect(animationLinks).toHaveLength(3);
+    expect(animationLinks[0].getAttribute("href")).toBe("portfolio/gamedev-stones-demo.gif");
+    expect(
+      screen.queryByTitle(/youtube/i) || document.querySelector("iframe[src*='youtube']"),
+    ).toBeNull();
   });
 });

@@ -895,9 +895,11 @@ function AreasSection({ services, automationQa, gamedevTeaser }) {
         />
         <div className="grid gap-5 lg:grid-cols-3">
           {areas.map((area) => (
-            <article
+            <a
               key={area.title}
-              className={`group min-w-0 rounded-lg border border-white/10 bg-gradient-to-br ${area.tone} p-6 text-center backdrop-blur transition hover:-translate-y-1 hover:border-cyan-300/35 hover:shadow-2xl hover:shadow-cyan-500/10 sm:text-left`}
+              href={area.href}
+              aria-label={`${area.cta}: ${area.title}`}
+              className={`group block min-w-0 rounded-lg border border-white/10 bg-gradient-to-br ${area.tone} p-6 text-center backdrop-blur transition hover:-translate-y-1 hover:border-cyan-300/35 hover:shadow-2xl hover:shadow-cyan-500/10 focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300/70 sm:text-left`}
             >
               <div className="mx-auto mb-5 flex h-12 w-12 items-center justify-center rounded-lg border border-white/10 bg-slate-950/55 text-cyan-200 sm:mx-0">
                 <Icon name={area.icon} className="h-5 w-5" />
@@ -917,14 +919,11 @@ function AreasSection({ services, automationQa, gamedevTeaser }) {
                   </span>
                 ))}
               </div>
-              <a
-                href={area.href}
-                className="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-cyan-200 hover:text-cyan-100"
-              >
+              <span className="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-cyan-200 transition group-hover:text-cyan-100">
                 {area.cta}
                 <Icon name="arrow-right" className="h-4 w-4" />
-              </a>
-            </article>
+              </span>
+            </a>
           ))}
         </div>
       </div>
@@ -1377,6 +1376,62 @@ function PageHero({ page, onNavigate }) {
   );
 }
 
+function PageMediaGallery({ mediaItems = [] }) {
+  if (!mediaItems.length) return null;
+
+  return (
+    <div className="mt-8 grid min-w-0 gap-4 md:grid-cols-3">
+      {mediaItems.map((item) => (
+        <article
+          key={item.src}
+          className="min-w-0 overflow-hidden rounded-lg border border-white/10 bg-slate-950/45 text-center"
+        >
+          <div className="flex aspect-[16/10] items-center justify-center overflow-hidden bg-slate-950">
+            <img
+              src={item.src}
+              alt={item.alt}
+              className="h-full w-full object-contain"
+              loading="lazy"
+              decoding="async"
+            />
+          </div>
+          <div className="p-4">
+            <h3 className="break-words text-lg font-bold text-white">{item.title}</h3>
+            {item.description && (
+              <p className="mt-2 break-words text-sm leading-6 text-slate-300">
+                {item.description}
+              </p>
+            )}
+            {item.tags?.length > 0 && (
+              <div className="mt-4 flex flex-wrap justify-center gap-2">
+                {item.tags.map((tag) => (
+                  <span
+                    key={`${item.src}-${tag}`}
+                    className="rounded-full bg-cyan-300/10 px-3 py-1 text-xs font-semibold text-cyan-100 ring-1 ring-cyan-300/15"
+                  >
+                    {tag}
+                  </span>
+                ))}
+              </div>
+            )}
+            {item.demoSrc && (
+              <a
+                href={item.demoSrc}
+                target="_blank"
+                rel="noreferrer"
+                className="mt-4 inline-flex items-center justify-center gap-2 rounded-full border border-cyan-300/25 bg-cyan-300/10 px-4 py-2 text-sm font-semibold text-cyan-100 transition hover:border-cyan-200/50 hover:bg-cyan-300/15"
+              >
+                {item.demoLabel || "Zobacz animację"}
+                <Icon name="external-link" className="h-4 w-4" />
+              </a>
+            )}
+          </div>
+        </article>
+      ))}
+    </div>
+  );
+}
+
 function PageSectionList({ sectionKey, section, onNavigate }) {
   const isCta = Boolean(section.ctaLabel);
 
@@ -1422,6 +1477,7 @@ function PageSectionList({ sectionKey, section, onNavigate }) {
             </div>
           )}
         </div>
+        <PageMediaGallery mediaItems={section.mediaItems} />
       </div>
     </section>
   );
