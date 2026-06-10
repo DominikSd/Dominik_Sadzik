@@ -1025,16 +1025,19 @@ function getPortfolioStatusLabel(status) {
 
 function PortfolioMockup({ item, fallbackSrc }) {
   const tone = portfolioMockupTones[item.mockupTone] || portfolioMockupTones.cyan;
-  const [src, setSrc] = useState(item.screenshotUrl);
+  const normalizedSrc = item.screenshotUrl?.includes("naturopathy-card.svg")
+    ? item.screenshotUrl.replace("naturopathy-card.svg", "naturopathy-card.png")
+    : item.screenshotUrl;
+  const [src, setSrc] = useState(normalizedSrc);
   const [hasTriedFallback, setHasTriedFallback] = useState(false);
 
   useEffect(() => {
-    setSrc(item.screenshotUrl);
+    setSrc(normalizedSrc);
     setHasTriedFallback(false);
-  }, [item.screenshotUrl]);
+  }, [normalizedSrc]);
 
   const handleError = () => {
-    if (fallbackSrc && !hasTriedFallback && fallbackSrc !== item.screenshotUrl) {
+    if (fallbackSrc && !hasTriedFallback && fallbackSrc !== normalizedSrc) {
       setSrc(fallbackSrc);
       setHasTriedFallback(true);
     }
