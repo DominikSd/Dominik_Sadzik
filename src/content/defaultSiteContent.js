@@ -234,13 +234,13 @@ export const defaultSiteContent = {
       },
       {
         type: "GameDev",
-        title: "Interaktywny prototyp 2D",
+        title: "Interaktywny prototyp 2.5D",
         text: "Projekt własny związany z logiką rozgrywki: sterowanie, kolizje, punkty i proste zachowania obiektów.",
         details:
           "Prototyp pokazuje pracę z interakcją, stanem aplikacji i czytelną reakcją systemu na decyzje użytkownika.",
         status: "prototyp",
         category: "GameDev",
-        tags: ["GameDev", "prototyp", "2D", "interakcje"],
+        tags: ["GameDev", "prototyp", "2.5D", "interakcje"],
         href: "#/gamedev",
         linkLabel: "Zobacz GameDev",
         mockupTone: "violet",
@@ -428,7 +428,7 @@ export const defaultSiteContent = {
           "Prototypy gier i interaktywne demo pokazujące pracę z logiką, reakcją na działania użytkownika oraz kreatywnym UI.",
         ogTitle: "GameDev i projekty interaktywne",
         ogDescription:
-          "Prototypy 2D, mechaniki i interaktywne demo pokazujące pracę z logiką oraz reakcją na działania użytkownika.",
+          "Prototypy 2.5D, mechaniki i interaktywne demo pokazujące pracę z logiką oraz reakcją na działania użytkownika.",
       },
       hero: {
         eyebrow: "GameDev",
@@ -445,7 +445,7 @@ export const defaultSiteContent = {
           description:
             "Najlepiej sprawdzają się małe, konkretne demo, w których od razu widać pomysł, zasady działania i reakcję na decyzje użytkownika.",
           items: [
-            "prototypy 2D",
+            "prototypy 2.5D",
             "proste mechaniki",
             "sterowanie postacią",
             "kolizje",
@@ -512,7 +512,7 @@ export const defaultSiteContent = {
               src: "portfolio/gamedev-conveyor-screen.webp",
               demoSrc: "portfolio/gamedev-conveyor-demo.gif",
               alt: "Screen poziomu 3D z platformami i przeszkodami.",
-              tags: ["level design", "platformy", "prototyp"],
+              tags: ["projekt poziomu", "platformy", "prototyp"],
             },
             {
               title: "Test przeszkód",

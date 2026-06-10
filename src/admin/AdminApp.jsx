@@ -101,7 +101,7 @@ export default function AdminApp() {
       }
     } catch (refreshError) {
       console.error("Admin CMS refresh failed.", refreshError);
-      setError(refreshError.message || "Nie udalo sie pobrac danych CMS.");
+      setError(refreshError.message || "Nie udało się pobrać danych CMS.");
     } finally {
       setLoading(false);
     }
@@ -163,10 +163,10 @@ export default function AdminApp() {
       validateSectionData(activeKey, content[activeKey]);
       await saveContentDraft(activeKey, content[activeKey]);
       setSavedContent((current) => ({ ...current, [activeKey]: content[activeKey] }));
-      setStatus("Draft zapisany. Zmiana nie jest jeszcze publiczna, dopoki jej nie opublikujesz.");
+      setStatus("Draft zapisany. Zmiana nie jest jeszcze publiczna, dopóki jej nie opublikujesz.");
     } catch (saveError) {
       console.error("Save draft failed.", saveError);
-      setError(saveError.message || "Nie udalo sie zapisac draftu.");
+      setError(saveError.message || "Nie udało się zapisać draftu.");
     }
   }
 
@@ -186,12 +186,12 @@ export default function AdminApp() {
       }
       await publishContentEntry(activeKey);
       setStatus(
-        "Sekcja opublikowana. Draft zostal jako robocza kopia ostatnio opublikowanej wersji.",
+        "Sekcja opublikowana. Draft został jako robocza kopia ostatnio opublikowanej wersji.",
       );
       await refresh();
     } catch (publishError) {
       console.error("Publish failed.", publishError);
-      setError(publishError.message || "Nie udalo sie opublikowac sekcji.");
+      setError(publishError.message || "Nie udało się opublikować sekcji.");
     }
   }
 
@@ -230,7 +230,7 @@ export default function AdminApp() {
           <h1 className="text-2xl font-black">CMS nie jest skonfigurowany</h1>
           <p className="mt-3 leading-7 text-amber-50/85">{getCmsConfigurationHelpText()}</p>
           <div className="mt-4 rounded-lg border border-amber-200/20 bg-slate-950/40 p-4">
-            <p className="text-sm font-bold text-amber-100">Brakujace zmienne:</p>
+            <p className="text-sm font-bold text-amber-100">Brakujące zmienne:</p>
             <ul className="mt-2 list-inside list-disc font-mono text-sm text-amber-50/90">
               {missingPublicEnvVars.map((name) => (
                 <li key={name}>{name}</li>

@@ -171,6 +171,7 @@ export const sectionSchemas = {
               "projekt demo",
               "koncepcja",
               "prototyp",
+              "projekt własny",
               "projekt wlasny",
               "projekt koncepcyjny",
             ])

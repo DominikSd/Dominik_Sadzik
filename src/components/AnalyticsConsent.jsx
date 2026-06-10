@@ -34,8 +34,8 @@ export default function AnalyticsConsent() {
     <div className="fixed bottom-4 left-4 right-4 z-[60] mx-auto max-w-3xl rounded-lg border border-white/10 bg-slate-950/95 p-4 text-white shadow-2xl shadow-blue-500/20 backdrop-blur md:left-auto md:right-6 md:max-w-md">
       <p className="text-sm font-bold">Analityka strony</p>
       <p className="mt-2 text-sm leading-6 text-slate-300">
-        Uzywamy Google Analytics 4, zeby sprawdzac ogolne statystyki odwiedzin i klikniec. Mozesz
-        zaakceptowac albo odrzucic analityke.
+        Używamy Google Analytics 4, żeby sprawdzać ogólne statystyki odwiedzin i kliknięć. Możesz
+        zaakceptować albo odrzucić analitykę.
       </p>
       <div className="mt-4 flex flex-col gap-2 sm:flex-row">
         <button
@@ -43,7 +43,7 @@ export default function AnalyticsConsent() {
           onClick={accept}
           className="rounded-lg bg-cyan-400 px-4 py-2 text-sm font-black text-slate-950 hover:bg-cyan-300"
         >
-          Akceptuje
+          Akceptuję
         </button>
         <button
           type="button"

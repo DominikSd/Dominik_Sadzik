@@ -1018,6 +1018,11 @@ const portfolioMockupTones = {
   },
 };
 
+function getPortfolioStatusLabel(status) {
+  if (status === "projekt wlasny") return "projekt własny";
+  return status || "projekt koncepcyjny";
+}
+
 function PortfolioMockup({ item }) {
   const tone = portfolioMockupTones[item.mockupTone] || portfolioMockupTones.cyan;
 
@@ -1114,7 +1119,7 @@ function PortfolioSection({ portfolio }) {
                         : "border border-violet-300/25 bg-violet-400/10 text-violet-100"
                     }`}
                   >
-                    {item.status || "projekt koncepcyjny"}
+                    {getPortfolioStatusLabel(item.status)}
                   </span>
                 </div>
                 <h3 className="min-w-0 whitespace-pre-line break-words text-xl font-bold text-white">

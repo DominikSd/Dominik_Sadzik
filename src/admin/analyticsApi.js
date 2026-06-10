@@ -201,7 +201,7 @@ function getInvokeName(error) {
 }
 
 function classifyFunctionInvokeError(error) {
-  const message = error?.message || "Nie udalo sie pobrac statystyk GA4.";
+  const message = error?.message || "Nie udało się pobrać statystyk GA4.";
   const status = getInvokeStatus(error);
   const name = getInvokeName(error);
   const endpoint = getGa4FunctionEndpoint();
@@ -304,7 +304,7 @@ export async function fetchGa4Report({ forceRefresh = false } = {}) {
 
   if (sessionError || !sessionData.session) {
     throw analyticsError("not_authenticated", "Wymagana jest aktywna sesja Supabase.", {
-      checks: ["Zaloguj sie ponownie do panelu CMS."],
+      checks: ["Zaloguj się ponownie do panelu CMS."],
     });
   }
 
@@ -322,7 +322,7 @@ export async function fetchGa4Report({ forceRefresh = false } = {}) {
   if (data?.error) {
     throw analyticsError(
       data.error.code,
-      data.error.message || "Nie udalo sie pobrac statystyk GA4.",
+      data.error.message || "Nie udało się pobrać statystyk GA4.",
       {
         endpoint: getGa4FunctionEndpoint(),
       },

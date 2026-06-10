@@ -6,7 +6,7 @@ const statusOptions = [
   "projekt demo",
   "koncepcja",
   "prototyp",
-  "projekt wlasny",
+  "projekt własny",
   "projekt koncepcyjny",
 ];
 

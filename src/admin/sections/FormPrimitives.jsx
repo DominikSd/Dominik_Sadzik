@@ -72,21 +72,21 @@ export function ListEditor({
               onClick={() => move(index, -1)}
               className="rounded-lg border border-white/10 px-3 py-2 text-xs text-slate-200 hover:bg-white/10"
             >
-              W gore
+              W górę
             </button>
             <button
               type="button"
               onClick={() => move(index, 1)}
               className="rounded-lg border border-white/10 px-3 py-2 text-xs text-slate-200 hover:bg-white/10"
             >
-              W dol
+              W dół
             </button>
             <button
               type="button"
               onClick={() => onChange(items.filter((_, itemIndex) => itemIndex !== index))}
               className="rounded-lg border border-red-400/30 px-3 py-2 text-xs text-red-200 hover:bg-red-500/10"
             >
-              Usun
+              Usuń
             </button>
           </div>
         </div>
@@ -101,7 +101,7 @@ export function ListEditor({
       </button>
       {Number.isFinite(maxItems) && (
         <p className="text-xs text-slate-500">
-          Limit elementow: {items.length}/{maxItems}
+          Limit elementów: {items.length}/{maxItems}
         </p>
       )}
     </div>
