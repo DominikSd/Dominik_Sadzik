@@ -1048,7 +1048,7 @@ function PortfolioMockup({ item, fallbackSrc }) {
       <img
         src={src}
         alt={`Podgląd projektu: ${item.title}`}
-        className="h-full w-full object-contain object-center"
+        className="m-auto block h-[90%] w-[90%] object-contain object-center"
         loading="lazy"
         onError={handleError}
       />
