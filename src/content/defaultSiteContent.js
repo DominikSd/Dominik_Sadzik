@@ -54,6 +54,11 @@ export const defaultSiteContent = {
         title: "Lekki CMS",
         text: "Prywatny panel do edycji treści, SEO, FAQ, danych kontaktowych i publikacji zmian bez ruszania kodu.",
       },
+      {
+        icon: "globe",
+        title: "Integracje z narzędziami",
+        text: "Możliwość podpięcia przycisku do rezerwacji terminu, Google Calendar, formularza kontaktowego lub innych narzędzi używanych w firmie.",
+      },
     ],
   },
   automationQa: {
@@ -120,7 +125,7 @@ export const defaultSiteContent = {
       "Responsywny wygląd na telefonie i komputerze",
       "Czytelna oferta bez technicznego chaosu",
       "Pomoc z domeną, hostingiem i publikacją",
-      "Formularz kontaktowy lub szybki kontakt online",
+      "Formularz, kalendarz rezerwacji lub szybki kontakt online",
       "Nowoczesny wygląd dopasowany do branży",
       "Możliwość dalszej rozbudowy",
     ],
@@ -274,6 +279,7 @@ export const defaultSiteContent = {
             "wizytówka online",
             "lekki CMS",
             "panel statystyk GA4",
+            "integracje z kalendarzem, formularzem lub narzędziami do rezerwacji",
           ],
         },
         cmsPanel: {
@@ -499,6 +505,24 @@ export const defaultSiteContent = {
               alt: "Screen interakcji z obiektami w środowisku 3D.",
               tags: ["fizyka", "interakcja", "3D"],
             },
+            {
+              title: "Poziom z platformami",
+              description:
+                "Test fragmentu poziomu z platformami, przeszkodami i czytelnym układem przestrzeni do przejścia.",
+              src: "portfolio/gamedev-conveyor-screen.webp",
+              demoSrc: "portfolio/gamedev-conveyor-demo.gif",
+              alt: "Screen poziomu 3D z platformami i przeszkodami.",
+              tags: ["level design", "platformy", "prototyp"],
+            },
+            {
+              title: "Test przeszkód",
+              description:
+                "Podgląd układu z kolcami i platformami, który pokazuje pracę nad rytmem przejścia i ryzykiem dla gracza.",
+              src: "portfolio/gamedev-spikes-screen.webp",
+              demoSrc: "portfolio/gamedev-spikes-demo.gif",
+              alt: "Screen poziomu 3D z kolcami i platformami.",
+              tags: ["przeszkody", "platformy", "balans"],
+            },
           ],
         },
         finalCta: {
@@ -528,6 +552,7 @@ export const defaultSiteContent = {
           "kilka sekcji",
           "portfolio lub realizacje",
           "formularz kontaktowy",
+          "przycisk rezerwacji terminu lub integracja z kalendarzem",
           "podstawy SEO",
         ],
         highlighted: true,
@@ -562,7 +587,7 @@ export const defaultSiteContent = {
       {
         question: "Czy mogę później rozbudować stronę?",
         answer:
-          "Tak. Stronę można rozwijać etapami: dodać nowe sekcje, podstrony, formularze, portfolio albo prostą automatyzację kontaktu.",
+          "Tak. Stronę można rozwijać etapami: dodać nowe sekcje, podstrony, formularze, portfolio albo integracje z narzędziami, np. przyciskiem do rezerwacji terminu w kalendarzu.",
       },
     ],
   },

@@ -252,9 +252,23 @@ describe("LandingPage navigation", () => {
         })
         .getAttribute("src"),
     ).toBe("portfolio/gamedev-pizza-character-screen.webp");
+    expect(
+      screen
+        .getByRole("img", {
+          name: "Screen poziomu 3D z platformami i przeszkodami.",
+        })
+        .getAttribute("src"),
+    ).toBe("portfolio/gamedev-conveyor-screen.webp");
+    expect(
+      screen
+        .getByRole("img", {
+          name: "Screen poziomu 3D z kolcami i platformami.",
+        })
+        .getAttribute("src"),
+    ).toBe("portfolio/gamedev-spikes-screen.webp");
     const animationLinks = screen.getAllByRole("link", { name: /Zobacz animację/ });
 
-    expect(animationLinks).toHaveLength(3);
+    expect(animationLinks).toHaveLength(5);
     expect(animationLinks[0].getAttribute("href")).toBe("portfolio/gamedev-stones-demo.gif");
     expect(
       screen.queryByTitle(/youtube/i) || document.querySelector("iframe[src*='youtube']"),
