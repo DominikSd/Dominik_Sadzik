@@ -183,6 +183,7 @@ export const sectionSchemas = {
           linkLabel: z.string().trim().max(80).optional().default("Zobacz projekt"),
           screenshotUrl: z.string().trim().max(300).optional().default(""),
           mockupTone: z.enum(["cyan", "violet", "blue", "emerald"]).optional().default("cyan"),
+          mockupScale: z.number().min(0.8).max(1.8).optional().default(1),
         }),
       )
       .min(1)

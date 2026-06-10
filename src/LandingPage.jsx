@@ -1025,6 +1025,7 @@ function getPortfolioStatusLabel(status) {
 
 function PortfolioMockup({ item, fallbackSrc }) {
   const tone = portfolioMockupTones[item.mockupTone] || portfolioMockupTones.cyan;
+  const mockupScale = Number.isFinite(item.mockupScale) ? item.mockupScale : 1;
   const normalizedSrc = item.screenshotUrl?.includes("naturopathy-card.svg")
     ? item.screenshotUrl.replace("naturopathy-card.svg", "naturopathy-card.png")
     : item.screenshotUrl;
@@ -1050,6 +1051,7 @@ function PortfolioMockup({ item, fallbackSrc }) {
           src={src}
           alt={`Podgląd projektu: ${item.title}`}
           className="block h-full w-full object-cover object-center"
+          style={mockupScale !== 1 ? { transform: `scale(${mockupScale})` } : undefined}
           loading="lazy"
           onError={handleError}
         />
