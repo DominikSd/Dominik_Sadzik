@@ -1045,13 +1045,15 @@ function PortfolioMockup({ item, fallbackSrc }) {
 
   if (src) {
     return (
-      <img
-        src={src}
-        alt={`Podgląd projektu: ${item.title}`}
-        className="m-auto block h-[90%] w-[90%] object-contain object-center"
-        loading="lazy"
-        onError={handleError}
-      />
+      <div className="flex h-full w-full items-center justify-center bg-slate-950">
+        <img
+          src={src}
+          alt={`Podgląd projektu: ${item.title}`}
+          className="block h-[90%] w-[90%] object-contain object-center"
+          loading="lazy"
+          onError={handleError}
+        />
+      </div>
     );
   }
 
