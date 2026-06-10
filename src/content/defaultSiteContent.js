@@ -178,7 +178,7 @@ export const defaultSiteContent = {
         tags: ["branding", "wizytówki", "grafika", "druk"],
         screenshotUrl: "portfolio/naturopathy-card.png?v=2",
         mockupTone: "emerald",
-        mockupScale: 1.35,
+        mockupScale: 1.65,
       },
       {
         type: "Projekt demo",
@@ -201,7 +201,7 @@ export const defaultSiteContent = {
         tags: ["CMS", "panel klienta", "statystyki", "edycja treści"],
         screenshotUrl: "portfolio/cms-panel-template.svg",
         mockupTone: "emerald",
-        mockupScale: 1.18,
+        mockupScale: 1.28,
       },
       {
         type: "Automatyzacja",

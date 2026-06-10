@@ -1023,12 +1023,24 @@ function getPortfolioStatusLabel(status) {
   return status || "projekt koncepcyjny";
 }
 
-function PortfolioMockup({ item, fallbackSrc }) {
+function getPortfolioMockupSourceScale(src = "") {
+  const value = String(src).toLowerCase();
+  if (value.includes("naturopathy-card")) return 1.65;
+  if (value.includes("cms-panel-template")) return 1.28;
+  return 1;
+}
+
+function PortfolioMockup({ item, fallbackSrc, fallbackScale = 1 }) {
   const tone = portfolioMockupTones[item.mockupTone] || portfolioMockupTones.cyan;
-  const mockupScale = Number.isFinite(item.mockupScale) ? item.mockupScale : 1;
   const normalizedSrc = item.screenshotUrl?.includes("naturopathy-card.svg")
     ? item.screenshotUrl.replace("naturopathy-card.svg", "naturopathy-card.png")
     : item.screenshotUrl;
+  const configuredScale = Number.isFinite(item.mockupScale) ? item.mockupScale : 1;
+  const mockupScale = Math.max(
+    configuredScale,
+    getPortfolioMockupSourceScale(normalizedSrc),
+    fallbackScale,
+  );
   const [src, setSrc] = useState(normalizedSrc);
   const [hasTriedFallback, setHasTriedFallback] = useState(false);
 
@@ -1095,6 +1107,13 @@ function PortfolioSection({ portfolio }) {
       ),
     [],
   );
+  const fallbackScales = useMemo(
+    () =>
+      Object.fromEntries(
+        defaultSiteContent.portfolio.items.map((item) => [item.title, item.mockupScale || 1]),
+      ),
+    [],
+  );
 
   return (
     <section
@@ -1118,10 +1137,18 @@ function PortfolioSection({ portfolio }) {
                     aria-label={`Otwórz projekt: ${item.title}`}
                     className="block h-full w-full"
                   >
-                    <PortfolioMockup item={item} fallbackSrc={fallbackScreenshots[item.title]} />
+                    <PortfolioMockup
+                      item={item}
+                      fallbackSrc={fallbackScreenshots[item.title]}
+                      fallbackScale={fallbackScales[item.title]}
+                    />
                   </a>
                 ) : (
-                  <PortfolioMockup item={item} fallbackSrc={fallbackScreenshots[item.title]} />
+                  <PortfolioMockup
+                    item={item}
+                    fallbackSrc={fallbackScreenshots[item.title]}
+                    fallbackScale={fallbackScales[item.title]}
+                  />
                 )}
                 <span className="absolute left-4 top-4 rounded-full border border-cyan-300/30 bg-slate-950/75 px-3 py-1 text-xs font-semibold text-cyan-100 backdrop-blur">
                   Projekt 0{index + 1}
