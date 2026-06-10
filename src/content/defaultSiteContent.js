@@ -472,8 +472,8 @@ export const defaultSiteContent = {
           description:
             "To koncepcyjne projekty portfolio, które pokazują kierunek pracy i zakres możliwych interakcji.",
           items: [
-            "platformówka 2D",
-            "prosta gra edukacyjna",
+            "platformówka 2.5D",
+            "interaktywne otoczenie",
             "interaktywny prototyp",
             "system punktów i zbierania obiektów",
           ],
