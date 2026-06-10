@@ -54,11 +54,6 @@ export const defaultSiteContent = {
         title: "Lekki CMS",
         text: "Prywatny panel do edycji treści, SEO, FAQ, danych kontaktowych i publikacji zmian bez ruszania kodu.",
       },
-      {
-        icon: "globe",
-        title: "Integracje z narzędziami",
-        text: "Możliwość podpięcia przycisku do rezerwacji terminu, Google Calendar, formularza kontaktowego lub innych narzędzi używanych w firmie.",
-      },
     ],
   },
   automationQa: {
@@ -271,7 +266,7 @@ export const defaultSiteContent = {
         whatICanBuild: {
           title: "Co mogę przygotować",
           description:
-            "Zakres dobieram do celu strony, branży i budżetu. Można zacząć od małej wizytówki i rozbudować ją etapami.",
+            "Zakres dobieram do celu strony, branży i budżetu. Można zacząć od małej wizytówki i rozbudować ją etapami, także o integracje z narzędziami używanymi w firmie.",
           items: [
             "strona firmowa",
             "portfolio",
@@ -279,7 +274,7 @@ export const defaultSiteContent = {
             "wizytówka online",
             "lekki CMS",
             "panel statystyk GA4",
-            "integracje z kalendarzem, formularzem lub narzędziami do rezerwacji",
+            "integracje z Google Calendar, formularzem lub systemem rezerwacji",
           ],
         },
         cmsPanel: {
