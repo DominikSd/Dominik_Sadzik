@@ -1246,14 +1246,31 @@ function FaqSection({ faq }) {
 }
 
 function ContactSection({ contact }) {
+  // If published/draft content lost Polish diacritics (e.g. production entries),
+  // fall back to `defaultSiteContent.contact` for any fields that contain
+  // no Polish letters. This helps avoid showing ASCII-only text like
+  // "Masz pomysl na strone?" when the repo/default has correct values.
+  const defaultContact = defaultSiteContent.contact || {};
+  const hasPolish = (s = "") => /[ąćęłńóśżźĄĆĘŁŃÓŚŻŹ]/.test(String(s));
+
+  const displayedContact = { ...defaultContact, ...(contact || {}) };
+
+  // For key fields, prefer published value only if it contains Polish letters,
+  // otherwise use defaultSiteContent to restore diacritics.
+  for (const key of ["eyebrow", "title", "text", "emailButtonLabel", "phoneButtonLabel"]) {
+    const val = contact?.[key];
+    if (typeof val === "string" && val.length > 0 && !hasPolish(val)) {
+      displayedContact[key] = defaultContact[key] || displayedContact[key];
+    }
+  }
   const contactActions = [
-    contact.email
+    displayedContact.email
       ? {
           className:
             "inline-flex w-full min-w-0 items-center justify-center gap-2 rounded-full gradient-button px-5 py-4 text-center text-sm font-bold shadow-xl shadow-blue-500/25 transition hover:scale-105 sm:w-auto sm:px-7",
-          href: `mailto:${contact.email}`,
+          href: `mailto:${displayedContact.email}`,
           icon: "mail",
-          label: contact.emailButtonLabel,
+          label: displayedContact.emailButtonLabel,
           type: "email",
         }
       : null,
@@ -1261,20 +1278,28 @@ function ContactSection({ contact }) {
       ? {
           className:
             "inline-flex w-full min-w-0 items-center justify-center gap-2 rounded-full border border-white/15 bg-white/5 px-5 py-4 text-center text-sm font-semibold text-slate-100 backdrop-blur transition hover:border-cyan-300/50 hover:bg-white/10 sm:w-auto sm:px-7",
-          href: `tel:${contact.phone.replace(/\s/g, "")}`,
+          href: `tel:${(displayedContact.phone || "").replace(/\s/g, "")}`,
           icon: "phone",
-          label: contact.phoneButtonLabel,
+          label: displayedContact.phoneButtonLabel,
           type: "phone",
         }
       : null,
   ].filter(Boolean);
 
   const contactRows = [
-    contact.phone
-      ? ["phone", "Telefon", contact.phone, `tel:${contact.phone.replace(/\s/g, "")}`, "phone"]
+    displayedContact.phone
+      ? [
+          "phone",
+          "Telefon",
+          displayedContact.phone,
+          `tel:${(displayedContact.phone || "").replace(/\s/g, "")}`,
+          "phone",
+        ]
       : null,
-    contact.email ? ["mail", "E-mail", contact.email, `mailto:${contact.email}`, "email"] : null,
-    contact.www ? ["globe", "WWW", contact.www, null, null] : null,
+    displayedContact.email
+      ? ["mail", "E-mail", displayedContact.email, `mailto:${displayedContact.email}`, "email"]
+      : null,
+    displayedContact.www ? ["globe", "WWW", displayedContact.www, null, null] : null,
   ].filter(Boolean);
 
   return (
@@ -1288,12 +1313,14 @@ function ContactSection({ contact }) {
         <div className="grid min-w-0 gap-10 md:grid-cols-[minmax(0,1fr)_minmax(0,0.85fr)] md:items-center">
           <div className="min-w-0">
             <p className="mb-3 text-sm font-semibold uppercase tracking-[0.26em] text-cyan-300">
-              {contact.eyebrow}
+              {displayedContact.eyebrow}
             </p>
             <h2 className="text-3xl font-black tracking-tight text-white md:text-5xl">
-              {contact.title}
+              {displayedContact.title}
             </h2>
-            <p className="mt-5 max-w-2xl text-lg leading-8 text-slate-300">{contact.text}</p>
+            <p className="mt-5 max-w-2xl text-lg leading-8 text-slate-300">
+              {displayedContact.text}
+            </p>
             <div className="mt-8 flex min-w-0 flex-col items-center gap-4 sm:flex-row sm:flex-wrap sm:items-start">
               {contactActions.map((action) => (
                 <a
