@@ -20,6 +20,44 @@ function mergeEntries(entries) {
     }
   }
 
+  // If some published entries lost Polish diacritics we prefer values
+  // from `defaultSiteContent` for those string fields. This walks the
+  // merged object and replaces string fields with the default when the
+  // published value contains no Polish letters but the default does.
+  function applyDiacriticsFallback(target, reference) {
+    const polishRegex = /[ąćęłńóśżźĄĆĘŁŃÓŚŻŹ]/;
+
+    function walk(t, r) {
+      if (typeof t !== "object" || t === null) return t;
+      for (const key of Object.keys(t)) {
+        const tv = t[key];
+        const rv = r?.[key];
+        if (typeof tv === "string" && typeof rv === "string") {
+          // if target string lacks Polish letters but reference has them,
+          // use reference value to restore diacritics
+          if (!polishRegex.test(tv) && polishRegex.test(rv)) {
+            t[key] = rv;
+          }
+        } else if (Array.isArray(tv) && Array.isArray(rv)) {
+          // traverse arrays elementwise when possible
+          for (let i = 0; i < tv.length; i++) {
+            if (typeof tv[i] === "object" && tv[i] !== null) {
+              walk(tv[i], rv[i] || {});
+            } else if (typeof tv[i] === "string" && typeof rv[i] === "string") {
+              if (!polishRegex.test(tv[i]) && polishRegex.test(rv[i])) tv[i] = rv[i];
+            }
+          }
+        } else if (typeof tv === "object" && tv !== null && typeof rv === "object" && rv !== null) {
+          walk(tv, rv);
+        }
+      }
+    }
+
+    walk(target, reference);
+  }
+
+  applyDiacriticsFallback(merged, defaultSiteContent);
+
   return normalizeSiteContent(merged);
 }
 
