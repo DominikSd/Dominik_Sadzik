@@ -1,6 +1,8 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 750" role="img" aria-labelledby="title desc">
-  <title id="title">Projekt wizytowki naturopatii</title>
-  <desc id="desc">Zielona wizytowka z motywem lisci i naturalnego brandingu.</desc>
+  <title id="title">Projekt wizytówki naturopatii</title>
+  <desc id="desc">Zielona wizytowka z motywem liści i naturalnego brandingu.</desc>
+    <title id="title">Projekt wizytówki naturopatii</title>
+    <desc id="desc">Zielona wizytówka z motywem liści i naturalnego brandingu.</desc>
   <defs>
     <linearGradient id="cream" x1="0" x2="1" y1="0" y2="1">
       <stop offset="0" stop-color="#fffdf0"/>
@@ -40,5 +42,5 @@
   <text x="600" y="520" text-anchor="middle" fill="#063a12" font-family="Georgia, serif" font-size="43">Naturopatia i detoksykacja</text>
   <line x1="420" y1="552" x2="780" y2="552" stroke="#b99424" stroke-width="4"/>
   <circle cx="600" cy="552" r="10" fill="#b99424"/>
-  <text x="600" y="594" text-anchor="middle" fill="#244622" font-family="Inter, Arial, sans-serif" font-size="18" font-weight="700">projekt wizytowki i identyfikacji</text>
-</svg>
+  <text x="600" y="594" text-anchor="middle" fill="#244622" font-family="Inter, Arial, sans-serif" font-size="18" font-weight="700">projekt wizytówki i identyfikacji</text>
+    <text x="600" y="594" text-anchor="middle" fill="#244622" font-family="Inter, Arial, sans-serif" font-size="18" font-weight="700">projekt wizytówki i identyfikacji</text>

@@ -9,13 +9,13 @@ Ta checklista sprawdza podstawowy przeplyw draft/published bez AI, Storage i bui
    - Jeśli świadomie używasz innego originu, np. `http://127.0.0.1:5174`, dodaj dokładnie ten
      origin do Supabase Authentication → URL Configuration.
 4. Wejdz na `http://localhost:5173/#/panel-admin`.
-5. Zaloguj sie uzytkownikiem z Supabase Auth.
+5. Zaloguj się uzytkownikiem z Supabase Auth.
    - Jeśli nie pamiętasz hasła, użyj opcji `Reset hasła`, aby wysłać link resetujący.
    - Jeśli testujesz magic link, link powinien wrócić na `?auth=callback`, a panel powinien
      przekierować zalogowanego użytkownika do `#/panel-admin`.
    - Jeśli testujesz reset hasła, link powinien wrócić na `?auth=recovery`, pokazać formularz
      nowego hasła i po zapisie przekierować do panelu.
-6. Upewnij sie, ze ten uzytkownik jest aktywny w `site_members` dla `VITE_SITE_ID`.
+6. Upewnij się, ze ten uzytkownik jest aktywny w `site_members` dla `VITE_SITE_ID`.
 7. Zmien tekst w sekcji Hero.
 8. Kliknij `Zapisz draft`.
 9. Otworz publiczna strone i sprawdz, ze jeszcze nie pokazuje zmiany.

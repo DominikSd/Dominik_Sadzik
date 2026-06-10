@@ -2,7 +2,7 @@
 
 Ten etap porządkuje trzy predefiniowane podstrony portfolio/oferty:
 
-- `#/strony-cms` - pelne rozwiniecie glownej oferty: strony, wizytowki online i lekki CMS.
+- `#/strony-cms` - pełne rozwinięcie głównej oferty: strony, wizytówki online i lekki CMS.
 - `#/qa-automatyzacja` - QA, testowanie, automatyzacja oraz sekcja certyfikatu ISTQB.
 - `#/gamedev` - GameDev, prototypy i projekty interaktywne.
 
@@ -22,16 +22,15 @@ Tresci sa w tym samym modelu CMS co reszta strony:
 
 W panelu CMS dodano zakladki:
 
-- `Automatyzacja i QA` - krotka zajawka kompetencji QA na stronie glownej.
-- `GameDev` - krotka zajawka kompetencji GameDev na stronie glownej.
-- `Nowe podstrony` - SEO, hero, listy punktow i CTA dla trzech podstron.
+- `Automatyzacja i QA` - krótka zajawka kompetencji QA na stronie głównej.
+- `GameDev` - krótka zajawka kompetencji GameDev na stronie głównej.
 - `Projekty` - edycja kart projektow/przykladow prac.
-
-Nie dodano bloga, buildera, uploadu mediow ani Supabase Storage.
+  Nowe dane są częścią `defaultSiteContent`:
+  Nie dodano bloga, buildera, uploadu mediow ani Supabase Storage.
 
 ## Struktura contentu
 
-Nowe dane sa czescia `defaultSiteContent`:
+Nowe dane sa częścią `defaultSiteContent`:
 
 - `automationQa` - sekcja home dla automatyzacji i testowania.
 - `gamedevTeaser` - sekcja home dla GameDev.
