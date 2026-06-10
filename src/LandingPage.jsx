@@ -740,7 +740,7 @@ function Hero({ hero, onNavigate }) {
             {hero.stats.map((stat) => (
               <div
                 key={`${stat.value}-${stat.label}`}
-                className="rounded-lg border border-white/10 bg-white/[0.045] p-4"
+                className="rounded-lg border border-white/10 bg-white/[0.045] p-4 text-center sm:text-left"
               >
                 <p className="text-2xl font-black text-cyan-200">{stat.value}</p>
                 <p className="mt-1 text-sm text-slate-400">{stat.label}</p>
@@ -779,9 +779,9 @@ function ServicesSection({ services }) {
               key={service.title}
               variants={fadeUp}
               whileHover={{ y: -6 }}
-              className="group rounded-lg border border-white/10 bg-white/[0.045] p-7 backdrop-blur transition hover:-translate-y-1 hover:border-cyan-300/40 hover:bg-white/[0.07] hover:shadow-2xl hover:shadow-cyan-500/10"
+              className="group rounded-lg border border-white/10 bg-white/[0.045] p-7 text-center backdrop-blur transition hover:-translate-y-1 hover:border-cyan-300/40 hover:bg-white/[0.07] hover:shadow-2xl hover:shadow-cyan-500/10 sm:text-left"
             >
-              <div className="mb-6 flex h-14 w-14 items-center justify-center rounded-lg bg-gradient-to-br from-blue-500/25 to-violet-500/25 text-cyan-200 ring-1 ring-white/10 transition group-hover:scale-110">
+              <div className="mx-auto mb-6 flex h-14 w-14 items-center justify-center rounded-lg bg-gradient-to-br from-blue-500/25 to-violet-500/25 text-cyan-200 ring-1 ring-white/10 transition group-hover:scale-110 sm:mx-0">
                 <Icon name={service.icon} className="h-6 w-6" />
               </div>
               <h3 className="text-xl font-bold text-white">{service.title}</h3>
@@ -802,7 +802,7 @@ function FeatureCardsSection({ section, id, cardCountClass = "md:grid-cols-3" })
     >
       <div className="relative z-10 mx-auto w-full max-w-7xl">
         <div className="grid min-w-0 gap-10 lg:grid-cols-[minmax(0,0.85fr)_minmax(0,1.15fr)] lg:items-start">
-          <div className="min-w-0">
+          <div className="min-w-0 text-center sm:text-left">
             <p className="mb-3 text-sm font-semibold uppercase tracking-[0.26em] text-cyan-300">
               {section.eyebrow}
             </p>
@@ -815,7 +815,7 @@ function FeatureCardsSection({ section, id, cardCountClass = "md:grid-cols-3" })
                 {section.certificateNote}
               </div>
             )}
-            <div className="mt-8 flex min-w-0 flex-col gap-3 sm:flex-row sm:flex-wrap">
+            <div className="mt-8 flex min-w-0 flex-col items-center gap-3 sm:flex-row sm:flex-wrap sm:items-start">
               <CtaLink href={section.ctaHref} label={section.ctaLabel} location={id} />
               {section.secondaryCtaLabel && section.secondaryCtaHref && (
                 <CtaLink
@@ -831,9 +831,9 @@ function FeatureCardsSection({ section, id, cardCountClass = "md:grid-cols-3" })
             {section.cards.map((card) => (
               <article
                 key={card.title}
-                className="min-w-0 rounded-lg border border-white/10 bg-white/[0.045] p-6 backdrop-blur transition hover:-translate-y-1 hover:border-cyan-300/35 hover:shadow-2xl hover:shadow-cyan-500/10"
+                className="min-w-0 rounded-lg border border-white/10 bg-white/[0.045] p-6 text-center backdrop-blur transition hover:-translate-y-1 hover:border-cyan-300/35 hover:shadow-2xl hover:shadow-cyan-500/10 sm:text-left"
               >
-                <div className="mb-5 flex h-12 w-12 items-center justify-center rounded-lg bg-gradient-to-br from-blue-500/25 to-violet-500/25 text-cyan-200 ring-1 ring-white/10">
+                <div className="mx-auto mb-5 flex h-12 w-12 items-center justify-center rounded-lg bg-gradient-to-br from-blue-500/25 to-violet-500/25 text-cyan-200 ring-1 ring-white/10 sm:mx-0">
                   <Icon name={card.icon} className="h-5 w-5" />
                 </div>
                 <h3 className="break-words text-xl font-bold text-white">{card.title}</h3>
@@ -897,9 +897,9 @@ function AreasSection({ services, automationQa, gamedevTeaser }) {
           {areas.map((area) => (
             <article
               key={area.title}
-              className={`group min-w-0 rounded-lg border border-white/10 bg-gradient-to-br ${area.tone} p-6 backdrop-blur transition hover:-translate-y-1 hover:border-cyan-300/35 hover:shadow-2xl hover:shadow-cyan-500/10`}
+              className={`group min-w-0 rounded-lg border border-white/10 bg-gradient-to-br ${area.tone} p-6 text-center backdrop-blur transition hover:-translate-y-1 hover:border-cyan-300/35 hover:shadow-2xl hover:shadow-cyan-500/10 sm:text-left`}
             >
-              <div className="mb-5 flex h-12 w-12 items-center justify-center rounded-lg border border-white/10 bg-slate-950/55 text-cyan-200">
+              <div className="mx-auto mb-5 flex h-12 w-12 items-center justify-center rounded-lg border border-white/10 bg-slate-950/55 text-cyan-200 sm:mx-0">
                 <Icon name={area.icon} className="h-5 w-5" />
               </div>
               <p className="text-xs font-semibold uppercase tracking-[0.22em] text-cyan-200">
@@ -907,7 +907,7 @@ function AreasSection({ services, automationQa, gamedevTeaser }) {
               </p>
               <h3 className="mt-3 text-2xl font-black text-white">{area.title}</h3>
               <p className="mt-3 min-w-0 break-words leading-7 text-slate-300">{area.text}</p>
-              <div className="mt-5 flex flex-wrap gap-2">
+              <div className="mt-5 flex flex-wrap justify-center gap-2 sm:justify-start">
                 {area.points.map((point) => (
                   <span
                     key={`${area.title}-${point}`}
@@ -938,7 +938,7 @@ function BenefitsSection({ benefits }) {
       id="korzysci"
       className="relative overflow-hidden px-6 py-20 md:px-10 lg:py-24 scroll-mt-24"
     >
-      <div className="relative z-10 mx-auto grid max-w-7xl gap-10 rounded-lg border border-white/10 bg-white/[0.045] p-7 backdrop-blur md:grid-cols-[0.85fr_1.15fr] md:p-10 card">
+      <div className="relative z-10 mx-auto grid max-w-7xl gap-10 rounded-lg border border-white/10 bg-white/[0.045] p-7 text-center backdrop-blur sm:text-left md:grid-cols-[0.85fr_1.15fr] md:p-10 card">
         <div>
           <p className="mb-3 text-sm font-semibold uppercase tracking-[0.26em] text-cyan-300">
             {benefits.eyebrow}
@@ -952,7 +952,7 @@ function BenefitsSection({ benefits }) {
           {benefits.items.map((item) => (
             <div
               key={item}
-              className="flex gap-3 rounded-lg border border-white/10 bg-slate-950/35 p-4"
+              className="flex flex-col items-center gap-3 rounded-lg border border-white/10 bg-slate-950/35 p-4 text-center sm:flex-row sm:items-start sm:text-left"
             >
               <div className="mt-1 flex h-6 w-6 flex-none items-center justify-center rounded-full bg-gradient-to-r from-blue-500 to-violet-500">
                 <Icon name="check" className="h-3.5 w-3.5 text-white" />
@@ -980,7 +980,7 @@ function ProcessSection({ process }) {
             {process.items.map((item) => (
               <div
                 key={item.step}
-                className="relative rounded-lg border border-white/10 bg-white/[0.045] p-6 backdrop-blur transition hover:border-violet-300/35 hover:shadow-2xl hover:shadow-violet-500/10 md:ml-16"
+                className="relative rounded-lg border border-white/10 bg-white/[0.045] p-6 text-center backdrop-blur transition hover:border-violet-300/35 hover:shadow-2xl hover:shadow-violet-500/10 sm:text-left md:ml-16"
               >
                 <div className="absolute -left-[4.55rem] top-6 hidden h-12 w-12 items-center justify-center rounded-lg bg-gradient-to-r from-blue-500 to-violet-500 text-sm font-black text-white shadow-lg shadow-blue-500/30 md:flex">
                   {item.step}
@@ -1098,8 +1098,8 @@ function PortfolioSection({ portfolio }) {
                   </span>
                 )}
               </div>
-              <div className="flex min-w-0 flex-1 flex-col p-5 sm:p-6">
-                <div className="mb-4 flex min-w-0 flex-wrap items-center gap-2">
+              <div className="flex min-w-0 flex-1 flex-col p-5 text-center sm:p-6 sm:text-left">
+                <div className="mb-4 flex min-w-0 flex-wrap items-center justify-center gap-2 sm:justify-start">
                   <span className="max-w-full rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs font-semibold text-slate-200">
                     {item.type || "Projekt"}
                   </span>
@@ -1131,7 +1131,7 @@ function PortfolioSection({ portfolio }) {
                   </div>
                 )}
                 {item.tags?.length > 0 && (
-                  <div className="mt-5 flex min-w-0 flex-wrap gap-2">
+                  <div className="mt-5 flex min-w-0 flex-wrap justify-center gap-2 sm:justify-start">
                     {item.tags.map((tag) => (
                       <span
                         key={`${item.title}-${tag}`}
@@ -1144,7 +1144,7 @@ function PortfolioSection({ portfolio }) {
                 )}
                 {item.href && (
                   <a
-                    className="mt-6 inline-flex min-w-0 items-center gap-2 self-start break-words text-sm font-semibold text-cyan-300 hover:text-cyan-200"
+                    className="mt-6 inline-flex min-w-0 items-center gap-2 self-center break-words text-sm font-semibold text-cyan-300 hover:text-cyan-200 sm:self-start"
                     href={item.href}
                     target={item.href.startsWith("http") ? "_blank" : undefined}
                     rel={item.href.startsWith("http") ? "noreferrer" : undefined}
@@ -1174,7 +1174,7 @@ function PackagesSection({ packages }) {
           {packages.items.map((pack) => (
             <div
               key={pack.name}
-              className={`relative rounded-lg border p-7 backdrop-blur transition hover:-translate-y-1 hover:shadow-2xl ${pack.highlighted ? "border-cyan-300/40 bg-gradient-to-br from-blue-500/18 to-violet-500/18 shadow-2xl shadow-blue-500/10 hover:shadow-blue-500/15" : "border-white/10 bg-white/[0.045] hover:border-violet-300/35 hover:shadow-violet-500/10"}`}
+              className={`relative rounded-lg border p-7 text-center backdrop-blur transition hover:-translate-y-1 hover:shadow-2xl sm:text-left ${pack.highlighted ? "border-cyan-300/40 bg-gradient-to-br from-blue-500/18 to-violet-500/18 shadow-2xl shadow-blue-500/10 hover:shadow-blue-500/15" : "border-white/10 bg-white/[0.045] hover:border-violet-300/35 hover:shadow-violet-500/10"}`}
             >
               {pack.highlighted && (
                 <div className="absolute -top-4 left-7 rounded-full bg-gradient-to-r from-blue-500 to-violet-500 px-4 py-1.5 text-xs font-bold text-white">
@@ -1185,7 +1185,10 @@ function PackagesSection({ packages }) {
               <p className="mt-3 leading-7 text-slate-400">{pack.desc}</p>
               <div className="mt-6 space-y-3">
                 {pack.points.map((point) => (
-                  <div key={point} className="flex items-center gap-3 text-slate-200">
+                  <div
+                    key={point}
+                    className="flex items-center justify-center gap-3 text-slate-200 sm:justify-start"
+                  >
                     <Icon name="check" className="h-4 w-4 text-cyan-300" />
                     <span>{point}</span>
                   </div>
@@ -1217,16 +1220,18 @@ function FaqSection({ faq }) {
               <button
                 type="button"
                 onClick={() => setOpen(open === index ? -1 : index)}
-                className="flex w-full items-center justify-between gap-4 p-6 text-left"
+                className="flex w-full items-center justify-between gap-4 p-6 text-center sm:text-left"
               >
-                <span className="font-bold text-white">{item.question}</span>
+                <span className="flex-1 font-bold text-white">{item.question}</span>
                 <Icon
                   name="chevron-down"
                   className={`h-5 w-5 text-cyan-300 transition ${open === index ? "rotate-180" : ""}`}
                 />
               </button>
               <div className={`${open === index ? "block" : "hidden"}`}>
-                <p className="px-6 pb-6 leading-7 text-slate-400">{item.answer}</p>
+                <p className="px-6 pb-6 text-center leading-7 text-slate-400 sm:text-left">
+                  {item.answer}
+                </p>
               </div>
             </div>
           ))}
@@ -1275,7 +1280,7 @@ function ContactSection({ contact }) {
     >
       <SectionDecor variant="branch" position="right" className="top-10 opacity-35" />
       <SectionDecor variant="mini" position="left" className="top-[58%] opacity-30" />
-      <div className="relative z-10 mx-auto w-full max-w-7xl overflow-hidden rounded-lg border border-white/10 bg-white/[0.045] p-5 backdrop-blur sm:p-7 md:p-10">
+      <div className="relative z-10 mx-auto w-full max-w-7xl overflow-hidden rounded-lg border border-white/10 bg-white/[0.045] p-5 text-center backdrop-blur sm:p-7 sm:text-left md:p-10">
         <div className="grid min-w-0 gap-10 md:grid-cols-[minmax(0,1fr)_minmax(0,0.85fr)] md:items-center">
           <div className="min-w-0">
             <p className="mb-3 text-sm font-semibold uppercase tracking-[0.26em] text-cyan-300">
@@ -1285,7 +1290,7 @@ function ContactSection({ contact }) {
               {contact.title}
             </h2>
             <p className="mt-5 max-w-2xl text-lg leading-8 text-slate-300">{contact.text}</p>
-            <div className="mt-8 flex min-w-0 flex-col gap-4 sm:flex-row sm:flex-wrap">
+            <div className="mt-8 flex min-w-0 flex-col items-center gap-4 sm:flex-row sm:flex-wrap sm:items-start">
               {contactActions.map((action) => (
                 <a
                   key={action.type}
@@ -1301,7 +1306,10 @@ function ContactSection({ contact }) {
           </div>
           <div className="w-full min-w-0 rounded-lg border border-cyan-300/20 bg-slate-950/55 p-4 shadow-2xl shadow-blue-500/10 sm:p-6">
             {contactRows.map(([icon, label, value, href, contactType]) => (
-              <div key={label} className="mb-5 flex min-w-0 items-start gap-3 last:mb-0 sm:gap-4">
+              <div
+                key={label}
+                className="mb-5 flex min-w-0 flex-col items-center gap-3 text-center last:mb-0 sm:flex-row sm:items-start sm:text-left"
+              >
                 <div className="flex h-11 w-11 flex-none items-center justify-center rounded-lg border border-cyan-300/30 bg-white/5 text-cyan-200 sm:h-12 sm:w-12">
                   <Icon name={icon} className="h-5 w-5" />
                 </div>
@@ -1375,7 +1383,7 @@ function PageSectionList({ sectionKey, section, onNavigate }) {
   return (
     <section id={sectionKey} className="px-4 py-10 scroll-mt-28 sm:px-6 md:px-10">
       <div
-        className={`mx-auto max-w-6xl rounded-lg border border-white/10 p-6 backdrop-blur md:p-8 ${
+        className={`mx-auto max-w-6xl rounded-lg border border-white/10 p-6 text-center backdrop-blur sm:text-left md:p-8 ${
           isCta ? "bg-cyan-400/10" : "bg-white/[0.045]"
         }`}
       >
@@ -1388,7 +1396,7 @@ function PageSectionList({ sectionKey, section, onNavigate }) {
               <p className="mt-4 break-words leading-7 text-slate-300">{section.description}</p>
             )}
             {isCta && (
-              <div className="mt-6">
+              <div className="mt-6 flex justify-center sm:justify-start">
                 <CtaLink
                   href={section.ctaHref}
                   label={section.ctaLabel}
@@ -1403,7 +1411,7 @@ function PageSectionList({ sectionKey, section, onNavigate }) {
               {section.items.map((item) => (
                 <div
                   key={item}
-                  className="flex min-w-0 gap-3 rounded-lg border border-white/10 bg-slate-950/40 p-4"
+                  className="flex min-w-0 flex-col items-center gap-3 rounded-lg border border-white/10 bg-slate-950/40 p-4 text-center sm:flex-row sm:items-start sm:text-left"
                 >
                   <div className="mt-1 flex h-6 w-6 flex-none items-center justify-center rounded-full bg-gradient-to-r from-blue-500 to-violet-500">
                     <Icon name="check" className="h-3.5 w-3.5 text-white" />
