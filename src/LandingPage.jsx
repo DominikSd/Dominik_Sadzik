@@ -1023,16 +1023,31 @@ function getPortfolioStatusLabel(status) {
   return status || "projekt koncepcyjny";
 }
 
-function PortfolioMockup({ item }) {
+function PortfolioMockup({ item, fallbackSrc }) {
   const tone = portfolioMockupTones[item.mockupTone] || portfolioMockupTones.cyan;
+  const [src, setSrc] = useState(item.screenshotUrl);
+  const [hasTriedFallback, setHasTriedFallback] = useState(false);
 
-  if (item.screenshotUrl) {
+  useEffect(() => {
+    setSrc(item.screenshotUrl);
+    setHasTriedFallback(false);
+  }, [item.screenshotUrl]);
+
+  const handleError = () => {
+    if (fallbackSrc && !hasTriedFallback && fallbackSrc !== item.screenshotUrl) {
+      setSrc(fallbackSrc);
+      setHasTriedFallback(true);
+    }
+  };
+
+  if (src) {
     return (
       <img
-        src={item.screenshotUrl}
+        src={src}
         alt={`Podgląd projektu: ${item.title}`}
         className="h-full w-full object-contain object-center"
         loading="lazy"
+        onError={handleError}
       />
     );
   }
@@ -1066,6 +1081,14 @@ function PortfolioMockup({ item }) {
 }
 
 function PortfolioSection({ portfolio }) {
+  const fallbackScreenshots = useMemo(
+    () =>
+      Object.fromEntries(
+        defaultSiteContent.portfolio.items.map((item) => [item.title, item.screenshotUrl]),
+      ),
+    [],
+  );
+
   return (
     <section
       id="realizacje"
@@ -1088,10 +1111,10 @@ function PortfolioSection({ portfolio }) {
                     aria-label={`Otwórz projekt: ${item.title}`}
                     className="block h-full w-full"
                   >
-                    <PortfolioMockup item={item} />
+                    <PortfolioMockup item={item} fallbackSrc={fallbackScreenshots[item.title]} />
                   </a>
                 ) : (
-                  <PortfolioMockup item={item} />
+                  <PortfolioMockup item={item} fallbackSrc={fallbackScreenshots[item.title]} />
                 )}
                 <span className="absolute left-4 top-4 rounded-full border border-cyan-300/30 bg-slate-950/75 px-3 py-1 text-xs font-semibold text-cyan-100 backdrop-blur">
                   Projekt 0{index + 1}
