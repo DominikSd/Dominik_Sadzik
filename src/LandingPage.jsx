@@ -1030,6 +1030,12 @@ function getPortfolioMockupSourceScale(src = "") {
   return 1;
 }
 
+function getPortfolioMockupSourceOffset(src = "") {
+  const value = String(src).toLowerCase();
+  if (value.includes("naturopathy-card")) return "translateY(4%)";
+  return "";
+}
+
 function PortfolioMockup({ item, fallbackSrc, fallbackScale = 1 }) {
   const tone = portfolioMockupTones[item.mockupTone] || portfolioMockupTones.cyan;
   const normalizedSrc = item.screenshotUrl?.includes("naturopathy-card.svg")
@@ -1041,6 +1047,7 @@ function PortfolioMockup({ item, fallbackSrc, fallbackScale = 1 }) {
     getPortfolioMockupSourceScale(normalizedSrc),
     fallbackScale,
   );
+  const mockupOffset = getPortfolioMockupSourceOffset(normalizedSrc);
   const [src, setSrc] = useState(normalizedSrc);
   const [hasTriedFallback, setHasTriedFallback] = useState(false);
 
@@ -1063,7 +1070,11 @@ function PortfolioMockup({ item, fallbackSrc, fallbackScale = 1 }) {
           src={src}
           alt={`Podgląd projektu: ${item.title}`}
           className="block h-full w-full object-cover object-center"
-          style={mockupScale !== 1 ? { transform: `scale(${mockupScale})` } : undefined}
+          style={
+            mockupScale !== 1 || mockupOffset
+              ? { transform: `${mockupOffset} scale(${mockupScale})`.trim() }
+              : undefined
+          }
           loading="lazy"
           onError={handleError}
         />
