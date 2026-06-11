@@ -1025,7 +1025,7 @@ function getPortfolioStatusLabel(status) {
 
 function getPortfolioMockupSourceScale(src = "") {
   const value = String(src).toLowerCase();
-  if (value.includes("naturopathy-card")) return 1.5;
+  if (value.includes("naturopathy-card")) return 1.42;
   if (value.includes("cms-panel-template")) return 1.28;
   return 1;
 }

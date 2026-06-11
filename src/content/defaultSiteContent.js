@@ -178,7 +178,7 @@ export const defaultSiteContent = {
         tags: ["branding", "wizytówki", "grafika", "druk"],
         screenshotUrl: "portfolio/naturopathy-card.png?v=2",
         mockupTone: "emerald",
-        mockupScale: 1.5,
+        mockupScale: 1.42,
       },
       {
         type: "Projekt demo",
