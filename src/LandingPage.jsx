@@ -1032,7 +1032,7 @@ function getPortfolioMockupSourceScale(src = "") {
 
 function getPortfolioMockupSourceOffset(src = "") {
   const value = String(src).toLowerCase();
-  if (value.includes("naturopathy-card")) return "translateY(4%)";
+  if (value.includes("naturopathy-card")) return "translateY(2%)";
   return "";
 }
 
