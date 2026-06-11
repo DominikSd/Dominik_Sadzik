@@ -850,16 +850,6 @@ function FeatureCardsSection({ section, id, cardCountClass = "md:grid-cols-3" })
 function AreasSection({ services, automationQa, gamedevTeaser }) {
   const areas = [
     {
-      icon: "monitor",
-      eyebrow: "Główna oferta",
-      title: "Strony i CMS",
-      text: "Strony internetowe, wizytówki online i lekki panel do edycji najważniejszych treści.",
-      href: "#/strony-cms",
-      cta: "Zobacz ofertę CMS",
-      tone: "from-cyan-400/20 to-blue-500/15",
-      points: services.items.slice(0, 3).map((item) => item.title),
-    },
-    {
       icon: "shield-check",
       eyebrow: "Dodatkowa kompetencja",
       title: "QA i automatyzacja",
@@ -868,6 +858,17 @@ function AreasSection({ services, automationQa, gamedevTeaser }) {
       cta: "Zobacz QA",
       tone: "from-blue-400/20 to-indigo-500/15",
       points: ["ISTQB", "testy stron", "raportowanie błędów"],
+    },
+    {
+      icon: "monitor",
+      eyebrow: "Główna oferta",
+      title: "Strony i CMS",
+      text: "Strony internetowe, wizytówki online i lekki panel do edycji najważniejszych treści.",
+      href: "#/strony-cms",
+      cta: "Zobacz ofertę CMS",
+      tone: "from-cyan-400/30 via-blue-500/20 to-violet-500/20",
+      featured: true,
+      points: services.items.slice(0, 3).map((item) => item.title),
     },
     {
       icon: "gamepad",
@@ -893,23 +894,31 @@ function AreasSection({ services, automationQa, gamedevTeaser }) {
           title="Główna oferta jest webowa, a dodatkowe kompetencje rozwijają temat"
           text="Możesz zacząć od strony internetowej z panelem CMS, a dodatkowo skorzystać z mojego podejścia do jakości, testowania i projektów interaktywnych."
         />
-        <div className="grid gap-5 lg:grid-cols-3">
+        <div className="grid gap-5 lg:grid-cols-3 lg:gap-10 xl:gap-12">
           {areas.map((area) => (
             <a
               key={area.title}
               href={area.href}
               aria-label={`${area.cta}: ${area.title}`}
-              className={`group block min-w-0 rounded-lg border border-white/10 bg-gradient-to-br ${area.tone} p-6 text-center backdrop-blur transition hover:-translate-y-1 hover:border-cyan-300/35 hover:shadow-2xl hover:shadow-cyan-500/10 focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300/70 sm:text-left`}
+              className={`group block min-w-0 rounded-lg bg-gradient-to-br ${area.tone} p-6 text-center backdrop-blur transition hover:-translate-y-1 focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300/70 ${
+                area.featured
+                  ? "featured-area-card border border-cyan-300/30 shadow-2xl shadow-cyan-500/10 hover:border-cyan-200/55 hover:shadow-cyan-500/20"
+                  : "border border-white/10 hover:border-cyan-300/35 hover:shadow-2xl hover:shadow-cyan-500/10"
+              }`}
             >
-              <div className="mx-auto mb-5 flex h-12 w-12 items-center justify-center rounded-lg border border-white/10 bg-slate-950/55 text-cyan-200 sm:mx-0">
-                <Icon name={area.icon} className="h-5 w-5" />
+              <div
+                className={`mx-auto mb-5 flex items-center justify-center rounded-lg border border-white/10 bg-slate-950/55 text-cyan-200 ${
+                  area.featured ? "h-14 w-14" : "h-12 w-12"
+                }`}
+              >
+                <Icon name={area.icon} className={area.featured ? "h-6 w-6" : "h-5 w-5"} />
               </div>
               <p className="text-xs font-semibold uppercase tracking-[0.22em] text-cyan-200">
                 {area.eyebrow}
               </p>
               <h3 className="mt-3 text-2xl font-black text-white">{area.title}</h3>
               <p className="mt-3 min-w-0 break-words leading-7 text-slate-300">{area.text}</p>
-              <div className="mt-5 flex flex-wrap justify-center gap-2 sm:justify-start">
+              <div className="mt-5 flex flex-wrap justify-center gap-2">
                 {area.points.map((point) => (
                   <span
                     key={`${area.title}-${point}`}
