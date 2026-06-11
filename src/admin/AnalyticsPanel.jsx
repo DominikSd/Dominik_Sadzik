@@ -22,8 +22,13 @@ function cleanPath(value) {
   const rawPath = String(value || "").trim();
   if (!rawPath || rawPath === "(not set)") return "";
 
-  const withoutQuery = rawPath.split(/[?#]/)[0] || "/";
-  const path = withoutQuery.startsWith("/") ? withoutQuery : `/${withoutQuery}`;
+  const hashIndex = rawPath.indexOf("#");
+  const beforeHash = hashIndex >= 0 ? rawPath.slice(0, hashIndex) : rawPath;
+  const hash = hashIndex >= 0 ? rawPath.slice(hashIndex) : "";
+  const withoutQuery = beforeHash.split("?")[0] || "/";
+  const cleanHash = hash ? `#${hash.slice(1).split("?")[0].split("&")[0]}` : "";
+  const path = `${withoutQuery.startsWith("/") ? withoutQuery : `/${withoutQuery}`}${cleanHash}`;
+
   return path.replace(/\/{2,}/g, "/");
 }
 
@@ -48,13 +53,60 @@ function toSentence(value) {
   return `${text.charAt(0).toUpperCase()}${text.slice(1)}`;
 }
 
+function routeLabelFromSegment(value) {
+  const segment = String(value || "")
+    .trim()
+    .toLowerCase();
+  const labels = {
+    "strony-cms": "Strony i CMS",
+    "qa-automatyzacja": "QA i automatyzacja",
+    "automatyzacja-testowanie": "QA i automatyzacja",
+    "tester-istqb": "QA i automatyzacja",
+    gamedev: "GameDev",
+    projects: "Projekty",
+    faq: "FAQ",
+    contact: "Kontakt",
+  };
+
+  return labels[segment] || toSentence(segment);
+}
+
+function hashRouteSegment(path) {
+  const hashIndex = String(path || "").indexOf("#");
+  if (hashIndex < 0) return "";
+
+  return String(path)
+    .slice(hashIndex + 1)
+    .split("?")[0]
+    .split("&")[0]
+    .replace(/^\/+|\/+$/g, "");
+}
+
+function isHomePagePath(value) {
+  const path = cleanPath(value);
+  const normalizedPath = normalizePath(path);
+  const normalizedRoot = appRootPath();
+  const routeSegment = hashRouteSegment(path);
+
+  if (path.includes("#")) return !routeSegment;
+  return normalizedPath === "/" || normalizedPath === normalizedRoot;
+}
+
 function formatPagePath(value) {
   const path = cleanPath(value);
   const normalizedPath = normalizePath(path);
   const normalizedRoot = appRootPath();
+  const routeSegment = hashRouteSegment(path);
 
   if (!path) {
     return { label: "Nieznana strona", detail: "" };
+  }
+
+  if (routeSegment) {
+    return {
+      label: routeLabelFromSegment(routeSegment),
+      detail: path,
+    };
   }
 
   if (normalizedPath === "/" || normalizedPath === normalizedRoot) {
@@ -63,7 +115,7 @@ function formatPagePath(value) {
 
   const segment = normalizedPath.split("/").filter(Boolean).pop();
   return {
-    label: toSentence(segment) || "Nieznana strona",
+    label: routeLabelFromSegment(segment) || "Nieznana strona",
     detail: path,
   };
 }
@@ -73,7 +125,7 @@ function formatEventName(value) {
     .trim()
     .toLowerCase();
   const labels = {
-    cta_click: "Kliknięcie przycisku",
+    cta_click: "Przyciski oferty i wyceny",
     contact_click: "Kliknięcie kontaktu",
     form_submit: "Wysłanie formularza",
     page_view: "Wyświetlenie strony",
@@ -195,6 +247,7 @@ function NavClickHighlight({ label, row }) {
 
 function NavigationClicksPanel({ rows }) {
   const safeRows = rows || [];
+  const totalClicks = safeRows.reduce((sum, row) => sum + Number(row.clicks || 0), 0);
   const cms = findNavClick(safeRows, ["strony_i_cms", "cms"]);
   const qa = findNavClick(safeRows, ["qa", "qa_i_automatyzacja"]);
   const gamedev = findNavClick(safeRows, ["gamedev", "game_dev"]);
@@ -210,6 +263,13 @@ function NavigationClicksPanel({ rows }) {
         <NavClickHighlight label="QA" row={qa} />
         <NavClickHighlight label="GameDev" row={gamedev} />
       </div>
+      {totalClicks === 0 && (
+        <div className="mt-4 rounded-lg border border-amber-300/25 bg-amber-500/10 p-4 text-sm leading-6 text-amber-50">
+          To nowy pomiar. Zera są normalne, jeśli najnowsza wersja strony nie zebrała jeszcze
+          kliknięć albo GA4 nie przetworzyło danych. Po kilku kliknięciach w menu odczekaj chwilę i
+          użyj przycisku „Odśwież dane”.
+        </div>
+      )}
       <div className="mt-5">
         <DataTable
           title="Wszystkie klikane zakładki"
@@ -378,6 +438,7 @@ export default function AnalyticsPanel() {
   };
 
   const summary = report?.summary || {};
+  const topContentPages = (report?.topPages || []).filter((row) => !isHomePagePath(row.path));
 
   return (
     <div className="space-y-6">
@@ -570,10 +631,10 @@ export default function AnalyticsPanel() {
 
           <div className="grid min-w-0 gap-5 xl:grid-cols-2">
             <DataTable
-              title="Najczęściej odwiedzane strony"
-              description="Strony, które odwiedzano najczęściej w ostatnich 30 dniach."
-              emptyText="Brak danych o odwiedzanych stronach dla tego okresu."
-              rows={report.topPages || []}
+              title="Najczęściej odwiedzane podstrony"
+              description="Podstrony, które odwiedzano najczęściej w ostatnich 30 dniach. Strona główna jest pomijana, bo zwykle naturalnie zbiera najwięcej wejść."
+              emptyText="Brak danych o odwiedzanych podstronach dla tego okresu."
+              rows={topContentPages}
               columns={[
                 {
                   key: "path",
@@ -596,7 +657,7 @@ export default function AnalyticsPanel() {
             />
             <DataTable
               title="Najczęstsze działania"
-              description="Najczęściej klikane elementy i wysłane formularze."
+              description="Najczęściej wykonywane akcje poza samym przechodzeniem między zakładkami."
               emptyText="Nie zarejestrowano jeszcze kliknięć ani wysłanych formularzy."
               rows={report.topEvents || report.trackedEvents || []}
               columns={[

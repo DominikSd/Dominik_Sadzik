@@ -42,7 +42,10 @@ const report = {
     eventCount30d: 48,
   },
   generatedAt: "2026-06-02T10:00:00.000Z",
-  topPages: [{ path: "/", pageViews: 50, users: 20 }],
+  topPages: [
+    { path: "/", pageViews: 50, users: 20 },
+    { path: "/Dominik_Sadzik/#/strony-cms", pageViews: 18, users: 8 },
+  ],
   topEvents: [{ eventName: "cta_click", count: 7 }],
   trackedEvents: [{ eventName: "cta_click", count: 7 }],
   navClicks: [
@@ -184,8 +187,10 @@ describe("AnalyticsPanel", () => {
     expect(screen.getByText("28")).toBeTruthy();
     expect(screen.getByText("16")).toBeTruthy();
     expect(screen.getAllByText("9").length).toBeGreaterThan(0);
-    expect(screen.getByText("Strona główna")).toBeTruthy();
-    expect(screen.getByText("Kliknięcie przycisku")).toBeTruthy();
+    expect(screen.getByText("Najczęściej odwiedzane podstrony")).toBeTruthy();
+    expect(screen.queryByText("Strona główna")).toBeNull();
+    expect(screen.getAllByText("Strony i CMS").length).toBeGreaterThan(0);
+    expect(screen.getByText("Przyciski oferty i wyceny")).toBeTruthy();
     expect(screen.getByText("Google")).toBeTruthy();
     expect(screen.getByText("Telefon")).toBeTruthy();
     expect(screen.queryByText("cta_click")).toBeNull();
@@ -209,7 +214,7 @@ describe("AnalyticsPanel", () => {
     render(<AnalyticsPanel />);
 
     expect(
-      await screen.findByText("Brak danych o odwiedzanych stronach dla tego okresu."),
+      await screen.findByText("Brak danych o odwiedzanych podstronach dla tego okresu."),
     ).toBeTruthy();
     expect(screen.getByText("Inna akcja: custom event name")).toBeTruthy();
     expect(screen.getByText("Wejście bezpośrednie")).toBeTruthy();
