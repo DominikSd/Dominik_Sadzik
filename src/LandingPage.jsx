@@ -404,6 +404,7 @@ function NavLink({ item, active, variant = "desktop", onNavigate }) {
 
 function Header({ settings, hero, routeSlug, activeSectionId, onNavigate }) {
   const [isOpen, setIsOpen] = useState(false);
+  const logoSrc = `${import.meta.env.BASE_URL}portfolio/logo.svg`;
 
   useEffect(() => {
     setIsOpen(false);
@@ -413,8 +414,15 @@ function Header({ settings, hero, routeSlug, activeSectionId, onNavigate }) {
     <header className="relative z-40 border-b border-white/10 bg-[#050816]/75 backdrop-blur-xl">
       <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-4 sm:px-6 md:px-10">
         <div className="flex items-center gap-3">
-          <div className="flex h-11 w-11 items-center justify-center rounded-lg border border-cyan-400/40 bg-slate-950/70 shadow-lg shadow-blue-500/20">
-            <Icon name="globe" className="h-5 w-5 text-cyan-300" />
+          <div className="flex h-11 w-11 items-center justify-center overflow-hidden rounded-lg border border-cyan-400/40 bg-slate-950/70 p-0.5 shadow-lg shadow-blue-500/20">
+            <img
+              src={logoSrc}
+              alt=""
+              aria-hidden="true"
+              className="h-[112%] w-[112%] max-w-none object-contain"
+              width="44"
+              height="44"
+            />
           </div>
           <div>
             <p className="text-sm font-bold tracking-wide text-white">{settings.siteName}</p>

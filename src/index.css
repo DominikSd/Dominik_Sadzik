@@ -10,6 +10,9 @@
   --accent-blue: rgba(37, 99, 235, 0.24);
   --accent-violet: rgba(124, 58, 237, 0.22);
   --accent-purple: rgba(168, 85, 247, 0.18);
+  --font-body: "Manrope";
+  --font-display: "Bricolage Grotesque";
+  --font-accent: "JetBrains Mono";
   --gradient-blur: 0;
   --gradient-opacity: 1;
 }
@@ -31,7 +34,7 @@ body {
     linear-gradient(135deg, var(--bg-very-dark) 0%, var(--bg-dark-2) 45%, var(--bg-dark-3) 100%);
   color: #fff;
   font-family:
-    Inter,
+    var(--font-body),
     ui-sans-serif,
     system-ui,
     -apple-system,
@@ -43,9 +46,31 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+h1,
+h2,
+h3,
+.font-black {
+  font-family: var(--font-display), var(--font-body), ui-sans-serif, system-ui, sans-serif;
+  letter-spacing: -0.015em;
+}
+
+nav,
+button,
+.gradient-button,
+.uppercase[class*="tracking-"],
+.rounded-full.text-xs,
+.rounded-full.text-sm {
+  font-family: var(--font-accent), var(--font-body), ui-monospace, SFMono-Regular, monospace;
+}
+
+.rounded-full.text-xs,
+.rounded-full.text-sm {
+  letter-spacing: -0.015em;
+}
+
 .page-gradient {
   position: fixed;
-  inset: 0;
+  inset: -4%;
   z-index: 0;
   pointer-events: none;
   opacity: 0.92;
@@ -59,6 +84,7 @@ body {
   mix-blend-mode: screen;
   filter: blur(var(--gradient-blur));
   transform: translateZ(0);
+  will-change: transform;
   animation: gradientDrift 18s ease-in-out infinite alternate;
 }
 
@@ -136,7 +162,7 @@ button:focus-visible {
 
 @keyframes gradientDrift {
   from {
-    transform: translate3d(-1.5%, -1%, 0) scale(1);
+    transform: translate3d(-1.5%, -1%, 0) scale(1.03);
   }
   to {
     transform: translate3d(1.5%, 1%, 0) scale(1.04);
