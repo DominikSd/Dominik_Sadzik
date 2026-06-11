@@ -148,6 +148,20 @@ export function trackCtaClick(label, location) {
   });
 }
 
+export function trackNavigationClick(label, target, location) {
+  const safeLabel = safeAnalyticsToken(label, "unknown");
+  const safeTarget = String(target || "")
+    .trim()
+    .replace(/^#\/?/, "")
+    .replace(/^#/, "");
+
+  trackEvent(`nav_click_${safeLabel}`, {
+    nav_label: safeLabel,
+    nav_target: safeAnalyticsToken(safeTarget, "unknown_target"),
+    nav_location: safeAnalyticsToken(location, "unknown_location"),
+  });
+}
+
 export function trackContactClick(type, location) {
   trackEvent("contact_click", {
     contact_type: safeAnalyticsToken(type, "unknown"),

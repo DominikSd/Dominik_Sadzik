@@ -89,6 +89,16 @@ const analyticsReportSchema = z
       )
       .optional()
       .default([]),
+    navClicks: z
+      .array(
+        z.object({
+          eventName: z.string().optional().default("unknown_event"),
+          clicks: numberLikeSchema.optional().default(0),
+          users: numberLikeSchema.optional().default(0),
+        }),
+      )
+      .optional()
+      .default([]),
     trafficSources: z
       .array(
         z.object({
@@ -170,6 +180,7 @@ export function normalizeAnalyticsReport(candidate) {
         summary.eventCount30d === 0 &&
         parsed.topPages.length === 0 &&
         topEvents.length === 0 &&
+        parsed.navClicks.length === 0 &&
         parsed.trafficSources.length === 0 &&
         parsed.devices.length === 0),
   };

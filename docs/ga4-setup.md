@@ -151,8 +151,17 @@ The panel dashboard reads a simplified report from Supabase Edge Function `ga4-r
 - event count for the last 7 and 30 days,
 - top page paths,
 - safe tracked events such as `cta_click`, `contact_click`, and `form_submit`,
+- navigation clicks such as `nav_click_strony_i_cms`, `nav_click_qa`, and `nav_click_gamedev`,
 - traffic sources by `sessionSourceMedium`,
 - device categories such as desktop, mobile, and tablet.
+
+Kliknięcia w nawigację są raportowane jako osobne eventy `nav_click_*`, żeby panel mógł pokazać,
+ile osób klika w zakładki CMS, QA, GameDev, Projekty, FAQ i Kontakt bez wymagania dodatkowych
+custom dimensions w GA4. Po zmianie raportu trzeba ponownie wdrożyć Edge Function:
+
+```bash
+supabase functions deploy ga4-report
+```
 
 The extra `Otworz pelny raport w Google Analytics` link may stay in the panel as a secondary action,
 but the primary stats should be visible inside the CMS panel.

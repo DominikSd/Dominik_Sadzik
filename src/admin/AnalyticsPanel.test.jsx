@@ -45,6 +45,11 @@ const report = {
   topPages: [{ path: "/", pageViews: 50, users: 20 }],
   topEvents: [{ eventName: "cta_click", count: 7 }],
   trackedEvents: [{ eventName: "cta_click", count: 7 }],
+  navClicks: [
+    { eventName: "nav_click_strony_i_cms", clicks: 9, users: 5 },
+    { eventName: "nav_click_gamedev", clicks: 4, users: 3 },
+    { eventName: "nav_click_qa", clicks: 2, users: 2 },
+  ],
   trafficSources: [{ sourceMedium: "google / organic", sessions: 12, users: 10 }],
   devices: [{ deviceCategory: "mobile", users: 9, sessions: 11 }],
   noData: false,
@@ -143,6 +148,7 @@ describe("AnalyticsPanel", () => {
       },
       topPages: [],
       topEvents: [],
+      navClicks: [],
       trafficSources: [],
       devices: [],
       noData: true,
@@ -168,10 +174,16 @@ describe("AnalyticsPanel", () => {
     expect(screen.getAllByText(/Szacunkowo: unikalni odwiedzający minus nowi/i)).toHaveLength(2);
     expect(screen.getByText("Wizyty (30 dni)")).toBeTruthy();
     expect(screen.getByText("Akcje (30 dni)")).toBeTruthy();
+    expect(screen.getByText("Kliknięcia w zakładki")).toBeTruthy();
+    expect(screen.getByText("Wszystkie klikane zakładki")).toBeTruthy();
+    expect(screen.getAllByText("Strony i CMS").length).toBeGreaterThan(0);
+    expect(screen.getAllByText("GameDev").length).toBeGreaterThan(0);
+    expect(screen.getAllByText("QA").length).toBeGreaterThan(0);
     expect(screen.getByText("90")).toBeTruthy();
     expect(screen.getByText("44")).toBeTruthy();
     expect(screen.getByText("28")).toBeTruthy();
     expect(screen.getByText("16")).toBeTruthy();
+    expect(screen.getAllByText("9").length).toBeGreaterThan(0);
     expect(screen.getByText("Strona główna")).toBeTruthy();
     expect(screen.getByText("Kliknięcie przycisku")).toBeTruthy();
     expect(screen.getByText("Google")).toBeTruthy();

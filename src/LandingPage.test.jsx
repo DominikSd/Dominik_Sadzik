@@ -3,6 +3,7 @@ import { render, screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { defaultSiteContent } from "./content/defaultSiteContent";
+import { trackNavigationClick } from "./lib/analytics/ga4";
 import { DRAFT_PREVIEW_STORAGE_KEY } from "./lib/draftPreview";
 import LandingPage from "./LandingPage";
 
@@ -13,6 +14,7 @@ vi.mock("./lib/contentApi", () => ({
 vi.mock("./lib/analytics/ga4", () => ({
   trackContactClick: vi.fn(),
   trackCtaClick: vi.fn(),
+  trackNavigationClick: vi.fn(),
 }));
 
 describe("LandingPage navigation", () => {
@@ -73,6 +75,16 @@ describe("LandingPage navigation", () => {
       "#contact",
     );
     expect(within(mainNav).queryByRole("link", { name: "ISTQB" })).toBeNull();
+  });
+
+  it("tracks clicks in the main navigation", async () => {
+    const user = userEvent.setup();
+    render(<LandingPage routeHash="#/" />);
+
+    const mainNav = screen.getByRole("navigation", { name: "Główna nawigacja" });
+    await user.click(within(mainNav).getByRole("link", { name: "Strony i CMS" }));
+
+    expect(trackNavigationClick).toHaveBeenCalledWith("Strony i CMS", "#/strony-cms", "desktop");
   });
 
   it("marks QA active for the old ISTQB route alias", () => {
@@ -216,7 +228,7 @@ describe("LandingPage navigation", () => {
 
     expect(screen.getByRole("heading", { name: "QA, testowanie i automatyzacja" })).toBeTruthy();
     expect(screen.getByText("Aktualnie: QA")).toBeTruthy();
-    expect(screen.getByText("Certyfikat ISTQB")).toBeTruthy();
+    expect(screen.getByRole("heading", { name: "Certyfikat ISTQB" })).toBeTruthy();
   });
 
   it("renders the GameDev detail route without a blank screen", () => {

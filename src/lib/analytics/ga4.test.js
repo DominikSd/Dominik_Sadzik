@@ -87,4 +87,19 @@ describe("GA4 privacy controls", () => {
     expect(JSON.stringify(event[2])).not.toContain("test@example.com");
     expect(JSON.stringify(event[2])).not.toContain("secret");
   });
+
+  it("tracks navigation clicks with safe event names and sanitized targets", async () => {
+    const ga4 = await loadGa4();
+
+    ga4.setAnalyticsConsent(true);
+    ga4.trackNavigationClick("Strony i CMS", "#/strony-cms?token=secret", "desktop");
+
+    const [event] = eventsNamed("nav_click_strony_i_cms");
+    expect(event[2]).toEqual({
+      nav_label: "strony_i_cms",
+      nav_target: "strony-cms",
+      nav_location: "desktop",
+    });
+    expect(JSON.stringify(event[2])).not.toContain("secret");
+  });
 });

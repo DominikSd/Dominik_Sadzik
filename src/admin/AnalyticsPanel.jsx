@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { BarChart3, ExternalLink, RefreshCw, ShieldAlert } from "lucide-react";
+import { BarChart3, ExternalLink, MousePointerClick, RefreshCw, ShieldAlert } from "lucide-react";
 import { getAnalyticsConfig } from "../lib/analytics/ga4";
 import { clearAnalyticsReportCache, fetchGa4Report } from "./analyticsApi";
 
@@ -83,6 +83,36 @@ function formatEventName(value) {
   return eventName ? `Inna akcja: ${toSentence(eventName).toLowerCase()}` : "Inna akcja";
 }
 
+function getNavClickToken(value) {
+  return String(value || "")
+    .trim()
+    .toLowerCase()
+    .replace(/^nav_click_/, "");
+}
+
+function formatNavClickName(value) {
+  const token = getNavClickToken(value);
+  const labels = {
+    start: "Start",
+    strony_i_cms: "Strony i CMS",
+    cms: "Strony i CMS",
+    qa: "QA",
+    qa_i_automatyzacja: "QA",
+    gamedev: "GameDev",
+    game_dev: "GameDev",
+    projekty: "Projekty",
+    faq: "FAQ",
+    kontakt: "Kontakt",
+  };
+
+  return labels[token] || toSentence(token) || "Inna zakładka";
+}
+
+function findNavClick(rows, tokens) {
+  const wantedTokens = new Set(tokens);
+  return (rows || []).find((row) => wantedTokens.has(getNavClickToken(row.eventName))) || {};
+}
+
 function formatTrafficSource(value) {
   const source = String(value || "")
     .trim()
@@ -118,11 +148,82 @@ function deviceLabel(value) {
 
 function MetricCard({ label, value, hint }) {
   return (
-    <div className="rounded-lg border border-white/10 bg-slate-950/55 p-4">
+    <div className="min-w-0 rounded-lg border border-white/10 bg-slate-950/55 p-4">
       <dt className="text-sm text-slate-400">{label}</dt>
       <dd className="mt-2 text-3xl font-black text-white">{formatNumber(value)}</dd>
       {hint && <p className="mt-1 text-xs text-slate-500">{hint}</p>}
     </div>
+  );
+}
+
+function AnalyticsSection({ title, description, icon: IconComponent, children }) {
+  return (
+    <section className="rounded-lg border border-white/10 bg-slate-950/45 p-5">
+      <div className="flex items-start gap-3">
+        {IconComponent && (
+          <div className="flex h-10 w-10 flex-none items-center justify-center rounded-lg bg-cyan-400/10 text-cyan-200">
+            <IconComponent className="h-5 w-5" />
+          </div>
+        )}
+        <div className="min-w-0">
+          <h3 className="text-lg font-black text-white">{title}</h3>
+          {description && <p className="mt-1 text-sm leading-6 text-slate-400">{description}</p>}
+        </div>
+      </div>
+      <div className="mt-5 min-w-0">{children}</div>
+    </section>
+  );
+}
+
+function NavClickHighlight({ label, row }) {
+  return (
+    <div className="rounded-lg border border-cyan-300/15 bg-cyan-400/10 p-4">
+      <p className="text-sm font-semibold text-cyan-100">{label}</p>
+      <div className="mt-3 grid grid-cols-2 gap-3">
+        <div>
+          <p className="text-xs uppercase tracking-[0.14em] text-cyan-100/60">Kliknięcia</p>
+          <p className="mt-1 text-2xl font-black text-white">{formatNumber(row.clicks)}</p>
+        </div>
+        <div>
+          <p className="text-xs uppercase tracking-[0.14em] text-cyan-100/60">Osoby</p>
+          <p className="mt-1 text-2xl font-black text-white">{formatNumber(row.users)}</p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function NavigationClicksPanel({ rows }) {
+  const safeRows = rows || [];
+  const cms = findNavClick(safeRows, ["strony_i_cms", "cms"]);
+  const qa = findNavClick(safeRows, ["qa", "qa_i_automatyzacja"]);
+  const gamedev = findNavClick(safeRows, ["gamedev", "game_dev"]);
+
+  return (
+    <AnalyticsSection
+      icon={MousePointerClick}
+      title="Kliknięcia w zakładki"
+      description="Pokazuje, w które części strony użytkownicy klikają najczęściej. Dane obejmują kliknięcia z menu, pływającej nawigacji, kart i stopki."
+    >
+      <div className="grid gap-4 lg:grid-cols-3">
+        <NavClickHighlight label="Strony i CMS" row={cms} />
+        <NavClickHighlight label="QA" row={qa} />
+        <NavClickHighlight label="GameDev" row={gamedev} />
+      </div>
+      <div className="mt-5">
+        <DataTable
+          title="Wszystkie klikane zakładki"
+          description="Pełna lista kliknięć w zakładki z ostatnich 30 dni."
+          emptyText="Brak danych o kliknięciach w zakładki. Nowe dane pojawią się po kliknięciach użytkowników i odświeżeniu raportu GA4."
+          rows={safeRows}
+          columns={[
+            { key: "eventName", label: "Zakładka", format: formatNavClickName },
+            { key: "clicks", label: "Kliknięcia", format: formatNumber },
+            { key: "users", label: "Osoby", format: formatNumber },
+          ]}
+        />
+      </div>
+    </AnalyticsSection>
   );
 }
 
@@ -372,93 +473,100 @@ export default function AnalyticsPanel() {
 
       {report && (
         <>
-          <div className="rounded-lg border border-white/10 bg-slate-950/45 p-5">
-            <div className="flex items-center gap-3">
-              <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-cyan-400/10 text-cyan-200">
-                <BarChart3 className="h-5 w-5" />
+          <AnalyticsSection
+            icon={BarChart3}
+            title="Ruch na stronie"
+            description="Dane z ostatnich 7 i 30 dni. Sprawdź, ile osób odwiedza stronę i które elementy przyciągają najwięcej uwagi."
+          >
+            <div className="grid gap-4 xl:grid-cols-[1.1fr_0.9fr]">
+              <div className="rounded-lg border border-white/10 bg-white/[0.03] p-4">
+                <h4 className="text-sm font-black uppercase tracking-[0.16em] text-cyan-200">
+                  Odwiedzający
+                </h4>
+                <dl className="mt-4 grid gap-4 sm:grid-cols-2">
+                  <MetricCard
+                    label="Unikalni odwiedzający (7 dni)"
+                    value={summary.totalUsers7d}
+                    hint="Osoby, które odwiedziły stronę w wybranym okresie."
+                  />
+                  <MetricCard
+                    label="Unikalni odwiedzający (30 dni)"
+                    value={summary.totalUsers30d}
+                    hint="Osoby, które odwiedziły stronę w wybranym okresie."
+                  />
+                  <MetricCard
+                    label="Nowi odwiedzający (7 dni)"
+                    value={summary.newUsers7d}
+                    hint="Osoby, które pierwszy raz odwiedziły stronę."
+                  />
+                  <MetricCard
+                    label="Nowi odwiedzający (30 dni)"
+                    value={summary.newUsers30d}
+                    hint="Osoby, które pierwszy raz odwiedziły stronę."
+                  />
+                  <MetricCard
+                    label="Powracający odwiedzający (7 dni)"
+                    value={summary.returningUsers7d}
+                    hint="Szacunkowo: unikalni odwiedzający minus nowi odwiedzający."
+                  />
+                  <MetricCard
+                    label="Powracający odwiedzający (30 dni)"
+                    value={summary.returningUsers30d}
+                    hint="Szacunkowo: unikalni odwiedzający minus nowi odwiedzający."
+                  />
+                </dl>
               </div>
-              <div>
-                <h3 className="text-lg font-black text-white">Ruch na stronie</h3>
-                <p className="text-sm leading-6 text-slate-400">
-                  Dane z ostatnich 7 i 30 dni. Sprawdź, ile osób odwiedza stronę i które elementy
-                  przyciągają najwięcej uwagi.
-                </p>
+              <div className="rounded-lg border border-white/10 bg-white/[0.03] p-4">
+                <h4 className="text-sm font-black uppercase tracking-[0.16em] text-cyan-200">
+                  Aktywność
+                </h4>
+                <dl className="mt-4 grid gap-4 sm:grid-cols-2">
+                  <MetricCard
+                    label="Aktywni odwiedzający (7 dni)"
+                    value={summary.activeUsers7d}
+                    hint="Osoby aktywne według definicji GA4."
+                  />
+                  <MetricCard
+                    label="Aktywni odwiedzający (30 dni)"
+                    value={summary.activeUsers30d}
+                    hint="Osoby aktywne według definicji GA4."
+                  />
+                  <MetricCard
+                    label="Odsłony (7 dni)"
+                    value={summary.pageViews7d}
+                    hint="Ile razy wyświetlono strony."
+                  />
+                  <MetricCard
+                    label="Odsłony (30 dni)"
+                    value={summary.pageViews30d}
+                    hint="Ile razy wyświetlono strony."
+                  />
+                  <MetricCard
+                    label="Wizyty (7 dni)"
+                    value={summary.sessions7d}
+                    hint="Liczba sesji na stronie."
+                  />
+                  <MetricCard
+                    label="Wizyty (30 dni)"
+                    value={summary.sessions30d}
+                    hint="Liczba sesji na stronie."
+                  />
+                  <MetricCard
+                    label="Akcje (7 dni)"
+                    value={summary.eventCount7d}
+                    hint="Kliknięcia i inne mierzone działania."
+                  />
+                  <MetricCard
+                    label="Akcje (30 dni)"
+                    value={summary.eventCount30d}
+                    hint="Kliknięcia i inne mierzone działania."
+                  />
+                </dl>
               </div>
             </div>
-          </div>
+          </AnalyticsSection>
 
-          <dl className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-            <MetricCard
-              label="Unikalni odwiedzający (7 dni)"
-              value={summary.totalUsers7d}
-              hint="Osoby, które odwiedziły stronę w wybranym okresie."
-            />
-            <MetricCard
-              label="Unikalni odwiedzający (30 dni)"
-              value={summary.totalUsers30d}
-              hint="Osoby, które odwiedziły stronę w wybranym okresie."
-            />
-            <MetricCard
-              label="Aktywni odwiedzający (7 dni)"
-              value={summary.activeUsers7d}
-              hint="Osoby aktywne według definicji GA4."
-            />
-            <MetricCard
-              label="Aktywni odwiedzający (30 dni)"
-              value={summary.activeUsers30d}
-              hint="Osoby aktywne według definicji GA4."
-            />
-            <MetricCard
-              label="Nowi odwiedzający (7 dni)"
-              value={summary.newUsers7d}
-              hint="Osoby, które pierwszy raz odwiedziły stronę."
-            />
-            <MetricCard
-              label="Nowi odwiedzający (30 dni)"
-              value={summary.newUsers30d}
-              hint="Osoby, które pierwszy raz odwiedziły stronę."
-            />
-            <MetricCard
-              label="Powracający odwiedzający (7 dni)"
-              value={summary.returningUsers7d}
-              hint="Osoby, które prawdopodobnie wróciły. Szacunkowo: unikalni odwiedzający minus nowi odwiedzający."
-            />
-            <MetricCard
-              label="Powracający odwiedzający (30 dni)"
-              value={summary.returningUsers30d}
-              hint="Osoby, które prawdopodobnie wróciły. Szacunkowo: unikalni odwiedzający minus nowi odwiedzający."
-            />
-            <MetricCard
-              label="Odsłony (7 dni)"
-              value={summary.pageViews7d}
-              hint="Ile razy wyświetlono strony."
-            />
-            <MetricCard
-              label="Odsłony (30 dni)"
-              value={summary.pageViews30d}
-              hint="Ile razy wyświetlono strony."
-            />
-            <MetricCard
-              label="Wizyty (7 dni)"
-              value={summary.sessions7d}
-              hint="Liczba sesji na stronie."
-            />
-            <MetricCard
-              label="Wizyty (30 dni)"
-              value={summary.sessions30d}
-              hint="Liczba sesji na stronie."
-            />
-            <MetricCard
-              label="Akcje (7 dni)"
-              value={summary.eventCount7d}
-              hint="Kliknięcia i inne mierzone działania."
-            />
-            <MetricCard
-              label="Akcje (30 dni)"
-              value={summary.eventCount30d}
-              hint="Kliknięcia i inne mierzone działania."
-            />
-          </dl>
+          <NavigationClicksPanel rows={report.navClicks || []} />
 
           <div className="grid min-w-0 gap-5 xl:grid-cols-2">
             <DataTable

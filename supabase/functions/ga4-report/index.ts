@@ -187,7 +187,7 @@ function rows(report: Record<string, unknown>) {
 }
 
 async function buildReport(propertyId: string, accessToken: string) {
-  const [summary7d, summary30d, pages, events, traffic, devices] = await Promise.all([
+  const [summary7d, summary30d, pages, events, navClicks, traffic, devices] = await Promise.all([
     runReport(accessToken, propertyId, {
       dateRanges: [{ startDate: "7daysAgo", endDate: "today" }],
       metrics: [
@@ -231,6 +231,23 @@ async function buildReport(propertyId: string, accessToken: string) {
       },
       orderBys: [{ metric: { metricName: "eventCount" }, desc: true }],
       limit: 10,
+    }),
+    runReport(accessToken, propertyId, {
+      dateRanges: [{ startDate: "30daysAgo", endDate: "today" }],
+      dimensions: [{ name: "eventName" }],
+      metrics: [{ name: "eventCount" }, { name: "activeUsers" }],
+      dimensionFilter: {
+        filter: {
+          fieldName: "eventName",
+          stringFilter: {
+            matchType: "BEGINS_WITH",
+            value: "nav_click_",
+            caseSensitive: false,
+          },
+        },
+      },
+      orderBys: [{ metric: { metricName: "eventCount" }, desc: true }],
+      limit: 20,
     }),
     runReport(accessToken, propertyId, {
       dateRanges: [{ startDate: "30daysAgo", endDate: "today" }],
@@ -283,6 +300,11 @@ async function buildReport(propertyId: string, accessToken: string) {
     topEvents: rows(events).map((row) => ({
       eventName: dimension(row, 0),
       count: metric(row, 0),
+    })),
+    navClicks: rows(navClicks).map((row) => ({
+      eventName: dimension(row, 0),
+      clicks: metric(row, 0),
+      users: metric(row, 1),
     })),
     trafficSources: rows(traffic).map((row) => ({
       sourceMedium: dimension(row, 0),
@@ -435,7 +457,8 @@ Deno.serve(async (req) => {
         report.summary.activeUsers30d === 0 &&
         report.summary.pageViews30d === 0 &&
         report.topPages.length === 0 &&
-        report.topEvents.length === 0,
+        report.topEvents.length === 0 &&
+        report.navClicks.length === 0,
       cache: {
         hit: false,
         ageSeconds: 0,

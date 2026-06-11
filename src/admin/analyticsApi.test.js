@@ -49,6 +49,7 @@ const report = {
   },
   topPages: [],
   topEvents: [],
+  navClicks: [],
   trafficSources: [],
   devices: [],
 };
@@ -153,6 +154,7 @@ describe("analyticsApi", () => {
         pageViews30d: "40",
       },
       trackedEvents: [{ eventName: "cta_click", count: "3" }],
+      navClicks: [{ eventName: "nav_click_gamedev", clicks: "5", users: "2" }],
     });
 
     expect(normalized.summary.totalUsers7d).toBe(4);
@@ -160,6 +162,7 @@ describe("analyticsApi", () => {
     expect(normalized.summary.users7d).toBe(4);
     expect(normalized.summary.sessions30d).toBe(0);
     expect(normalized.topEvents).toEqual([{ eventName: "cta_click", count: 3 }]);
+    expect(normalized.navClicks).toEqual([{ eventName: "nav_click_gamedev", clicks: 5, users: 2 }]);
     expect(normalized.noData).toBe(false);
   });
 

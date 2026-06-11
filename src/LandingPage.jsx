@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useState } from "react";
 import { motion } from "framer-motion";
 import AnimatedCircuit from "./components/AnimatedCircuit";
 import { defaultSiteContent } from "./content/defaultSiteContent";
-import { trackContactClick, trackCtaClick } from "./lib/analytics/ga4";
+import { trackContactClick, trackCtaClick, trackNavigationClick } from "./lib/analytics/ga4";
 import { loadPublishedSiteContent } from "./lib/contentApi";
 import { isDraftPreviewRequest, loadDraftPreviewContent } from "./lib/draftPreview";
 
@@ -390,7 +390,10 @@ function NavLink({ item, active, variant = "desktop", onNavigate }) {
   return (
     <a
       href={item.href}
-      onClick={(event) => onNavigate(event, item.href)}
+      onClick={(event) => {
+        trackNavigationClick(item.label, item.href, variant);
+        onNavigate(event, item.href);
+      }}
       aria-label={isFloating ? item.label : undefined}
       aria-current={active ? "page" : undefined}
       className={`${baseClass} ${stateClass} ${isFloating ? "text-xs sm:text-sm" : ""}`}
@@ -485,7 +488,10 @@ function FloatingNavIconLink({ item, active, onNavigate }) {
   return (
     <a
       href={item.href}
-      onClick={(event) => onNavigate(event, item.href)}
+      onClick={(event) => {
+        trackNavigationClick(item.label, item.href, "floating_icon");
+        onNavigate(event, item.href);
+      }}
       aria-label={item.label}
       aria-current={active ? "page" : undefined}
       title={item.label}
@@ -907,6 +913,7 @@ function AreasSection({ services, automationQa, gamedevTeaser }) {
             <a
               key={area.title}
               href={area.href}
+              onClick={() => trackNavigationClick(area.title, area.href, "areas")}
               aria-label={`${area.cta}: ${area.title}`}
               className={`group block min-w-0 rounded-lg bg-gradient-to-br ${area.tone} p-6 text-center backdrop-blur transition hover:-translate-y-1 focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300/70 ${
                 area.featured
@@ -1455,39 +1462,126 @@ function ContactSection({ contact }) {
 }
 
 function PageHero({ page, onNavigate }) {
+  const sectionPreviews = Object.entries(page.sections || {})
+    .filter(([, section]) => !section.ctaLabel)
+    .slice(0, 3)
+    .map(([key, section]) => ({
+      key,
+      title: section.title,
+      count: section.items?.length || 0,
+    }));
+
   return (
     <section className="relative overflow-hidden px-4 pb-16 pt-12 sm:px-6 md:px-10 md:pb-20 md:pt-16">
       <div className="pointer-events-none absolute right-4 top-8 opacity-40 md:right-12">
         <AnimatedCircuit variant="branch" flip className="h-36 w-64" />
       </div>
-      <div className="relative z-10 mx-auto max-w-5xl">
-        <a
-          href="#"
-          className="mb-8 inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-sm font-semibold text-cyan-100 hover:bg-white/10"
+      <div className="relative z-10 mx-auto grid max-w-7xl items-center gap-10 lg:grid-cols-[minmax(0,0.95fr)_minmax(320px,0.75fr)]">
+        <motion.div initial="hidden" animate="visible" variants={stagger} className="min-w-0">
+          <motion.a
+            variants={fadeUp}
+            href="#"
+            className="mb-8 inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-sm font-semibold text-cyan-100 hover:bg-white/10"
+          >
+            <Icon name="arrow-right" className="h-4 w-4 rotate-180" />
+            Strona główna
+          </motion.a>
+          <motion.p
+            variants={fadeUp}
+            className="text-sm font-semibold uppercase tracking-[0.26em] text-cyan-300"
+          >
+            {page.hero.eyebrow}
+          </motion.p>
+          <motion.h1
+            variants={fadeUp}
+            className="mt-4 max-w-4xl break-words text-4xl font-black leading-tight tracking-tight text-white md:text-6xl"
+          >
+            {page.hero.title}
+          </motion.h1>
+          {page.hero.subtitle && (
+            <motion.p variants={fadeUp} className="mt-4 text-xl font-semibold text-cyan-100">
+              {page.hero.subtitle}
+            </motion.p>
+          )}
+          <motion.p
+            variants={fadeUp}
+            className="mt-6 max-w-3xl text-lg leading-8 text-slate-300 md:text-xl"
+          >
+            {page.hero.description}
+          </motion.p>
+          <motion.div variants={fadeUp} className="mt-8">
+            <CtaLink
+              href={page.hero.ctaHref}
+              label={page.hero.ctaLabel}
+              location={page.slug}
+              onNavigate={onNavigate}
+            />
+          </motion.div>
+        </motion.div>
+        <motion.div
+          initial={{ opacity: 0, y: 18 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.55, ease: "easeOut" }}
+          className="relative min-w-0"
         >
-          <Icon name="arrow-right" className="h-4 w-4 rotate-180" />
-          Strona główna
-        </a>
-        <p className="text-sm font-semibold uppercase tracking-[0.26em] text-cyan-300">
-          {page.hero.eyebrow}
-        </p>
-        <h1 className="mt-4 max-w-4xl break-words text-4xl font-black leading-tight tracking-tight text-white md:text-6xl">
-          {page.hero.title}
-        </h1>
-        {page.hero.subtitle && (
-          <p className="mt-4 text-xl font-semibold text-cyan-100">{page.hero.subtitle}</p>
-        )}
-        <p className="mt-6 max-w-3xl text-lg leading-8 text-slate-300 md:text-xl">
-          {page.hero.description}
-        </p>
-        <div className="mt-8">
-          <CtaLink
-            href={page.hero.ctaHref}
-            label={page.hero.ctaLabel}
-            location={page.slug}
-            onNavigate={onNavigate}
-          />
-        </div>
+          <div className="absolute -inset-4 rounded-lg bg-gradient-to-br from-cyan-400/10 via-blue-500/10 to-violet-500/10 blur-2xl" />
+          <div className="relative overflow-hidden rounded-lg border border-cyan-300/20 bg-slate-950/60 p-5 shadow-2xl shadow-blue-500/10 backdrop-blur">
+            <div className="flex items-center justify-between gap-3 border-b border-white/10 pb-4">
+              <div>
+                <p className="text-xs font-semibold uppercase tracking-[0.22em] text-cyan-200">
+                  podgląd zakresu
+                </p>
+                <p className="mt-1 text-lg font-black text-white">{page.hero.eyebrow}</p>
+              </div>
+              <div className="flex h-12 w-12 items-center justify-center rounded-lg border border-cyan-300/25 bg-cyan-300/10 text-cyan-100">
+                <Icon
+                  name={
+                    page.slug === "gamedev"
+                      ? "gamepad"
+                      : page.slug === "qa-automatyzacja"
+                        ? "shield-check"
+                        : "monitor"
+                  }
+                  className="h-6 w-6"
+                />
+              </div>
+            </div>
+            <div className="mt-5 grid gap-3">
+              {sectionPreviews.map((item, index) => (
+                <motion.div
+                  key={item.key}
+                  initial={{ opacity: 0, x: 18 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.45, delay: 0.1 + index * 0.08 }}
+                  className="grid grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-3 rounded-lg border border-white/10 bg-white/[0.045] p-3"
+                >
+                  <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-r from-blue-500 to-violet-500 text-xs font-black text-white">
+                    {index + 1}
+                  </span>
+                  <span className="min-w-0 truncate text-sm font-semibold text-slate-100">
+                    {item.title}
+                  </span>
+                  <span className="rounded-full bg-cyan-300/10 px-2.5 py-1 text-xs font-semibold text-cyan-100 ring-1 ring-cyan-300/15">
+                    {item.count}
+                  </span>
+                </motion.div>
+              ))}
+            </div>
+            <div className="mt-5 overflow-hidden rounded-lg border border-white/10 bg-slate-950/65 p-4">
+              <div className="h-2 rounded-full bg-white/10">
+                <motion.div
+                  initial={{ width: "22%" }}
+                  animate={{ width: ["22%", "78%", "48%", "92%"] }}
+                  transition={{ duration: 5.5, repeat: Infinity, ease: "easeInOut" }}
+                  className="h-full rounded-full bg-gradient-to-r from-cyan-300 via-blue-400 to-violet-400"
+                />
+              </div>
+              <p className="mt-3 text-sm leading-6 text-slate-300">
+                Zamiast samej listy: sekcje, karty, demo i jasny rytm informacji.
+              </p>
+            </div>
+          </div>
+        </motion.div>
       </div>
     </section>
   );
@@ -1497,11 +1591,12 @@ function PageMediaGallery({ mediaItems = [] }) {
   if (!mediaItems.length) return null;
 
   return (
-    <div className="mt-8 grid min-w-0 gap-4 md:grid-cols-3">
+    <div className="mt-8 flex min-w-0 snap-x gap-4 overflow-x-auto pb-2 [scrollbar-width:none] md:grid md:grid-cols-3 md:overflow-visible md:pb-0 [&::-webkit-scrollbar]:hidden">
       {mediaItems.map((item) => (
-        <article
+        <motion.article
           key={item.src}
-          className="min-w-0 overflow-hidden rounded-lg border border-white/10 bg-slate-950/45 text-center"
+          whileHover={{ y: -6 }}
+          className="min-w-[82%] snap-center overflow-hidden rounded-lg border border-white/10 bg-slate-950/45 text-center transition hover:border-cyan-300/35 hover:shadow-2xl hover:shadow-cyan-500/10 sm:min-w-[56%] md:min-w-0"
         >
           <div className="flex aspect-[16/10] items-center justify-center overflow-hidden bg-slate-950">
             <img
@@ -1543,24 +1638,138 @@ function PageMediaGallery({ mediaItems = [] }) {
               </a>
             )}
           </div>
-        </article>
+        </motion.article>
       ))}
     </div>
   );
 }
 
-function PageSectionList({ sectionKey, section, onNavigate }) {
+function getPageSectionVariant(sectionKey, sectionIndex, itemCount) {
+  if (/process|automation/i.test(sectionKey)) return "timeline";
+  if (/audience|examples|whatIBuild/i.test(sectionKey) || itemCount > 6) return "cloud";
+  if (sectionIndex % 3 === 1) return "rail";
+  return "cards";
+}
+
+function PageSectionItems({ items, variant }) {
+  if (variant === "timeline") {
+    return (
+      <div className="relative min-w-0 space-y-3">
+        <div className="absolute left-4 top-5 hidden h-[calc(100%-2.5rem)] w-px bg-gradient-to-b from-cyan-300 via-blue-500 to-violet-500 sm:block" />
+        {items.map((item, index) => (
+          <motion.div
+            key={item}
+            variants={fadeUp}
+            className="relative flex min-w-0 flex-col items-center gap-3 rounded-lg border border-white/10 bg-slate-950/45 p-4 text-center sm:flex-row sm:items-start sm:pl-12 sm:text-left"
+          >
+            <span className="z-10 flex h-8 w-8 flex-none items-center justify-center rounded-full bg-gradient-to-r from-blue-500 to-violet-500 text-xs font-black text-white shadow-lg shadow-blue-500/20 sm:absolute sm:left-0 sm:top-4">
+              {index + 1}
+            </span>
+            <p className="min-w-0 break-words text-slate-200">{item}</p>
+          </motion.div>
+        ))}
+      </div>
+    );
+  }
+
+  if (variant === "cloud") {
+    return (
+      <motion.div variants={stagger} className="flex min-w-0 flex-wrap justify-center gap-3">
+        {items.map((item, index) => (
+          <motion.span
+            key={item}
+            variants={fadeUp}
+            className={`max-w-full break-words rounded-full border px-4 py-2 text-center font-semibold shadow-lg shadow-slate-950/20 ${
+              index % 3 === 0
+                ? "border-cyan-300/25 bg-cyan-300/10 text-cyan-50"
+                : index % 3 === 1
+                  ? "border-blue-300/20 bg-blue-400/10 text-blue-50"
+                  : "border-violet-300/25 bg-violet-400/10 text-violet-50"
+            }`}
+          >
+            {item}
+          </motion.span>
+        ))}
+      </motion.div>
+    );
+  }
+
+  if (variant === "rail") {
+    return (
+      <div className="flex min-w-0 snap-x gap-4 overflow-x-auto pb-2 [scrollbar-width:none] md:grid md:grid-cols-2 md:overflow-visible md:pb-0 [&::-webkit-scrollbar]:hidden">
+        {items.map((item, index) => (
+          <motion.div
+            key={item}
+            variants={fadeUp}
+            whileHover={{ y: -4 }}
+            className="min-w-[78%] snap-center rounded-lg border border-white/10 bg-white/[0.045] p-5 text-center backdrop-blur sm:min-w-[48%] md:min-w-0"
+          >
+            <div className="mx-auto mb-4 flex h-10 w-10 items-center justify-center rounded-lg border border-cyan-300/20 bg-cyan-300/10 text-cyan-100">
+              <Icon name={index % 2 === 0 ? "sparkles" : "check"} className="h-5 w-5" />
+            </div>
+            <p className="min-w-0 break-words text-slate-100">{item}</p>
+          </motion.div>
+        ))}
+      </div>
+    );
+  }
+
+  return (
+    <div className="grid min-w-0 gap-3 sm:grid-cols-2">
+      {items.map((item, index) => (
+        <motion.div
+          key={item}
+          variants={fadeUp}
+          whileHover={{ y: -4 }}
+          className="group flex min-w-0 flex-col items-center gap-3 rounded-lg border border-white/10 bg-slate-950/40 p-4 text-center transition hover:border-cyan-300/30 hover:bg-white/[0.055]"
+        >
+          <div className="flex h-10 w-10 flex-none items-center justify-center rounded-lg bg-gradient-to-r from-blue-500 to-violet-500 text-sm font-black text-white shadow-lg shadow-blue-500/20">
+            {String(index + 1).padStart(2, "0")}
+          </div>
+          <p className="min-w-0 break-words text-slate-200">{item}</p>
+        </motion.div>
+      ))}
+    </div>
+  );
+}
+
+function PageSectionList({ sectionKey, section, sectionIndex = 0, onNavigate }) {
   const isCta = Boolean(section.ctaLabel);
+  const items = Array.isArray(section.items) ? section.items : [];
+  const variant = getPageSectionVariant(sectionKey, sectionIndex, items.length);
 
   return (
     <section id={sectionKey} className="px-4 py-10 scroll-mt-28 sm:px-6 md:px-10">
-      <div
-        className={`mx-auto max-w-6xl rounded-lg border border-white/10 p-6 text-center backdrop-blur sm:text-left md:p-8 ${
-          isCta ? "bg-cyan-400/10" : "bg-white/[0.045]"
+      <motion.div
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, amount: 0.18 }}
+        variants={stagger}
+        className={`mx-auto max-w-6xl overflow-hidden rounded-lg border border-white/10 p-6 text-center backdrop-blur md:p-8 ${
+          isCta
+            ? "bg-gradient-to-br from-cyan-400/10 via-blue-500/10 to-violet-500/10"
+            : "bg-white/[0.045]"
         }`}
       >
-        <div className="grid min-w-0 gap-6 md:grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)]">
-          <div className="min-w-0">
+        <div
+          className={`grid min-w-0 gap-8 ${
+            isCta
+              ? "items-center md:grid-cols-[minmax(0,1fr)_auto]"
+              : "md:grid-cols-[0.78fr_1.22fr]"
+          }`}
+        >
+          <motion.div variants={fadeUp} className="min-w-0">
+            {!isCta && (
+              <p className="mb-3 text-xs font-semibold uppercase tracking-[0.22em] text-cyan-300">
+                {variant === "timeline"
+                  ? "kroki"
+                  : variant === "cloud"
+                    ? "zakres"
+                    : variant === "rail"
+                      ? "przegląd"
+                      : "elementy"}
+              </p>
+            )}
             <h2 className="break-words text-2xl font-black text-white md:text-3xl">
               {section.title}
             </h2>
@@ -1568,7 +1777,7 @@ function PageSectionList({ sectionKey, section, onNavigate }) {
               <p className="mt-4 break-words leading-7 text-slate-300">{section.description}</p>
             )}
             {isCta && (
-              <div className="mt-6 flex justify-center sm:justify-start">
+              <div className="mt-6 flex justify-center">
                 <CtaLink
                   href={section.ctaHref}
                   label={section.ctaLabel}
@@ -1577,25 +1786,11 @@ function PageSectionList({ sectionKey, section, onNavigate }) {
                 />
               </div>
             )}
-          </div>
-          {!isCta && (
-            <div className="grid min-w-0 gap-3 sm:grid-cols-2">
-              {section.items.map((item) => (
-                <div
-                  key={item}
-                  className="flex min-w-0 flex-col items-center gap-3 rounded-lg border border-white/10 bg-slate-950/40 p-4 text-center sm:flex-row sm:items-start sm:text-left"
-                >
-                  <div className="mt-1 flex h-6 w-6 flex-none items-center justify-center rounded-full bg-gradient-to-r from-blue-500 to-violet-500">
-                    <Icon name="check" className="h-3.5 w-3.5 text-white" />
-                  </div>
-                  <p className="min-w-0 break-words text-slate-200">{item}</p>
-                </div>
-              ))}
-            </div>
-          )}
+          </motion.div>
+          {!isCta && <PageSectionItems items={items} variant={variant} />}
         </div>
         <PageMediaGallery mediaItems={section.mediaItems} />
-      </div>
+      </motion.div>
     </section>
   );
 }
@@ -1604,8 +1799,14 @@ function ServiceDetailPage({ page, contact, onNavigate }) {
   return (
     <>
       <PageHero page={page} onNavigate={onNavigate} />
-      {Object.entries(page.sections).map(([key, section]) => (
-        <PageSectionList key={key} sectionKey={key} section={section} onNavigate={onNavigate} />
+      {Object.entries(page.sections).map(([key, section], index) => (
+        <PageSectionList
+          key={key}
+          sectionKey={key}
+          section={section}
+          sectionIndex={index}
+          onNavigate={onNavigate}
+        />
       ))}
       <ContactSection contact={contact} />
     </>
@@ -1826,13 +2027,25 @@ export default function LandingPage({ routeHash = "" }) {
         <div className="mx-auto flex max-w-7xl flex-col items-center gap-4 md:flex-row md:justify-between">
           <span>{content.settings.footerText}</span>
           <nav className="flex flex-wrap justify-center gap-4 text-slate-400">
-            <a href="#/strony-cms" className="hover:text-cyan-300">
+            <a
+              href="#/strony-cms"
+              onClick={() => trackNavigationClick("Strony i CMS", "#/strony-cms", "footer")}
+              className="hover:text-cyan-300"
+            >
               Strony i CMS
             </a>
-            <a href="#/qa-automatyzacja" className="hover:text-cyan-300">
+            <a
+              href="#/qa-automatyzacja"
+              onClick={() => trackNavigationClick("QA", "#/qa-automatyzacja", "footer")}
+              className="hover:text-cyan-300"
+            >
               QA
             </a>
-            <a href="#/gamedev" className="hover:text-cyan-300">
+            <a
+              href="#/gamedev"
+              onClick={() => trackNavigationClick("GameDev", "#/gamedev", "footer")}
+              className="hover:text-cyan-300"
+            >
               GameDev
             </a>
           </nav>
