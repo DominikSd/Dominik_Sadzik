@@ -1462,20 +1462,9 @@ function ContactSection({ contact }) {
 }
 
 function PageHero({ page, onNavigate }) {
-  const sectionPreviews = Object.entries(page.sections || {})
-    .filter(([, section]) => !section.ctaLabel)
-    .slice(0, 3)
-    .map(([key, section]) => ({
-      key,
-      title: section.title,
-      count: section.items?.length || 0,
-    }));
-
   return (
     <section className="relative overflow-hidden px-4 pb-16 pt-12 sm:px-6 md:px-10 md:pb-20 md:pt-16">
-      <div className="pointer-events-none absolute right-4 top-8 opacity-40 md:right-12">
-        <AnimatedCircuit variant="branch" flip className="h-36 w-64" />
-      </div>
+      <PageHeroDecor />
       <div className="relative z-10 mx-auto grid max-w-7xl items-center gap-10 lg:grid-cols-[minmax(0,0.95fr)_minmax(320px,0.75fr)]">
         <motion.div initial="hidden" animate="visible" variants={stagger} className="min-w-0">
           <motion.a
@@ -1518,72 +1507,164 @@ function PageHero({ page, onNavigate }) {
             />
           </motion.div>
         </motion.div>
-        <motion.div
-          initial={{ opacity: 0, y: 18 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.55, ease: "easeOut" }}
-          className="relative min-w-0"
-        >
-          <div className="absolute -inset-4 rounded-lg bg-gradient-to-br from-cyan-400/10 via-blue-500/10 to-violet-500/10 blur-2xl" />
-          <div className="relative overflow-hidden rounded-lg border border-cyan-300/20 bg-slate-950/60 p-5 shadow-2xl shadow-blue-500/10 backdrop-blur">
-            <div className="flex items-center justify-between gap-3 border-b border-white/10 pb-4">
-              <div>
-                <p className="text-xs font-semibold uppercase tracking-[0.22em] text-cyan-200">
-                  podgląd zakresu
-                </p>
-                <p className="mt-1 text-lg font-black text-white">{page.hero.eyebrow}</p>
-              </div>
-              <div className="flex h-12 w-12 items-center justify-center rounded-lg border border-cyan-300/25 bg-cyan-300/10 text-cyan-100">
-                <Icon
-                  name={
-                    page.slug === "gamedev"
-                      ? "gamepad"
-                      : page.slug === "qa-automatyzacja"
-                        ? "shield-check"
-                        : "monitor"
-                  }
-                  className="h-6 w-6"
-                />
-              </div>
-            </div>
-            <div className="mt-5 grid gap-3">
-              {sectionPreviews.map((item, index) => (
-                <motion.div
-                  key={item.key}
-                  initial={{ opacity: 0, x: 18 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ duration: 0.45, delay: 0.1 + index * 0.08 }}
-                  className="grid grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-3 rounded-lg border border-white/10 bg-white/[0.045] p-3"
-                >
-                  <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-r from-blue-500 to-violet-500 text-xs font-black text-white">
-                    {index + 1}
-                  </span>
-                  <span className="min-w-0 truncate text-sm font-semibold text-slate-100">
-                    {item.title}
-                  </span>
-                  <span className="rounded-full bg-cyan-300/10 px-2.5 py-1 text-xs font-semibold text-cyan-100 ring-1 ring-cyan-300/15">
-                    {item.count}
-                  </span>
-                </motion.div>
-              ))}
-            </div>
-            <div className="mt-5 overflow-hidden rounded-lg border border-white/10 bg-slate-950/65 p-4">
-              <div className="h-2 rounded-full bg-white/10">
-                <motion.div
-                  initial={{ width: "22%" }}
-                  animate={{ width: ["22%", "78%", "48%", "92%"] }}
-                  transition={{ duration: 5.5, repeat: Infinity, ease: "easeInOut" }}
-                  className="h-full rounded-full bg-gradient-to-r from-cyan-300 via-blue-400 to-violet-400"
-                />
-              </div>
-              <p className="mt-3 text-sm leading-6 text-slate-300">
-                Zamiast samej listy: sekcje, karty, demo i jasny rytm informacji.
-              </p>
-            </div>
-          </div>
-        </motion.div>
+        <PageHeroScopeCarousel page={page} items={getPageHeroScopeItems(page)} />
       </div>
     </section>
+  );
+}
+
+function PageHeroDecor() {
+  return (
+    <>
+      <div className="pointer-events-none absolute right-4 top-8 opacity-45 md:right-12">
+        <AnimatedCircuit variant="branch" flip className="h-36 w-64 md:h-44 md:w-80" />
+      </div>
+      <div className="pointer-events-none absolute left-0 top-24 -translate-x-1/3 opacity-30 md:top-32 md:opacity-45">
+        <AnimatedCircuit variant="longDrop" className="h-28 w-72 md:h-40 md:w-[28rem]" />
+      </div>
+      <div className="pointer-events-none absolute bottom-8 right-1/4 hidden opacity-25 md:block">
+        <AnimatedCircuit variant="stair" flip className="h-32 w-64" />
+      </div>
+      <div className="pointer-events-none absolute left-1/2 top-4 hidden -translate-x-1/2 opacity-20 lg:block">
+        <AnimatedCircuit variant="mini" className="h-20 w-40" />
+      </div>
+    </>
+  );
+}
+
+function getPageHeroScopeItems(page) {
+  if (page.slug === "strony-cms") {
+    return [
+      {
+        icon: "monitor",
+        eyebrow: "Strony internetowe",
+        title: "Strony firmowe i landing page",
+        text: "Czytelna oferta, szybka ścieżka do kontaktu i responsywny układ.",
+      },
+      {
+        icon: "sparkles",
+        eyebrow: "Lekki CMS",
+        title: "Panel do edycji treści",
+        text: "Zmiany tekstów, FAQ, SEO i danych kontaktowych bez ruszania kodu.",
+      },
+      {
+        icon: "palette",
+        eyebrow: "Materiały graficzne",
+        title: "Wizytówki, karty reklamowe i ogłoszenia",
+        text: "Spójne materiały online i do druku dopasowane do strony.",
+      },
+      {
+        icon: "globe",
+        eyebrow: "Integracje",
+        title: "Kalendarz, formularze i narzędzia zewnętrzne",
+        text: "Podpięcie rozwiązań ułatwiających rezerwacje, kontakt i obsługę klienta.",
+      },
+      {
+        icon: "badge",
+        eyebrow: "Widoczność",
+        title: "Podstawy SEO i analityka GA4",
+        text: "Strona przygotowana pod indeksowanie i podgląd najważniejszych statystyk.",
+      },
+      {
+        icon: "check",
+        eyebrow: "Jakość",
+        title: "Testy mobile, desktop i publikacja",
+        text: "Sprawdzenie układu, linków, formularzy i działania po wdrożeniu.",
+      },
+    ];
+  }
+
+  return Object.entries(page.sections || {})
+    .filter(([, section]) => !section.ctaLabel)
+    .map(([key, section]) => ({
+      key,
+      icon:
+        page.slug === "gamedev"
+          ? "gamepad"
+          : page.slug === "qa-automatyzacja"
+            ? "shield-check"
+            : "monitor",
+      eyebrow: section.items?.length ? `${section.items.length} elementów` : "zakres",
+      title: section.title,
+      text: section.description || "Zakres pracy przedstawiony w kolejnej sekcji.",
+    }));
+}
+
+function PageHeroScopeCarousel({ page, items }) {
+  const carouselItems = items.length > 0 ? items : [];
+  const duplicatedItems = [...carouselItems, ...carouselItems];
+
+  if (!carouselItems.length) return null;
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 18 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.55, ease: "easeOut" }}
+      className="relative min-w-0"
+    >
+      <div className="absolute -inset-4 rounded-lg bg-gradient-to-br from-cyan-400/10 via-blue-500/10 to-violet-500/10 blur-2xl" />
+      <div className="relative overflow-hidden rounded-lg border border-cyan-300/20 bg-slate-950/60 p-5 shadow-2xl shadow-blue-500/10 backdrop-blur">
+        <div className="flex items-center justify-between gap-3 border-b border-white/10 pb-4">
+          <div>
+            <p className="text-xs font-semibold uppercase tracking-[0.22em] text-cyan-200">
+              Podgląd zakresu prac
+            </p>
+            <p className="mt-1 text-lg font-black text-white">{page.hero.eyebrow}</p>
+          </div>
+          <div className="flex h-12 w-12 items-center justify-center rounded-lg border border-cyan-300/25 bg-cyan-300/10 text-cyan-100">
+            <Icon
+              name={
+                page.slug === "gamedev"
+                  ? "gamepad"
+                  : page.slug === "qa-automatyzacja"
+                    ? "shield-check"
+                    : "monitor"
+              }
+              className="h-6 w-6"
+            />
+          </div>
+        </div>
+        <div className="relative mt-5 h-[23rem] overflow-hidden rounded-lg border border-white/10 bg-slate-950/45 p-3">
+          <div className="pointer-events-none absolute inset-x-0 top-0 z-10 h-16 bg-gradient-to-b from-slate-950 via-slate-950/75 to-transparent" />
+          <div className="pointer-events-none absolute inset-x-0 bottom-0 z-10 h-16 bg-gradient-to-t from-slate-950 via-slate-950/75 to-transparent" />
+          <motion.div
+            initial={{ y: "-50%" }}
+            animate={{ y: "0%" }}
+            transition={{ duration: 24, repeat: Infinity, ease: "linear" }}
+            className="grid gap-3"
+            aria-hidden="true"
+          >
+            {duplicatedItems.map((item, index) => (
+              <div
+                key={`${item.title}-${index}`}
+                className="grid min-h-[6.25rem] grid-cols-[auto_minmax(0,1fr)] gap-3 rounded-lg border border-white/10 bg-white/[0.045] p-4"
+              >
+                <div className="flex h-11 w-11 items-center justify-center rounded-lg bg-gradient-to-r from-blue-500 to-violet-500 text-white shadow-lg shadow-blue-500/20">
+                  <Icon name={item.icon} className="h-5 w-5" />
+                </div>
+                <div className="min-w-0">
+                  <p className="text-xs font-semibold uppercase tracking-[0.16em] text-cyan-200">
+                    {item.eyebrow}
+                  </p>
+                  <p className="mt-1 break-words text-base font-black text-white">{item.title}</p>
+                  <p className="mt-1 line-clamp-2 text-sm leading-6 text-slate-300">{item.text}</p>
+                </div>
+              </div>
+            ))}
+          </motion.div>
+          <div className="sr-only">
+            {carouselItems.map((item) => (
+              <p key={item.title}>{`${item.eyebrow}: ${item.title}. ${item.text}`}</p>
+            ))}
+          </div>
+        </div>
+        <p className="mt-4 text-sm leading-6 text-slate-300">
+          Zakres można zacząć od prostej strony i rozbudować etapami o CMS, materiały graficzne,
+          integracje oraz analitykę.
+        </p>
+      </div>
+    </motion.div>
   );
 }
 
@@ -1674,12 +1755,15 @@ function PageSectionItems({ items, variant }) {
 
   if (variant === "cloud") {
     return (
-      <motion.div variants={stagger} className="flex min-w-0 flex-wrap justify-center gap-3">
+      <motion.div
+        variants={stagger}
+        className="mx-auto flex max-w-5xl min-w-0 flex-wrap items-center justify-center gap-3 md:gap-4"
+      >
         {items.map((item, index) => (
           <motion.span
             key={item}
             variants={fadeUp}
-            className={`max-w-full break-words rounded-full border px-4 py-2 text-center font-semibold shadow-lg shadow-slate-950/20 ${
+            className={`inline-flex min-h-12 max-w-full items-center justify-center break-words rounded-2xl border px-5 py-3 text-center text-sm font-semibold leading-snug shadow-lg shadow-slate-950/20 sm:text-base ${
               index % 3 === 0
                 ? "border-cyan-300/25 bg-cyan-300/10 text-cyan-50"
                 : index % 3 === 1
@@ -1737,6 +1821,7 @@ function PageSectionList({ sectionKey, section, sectionIndex = 0, onNavigate }) 
   const isCta = Boolean(section.ctaLabel);
   const items = Array.isArray(section.items) ? section.items : [];
   const variant = getPageSectionVariant(sectionKey, sectionIndex, items.length);
+  const isCloud = variant === "cloud";
 
   return (
     <section id={sectionKey} className="px-4 py-10 scroll-mt-28 sm:px-6 md:px-10">
@@ -1755,10 +1840,15 @@ function PageSectionList({ sectionKey, section, sectionIndex = 0, onNavigate }) 
           className={`grid min-w-0 gap-8 ${
             isCta
               ? "items-center md:grid-cols-[minmax(0,1fr)_auto]"
-              : "md:grid-cols-[0.78fr_1.22fr]"
+              : isCloud
+                ? "mx-auto max-w-6xl"
+                : "md:grid-cols-[0.78fr_1.22fr]"
           }`}
         >
-          <motion.div variants={fadeUp} className="min-w-0">
+          <motion.div
+            variants={fadeUp}
+            className={`min-w-0 ${isCloud ? "mx-auto max-w-3xl text-center" : ""}`}
+          >
             {!isCta && (
               <p className="mb-3 text-xs font-semibold uppercase tracking-[0.22em] text-cyan-300">
                 {variant === "timeline"
@@ -1774,7 +1864,13 @@ function PageSectionList({ sectionKey, section, sectionIndex = 0, onNavigate }) 
               {section.title}
             </h2>
             {section.description && (
-              <p className="mt-4 break-words leading-7 text-slate-300">{section.description}</p>
+              <p
+                className={`mt-4 break-words leading-7 text-slate-300 ${
+                  isCloud ? "mx-auto max-w-2xl" : ""
+                }`}
+              >
+                {section.description}
+              </p>
             )}
             {isCta && (
               <div className="mt-6 flex justify-center">
@@ -1795,11 +1891,17 @@ function PageSectionList({ sectionKey, section, sectionIndex = 0, onNavigate }) 
   );
 }
 
+function getVisiblePageSections(page) {
+  return Object.entries(page.sections || {}).filter(
+    ([key]) => !(page.slug === "strony-cms" && key === "whatICanBuild"),
+  );
+}
+
 function ServiceDetailPage({ page, contact, onNavigate }) {
   return (
     <>
       <PageHero page={page} onNavigate={onNavigate} />
-      {Object.entries(page.sections).map(([key, section], index) => (
+      {getVisiblePageSections(page).map(([key, section], index) => (
         <PageSectionList
           key={key}
           sectionKey={key}

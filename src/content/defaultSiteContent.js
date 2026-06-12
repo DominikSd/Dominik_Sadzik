@@ -59,7 +59,7 @@ export const defaultSiteContent = {
   automationQa: {
     eyebrow: "Dodatkowa kompetencja",
     title: "QA i automatyzacja",
-    text: "Testowanie, myślenie scenariuszami i automatyzacja pomagają mi tworzyć stabilniejsze strony oraz szybciej wychwytywać problemy przed publikacją.",
+    text: "Sprawdzam stronę tak, jak korzystałaby z niej prawdziwa osoba: klikam, szukam niejasności i wyłapuję rzeczy, które mogą przeszkodzić przed publikacją.",
     certificateNote: "Certyfikowany tester ISTQB - praktyczne podejście do jakości.",
     ctaLabel: "Zobacz QA",
     ctaHref: "#/qa-automatyzacja",
@@ -69,7 +69,7 @@ export const defaultSiteContent = {
       {
         icon: "check",
         title: "Testowanie stron i aplikacji",
-        text: "Sprawdzanie formularzy, linków, responsywności, podstawowych scenariuszy użytkownika i błędów UI.",
+        text: "Sprawdzanie formularzy, linków, wersji mobilnej i drobnych błędów, które użytkownik szybko zauważy.",
       },
       {
         icon: "sparkles",
@@ -84,14 +84,14 @@ export const defaultSiteContent = {
       {
         icon: "monitor",
         title: "Podstawy testów automatycznych",
-        text: "Automatyczne sprawdzanie wybranych ścieżek użytkownika i najważniejszych elementów strony.",
+        text: "Automatyczne sprawdzanie najważniejszych miejsc na stronie, żeby szybciej wyłapać regresje po zmianach.",
       },
     ],
   },
   gamedevTeaser: {
     eyebrow: "Interaktywne projekty",
     title: "GameDev i projekty interaktywne",
-    text: "Projekty interaktywne pokazują moje podejście do logiki, reakcji na działania użytkownika i tworzenia angażujących doświadczeń.",
+    text: "Małe prototypy pokazują, że lubię pracować nie tylko nad wyglądem, ale też nad ruchem, zasadami i tym, co dzieje się po kliknięciu.",
     ctaLabel: "Zobacz GameDev",
     ctaHref: "#/gamedev",
     cards: [
@@ -108,7 +108,7 @@ export const defaultSiteContent = {
       {
         icon: "palette",
         title: "Edukacja i eksperymenty",
-        text: "Wykorzystanie game devu w nauce programowania i kreatywnych projektach.",
+        text: "Małe sceny i demo pomagają szybko sprawdzić pomysł, zanim zrobi się z niego większy projekt.",
       },
     ],
   },
@@ -207,8 +207,7 @@ export const defaultSiteContent = {
         type: "Automatyzacja",
         title: "Kontrola strony po publikacji",
         text: "Projekt demo pokazujący, jak można sprawdzać kluczowe elementy strony po publikacji: widoczność sekcji, CTA, formularz i podstawowe linki.",
-        details:
-          "Zakres obejmuje checklistę jakości, podstawowe scenariusze użytkownika i powtarzalne kontrole po zmianach.",
+        details: "Zakres obejmuje checklistę jakości i powtarzalne kontrole po zmianach.",
         status: "projekt demo",
         category: "Automatyzacja",
         tags: ["QA", "testy", "checklista", "automatyzacja"],
@@ -234,7 +233,7 @@ export const defaultSiteContent = {
         title: "Interaktywny prototyp 2.5D",
         text: "Projekt własny związany z logiką rozgrywki: sterowanie, kolizje, punkty i proste zachowania obiektów.",
         details:
-          "Prototyp pokazuje pracę z interakcją, stanem aplikacji i czytelną reakcją systemu na decyzje użytkownika.",
+          "Prototyp pokazuje, jak myślę o ruchu, stanie aplikacji i jasnej reakcji po kliknięciu lub akcji gracza.",
         status: "prototyp",
         category: "GameDev",
         tags: ["GameDev", "prototyp", "2.5D", "interakcje"],
@@ -260,7 +259,7 @@ export const defaultSiteContent = {
         title: "Strony internetowe i lekki CMS",
         subtitle: "Nowoczesna strona z możliwością edycji treści",
         description:
-          "Tworzę responsywne strony, wizytówki online i proste panele CMS, dzięki którym możesz edytować najważniejsze treści bez przebudowy strony.",
+          "Projektuję strony, które mają jasno pokazać ofertę i ułatwić kontakt. Jeśli chcesz później samodzielnie zmieniać teksty, mogę dodać prosty panel CMS.",
         ctaLabel: "Zapytaj o stronę",
         ctaHref: "#contact",
       },
@@ -282,27 +281,27 @@ export const defaultSiteContent = {
         cmsPanel: {
           title: "Panel CMS",
           description:
-            "Panel ma być prosty i bezpieczny: właściciel edytuje treści, ale nie rozbija layoutu strony.",
+            "Panel nie ma udawać WordPressa. Ma dawać szybki dostęp do najważniejszych treści i chronić stronę przed przypadkowym zepsuciem układu.",
           items: [
-            "edycja treści i sekcji oferty",
-            "FAQ i dane kontaktowe",
-            "podstawowe SEO",
-            "przygotowanie zmian przed publikacją",
-            "statystyki GA4 w panelu",
-            "dostępy dla osób pracujących przy stronie",
+            "zmiana tekstów w ofercie",
+            "edycja FAQ i kontaktu",
+            "tytuły i opisy pod wyszukiwarkę",
+            "zapis zmian przed publikacją",
+            "prosty podgląd statystyk",
+            "dostęp dla osoby, która ma pomagać przy stronie",
           ],
         },
         process: {
           title: "Proces współpracy",
           description:
-            "Pracę prowadzę etapami, żeby od początku było jasne, co powstaje i co jest potrzebne do publikacji.",
+            "Najpierw ustalamy, co strona ma załatwiać. Dopiero potem dobieram układ, treści i funkcje, żeby nie robić rzeczy tylko dla efektu.",
           items: [
-            "rozmowa i cel strony",
-            "struktura treści",
-            "projekt i wykonanie",
-            "testy responsywności",
-            "publikacja",
-            "wsparcie po wdrożeniu",
+            "krótka rozmowa o celu strony",
+            "ustalenie sekcji i materiałów",
+            "projekt i wdrożenie",
+            "sprawdzenie telefonu i komputera",
+            "publikacja strony",
+            "poprawki po pierwszym odbiorze",
           ],
         },
         audience: {
@@ -321,7 +320,7 @@ export const defaultSiteContent = {
         finalCta: {
           title: "Chcesz stronę, którą da się później edytować?",
           description:
-            "Napisz, czego potrzebujesz: prostej wizytówki, strony firmowej, portfolio albo panelu CMS do treści.",
+            "Napisz, co chcesz pokazać i co ma zrobić odwiedzający po wejściu na stronę. Na tej podstawie dobierzemy najprostszy sensowny zakres.",
           ctaLabel: "Skontaktuj się",
           ctaHref: "#contact",
         },
@@ -332,17 +331,17 @@ export const defaultSiteContent = {
       seo: {
         title: "QA, testowanie i automatyzacja | Dominik Sadzik",
         description:
-          "QA, testowanie stron i aplikacji, certyfikat ISTQB, automatyzacja powtarzalnych kontroli i raportowanie błędów.",
+          "QA, testowanie stron i aplikacji, certyfikat ISTQB, checklisty przed publikacją i czytelne raportowanie błędów.",
         ogTitle: "QA, testowanie i automatyzacja",
         ogDescription:
-          "Praktyczne podejście do jakości stron, scenariuszy użytkownika i powtarzalnych kontroli.",
+          "Praktyczne podejście do jakości stron: formularze, linki, wersja mobilna, raporty błędów i kontrole po zmianach.",
       },
       hero: {
         eyebrow: "QA i automatyzacja",
         title: "QA, testowanie i automatyzacja",
-        subtitle: "Certyfikat ISTQB, scenariusze i stabilniejsze wdrożenia",
+        subtitle: "Certyfikat ISTQB, checklisty i spokojniejsze wdrożenia",
         description:
-          "Łączę praktyczne testowanie z automatyzacją powtarzalnych kontroli. ISTQB pomaga mi patrzeć na projekt przez scenariusze użytkownika, ryzyka i jakość wdrożenia.",
+          "Przed publikacją warto sprawdzić rzeczy, które użytkownik zauważy od razu: formularze, linki, wersję mobilną i drobne błędy w układzie. W tym pomaga mi podejście QA.",
         ctaLabel: "Porozmawiajmy o QA",
         ctaHref: "#contact",
       },
@@ -350,19 +349,19 @@ export const defaultSiteContent = {
         istqbCertificate: {
           title: "Certyfikat ISTQB",
           description:
-            "Certyfikat porządkuje podejście do jakości: pomaga myśleć scenariuszami, ryzykiem, przypadkami testowymi i czytelnym raportowaniem.",
+            "ISTQB traktuję jako uporządkowanie pracy, nie jako suchą teorię. Pomaga mi szybciej zauważać ryzyka i opisywać problemy tak, żeby dało się je łatwo poprawić.",
           items: [
-            "myślenie scenariuszami użytkownika",
-            "szukanie ryzyk",
-            "priorytetyzacja błędów",
-            "sprawdzanie, czy poprawki nie psują działających elementów",
-            "komunikacja z developerem i klientem",
+            "sprawdzanie realnych ścieżek na stronie",
+            "wyłapywanie miejsc, które mogą zmylić użytkownika",
+            "oddzielanie błędów ważnych od kosmetyki",
+            "kontrola, czy poprawka nie psuje innej części strony",
+            "jasny opis problemu bez technicznego chaosu",
           ],
         },
         testing: {
           title: "Testowanie stron i aplikacji",
           description:
-            "Sprawdzam najważniejsze ścieżki użytkownika, formularze, linki, responsywność i podstawowe problemy UI.",
+            "Patrzę na stronę praktycznie: czy da się wygodnie znaleźć ofertę, kliknąć kontakt, wysłać formularz i korzystać z niej na telefonie.",
           items: [
             "testy funkcjonalne",
             "testy formularzy",
@@ -374,7 +373,7 @@ export const defaultSiteContent = {
         automation: {
           title: "Automatyzacja powtarzalnych procesów",
           description:
-            "Automatyzacja ma sens tam, gdzie te same kontrole wracają po każdej zmianie.",
+            "Nie wszystko trzeba automatyzować. Ma to sens tam, gdzie po każdej zmianie wracają te same nudne kontrole.",
           items: [
             "powtarzalne scenariusze",
             "checklisty przed publikacją",
@@ -386,7 +385,7 @@ export const defaultSiteContent = {
         bugReports: {
           title: "Raportowanie błędów",
           description:
-            "Raport powinien pomagać szybko zrozumieć problem i odtworzyć go bez zgadywania.",
+            "Dobry raport nie jest listą narzekań. Ma szybko pokazać, co nie działa, gdzie to widać i co trzeba zrobić dalej.",
           items: [
             "opis błędu",
             "kroki odtworzenia",
@@ -399,7 +398,7 @@ export const defaultSiteContent = {
         examples: {
           title: "Przykładowe zastosowania",
           description:
-            "Zakres można dopasować do strony, aplikacji albo procesu, który często wymaga ręcznego sprawdzania.",
+            "Najczęściej chodzi o proste rzeczy, które łatwo przeoczyć, a które mocno wpływają na odbiór strony.",
           items: [
             "formularz kontaktowy",
             "linki i przyciski CTA",
@@ -411,7 +410,7 @@ export const defaultSiteContent = {
         finalCta: {
           title: "Chcesz sprawdzić stronę przed publikacją?",
           description:
-            "Napisz, co najczęściej sprawdzasz ręcznie. Pomogę ocenić, co warto uporządkować lub zautomatyzować.",
+            "Możesz podesłać stronę albo opisać problem. Sprawdzę, co warto poprawić ręcznie, a co można później zautomatyzować.",
           ctaLabel: "Skontaktuj się",
           ctaHref: "#contact",
         },
@@ -422,17 +421,17 @@ export const defaultSiteContent = {
       seo: {
         title: "GameDev i projekty interaktywne | Dominik Sadzik",
         description:
-          "Prototypy gier i interaktywne demo pokazujące pracę z logiką, reakcją na działania użytkownika oraz kreatywnym UI.",
+          "Prototypy gier i małe interaktywne demo pokazujące pracę z ruchem, zasadami, sterowaniem i czytelnym UI.",
         ogTitle: "GameDev i projekty interaktywne",
         ogDescription:
-          "Prototypy 2.5D, mechaniki i interaktywne demo pokazujące pracę z logiką oraz reakcją na działania użytkownika.",
+          "Prototypy 2.5D, proste mechaniki i interaktywne demo pokazujące, jak myślę o ruchu, zasadach i reakcji na gracza.",
       },
       hero: {
         eyebrow: "GameDev",
         title: "GameDev i interaktywne prototypy",
-        subtitle: "Logika, interakcje i kreatywne eksperymenty",
+        subtitle: "Małe demo, ruch, mechaniki i eksperymenty",
         description:
-          "W tej części portfolio pokazuję prototypy i interaktywne demo, które łączą logikę, czytelne sterowanie i kreatywne podejście do doświadczenia użytkownika.",
+          "To nie jest oferta dużych gier komercyjnych. Pokazuję tu mniejsze prototypy, bo dobrze oddają sposób myślenia: pomysł, sterowanie, reakcja świata i szybkie sprawdzenie, czy mechanika ma sens.",
         ctaLabel: "Porozmawiajmy o projekcie",
         ctaHref: "#contact",
       },
@@ -440,7 +439,7 @@ export const defaultSiteContent = {
         whatIBuild: {
           title: "Co pokazują prototypy",
           description:
-            "Najlepiej sprawdzają się małe, konkretne demo, w których od razu widać pomysł, zasady działania i reakcję na decyzje użytkownika.",
+            "Najbardziej lubię krótkie demo, w którym od razu widać pomysł. Postać ma się ruszać, obiekty mają reagować, a zasady powinny być jasne bez długiego tłumaczenia.",
           items: [
             "prototypy 2.5D",
             "proste mechaniki",
@@ -455,19 +454,19 @@ export const defaultSiteContent = {
         connectionToWeb: {
           title: "Jak GameDev łączy się z moją ofertą",
           description:
-            "Projekty interaktywne wzmacniają umiejętności przydatne także w stronach i aplikacjach: logikę, płynne reakcje UI oraz przewidywanie zachowań użytkownika.",
+            "Te prototypy pomagają mi też przy stronach. Łatwiej wtedy myśleć o stanie, ruchu, informacji zwrotnej i o tym, czy po kliknięciu dzieje się dokładnie to, czego ktoś oczekuje.",
           items: [
-            "logika aplikacji",
-            "praca z interakcją użytkownika",
-            "testowanie zachowań",
-            "kreatywne UI",
-            "prototypowanie",
+            "logika pod spodem",
+            "czytelna reakcja po kliknięciu",
+            "sprawdzanie nietypowych zachowań",
+            "UI, które nie jest tylko statycznym obrazkiem",
+            "szybkie testowanie pomysłu",
           ],
         },
         demos: {
           title: "Przykładowe projekty i demo",
           description:
-            "To koncepcyjne projekty portfolio, które pokazują kierunek pracy i zakres możliwych interakcji.",
+            "Poniżej są krótkie fragmenty i screeny z prototypów. Nie udają gotowych produktów, tylko pokazują konkretne mechaniki i eksperymenty.",
           items: [
             "platformówka 2.5D",
             "interaktywne otoczenie",
@@ -478,7 +477,7 @@ export const defaultSiteContent = {
             {
               title: "Prototyp 3D z punktami",
               description:
-                "Krótki podgląd mechaniki zbierania obiektów, licznika punktów i prostego HUD-u w scenie 3D.",
+                "Mały test zbierania obiektów, licznika punktów i prostego HUD-u w scenie 3D.",
               src: "portfolio/gamedev-stones-screen.webp",
               demoSrc: "portfolio/gamedev-stones-demo.gif",
               alt: "Screen prototypu 3D ze zbieraniem obiektów i licznikiem punktów.",
@@ -487,7 +486,7 @@ export const defaultSiteContent = {
             {
               title: "Model i animacja postaci",
               description:
-                "Pionowy podgląd prostego modelu postaci pokazujący eksperyment z formą, ruchem i prezentacją obiektu.",
+                "Eksperyment z prostą postacią, ruchem i prezentacją obiektu w trochę luźniejszej formie.",
               src: "portfolio/gamedev-pizza-character-screen.webp",
               demoSrc: "portfolio/gamedev-pizza-character.gif",
               alt: "Screen modelu postaci w kształcie kawałka pizzy.",
@@ -496,7 +495,7 @@ export const defaultSiteContent = {
             {
               title: "Interakcja z otoczeniem",
               description:
-                "Demo reakcji świata gry na działanie gracza: ruch, fizyka obiektów i czytelny efekt interakcji.",
+                "Test tego, czy obiekty w świecie gry reagują jasno na działanie gracza.",
               src: "portfolio/gamedev-arena-screen.webp",
               demoSrc: "portfolio/gamedev-destruction-demo.gif",
               alt: "Screen interakcji z obiektami w środowisku 3D.",
@@ -505,7 +504,7 @@ export const defaultSiteContent = {
             {
               title: "Poziom z platformami",
               description:
-                "Test fragmentu poziomu z platformami, przeszkodami i czytelnym układem przestrzeni do przejścia.",
+                "Fragment poziomu z platformami i przeszkodami, czyli szybkie sprawdzenie rytmu przejścia.",
               src: "portfolio/gamedev-conveyor-screen.webp",
               demoSrc: "portfolio/gamedev-conveyor-demo.gif",
               alt: "Screen poziomu 3D z platformami i przeszkodami.",
@@ -514,7 +513,7 @@ export const defaultSiteContent = {
             {
               title: "Test przeszkód",
               description:
-                "Podgląd układu z kolcami i platformami, który pokazuje pracę nad rytmem przejścia i ryzykiem dla gracza.",
+                "Układ z kolcami i platformami, gdzie ważne jest wyczucie odległości, czasu i ryzyka.",
               src: "portfolio/gamedev-spikes-screen.webp",
               demoSrc: "portfolio/gamedev-spikes-demo.gif",
               alt: "Screen poziomu 3D z kolcami i platformami.",
@@ -525,7 +524,7 @@ export const defaultSiteContent = {
         finalCta: {
           title: "Masz pomysł na interaktywny projekt?",
           description:
-            "Napisz, czy chodzi o prototyp, demo, element edukacyjny czy kreatywną interakcję na stronie.",
+            "Jeśli chodzi Ci po głowie małe demo, interaktywny element na stronie albo prosty prototyp, możemy pogadać o tym bez robienia od razu wielkiej produkcji.",
           ctaLabel: "Napisz w sprawie GameDev",
           ctaHref: "#contact",
         },

@@ -205,6 +205,7 @@ describe("LandingPage navigation", () => {
         .getAttribute("aria-current"),
     ).toBe("page");
     expect(screen.getByText("Aktualnie: Strony i CMS")).toBeTruthy();
+    expect(screen.queryByRole("heading", { name: "Co mogę przygotować" })).toBeNull();
   });
 
   it("renders the QA detail route without a blank screen", () => {
