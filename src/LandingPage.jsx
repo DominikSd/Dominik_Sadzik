@@ -1726,10 +1726,127 @@ function PageMediaGallery({ mediaItems = [] }) {
 }
 
 function getPageSectionVariant(sectionKey, sectionIndex, itemCount) {
+  if (sectionKey === "cmsPanel") return "cms-interactive";
   if (/process|automation/i.test(sectionKey)) return "timeline";
   if (/audience|examples|whatIBuild/i.test(sectionKey) || itemCount > 6) return "cloud";
   if (sectionIndex % 3 === 1) return "rail";
   return "cards";
+}
+
+function getCmsFeaturePreview(item, index) {
+  const previews = [
+    {
+      title: "Oferta",
+      icon: "monitor",
+      accent: "cyan",
+      rows: ["Nagłówek usługi", "Krótki opis oferty", "Przycisk kontaktu"],
+    },
+    {
+      title: "FAQ i kontakt",
+      icon: "mail",
+      accent: "violet",
+      rows: ["Pytanie klienta", "Krótka odpowiedź", "Dane kontaktowe"],
+    },
+    {
+      title: "SEO",
+      icon: "globe",
+      accent: "blue",
+      rows: ["Tytuł strony", "Opis w wyszukiwarce", "Podgląd wyniku"],
+      imageSrc: "portfolio/cms-seo-editor-preview.svg",
+      imageAlt: "Podgląd edycji SEO podstrony w panelu CMS.",
+    },
+    {
+      title: "Zmiany",
+      icon: "check",
+      accent: "emerald",
+      rows: ["Wersja robocza", "Sprawdzenie treści", "Publikacja"],
+    },
+    {
+      title: "Statystyki",
+      icon: "badge",
+      accent: "cyan",
+      rows: ["Odwiedzający", "Kliknięcia", "Popularne podstrony"],
+    },
+    {
+      title: "Dostępy",
+      icon: "shield-check",
+      accent: "violet",
+      rows: ["Właściciel", "Edytor", "Podgląd"],
+    },
+  ];
+
+  return (
+    previews[index] || {
+      title: item,
+      icon: "sparkles",
+      accent: "cyan",
+      rows: ["Edycja", "Podgląd", "Publikacja"],
+    }
+  );
+}
+
+function CmsFeaturePreview({ preview }) {
+  const accentClass = {
+    blue: "from-blue-400 to-violet-400",
+    cyan: "from-cyan-300 to-blue-400",
+    emerald: "from-emerald-300 to-cyan-300",
+    violet: "from-violet-400 to-fuchsia-400",
+  }[preview.accent];
+
+  return (
+    <div className="relative min-h-[8.5rem] overflow-hidden rounded-lg border border-white/10 bg-slate-950/70 p-3 shadow-inner shadow-slate-950/70">
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_25%_20%,rgba(34,211,238,0.16),transparent_35%),radial-gradient(circle_at_85%_65%,rgba(139,92,246,0.14),transparent_34%)]" />
+      <div className="relative flex items-center justify-between gap-3 border-b border-white/10 pb-2">
+        <div className="flex min-w-0 items-center gap-2">
+          <span className={`h-2.5 w-2.5 rounded-full bg-gradient-to-r ${accentClass}`} />
+          <p className="truncate text-xs font-black uppercase tracking-[0.18em] text-slate-100">
+            {preview.title}
+          </p>
+        </div>
+        <Icon name={preview.icon} className="h-4 w-4 flex-none text-cyan-100" />
+      </div>
+      {preview.imageSrc ? (
+        <div className="relative mt-3 overflow-hidden rounded-md border border-white/10 bg-slate-950">
+          <img
+            src={preview.imageSrc}
+            alt={preview.imageAlt}
+            className="aspect-[16/9] h-full w-full object-cover object-top"
+            loading="lazy"
+            decoding="async"
+          />
+          <div className="pointer-events-none absolute inset-x-0 bottom-0 h-10 bg-gradient-to-t from-slate-950/85 to-transparent" />
+        </div>
+      ) : (
+        <>
+          <div className="relative mt-3 grid gap-2">
+            {preview.rows.map((row, rowIndex) => (
+              <div
+                key={row}
+                className="grid grid-cols-[auto_minmax(0,1fr)] items-center gap-2 rounded-md bg-white/[0.045] px-2.5 py-2"
+              >
+                <span
+                  className={`h-2 w-2 rounded-full bg-gradient-to-r ${accentClass} ${
+                    rowIndex === 1 ? "opacity-75" : rowIndex === 2 ? "opacity-55" : ""
+                  }`}
+                />
+                <span className="min-w-0 truncate text-[0.72rem] font-semibold text-slate-300">
+                  {row}
+                </span>
+              </div>
+            ))}
+          </div>
+          <div className={`relative mt-3 h-1.5 rounded-full bg-white/10`}>
+            <motion.div
+              className={`h-full rounded-full bg-gradient-to-r ${accentClass}`}
+              initial={{ width: "42%" }}
+              animate={{ width: ["42%", "78%", "56%"] }}
+              transition={{ duration: 4.6, repeat: Infinity, ease: "easeInOut" }}
+            />
+          </div>
+        </>
+      )}
+    </div>
+  );
 }
 
 function PageSectionItems({ items, variant }) {
@@ -1794,6 +1911,48 @@ function PageSectionItems({ items, variant }) {
             <p className="min-w-0 break-words text-slate-100">{item}</p>
           </motion.div>
         ))}
+      </div>
+    );
+  }
+
+  if (variant === "cms-interactive") {
+    return (
+      <div className="grid min-w-0 gap-4 sm:grid-cols-2">
+        {items.map((item, index) => {
+          const preview = getCmsFeaturePreview(item, index);
+
+          return (
+            <motion.article
+              key={item}
+              variants={fadeUp}
+              animate={{ y: [0, -3, 0] }}
+              transition={{
+                duration: 5.2,
+                repeat: Infinity,
+                ease: "easeInOut",
+                delay: index * 0.18,
+              }}
+              whileHover={{ y: -6, scale: 1.015 }}
+              tabIndex={0}
+              className="group relative min-w-0 overflow-hidden rounded-lg border border-white/10 bg-slate-950/40 p-5 text-center outline-none transition duration-300 hover:border-cyan-300/35 hover:bg-white/[0.06] focus-visible:border-cyan-200/70 focus-visible:ring-2 focus-visible:ring-cyan-300/30"
+            >
+              <div className="pointer-events-none absolute inset-x-8 top-0 h-px bg-gradient-to-r from-transparent via-cyan-300/40 to-transparent opacity-0 transition duration-300 group-hover:opacity-100 group-focus-visible:opacity-100" />
+              <div className="flex min-w-0 flex-col items-center justify-center">
+                <div className="flex min-h-[8rem] min-w-0 flex-col items-center justify-center gap-4">
+                  <div className="flex h-12 w-12 flex-none items-center justify-center rounded-lg bg-gradient-to-r from-blue-500 to-violet-500 text-sm font-black text-white shadow-lg shadow-blue-500/20 transition duration-300 group-hover:scale-105 group-hover:shadow-cyan-400/25 group-focus-visible:scale-105 group-focus-visible:shadow-cyan-400/25">
+                    {String(index + 1).padStart(2, "0")}
+                  </div>
+                  <p className="mx-auto min-w-0 max-w-[18rem] break-words text-lg font-semibold leading-snug text-slate-100">
+                    {item}
+                  </p>
+                </div>
+                <div className="w-full max-h-0 -translate-y-2 overflow-hidden opacity-0 transition-all duration-500 group-hover:max-h-72 group-hover:translate-y-0 group-hover:opacity-100 group-focus-visible:max-h-72 group-focus-visible:translate-y-0 group-focus-visible:opacity-100">
+                  <CmsFeaturePreview preview={preview} />
+                </div>
+              </div>
+            </motion.article>
+          );
+        })}
       </div>
     );
   }

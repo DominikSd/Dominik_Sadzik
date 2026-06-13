@@ -206,6 +206,14 @@ describe("LandingPage navigation", () => {
     ).toBe("page");
     expect(screen.getByText("Aktualnie: Strony i CMS")).toBeTruthy();
     expect(screen.queryByRole("heading", { name: "Co mogę przygotować" })).toBeNull();
+    expect(screen.queryByText("Najedź, żeby zobaczyć podgląd")).toBeNull();
+    expect(screen.getByText("Oferta")).toBeTruthy();
+    expect(screen.getByText("Statystyki")).toBeTruthy();
+    expect(
+      screen
+        .getByRole("img", { name: "Podgląd edycji SEO podstrony w panelu CMS." })
+        .getAttribute("src"),
+    ).toBe("portfolio/cms-seo-editor-preview.svg");
   });
 
   it("renders the QA detail route without a blank screen", () => {
