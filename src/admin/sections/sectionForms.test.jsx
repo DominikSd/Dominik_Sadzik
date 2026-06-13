@@ -21,7 +21,7 @@ const forms = [
   ["portfolio", PortfolioSectionForm, "Dodaj projekt"],
   ["faq", FaqSectionForm, "Dodaj pytanie"],
   ["contact", ContactSectionForm, "Telefon"],
-  ["seo", SeoSectionForm, "Meta title"],
+  ["seo", SeoSectionForm, "Domyślne SEO strony"],
   ["settings", SettingsSectionForm, "Nazwa strony"],
 ];
 

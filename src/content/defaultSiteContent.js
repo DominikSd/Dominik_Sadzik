@@ -16,9 +16,67 @@ export const defaultSiteContent = {
     ],
   },
   seo: {
-    metaTitle: "Dominik Sadzik - Projektowanie stron internetowych i wizytówek",
+    metaTitle: "Dominik Sadzik | Strony internetowe, wizytówki online i lekki CMS",
     metaDescription:
-      "Projektuję nowoczesne strony internetowe, wizytówki online i proste rozwiązania dla małych firm, specjalistów oraz lokalnych usług.",
+      "Tworzę nowoczesne, responsywne strony internetowe, portfolio i wizytówki online z prostym panelem CMS do edycji treści.",
+    canonical: "https://dominiksd.github.io/Dominik_Sadzik/",
+    robots: "index,follow",
+    ogTitle: "Dominik Sadzik | Strony internetowe, wizytówki online i lekki CMS",
+    ogDescription:
+      "Tworzę nowoczesne, responsywne strony internetowe, portfolio i wizytówki online z prostym panelem CMS do edycji treści.",
+    ogImage: "https://dominiksd.github.io/Dominik_Sadzik/portfolio/logo.svg",
+    siteName: "Dominik Sadzik",
+    locale: "pl_PL",
+    pages: {
+      start: {
+        title: "Dominik Sadzik | Strony internetowe, wizytówki online i lekki CMS",
+        description:
+          "Tworzę nowoczesne, responsywne strony internetowe, portfolio i wizytówki online z prostym panelem CMS do edycji treści.",
+        slug: "",
+        canonical: "https://dominiksd.github.io/Dominik_Sadzik/",
+        noindex: false,
+        ogTitle: "Dominik Sadzik | Strony internetowe i lekki CMS",
+        ogDescription:
+          "Portfolio i oferta tworzenia stron, wizytówek online oraz prostego CMS-a do edycji treści.",
+        ogImage: "https://dominiksd.github.io/Dominik_Sadzik/portfolio/logo.svg",
+      },
+      projects: {
+        title: "Projekty i realizacje | Dominik Sadzik",
+        description:
+          "Zobacz przykłady stron internetowych, projektów graficznych, lekkiego CMS-a, QA i prototypów interaktywnych.",
+        slug: "projects",
+        canonical: "https://dominiksd.github.io/Dominik_Sadzik/#projects",
+        noindex: false,
+        ogTitle: "Projekty i realizacje | Dominik Sadzik",
+        ogDescription:
+          "Wybrane realizacje, projekty graficzne i koncepcje pokazujące zakres mojej pracy.",
+        ogImage: "https://dominiksd.github.io/Dominik_Sadzik/portfolio/neuronest-site.svg?v=2",
+      },
+      faq: {
+        title: "FAQ | Strony internetowe i CMS",
+        description:
+          "Odpowiedzi na najczęstsze pytania o stronę internetową, CMS, domenę, hosting i dalszą rozbudowę.",
+        slug: "faq",
+        canonical: "https://dominiksd.github.io/Dominik_Sadzik/#faq",
+        noindex: false,
+        ogTitle: "FAQ | Strony internetowe i CMS",
+        ogDescription:
+          "Najważniejsze informacje przed rozpoczęciem pracy nad stroną internetową lub wizytówką online.",
+        ogImage: "https://dominiksd.github.io/Dominik_Sadzik/portfolio/logo.svg",
+      },
+      contact: {
+        title: "Kontakt | Dominik Sadzik",
+        description:
+          "Napisz, jeśli potrzebujesz strony internetowej, wizytówki online, prostego CMS-a albo wsparcia QA.",
+        slug: "contact",
+        canonical: "https://dominiksd.github.io/Dominik_Sadzik/#contact",
+        noindex: false,
+        ogTitle: "Kontakt | Dominik Sadzik",
+        ogDescription:
+          "Skontaktuj się w sprawie strony internetowej, wizytówki online, lekkiego CMS-a lub testów strony.",
+        ogImage: "https://dominiksd.github.io/Dominik_Sadzik/portfolio/logo.svg",
+      },
+    },
   },
   hero: {
     eyebrow: "Strony internetowe - lekki CMS - QA",
@@ -250,9 +308,12 @@ export const defaultSiteContent = {
         title: "Strony internetowe i lekki CMS | Dominik Sadzik",
         description:
           "Nowoczesne strony internetowe, wizytówki online i lekki panel CMS do edycji treści, SEO, FAQ, kontaktu i statystyk.",
+        canonical: "https://dominiksd.github.io/Dominik_Sadzik/#/strony-cms",
+        noindex: false,
         ogTitle: "Strony internetowe i lekki CMS",
         ogDescription:
           "Strony dla małych firm, specjalistów i usługodawców z prostym panelem edycji treści.",
+        ogImage: "https://dominiksd.github.io/Dominik_Sadzik/portfolio/logo.svg",
       },
       hero: {
         eyebrow: "Strony i CMS",
@@ -332,9 +393,12 @@ export const defaultSiteContent = {
         title: "QA, testowanie i automatyzacja | Dominik Sadzik",
         description:
           "QA, testowanie stron i aplikacji, certyfikat ISTQB, checklisty przed publikacją i czytelne raportowanie błędów.",
+        canonical: "https://dominiksd.github.io/Dominik_Sadzik/#/qa-automatyzacja",
+        noindex: false,
         ogTitle: "QA, testowanie i automatyzacja",
         ogDescription:
           "Praktyczne podejście do jakości stron: formularze, linki, wersja mobilna, raporty błędów i kontrole po zmianach.",
+        ogImage: "https://dominiksd.github.io/Dominik_Sadzik/portfolio/logo.svg",
       },
       hero: {
         eyebrow: "QA i automatyzacja",
@@ -422,9 +486,12 @@ export const defaultSiteContent = {
         title: "GameDev i projekty interaktywne | Dominik Sadzik",
         description:
           "Prototypy gier i małe interaktywne demo pokazujące pracę z ruchem, zasadami, sterowaniem i czytelnym UI.",
+        canonical: "https://dominiksd.github.io/Dominik_Sadzik/#/gamedev",
+        noindex: false,
         ogTitle: "GameDev i projekty interaktywne",
         ogDescription:
           "Prototypy 2.5D, proste mechaniki i interaktywne demo pokazujące, jak myślę o ruchu, zasadach i reakcji na gracza.",
+        ogImage: "https://dominiksd.github.io/Dominik_Sadzik/portfolio/gamedev-stones-screen.webp",
       },
       hero: {
         eyebrow: "GameDev",

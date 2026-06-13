@@ -8,6 +8,7 @@ import UpdatePasswordForm from "./admin/auth/UpdatePasswordForm.jsx";
 import { getSafeAnalyticsPath, initAnalytics, trackPageView } from "./lib/analytics/ga4.js";
 import { adminHashPath, supabase } from "./lib/supabaseClient.js";
 import { extractAuthHash, normalizeHash, pathToHash } from "./lib/routeUtils.js";
+import { applyNoindexSeo } from "./lib/seo.js";
 import { getAuthModeFromSearch } from "./admin/auth/authRedirects.js";
 import "./index.css";
 import ErrorBoundary from "./components/ErrorBoundary.jsx";
@@ -100,6 +101,20 @@ export function AppRouter() {
     });
 
     return () => subscription.subscription.unsubscribe();
+  }, [authMode, hash]);
+
+  useEffect(() => {
+    if (authMode === "callback") {
+      applyNoindexSeo("Logowanie do panelu CMS - Dominik Sadzik");
+      return;
+    }
+    if (authMode === "recovery") {
+      applyNoindexSeo("Reset hasła panelu CMS - Dominik Sadzik");
+      return;
+    }
+    if (hash === `#/${adminHashPath}`) {
+      applyNoindexSeo("Panel CMS - Dominik Sadzik");
+    }
   }, [authMode, hash]);
 
   useEffect(() => {

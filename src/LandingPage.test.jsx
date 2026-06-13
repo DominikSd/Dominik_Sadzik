@@ -49,6 +49,9 @@ describe("LandingPage navigation", () => {
 
     expect(screen.getByText("Draft preview title")).toBeTruthy();
     expect(screen.getByText(/Podgląd draftu CMS/)).toBeTruthy();
+    expect(document.querySelector('meta[name="robots"]').getAttribute("content")).toBe(
+      "noindex,nofollow",
+    );
   });
 
   it("renders consistent main navigation categories without a separate ISTQB link", () => {

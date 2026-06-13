@@ -1,5 +1,13 @@
 import React, { useState } from "react";
 import { Field, FormGrid, ListEditor, TextArea, TextInput } from "./FormPrimitives";
+import { defaultSiteContent } from "../../content/defaultSiteContent";
+import {
+  GooglePreview,
+  getLengthHint,
+  SocialPreview,
+  validateCanonical,
+  validateOgImage,
+} from "./SeoSectionForm";
 
 const pageLabels = [
   ["webCms", "Strony i CMS"],
@@ -31,15 +39,26 @@ const sectionLabels = {
 
 function PageSeoEditor({ page, updatePage }) {
   const updateSeo = (patch) => updatePage({ seo: { ...page.seo, ...patch } });
+  const canonicalError = validateCanonical(page.seo.canonical || "");
+  const ogImageError = validateOgImage(page.seo.ogImage || "");
+  const socialTitle = page.seo.ogTitle || page.seo.title;
+  const socialDescription = page.seo.ogDescription || page.seo.description;
+  const socialImage = page.seo.ogImage || defaultSiteContent.seo.ogImage;
 
   return (
     <div className="space-y-4 rounded-lg border border-white/10 bg-white/[0.035] p-4">
       <h3 className="text-lg font-bold text-white">SEO podstrony</h3>
       <FormGrid>
-        <Field label="SEO title" hint="Najlepiej ok. 60-70 znaków.">
+        <Field label="SEO title" hint={getLengthHint(page.seo.title, 30, 60)}>
           <TextInput
             value={page.seo.title}
             onChange={(event) => updateSeo({ title: event.target.value })}
+          />
+        </Field>
+        <Field label="Slug URL" hint="Małe litery, cyfry i myślniki.">
+          <TextInput
+            value={page.slug}
+            onChange={(event) => updatePage({ slug: event.target.value })}
           />
         </Field>
         <Field label="OG title">
@@ -49,18 +68,50 @@ function PageSeoEditor({ page, updatePage }) {
           />
         </Field>
       </FormGrid>
-      <Field label="SEO description" hint="Najlepiej ok. 150-170 znaków.">
+      <Field label="SEO description" hint={getLengthHint(page.seo.description, 70, 160)}>
         <TextArea
           value={page.seo.description}
           onChange={(event) => updateSeo({ description: event.target.value })}
         />
       </Field>
+      <Field label="Canonical URL" hint={canonicalError || "Pełny URL albo puste pole."}>
+        <TextInput
+          value={page.seo.canonical || ""}
+          onChange={(event) => updateSeo({ canonical: event.target.value })}
+        />
+      </Field>
+      <label className="flex items-start gap-3 rounded-lg border border-white/10 bg-slate-950/45 p-4 text-sm text-slate-200">
+        <input
+          type="checkbox"
+          checked={Boolean(page.seo.noindex)}
+          onChange={(event) => updateSeo({ noindex: event.target.checked })}
+          className="mt-1"
+        />
+        <span>
+          <span className="block font-semibold text-white">Nie indeksuj tej podstrony</span>
+          <span className="mt-1 block text-slate-400">Ustawia robots na noindex,nofollow.</span>
+        </span>
+      </label>
       <Field label="OG description">
         <TextArea
           value={page.seo.ogDescription || ""}
           onChange={(event) => updateSeo({ ogDescription: event.target.value })}
         />
       </Field>
+      <Field label="OG image" hint={ogImageError || "URL albo ścieżka publiczna."}>
+        <TextInput
+          value={page.seo.ogImage || ""}
+          onChange={(event) => updateSeo({ ogImage: event.target.value })}
+        />
+      </Field>
+      <div className="grid gap-4 lg:grid-cols-2">
+        <GooglePreview
+          title={page.seo.title}
+          description={page.seo.description}
+          canonical={page.seo.canonical}
+        />
+        <SocialPreview title={socialTitle} description={socialDescription} image={socialImage} />
+      </div>
     </div>
   );
 }
@@ -72,12 +123,6 @@ function PageHeroEditor({ page, updatePage }) {
     <div className="space-y-4 rounded-lg border border-white/10 bg-white/[0.035] p-4">
       <h3 className="text-lg font-bold text-white">Hero podstrony</h3>
       <FormGrid>
-        <Field label="Slug">
-          <TextInput
-            value={page.slug}
-            onChange={(event) => updatePage({ slug: event.target.value })}
-          />
-        </Field>
         <Field label="Etykieta">
           <TextInput
             value={page.hero.eyebrow}

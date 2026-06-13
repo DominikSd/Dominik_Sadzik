@@ -56,4 +56,32 @@ describe("site content schema", () => {
 
     expect(() => validateSectionData("pages", pages)).toThrow();
   });
+
+  it("fills new SEO fields when normalizing older CMS content", () => {
+    const content = normalizeSiteContent({
+      ...defaultSiteContent,
+      seo: {
+        metaTitle: "Stary tytuł SEO",
+        metaDescription: "Stary opis meta używany przed rozbudową SEO w panelu.",
+      },
+    });
+
+    expect(content.seo.canonical).toBe(defaultSiteContent.seo.canonical);
+    expect(content.seo.pages.start.title).toBe(defaultSiteContent.seo.pages.start.title);
+  });
+
+  it("validates SEO slugs before saving a draft", () => {
+    const seo = {
+      ...defaultSiteContent.seo,
+      pages: {
+        ...defaultSiteContent.seo.pages,
+        projects: {
+          ...defaultSiteContent.seo.pages.projects,
+          slug: "projekty test",
+        },
+      },
+    };
+
+    expect(() => validateSectionData("seo", seo)).toThrow();
+  });
 });

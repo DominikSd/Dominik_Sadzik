@@ -67,11 +67,55 @@ const finalCtaSectionSchema = z.object({
   ctaHref: z.string().trim().min(1).max(220),
 });
 
+const slugSchema = z
+  .string()
+  .trim()
+  .max(80)
+  .regex(/^[a-z0-9-]*$/, "Slug może zawierać tylko małe litery, cyfry i myślniki.");
+
+const canonicalSchema = z
+  .string()
+  .trim()
+  .max(240)
+  .refine((value) => value === "" || /^https?:\/\/[^\s]+$/i.test(value), {
+    message: "Canonical musi być pełnym adresem URL albo pustym polem.",
+  })
+  .default("");
+
+const ogImageSchema = z
+  .string()
+  .trim()
+  .max(300)
+  .refine(
+    (value) =>
+      value === "" ||
+      /^https?:\/\/[^\s]+$/i.test(value) ||
+      /^[a-z0-9][a-z0-9/_.,?=&%#+-]*$/i.test(value),
+    {
+      message: "Obraz OG musi być pełnym URL-em albo poprawną ścieżką publiczną.",
+    },
+  )
+  .default("");
+
+const routeSeoSchema = z.object({
+  title: z.string().trim().min(1).max(75),
+  description: z.string().trim().min(1).max(180),
+  slug: slugSchema.default(""),
+  canonical: canonicalSchema,
+  noindex: z.boolean().default(false),
+  ogTitle: z.string().trim().max(90).optional().default(""),
+  ogDescription: z.string().trim().max(220).optional().default(""),
+  ogImage: ogImageSchema,
+});
+
 const pageSeoSchema = z.object({
   title: z.string().trim().min(1).max(75),
   description: z.string().trim().min(1).max(180),
+  canonical: canonicalSchema,
+  noindex: z.boolean().default(false),
   ogTitle: z.string().trim().max(90).optional().default(""),
   ogDescription: z.string().trim().max(220).optional().default(""),
+  ogImage: ogImageSchema,
 });
 
 const pageHeroSchema = z.object({
@@ -84,7 +128,7 @@ const pageHeroSchema = z.object({
 });
 
 const editablePageSchema = z.object({
-  slug: z.string().trim().min(1).max(80),
+  slug: slugSchema.min(1),
   seo: pageSeoSchema,
   hero: pageHeroSchema,
   sections: z.record(z.union([editableListSectionSchema, finalCtaSectionSchema])),
@@ -100,6 +144,21 @@ export const sectionSchemas = {
   seo: z.object({
     metaTitle: z.string().trim().min(1).max(70),
     metaDescription: z.string().trim().min(1).max(170),
+    canonical: canonicalSchema,
+    robots: z.string().trim().min(1).max(60).default("index,follow"),
+    ogTitle: z.string().trim().max(90).optional().default(""),
+    ogDescription: z.string().trim().max(220).optional().default(""),
+    ogImage: ogImageSchema,
+    siteName: z.string().trim().min(1).max(100).default(defaultSiteContent.settings.siteName),
+    locale: z.string().trim().min(2).max(12).default("pl_PL"),
+    pages: z
+      .object({
+        start: routeSeoSchema,
+        projects: routeSeoSchema,
+        faq: routeSeoSchema,
+        contact: routeSeoSchema,
+      })
+      .default(defaultSiteContent.seo.pages),
   }),
   hero: z.object({
     eyebrow: z.string().trim().max(120),
@@ -261,6 +320,7 @@ export function validateSectionData(key, data) {
 
 export function normalizeSiteContent(candidate) {
   const candidatePages = candidate?.pages || {};
+  const candidateSeo = candidate?.seo || {};
   const pages = {
     ...defaultSiteContent.pages,
     ...candidatePages,
@@ -272,10 +332,19 @@ export function normalizeSiteContent(candidate) {
       defaultSiteContent.pages.qaAutomation,
     gamedev: candidatePages.gamedev || defaultSiteContent.pages.gamedev,
   };
+  const seo = {
+    ...defaultSiteContent.seo,
+    ...candidateSeo,
+    pages: {
+      ...defaultSiteContent.seo.pages,
+      ...(candidateSeo.pages || {}),
+    },
+  };
 
   return siteContentSchema.parse({
     ...defaultSiteContent,
     ...candidate,
+    seo,
     pages,
     schemaVersion: CONTENT_SCHEMA_VERSION,
   });

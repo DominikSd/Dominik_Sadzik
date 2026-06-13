@@ -5,6 +5,7 @@ import { defaultSiteContent } from "./content/defaultSiteContent";
 import { trackContactClick, trackCtaClick, trackNavigationClick } from "./lib/analytics/ga4";
 import { loadPublishedSiteContent } from "./lib/contentApi";
 import { isDraftPreviewRequest, loadDraftPreviewContent } from "./lib/draftPreview";
+import { applySeo, applyStructuredData, getPublicRouteSeo } from "./lib/seo";
 
 const fadeUp = {
   hidden: { opacity: 1, y: 0 },
@@ -2178,24 +2179,10 @@ export default function LandingPage({ routeHash = "" }) {
   }, [activePage, routeSlug]);
 
   useEffect(() => {
-    const seo = activePage?.seo;
-    document.title = seo?.title || content.seo.metaTitle;
-    const description = document.querySelector('meta[name="description"]');
-    if (description)
-      description.setAttribute("content", seo?.description || content.seo.metaDescription);
-
-    const ogTitle = document.querySelector('meta[property="og:title"]');
-    if (ogTitle)
-      ogTitle.setAttribute("content", seo?.ogTitle || seo?.title || content.seo.metaTitle);
-
-    const ogDescription = document.querySelector('meta[property="og:description"]');
-    if (ogDescription) {
-      ogDescription.setAttribute(
-        "content",
-        seo?.ogDescription || seo?.description || content.seo.metaDescription,
-      );
-    }
-  }, [activePage, content.seo]);
+    const seo = getPublicRouteSeo({ content, routeHash, activePage });
+    applySeo(draftPreview?.content ? { ...seo, robots: "noindex,nofollow" } : seo);
+    applyStructuredData(content);
+  }, [activePage, content, draftPreview, routeHash]);
 
   const handleNavigate = (event, href) => {
     if (String(href || "").startsWith("#/")) return;

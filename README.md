@@ -224,6 +224,7 @@ Build nie może zawierać nazw lub wartości prywatnych sekretów.
 - [Configuration map](docs/configuration-map.md)
 - [Supabase setup](docs/supabase-setup.md)
 - [GA4 setup](docs/ga4-setup.md)
+- [SEO checklist](docs/seo-checklist.md)
 - [Local CMS test](docs/local-cms-test.md)
 - [Supabase RLS manual test](docs/supabase-rls-manual-test.md)
 - [Deployment checklist](docs/deployment-checklist.md)

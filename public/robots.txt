@@ -1,0 +1,9 @@
+User-agent: *
+Allow: /Dominik_Sadzik/
+
+# Panel CMS jest prywatny i dodatkowo dostaje noindex w aplikacji.
+# Robots.txt nie jest mechanizmem bezpieczeństwa, ale pomaga nie sugerować indeksowania panelu.
+Disallow: /Dominik_Sadzik/panel-admin
+Disallow: /Dominik_Sadzik/admin
+
+Sitemap: https://dominiksd.github.io/Dominik_Sadzik/sitemap.xml
