@@ -213,7 +213,12 @@ describe("LandingPage navigation", () => {
       screen
         .getByRole("img", { name: "Podgląd edycji SEO podstrony w panelu CMS." })
         .getAttribute("src"),
-    ).toBe("portfolio/cms-seo-editor-preview.svg");
+    ).toBe("portfolio/cms-seo-preview.png");
+    expect(
+      screen
+        .getByRole("img", { name: "Podgląd współpracy i dostępu do panelu CMS." })
+        .getAttribute("src"),
+    ).toBe("portfolio/cms-team-preview.png");
   });
 
   it("renders the QA detail route without a blank screen", () => {

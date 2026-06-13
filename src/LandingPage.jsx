@@ -1740,19 +1740,23 @@ function getCmsFeaturePreview(item, index) {
       icon: "monitor",
       accent: "cyan",
       rows: ["Nagłówek usługi", "Krótki opis oferty", "Przycisk kontaktu"],
+      imageSrc: "portfolio/cms-offer-preview.png",
+      imageAlt: "Podgląd edycji oferty strony w panelu CMS.",
     },
     {
       title: "FAQ i kontakt",
       icon: "mail",
       accent: "violet",
       rows: ["Pytanie klienta", "Krótka odpowiedź", "Dane kontaktowe"],
+      imageSrc: "portfolio/cms-faq-preview.png",
+      imageAlt: "Podgląd edycji FAQ i kontaktu w panelu CMS.",
     },
     {
       title: "SEO",
       icon: "globe",
       accent: "blue",
       rows: ["Tytuł strony", "Opis w wyszukiwarce", "Podgląd wyniku"],
-      imageSrc: "portfolio/cms-seo-editor-preview.svg",
+      imageSrc: "portfolio/cms-seo-preview.png",
       imageAlt: "Podgląd edycji SEO podstrony w panelu CMS.",
     },
     {
@@ -1760,18 +1764,24 @@ function getCmsFeaturePreview(item, index) {
       icon: "check",
       accent: "emerald",
       rows: ["Wersja robocza", "Sprawdzenie treści", "Publikacja"],
+      imageSrc: "portfolio/cms-publish-preview.png",
+      imageAlt: "Podgląd zapisu i publikacji zmian w panelu CMS.",
     },
     {
       title: "Statystyki",
       icon: "badge",
       accent: "cyan",
       rows: ["Odwiedzający", "Kliknięcia", "Popularne podstrony"],
+      imageSrc: "portfolio/cms-analytics-preview.png",
+      imageAlt: "Podgląd statystyk strony w panelu CMS.",
     },
     {
-      title: "Dostępy",
+      title: "Współpraca",
       icon: "shield-check",
       accent: "violet",
       rows: ["Właściciel", "Edytor", "Podgląd"],
+      imageSrc: "portfolio/cms-team-preview.png",
+      imageAlt: "Podgląd współpracy i dostępu do panelu CMS.",
     },
   ];
 
@@ -1810,7 +1820,7 @@ function CmsFeaturePreview({ preview }) {
           <img
             src={preview.imageSrc}
             alt={preview.imageAlt}
-            className="aspect-[16/9] h-full w-full object-cover object-top"
+            className="aspect-[4/3] h-full w-full object-cover object-top"
             loading="lazy"
             decoding="async"
           />
