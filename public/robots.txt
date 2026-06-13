@@ -7,3 +7,4 @@ Disallow: /Dominik_Sadzik/panel-admin
 Disallow: /Dominik_Sadzik/admin
 
 Sitemap: https://dominiksd.github.io/Dominik_Sadzik/sitemap.xml
+Sitemap: https://dominiksd.github.io/Dominik_Sadzik/sitemap-main.xml
