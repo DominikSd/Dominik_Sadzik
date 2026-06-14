@@ -1,5 +1,5 @@
 export const DEFAULT_SITE_URL = "https://dominiksd.github.io/Dominik_Sadzik/";
-export const DEFAULT_OG_IMAGE = `${DEFAULT_SITE_URL}portfolio/logo.svg`;
+export const DEFAULT_OG_IMAGE = `${DEFAULT_SITE_URL}og-image.png`;
 
 function getDocumentHead() {
   if (typeof document === "undefined") return null;

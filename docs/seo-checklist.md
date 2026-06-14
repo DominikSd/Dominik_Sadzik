@@ -67,7 +67,7 @@ fallback bierze SEO z `src/content/defaultSiteContent.js`.
 - `description`: około 70-160 znaków.
 - `slug`: małe litery, cyfry i myślniki, bez spacji i polskich znaków.
 - `canonical`: pełny adres URL albo puste pole.
-- `ogImage`: pełny URL albo ścieżka publiczna, np. `portfolio/logo.svg`.
+- `ogImage`: pełny URL albo ścieżka publiczna, np. `og-image.png`.
 
 ## Google Search Console
 
