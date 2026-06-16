@@ -11,7 +11,7 @@ describe("seo helpers", () => {
     });
 
     expect(seo.title).toBe("Strony internetowe i lekki CMS | Dominik Sadzik");
-    expect(seo.canonical).toBe("https://dominiksd.github.io/Dominik_Sadzik/#/strony-cms");
+    expect(seo.canonical).toBe("https://dominik-sadzik.pl/#/strony-cms");
     expect(seo.robots).toBe("index,follow");
   });
 
@@ -22,7 +22,7 @@ describe("seo helpers", () => {
     });
 
     expect(seo.title).toBe("Projekty i realizacje | Dominik Sadzik");
-    expect(seo.canonical).toBe("https://dominiksd.github.io/Dominik_Sadzik/#projects");
+    expect(seo.canonical).toBe("https://dominik-sadzik.pl/#projects");
   });
 
   it("applies noindex metadata for private panel routes", () => {
@@ -49,7 +49,7 @@ describe("seo helpers", () => {
       "summary_large_image",
     );
     expect(document.querySelector('link[rel="canonical"]').getAttribute("href")).toBe(
-      "https://dominiksd.github.io/Dominik_Sadzik/",
+      "https://dominik-sadzik.pl/",
     );
   });
 
@@ -82,7 +82,7 @@ describe("seo helpers", () => {
     expect(document.querySelectorAll('meta[name="description"]')).toHaveLength(1);
     expect(document.querySelectorAll('link[rel="canonical"]')).toHaveLength(1);
     expect(document.querySelector('link[rel="canonical"]').getAttribute("href")).toBe(
-      "https://dominiksd.github.io/Dominik_Sadzik/#/strony-cms",
+      "https://dominik-sadzik.pl/#/strony-cms",
     );
   });
 });

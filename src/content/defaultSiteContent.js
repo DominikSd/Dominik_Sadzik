@@ -19,12 +19,12 @@ export const defaultSiteContent = {
     metaTitle: "Dominik Sadzik | Strony internetowe, wizytówki online i lekki CMS",
     metaDescription:
       "Tworzę nowoczesne, responsywne strony internetowe, portfolio i wizytówki online z prostym panelem CMS do edycji treści.",
-    canonical: "https://dominiksd.github.io/Dominik_Sadzik/",
+    canonical: "https://dominik-sadzik.pl/",
     robots: "index,follow",
     ogTitle: "Dominik Sadzik | Strony internetowe, wizytówki online i lekki CMS",
     ogDescription:
       "Tworzę nowoczesne, responsywne strony internetowe, portfolio i wizytówki online z prostym panelem CMS do edycji treści.",
-    ogImage: "https://dominiksd.github.io/Dominik_Sadzik/og-image.png",
+    ogImage: "https://dominik-sadzik.pl/og-image.png",
     siteName: "Dominik Sadzik",
     locale: "pl_PL",
     pages: {
@@ -33,48 +33,48 @@ export const defaultSiteContent = {
         description:
           "Tworzę nowoczesne, responsywne strony internetowe, portfolio i wizytówki online z prostym panelem CMS do edycji treści.",
         slug: "",
-        canonical: "https://dominiksd.github.io/Dominik_Sadzik/",
+        canonical: "https://dominik-sadzik.pl/",
         noindex: false,
         ogTitle: "Dominik Sadzik | Strony internetowe i lekki CMS",
         ogDescription:
           "Portfolio i oferta tworzenia stron, wizytówek online oraz prostego CMS-a do edycji treści.",
-        ogImage: "https://dominiksd.github.io/Dominik_Sadzik/og-image.png",
+        ogImage: "https://dominik-sadzik.pl/og-image.png",
       },
       projects: {
         title: "Projekty i realizacje | Dominik Sadzik",
         description:
           "Zobacz przykłady stron internetowych, projektów graficznych, lekkiego CMS-a, QA i prototypów interaktywnych.",
         slug: "projects",
-        canonical: "https://dominiksd.github.io/Dominik_Sadzik/#projects",
+        canonical: "https://dominik-sadzik.pl/#projects",
         noindex: false,
         ogTitle: "Projekty i realizacje | Dominik Sadzik",
         ogDescription:
           "Wybrane realizacje, projekty graficzne i koncepcje pokazujące zakres mojej pracy.",
-        ogImage: "https://dominiksd.github.io/Dominik_Sadzik/og-image.png",
+        ogImage: "https://dominik-sadzik.pl/og-image.png",
       },
       faq: {
         title: "FAQ | Strony internetowe i CMS",
         description:
           "Odpowiedzi na najczęstsze pytania o stronę internetową, CMS, domenę, hosting i dalszą rozbudowę.",
         slug: "faq",
-        canonical: "https://dominiksd.github.io/Dominik_Sadzik/#faq",
+        canonical: "https://dominik-sadzik.pl/#faq",
         noindex: false,
         ogTitle: "FAQ | Strony internetowe i CMS",
         ogDescription:
           "Najważniejsze informacje przed rozpoczęciem pracy nad stroną internetową lub wizytówką online.",
-        ogImage: "https://dominiksd.github.io/Dominik_Sadzik/og-image.png",
+        ogImage: "https://dominik-sadzik.pl/og-image.png",
       },
       contact: {
         title: "Kontakt | Dominik Sadzik",
         description:
           "Napisz, jeśli potrzebujesz strony internetowej, wizytówki online, prostego CMS-a albo wsparcia QA.",
         slug: "contact",
-        canonical: "https://dominiksd.github.io/Dominik_Sadzik/#contact",
+        canonical: "https://dominik-sadzik.pl/#contact",
         noindex: false,
         ogTitle: "Kontakt | Dominik Sadzik",
         ogDescription:
           "Skontaktuj się w sprawie strony internetowej, wizytówki online, lekkiego CMS-a lub testów strony.",
-        ogImage: "https://dominiksd.github.io/Dominik_Sadzik/og-image.png",
+        ogImage: "https://dominik-sadzik.pl/og-image.png",
       },
     },
   },
@@ -308,12 +308,12 @@ export const defaultSiteContent = {
         title: "Strony internetowe i lekki CMS | Dominik Sadzik",
         description:
           "Nowoczesne strony internetowe, wizytówki online i lekki panel CMS do edycji treści, SEO, FAQ, kontaktu i statystyk.",
-        canonical: "https://dominiksd.github.io/Dominik_Sadzik/#/strony-cms",
+        canonical: "https://dominik-sadzik.pl/#/strony-cms",
         noindex: false,
         ogTitle: "Strony internetowe i lekki CMS",
         ogDescription:
           "Strony dla małych firm, specjalistów i usługodawców z prostym panelem edycji treści.",
-        ogImage: "https://dominiksd.github.io/Dominik_Sadzik/og-image.png",
+        ogImage: "https://dominik-sadzik.pl/og-image.png",
       },
       hero: {
         eyebrow: "Strony i CMS",
@@ -393,12 +393,12 @@ export const defaultSiteContent = {
         title: "QA, testowanie i automatyzacja | Dominik Sadzik",
         description:
           "QA, testowanie stron i aplikacji, certyfikat ISTQB, checklisty przed publikacją i czytelne raportowanie błędów.",
-        canonical: "https://dominiksd.github.io/Dominik_Sadzik/#/qa-automatyzacja",
+        canonical: "https://dominik-sadzik.pl/#/qa-automatyzacja",
         noindex: false,
         ogTitle: "QA, testowanie i automatyzacja",
         ogDescription:
           "Praktyczne podejście do jakości stron: formularze, linki, wersja mobilna, raporty błędów i kontrole po zmianach.",
-        ogImage: "https://dominiksd.github.io/Dominik_Sadzik/og-image.png",
+        ogImage: "https://dominik-sadzik.pl/og-image.png",
       },
       hero: {
         eyebrow: "QA i automatyzacja",
@@ -486,12 +486,12 @@ export const defaultSiteContent = {
         title: "GameDev i projekty interaktywne | Dominik Sadzik",
         description:
           "Prototypy gier i małe interaktywne demo pokazujące pracę z ruchem, zasadami, sterowaniem i czytelnym UI.",
-        canonical: "https://dominiksd.github.io/Dominik_Sadzik/#/gamedev",
+        canonical: "https://dominik-sadzik.pl/#/gamedev",
         noindex: false,
         ogTitle: "GameDev i projekty interaktywne",
         ogDescription:
           "Prototypy 2.5D, proste mechaniki i interaktywne demo pokazujące, jak myślę o ruchu, zasadach i reakcji na gracza.",
-        ogImage: "https://dominiksd.github.io/Dominik_Sadzik/og-image.png",
+        ogImage: "https://dominik-sadzik.pl/og-image.png",
       },
       hero: {
         eyebrow: "GameDev",
@@ -660,7 +660,7 @@ export const defaultSiteContent = {
     text: "Napisz, czego potrzebujesz. Odezwę się i podpowiem, jakie rozwiązanie będzie najlepsze na start.",
     email: "kontakt@dominiksadzik.pl",
     phone: "",
-    www: "dominiksd.github.io/Dominik_Sadzik",
+    www: "dominik-sadzik.pl",
     address: "Polska",
     emailButtonLabel: "Napisz wiadomość",
     phoneButtonLabel: "Zadzwoń",

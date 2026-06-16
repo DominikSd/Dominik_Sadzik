@@ -80,12 +80,6 @@ http://localhost:5173/#/panel-admin
 
 Jeśli zalogowany użytkownik nie pamięta hasła, panel oferuje wbudowany tryb resetu hasła, który wyśle link resetujący na e-mail.
 
-W zależności od konfiguracji `base` w Vite lokalny adres może też wyglądać tak:
-
-```text
-http://localhost:5173/Dominik_Sadzik/#/panel-admin
-```
-
 Po każdej zmianie `.env` zatrzymaj i uruchom ponownie dev server:
 
 ```bash

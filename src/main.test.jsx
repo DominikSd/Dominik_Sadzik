@@ -55,7 +55,7 @@ describe("AppRouter", () => {
   beforeEach(() => {
     cleanup();
     vi.clearAllMocks();
-    window.history.pushState(null, "", "/Dominik_Sadzik/");
+    window.history.pushState(null, "", "/");
   });
 
   it("does not import the removed PasswordRecoveryForm component", () => {
@@ -66,11 +66,7 @@ describe("AppRouter", () => {
   });
 
   it("renders the auth callback screen from ?auth=callback without falling through", () => {
-    window.history.pushState(
-      null,
-      "",
-      "/Dominik_Sadzik/?auth=callback#access_token=token&type=magiclink",
-    );
+    window.history.pushState(null, "", "/?auth=callback#access_token=token&type=magiclink");
 
     render(<AppRouter />);
 
@@ -79,11 +75,7 @@ describe("AppRouter", () => {
   });
 
   it("renders the password recovery screen from ?auth=recovery without falling through", () => {
-    window.history.pushState(
-      null,
-      "",
-      "/Dominik_Sadzik/?auth=recovery#access_token=token&type=recovery",
-    );
+    window.history.pushState(null, "", "/?auth=recovery#access_token=token&type=recovery");
 
     render(<AppRouter />);
 
@@ -92,7 +84,7 @@ describe("AppRouter", () => {
   });
 
   it("renders the admin route from the hash route", () => {
-    window.history.pushState(null, "", "/Dominik_Sadzik/#/panel-admin");
+    window.history.pushState(null, "", "/#/panel-admin");
 
     render(<AppRouter />);
 
@@ -100,7 +92,7 @@ describe("AppRouter", () => {
   });
 
   it("passes public hash routes to the landing page", () => {
-    window.history.pushState(null, "", "/Dominik_Sadzik/#/gamedev");
+    window.history.pushState(null, "", "/#/gamedev");
 
     render(<AppRouter />);
 

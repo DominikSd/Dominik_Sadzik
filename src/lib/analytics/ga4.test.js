@@ -68,10 +68,10 @@ describe("GA4 privacy controls", () => {
     const ga4 = await loadGa4();
 
     ga4.setAnalyticsConsent(true);
-    ga4.trackPageView("/Dominik_Sadzik/?email=test@example.com#/panel-admin?token=secret", "Panel");
+    ga4.trackPageView("/?email=test@example.com#/panel-admin?token=secret", "Panel");
 
     const [event] = eventsNamed("page_view");
-    expect(event[2].page_path).toBe("/Dominik_Sadzik/#/panel-admin");
+    expect(event[2].page_path).toBe("/#/panel-admin");
     expect(JSON.stringify(event[2])).not.toContain("test@example.com");
     expect(JSON.stringify(event[2])).not.toContain("secret");
   });

@@ -75,11 +75,11 @@ WYMAGA RĘCZNEGO DZIAŁANIA
 
 1. Wejdź na <https://search.google.com/search-console>.
 2. Dodaj usługę dla adresu:
-   `https://dominiksd.github.io/Dominik_Sadzik/`
+   `https://dominik-sadzik.pl/`
 3. Zweryfikuj własność jedną z metod dostępnych w Google.
 4. Po weryfikacji wejdź w `Sitemaps`.
 5. Zgłoś sitemapę:
-   `https://dominiksd.github.io/Dominik_Sadzik/sitemap.xml`
+   `https://dominik-sadzik.pl/sitemap.xml`
 6. W `Kontrola adresu URL` sprawdź stronę główną i poproś o indeksowanie.
 
 ## Testowanie meta tagów i Open Graph
@@ -88,7 +88,7 @@ WYMAGA RĘCZNEGO DZIAŁANIA
 
 Po deployu sprawdź:
 
-- `view-source:https://dominiksd.github.io/Dominik_Sadzik/`,
+- `view-source:https://dominik-sadzik.pl/`,
 - DevTools → Elements → `<head>`,
 - Facebook Sharing Debugger,
 - LinkedIn Post Inspector,
@@ -102,7 +102,7 @@ Najpewniejsze meta tagi to te, które są już w `index.html`.
 Projekt działa na GitHub Pages i używa adresów z `#`, np.:
 
 ```text
-https://dominiksd.github.io/Dominik_Sadzik/#/strony-cms
+https://dominik-sadzik.pl/#/strony-cms
 ```
 
 To jest bezpieczne dla deployu na GitHub Pages, ale ma ograniczenia SEO:

@@ -17,21 +17,17 @@ describe("authRedirects", () => {
   });
 
   it("builds auth URLs on the configured Vite base path", () => {
-    expect(getAuthCallbackUrl()).toBe(`${window.location.origin}/Dominik_Sadzik/?auth=callback`);
-    expect(getAuthRecoveryUrl()).toBe(`${window.location.origin}/Dominik_Sadzik/?auth=recovery`);
-    expect(getAdminUrl()).toBe(`${window.location.origin}/Dominik_Sadzik/#/panel-admin`);
+    expect(getAuthCallbackUrl()).toBe(`${window.location.origin}/?auth=callback`);
+    expect(getAuthRecoveryUrl()).toBe(`${window.location.origin}/?auth=recovery`);
+    expect(getAdminUrl()).toBe(`${window.location.origin}/#/panel-admin`);
   });
 
   it("clears auth query params without removing the hash route", () => {
-    window.history.pushState(
-      null,
-      "",
-      "/Dominik_Sadzik/?auth=callback&code=abc&utm_source=test#/panel-admin",
-    );
+    window.history.pushState(null, "", "/?auth=callback&code=abc&utm_source=test#/panel-admin");
 
     clearAuthQueryParams();
 
-    expect(window.location.pathname).toBe("/Dominik_Sadzik/");
+    expect(window.location.pathname).toBe("/");
     expect(window.location.search).toBe("?utm_source=test");
     expect(window.location.hash).toBe("#/panel-admin");
   });
@@ -40,12 +36,12 @@ describe("authRedirects", () => {
     window.history.pushState(
       null,
       "",
-      "/Dominik_Sadzik/?auth=recovery#access_token=test-access&refresh_token=test-refresh&type=recovery",
+      "/?auth=recovery#access_token=test-access&refresh_token=test-refresh&type=recovery",
     );
 
     clearAuthHashParams();
 
-    expect(window.location.pathname).toBe("/Dominik_Sadzik/");
+    expect(window.location.pathname).toBe("/");
     expect(window.location.search).toBe("?auth=recovery");
     expect(window.location.hash).toBe("");
   });
@@ -54,12 +50,12 @@ describe("authRedirects", () => {
     window.history.pushState(
       null,
       "",
-      "/Dominik_Sadzik/?auth=recovery#access_token=test-access&refresh_token=test-refresh&type=recovery",
+      "/?auth=recovery#access_token=test-access&refresh_token=test-refresh&type=recovery",
     );
 
     clearAuthQueryParams();
 
-    expect(window.location.pathname).toBe("/Dominik_Sadzik/");
+    expect(window.location.pathname).toBe("/");
     expect(window.location.search).toBe("");
     expect(window.location.hash).toBe("");
   });

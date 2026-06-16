@@ -19,7 +19,7 @@ vi.mock("./lib/analytics/ga4", () => ({
 
 describe("LandingPage navigation", () => {
   beforeEach(() => {
-    window.history.replaceState(null, "", "/Dominik_Sadzik/");
+    window.history.replaceState(null, "", "/");
     window.localStorage.clear();
     window.scrollTo = vi.fn();
     window.IntersectionObserver = vi.fn(() => ({
@@ -30,7 +30,7 @@ describe("LandingPage navigation", () => {
   });
 
   it("renders local draft preview content from ?preview=draft", () => {
-    window.history.replaceState(null, "", "/Dominik_Sadzik/?preview=draft#/");
+    window.history.replaceState(null, "", "/?preview=draft#/");
     window.localStorage.setItem(
       DRAFT_PREVIEW_STORAGE_KEY,
       JSON.stringify({

@@ -361,8 +361,8 @@ http://127.0.0.1:5174/Dominik_Sadzik/?auth=recovery
 Dla GitHub Pages:
 
 ```text
-https://dominiksd.github.io/Dominik_Sadzik/?auth=callback
-https://dominiksd.github.io/Dominik_Sadzik/?auth=recovery
+https://dominik-sadzik.pl/?auth=callback
+https://dominik-sadzik.pl/?auth=recovery
 ```
 
 Dla własnej domeny:

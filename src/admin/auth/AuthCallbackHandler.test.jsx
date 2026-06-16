@@ -33,7 +33,7 @@ describe("AuthCallbackHandler", () => {
     exchangeCodeForSession.mockResolvedValue({ error: null });
     setSession.mockResolvedValue({ error: null });
     onAuthStateChange.mockReturnValue({ data: { subscription: { unsubscribe: vi.fn() } } });
-    window.history.pushState(null, "", "/Dominik_Sadzik/?auth=callback");
+    window.history.pushState(null, "", "/?auth=callback");
   });
 
   it("shows an error when no session is created", async () => {
@@ -60,7 +60,7 @@ describe("AuthCallbackHandler", () => {
     window.history.pushState(
       null,
       "",
-      "/Dominik_Sadzik/?auth=callback#access_token=test-access&refresh_token=test-refresh&type=magiclink",
+      "/?auth=callback#access_token=test-access&refresh_token=test-refresh&type=magiclink",
     );
 
     render(<AuthCallbackHandler />);

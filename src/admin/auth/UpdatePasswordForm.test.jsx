@@ -11,7 +11,7 @@ const clearAuthHashParams = vi.fn(() => {
   window.history.replaceState(null, "", `${window.location.pathname}${window.location.search}`);
 });
 const clearAuthQueryParams = vi.fn(() => {
-  window.history.replaceState(null, "", "/Dominik_Sadzik/");
+  window.history.replaceState(null, "", "/");
 });
 
 vi.mock("../../lib/supabaseClient.js", () => ({
@@ -42,7 +42,7 @@ describe("UpdatePasswordForm", () => {
     onAuthStateChange.mockReturnValue({ data: { subscription: { unsubscribe: vi.fn() } } });
     setSession.mockResolvedValue({ error: null });
     updateUser.mockResolvedValue({ error: null });
-    window.history.pushState(null, "", "/Dominik_Sadzik/?auth=recovery");
+    window.history.pushState(null, "", "/?auth=recovery");
   });
 
   it("uses updateUser to save a new password", async () => {
@@ -74,7 +74,7 @@ describe("UpdatePasswordForm", () => {
     window.history.pushState(
       null,
       "",
-      "/Dominik_Sadzik/?auth=recovery#access_token=test-access&refresh_token=test-refresh&type=recovery",
+      "/?auth=recovery#access_token=test-access&refresh_token=test-refresh&type=recovery",
     );
 
     render(<UpdatePasswordForm />);
@@ -134,7 +134,7 @@ describe("UpdatePasswordForm", () => {
 
     await waitFor(() => {
       expect(clearAuthQueryParams).toHaveBeenCalled();
-      expect(window.location.pathname).toBe("/Dominik_Sadzik/");
+      expect(window.location.pathname).toBe("/");
       expect(window.location.search).toBe("");
       expect(window.location.hash).toBe("#/panel-admin");
     });

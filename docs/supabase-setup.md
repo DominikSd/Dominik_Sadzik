@@ -77,6 +77,8 @@ Local:
 ```text
 http://localhost:5173/?auth=callback
 http://localhost:5173/?auth=recovery
+http://127.0.0.1:5174/?auth=callback
+http://127.0.0.1:5174/?auth=recovery
 http://localhost:5173/Dominik_Sadzik/?auth=callback
 http://localhost:5173/Dominik_Sadzik/?auth=recovery
 http://127.0.0.1:5174/Dominik_Sadzik/?auth=callback
@@ -86,6 +88,6 @@ http://127.0.0.1:5174/Dominik_Sadzik/?auth=recovery
 Production:
 
 ```text
-https://dominiksd.github.io/Dominik_Sadzik/?auth=callback
-https://dominiksd.github.io/Dominik_Sadzik/?auth=recovery
+https://dominik-sadzik.pl/?auth=callback
+https://dominik-sadzik.pl/?auth=recovery
 ```

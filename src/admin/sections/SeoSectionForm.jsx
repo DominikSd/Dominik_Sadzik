@@ -52,7 +52,7 @@ export function GooglePreview({ title, description, canonical }) {
         Podgląd Google
       </p>
       <p className="mt-3 truncate text-xs text-emerald-300">
-        {canonical || "https://dominiksd.github.io/Dominik_Sadzik/"}
+        {canonical || "https://dominik-sadzik.pl/"}
       </p>
       <p className="mt-1 break-words text-lg font-semibold text-blue-300">
         {title || "Tytuł strony"}

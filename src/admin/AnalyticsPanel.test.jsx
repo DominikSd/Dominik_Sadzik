@@ -44,7 +44,7 @@ const report = {
   generatedAt: "2026-06-02T10:00:00.000Z",
   topPages: [
     { path: "/", pageViews: 50, users: 20 },
-    { path: "/Dominik_Sadzik/#/strony-cms", pageViews: 18, users: 8 },
+    { path: "/#/strony-cms", pageViews: 18, users: 8 },
   ],
   topEvents: [{ eventName: "cta_click", count: 7 }],
   trackedEvents: [{ eventName: "cta_click", count: 7 }],

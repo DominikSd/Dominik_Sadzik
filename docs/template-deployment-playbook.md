@@ -86,7 +86,8 @@ VITE_GA_MEASUREMENT_ID
 
 Jeśli hosting używa innego `base` niż GitHub Pages, sprawdź `vite.config.js`. Dla domeny głównej
 często wygodniejsze jest `base: "/"`; dla GitHub Pages z repo path zostaje
-`base: "/Dominik_Sadzik/"` albo odpowiednia ścieżka nowego repo.
+`base: "/"`. Jeżeli nowy projekt ma działać na GitHub Pages bez własnej domeny, ustaw
+odpowiednią ścieżkę repo, np. `base: "/nazwa-repo/"`.
 
 ## 5. Supabase Project
 
