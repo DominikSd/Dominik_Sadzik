@@ -1,5 +1,5 @@
 export const DEFAULT_SITE_URL = "https://dominik-sadzik.pl/";
-export const DEFAULT_OG_IMAGE = `${DEFAULT_SITE_URL}og-image.png`;
+export const DEFAULT_OG_IMAGE = `${DEFAULT_SITE_URL}link-preview.png`;
 
 function getDocumentHead() {
   if (typeof document === "undefined") return null;

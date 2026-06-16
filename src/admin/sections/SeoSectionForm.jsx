@@ -42,7 +42,7 @@ export function validateOgImage(value) {
   if (!value) return "";
   if (/^https?:\/\/[^\s]+$/i.test(value)) return "";
   if (/^[a-z0-9][a-z0-9/_.,?=&%#+-]*$/i.test(value)) return "";
-  return "Podaj pełny URL albo ścieżkę publiczną, np. og-image.png.";
+  return "Podaj pełny URL albo ścieżkę publiczną, np. link-preview.png.";
 }
 
 export function GooglePreview({ title, description, canonical }) {
