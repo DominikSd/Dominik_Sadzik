@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import AnimatedCircuit from "./components/AnimatedCircuit";
+import WebsiteBriefPage from "./components/WebsiteBriefPage";
 import { defaultSiteContent } from "./content/defaultSiteContent";
 import { trackContactClick, trackCtaClick, trackNavigationClick } from "./lib/analytics/ga4";
 import { loadPublishedSiteContent } from "./lib/contentApi";
@@ -76,6 +77,7 @@ const routeLabelsBySlug = {
   "automatyzacja-testowanie": "QA",
   "tester-istqb": "QA",
   gamedev: "GameDev",
+  "opisz-strone": "Opisz stronę",
 };
 
 function getRouteSlug(routeHash = "") {
@@ -1447,6 +1449,19 @@ function ContactSection({ contact }) {
                 </a>
               ))}
             </div>
+            <div className="mt-6 rounded-lg border border-cyan-300/20 bg-cyan-300/10 p-4 text-center sm:text-left">
+              <p className="text-sm leading-6 text-slate-200">
+                Wypełnij krótki formularz, a przygotuję wstępną propozycję zakresu i wyceny.
+              </p>
+              <a
+                href="#/opisz-strone"
+                className="mt-4 inline-flex w-full min-w-0 items-center justify-center gap-2 rounded-full border border-cyan-300/40 bg-slate-950/55 px-5 py-3 text-center text-sm font-bold text-cyan-100 transition hover:border-cyan-200 hover:bg-cyan-300/15 sm:w-auto"
+                onClick={() => trackCtaClick("Opisz swoją stronę", "contact_brief")}
+              >
+                <span>Opisz swoją stronę</span>
+                <Icon name="arrow-right" className="h-4 w-4 flex-none" />
+              </a>
+            </div>
           </div>
           <div className="w-full min-w-0 rounded-lg border border-cyan-300/20 bg-slate-950/55 p-4 shadow-2xl shadow-blue-500/10 sm:p-6">
             {contactRows.map(([icon, label, value, href, contactType]) => (
@@ -2165,6 +2180,7 @@ export default function LandingPage({ routeHash = "" }) {
   const routeSlug = getRouteSlug(routeHash);
   const pageKey = detailPageRoutes[routeSlug];
   const activePage = pageKey ? content.pages?.[pageKey] : null;
+  const isBriefRoute = routeSlug === "opisz-strone";
 
   useEffect(() => {
     clearProgrammaticScrollTarget();
@@ -2181,7 +2197,7 @@ export default function LandingPage({ routeHash = "" }) {
     const updateNavigationState = () => {
       frame = 0;
       setIsFloatingNavVisible(window.scrollY > 160);
-      if (activePage) return;
+      if (activePage || isBriefRoute) return;
 
       const programmaticTarget = programmaticScrollTargetRef.current;
       if (programmaticTarget) {
@@ -2209,12 +2225,12 @@ export default function LandingPage({ routeHash = "" }) {
       window.removeEventListener("scroll", scheduleUpdate);
       window.removeEventListener("resize", scheduleUpdate);
     };
-  }, [activePage, routeSlug]);
+  }, [activePage, isBriefRoute, routeSlug]);
 
   useEffect(() => {
-    if (activePage) {
+    if (activePage || isBriefRoute) {
       const frame = window.requestAnimationFrame(() => {
-        if (routeSlug === "tester-istqb") {
+        if (!isBriefRoute && routeSlug === "tester-istqb") {
           document.getElementById("istqbCertificate")?.scrollIntoView({ block: "start" });
           return;
         }
@@ -2232,7 +2248,7 @@ export default function LandingPage({ routeHash = "" }) {
     });
 
     return () => window.cancelAnimationFrame(frame);
-  }, [activePage, routeSlug]);
+  }, [activePage, isBriefRoute, routeSlug]);
 
   useEffect(() => {
     const seo = getPublicRouteSeo({ content, routeHash, activePage });
@@ -2310,7 +2326,9 @@ export default function LandingPage({ routeHash = "" }) {
         onNavigate={handleNavigate}
       />
       <main className="relative z-10 overflow-visible">
-        {activePage ? (
+        {isBriefRoute ? (
+          <WebsiteBriefPage contact={content.contact} />
+        ) : activePage ? (
           <ServiceDetailPage
             page={activePage}
             contact={content.contact}

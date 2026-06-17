@@ -25,6 +25,17 @@ describe("seo helpers", () => {
     expect(seo.canonical).toBe("https://dominik-sadzik.pl/#projects");
   });
 
+  it("returns route-aware SEO for the website description route", () => {
+    const seo = getPublicRouteSeo({
+      content: defaultSiteContent,
+      routeHash: "#/opisz-strone",
+    });
+
+    expect(seo.title).toBe("Opisz stronę do wyceny | Dominik Sadzik");
+    expect(seo.canonical).toBe("https://dominik-sadzik.pl/#/opisz-strone");
+    expect(seo.robots).toBe("index,follow");
+  });
+
   it("applies noindex metadata for private panel routes", () => {
     applyNoindexSeo("Panel CMS - Test");
 

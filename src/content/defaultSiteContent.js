@@ -76,6 +76,18 @@ export const defaultSiteContent = {
           "Skontaktuj się w sprawie strony internetowej, wizytówki online, lekkiego CMS-a lub testów strony.",
         ogImage: "https://dominik-sadzik.pl/link-preview.png",
       },
+      "opisz-strone": {
+        title: "Opisz stronę do wyceny | Dominik Sadzik",
+        description:
+          "Opisz, jakiej strony internetowej, wizytówki online lub lekkiego CMS-a potrzebujesz, a przygotuję wstępną propozycję zakresu.",
+        slug: "opisz-strone",
+        canonical: "https://dominik-sadzik.pl/#/opisz-strone",
+        noindex: false,
+        ogTitle: "Opisz stronę do wyceny | Dominik Sadzik",
+        ogDescription:
+          "Krótki formularz, który pomaga zebrać potrzeby przed wyceną strony internetowej lub panelu CMS.",
+        ogImage: "https://dominik-sadzik.pl/link-preview.png",
+      },
     },
   },
   hero: {

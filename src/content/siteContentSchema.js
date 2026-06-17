@@ -157,6 +157,7 @@ export const sectionSchemas = {
         projects: routeSeoSchema,
         faq: routeSeoSchema,
         contact: routeSeoSchema,
+        "opisz-strone": routeSeoSchema,
       })
       .default(defaultSiteContent.seo.pages),
   }),

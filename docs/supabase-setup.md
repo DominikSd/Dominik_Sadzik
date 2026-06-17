@@ -8,9 +8,10 @@
 
 ## 2. Apply Migration
 
-Run `supabase/migrations/001_core_cms.sql` in the Supabase SQL editor or through the Supabase CLI.
+Run migrations from `supabase/migrations/` in order in the Supabase SQL editor or through the
+Supabase CLI.
 
-The migration creates:
+The core CMS migration creates:
 
 - `sites`
 - `site_members`
@@ -18,6 +19,28 @@ The migration creates:
 - RLS policies
 - `save_content_draft(...)`
 - `publish_content_entry(...)`
+
+The website description form migration creates:
+
+- `website_briefs`
+- public insert-only RLS for the quote request form
+- authenticated read access for `owner` and `editor` site members
+
+The public website description form stores submissions in `website_briefs`. Public visitors cannot
+read, update or delete submitted requests.
+
+Example CLI command:
+
+```bash
+supabase db push
+```
+
+Or apply the SQL manually in this order:
+
+```text
+supabase/migrations/001_core_cms.sql
+supabase/migrations/002_website_briefs.sql
+```
 
 ## 3. Create Site And Owner
 
@@ -52,7 +75,23 @@ VITE_GA_MEASUREMENT_ID=
 
 Never put `SUPABASE_SERVICE_ROLE_KEY` in frontend code or any `VITE_*` variable.
 
-## 5. Auth redirect URLs
+## 5. Website description form
+
+The public route `#/opisz-strone` saves quote requests to `public.website_briefs` through the
+frontend Supabase anon key and RLS.
+
+Required conditions:
+
+- `VITE_SUPABASE_URL`, `VITE_SUPABASE_ANON_KEY` and `VITE_SITE_ID` point to the same Supabase project,
+- `VITE_SITE_ID` exists in `public.sites`,
+- the site row has `active = true`,
+- `002_website_briefs.sql` has been applied.
+
+The form does not send email notifications yet. If notifications are needed, add a separate Supabase
+Edge Function later and store provider credentials only as Supabase secrets, for example for Resend
+or another mail provider. Do not put SMTP/API keys in `.env`, GitHub Variables or frontend code.
+
+## 6. Auth redirect URLs
 
 In Supabase Authentication → URL Configuration add the callback and recovery URLs used by the
 CMS. These URLs intentionally use query params (`?auth=callback` and `?auth=recovery`) instead of

@@ -304,6 +304,27 @@ describe("LandingPage navigation", () => {
     ).toBe("portfolio/cms-team-preview.png");
   });
 
+  it("renders the website description route without a blank screen", () => {
+    render(<LandingPage routeHash="#/opisz-strone" />);
+
+    expect(
+      screen.getByRole("heading", {
+        name: "Opisz swoją stronę, a przygotuję wstępną propozycję",
+      }),
+    ).toBeTruthy();
+    expect(screen.getByRole("button", { name: /Wyślij opis strony/i })).toBeTruthy();
+    expect(screen.getByText("Aktualnie: Opisz stronę")).toBeTruthy();
+  });
+
+  it("links the contact section to the website description form", () => {
+    render(<LandingPage routeHash="#/" />);
+
+    expect(screen.getByRole("link", { name: /Opisz swoją stronę/i }).getAttribute("href")).toBe(
+      "#/opisz-strone",
+    );
+    expect(screen.getByText(/przygotuję wstępną propozycję zakresu i wyceny/i)).toBeTruthy();
+  });
+
   it("renders the QA detail route without a blank screen", () => {
     render(<LandingPage routeHash="#/qa-automatyzacja" />);
 
