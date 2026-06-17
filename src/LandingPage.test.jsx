@@ -210,6 +210,52 @@ describe("LandingPage navigation", () => {
     });
   });
 
+  it("keeps projects active when navigating back from the bottom contact area", async () => {
+    const user = userEvent.setup();
+    render(<LandingPage routeHash="#/" />);
+
+    const floatingNav = screen.getByRole("navigation", {
+      name: "Pływająca nawigacja sekcji",
+    });
+
+    const sectionRects = {
+      start: { top: -1200, bottom: -700 },
+      projects: { top: 900, bottom: 1300 },
+      faq: { top: 140, bottom: 420 },
+      contact: { top: 90, bottom: 360 },
+    };
+
+    for (const [sectionId, rect] of Object.entries(sectionRects)) {
+      Object.defineProperty(document.getElementById(sectionId), "getBoundingClientRect", {
+        configurable: true,
+        value: () => ({
+          height: rect.bottom - rect.top,
+          left: 0,
+          right: 100,
+          width: 100,
+          ...rect,
+        }),
+      });
+    }
+
+    Object.defineProperty(window, "scrollY", { configurable: true, value: 1200 });
+    Object.defineProperty(document.documentElement, "scrollHeight", {
+      configurable: true,
+      value: 1200 + window.innerHeight,
+    });
+
+    await user.click(within(floatingNav).getByRole("link", { name: "Projekty" }));
+    fireEvent.scroll(window);
+    fireEvent.scroll(window);
+
+    await waitFor(() => {
+      expect(screen.getByText("Aktualnie: Projekty")).toBeTruthy();
+      expect(
+        within(floatingNav).getByRole("link", { name: "Projekty" }).getAttribute("aria-current"),
+      ).toBe("page");
+    });
+  });
+
   it("does not mark CMS active from a homepage web CMS section hash", () => {
     render(<LandingPage routeHash="#web-cms" />);
 

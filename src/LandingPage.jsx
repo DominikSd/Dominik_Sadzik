@@ -173,7 +173,9 @@ function hasReachedProgrammaticScrollTarget(sectionId) {
 
   const rect = target.getBoundingClientRect();
   const isNearTargetTop = Math.abs(rect.top) <= 24;
+  const lastHomeSectionId = HOME_SECTIONS[HOME_SECTIONS.length - 1]?.id;
   const isNearPageBottom =
+    sectionId === lastHomeSectionId &&
     window.scrollY + window.innerHeight >= document.documentElement.scrollHeight - 2;
 
   return isNearTargetTop || isNearPageBottom;
