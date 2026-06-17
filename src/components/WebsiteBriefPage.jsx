@@ -235,6 +235,23 @@ function BriefSection({ icon: Icon, eyebrow, title, children }) {
   );
 }
 
+function SuccessMessage({ live = false, className = "" }) {
+  return (
+    <div
+      role={live ? "status" : undefined}
+      className={`rounded-lg border border-emerald-300/35 bg-emerald-400/10 p-5 text-emerald-50 ${className}`}
+    >
+      <div className="flex flex-col items-center gap-3 text-center sm:flex-row sm:text-left">
+        <CheckCircle2 className="h-6 w-6 flex-none text-emerald-200" />
+        <p>
+          Dziękuję za przesłanie opisu strony. Otrzymałem Twoje zgłoszenie i odezwę się z propozycją
+          zakresu lub dodatkowymi pytaniami.
+        </p>
+      </div>
+    </div>
+  );
+}
+
 export default function WebsiteBriefPage({ contact }) {
   const [form, setForm] = useState(initialForm);
   const [errors, setErrors] = useState({});
@@ -342,20 +359,7 @@ export default function WebsiteBriefPage({ contact }) {
           </aside>
         </section>
 
-        {status === "success" && (
-          <div
-            role="status"
-            className="mb-8 rounded-lg border border-emerald-300/35 bg-emerald-400/10 p-5 text-emerald-50"
-          >
-            <div className="flex flex-col items-center gap-3 text-center sm:flex-row sm:text-left">
-              <CheckCircle2 className="h-6 w-6 flex-none text-emerald-200" />
-              <p>
-                Dziękuję za przesłanie opisu strony. Otrzymałem Twoje zgłoszenie i odezwę się z
-                propozycją zakresu lub dodatkowymi pytaniami.
-              </p>
-            </div>
-          </div>
-        )}
+        {status === "success" && <SuccessMessage live className="mb-8" />}
 
         {submitError && (
           <div
@@ -544,6 +548,8 @@ export default function WebsiteBriefPage({ contact }) {
               <Send className="h-4 w-4" />
             </button>
           </div>
+
+          {status === "success" && <SuccessMessage />}
         </form>
       </div>
     </main>

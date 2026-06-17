@@ -76,6 +76,7 @@ describe("WebsiteBriefPage", () => {
       expect(screen.getByRole("status").textContent).toContain(
         "Dziękuję za przesłanie opisu strony",
       );
+      expect(screen.getAllByText(/Dziękuję za przesłanie opisu strony/i)).toHaveLength(2);
     });
   });
 });
