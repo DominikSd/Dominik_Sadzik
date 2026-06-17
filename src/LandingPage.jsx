@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import AnimatedCircuit from "./components/AnimatedCircuit";
 import { defaultSiteContent } from "./content/defaultSiteContent";
@@ -42,6 +42,8 @@ const HOME_SECTIONS = [
   { id: "faq", label: "FAQ" },
   { id: "contact", label: "Kontakt" },
 ];
+
+const PROGRAMMATIC_SCROLL_LOCK_MS = 1400;
 
 const floatingNavItems = [
   { label: "Start", shortLabel: "Start", href: "#start", icon: "home" },
@@ -159,6 +161,22 @@ function getActiveHomeSectionId() {
   }
 
   return activeId;
+}
+
+function hasReachedProgrammaticScrollTarget(sectionId) {
+  if (typeof window === "undefined" || typeof document === "undefined") return true;
+
+  if (sectionId === "start") return window.scrollY <= 8;
+
+  const target = document.getElementById(sectionId);
+  if (!target) return true;
+
+  const rect = target.getBoundingClientRect();
+  const isNearTargetTop = Math.abs(rect.top) <= 24;
+  const isNearPageBottom =
+    window.scrollY + window.innerHeight >= document.documentElement.scrollHeight - 2;
+
+  return isNearTargetTop || isNearPageBottom;
 }
 
 function Icon({ name, className = "h-5 w-5" }) {
@@ -2097,7 +2115,27 @@ export default function LandingPage({ routeHash = "" }) {
   const [cmsWarning, setCmsWarning] = useState("");
   const [activeSectionId, setActiveSectionId] = useState("start");
   const [isFloatingNavVisible, setIsFloatingNavVisible] = useState(false);
+  const programmaticScrollTargetRef = useRef("");
+  const programmaticScrollTimeoutRef = useRef(0);
   const selfTestErrors = useMemo(() => runContentSelfTests(content), [content]);
+
+  const clearProgrammaticScrollTarget = () => {
+    programmaticScrollTargetRef.current = "";
+    if (programmaticScrollTimeoutRef.current) {
+      window.clearTimeout(programmaticScrollTimeoutRef.current);
+      programmaticScrollTimeoutRef.current = 0;
+    }
+  };
+
+  const lockActiveSectionDuringScroll = (sectionId) => {
+    clearProgrammaticScrollTarget();
+    programmaticScrollTargetRef.current = sectionId;
+    setActiveSectionId(sectionId);
+    programmaticScrollTimeoutRef.current = window.setTimeout(() => {
+      clearProgrammaticScrollTarget();
+      if (!activePage) setActiveSectionId(getActiveHomeSectionId());
+    }, PROGRAMMATIC_SCROLL_LOCK_MS);
+  };
 
   useEffect(() => {
     if (draftPreview?.content) {
@@ -2127,8 +2165,13 @@ export default function LandingPage({ routeHash = "" }) {
   const activePage = pageKey ? content.pages?.[pageKey] : null;
 
   useEffect(() => {
+    clearProgrammaticScrollTarget();
     setActiveSectionId(getInitialActiveSectionId(routeSlug));
   }, [routeSlug]);
+
+  useEffect(() => {
+    return () => clearProgrammaticScrollTarget();
+  }, []);
 
   useEffect(() => {
     let frame = 0;
@@ -2136,7 +2179,18 @@ export default function LandingPage({ routeHash = "" }) {
     const updateNavigationState = () => {
       frame = 0;
       setIsFloatingNavVisible(window.scrollY > 160);
-      if (!activePage) setActiveSectionId(getActiveHomeSectionId());
+      if (activePage) return;
+
+      const programmaticTarget = programmaticScrollTargetRef.current;
+      if (programmaticTarget) {
+        setActiveSectionId(programmaticTarget);
+        if (hasReachedProgrammaticScrollTarget(programmaticTarget)) {
+          clearProgrammaticScrollTarget();
+        }
+        return;
+      }
+
+      setActiveSectionId(getActiveHomeSectionId());
     };
 
     const scheduleUpdate = () => {
@@ -2191,7 +2245,7 @@ export default function LandingPage({ routeHash = "" }) {
     const sectionId = getSectionIdFromHref(href);
 
     if (!sectionId) {
-      setActiveSectionId("start");
+      lockActiveSectionDuringScroll("start");
       if (activePage) {
         window.location.hash = "#/";
         return;
@@ -2203,20 +2257,20 @@ export default function LandingPage({ routeHash = "" }) {
     }
 
     if (activePage) {
-      setActiveSectionId(sectionId);
+      lockActiveSectionDuringScroll(sectionId);
       window.location.hash = `#${sectionId}`;
       return;
     }
 
     const section = document.getElementById(sectionId);
     if (section) {
+      lockActiveSectionDuringScroll(sectionId);
       section.scrollIntoView({ behavior: "smooth", block: "start" });
       window.history.replaceState(
         null,
         "",
         `${window.location.pathname}${window.location.search}#${sectionId}`,
       );
-      setActiveSectionId(sectionId);
       return;
     }
 

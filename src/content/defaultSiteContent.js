@@ -89,7 +89,7 @@ export const defaultSiteContent = {
     stats: [
       { value: "100%", label: "responsywny projekt" },
       { value: "SEO", label: "podstawy widoczności" },
-      { value: "CMS", label: "gotowe do edycji" },
+      { value: "CMS", label: "panel administratora" },
     ],
   },
   services: {

@@ -1,5 +1,5 @@
 import React from "react";
-import { render, screen, within } from "@testing-library/react";
+import { fireEvent, render, screen, waitFor, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { defaultSiteContent } from "./content/defaultSiteContent";
@@ -22,6 +22,7 @@ describe("LandingPage navigation", () => {
     window.history.replaceState(null, "", "/");
     window.localStorage.clear();
     window.scrollTo = vi.fn();
+    window.HTMLElement.prototype.scrollIntoView = vi.fn();
     window.IntersectionObserver = vi.fn(() => ({
       observe: vi.fn(),
       disconnect: vi.fn(),
@@ -174,6 +175,39 @@ describe("LandingPage navigation", () => {
     expect(within(floatingNav).getByRole("link", { name: "Kontakt" }).getAttribute("href")).toBe(
       "#contact",
     );
+  });
+
+  it("keeps the clicked floating nav section active while smooth scrolling", async () => {
+    const user = userEvent.setup();
+    render(<LandingPage routeHash="#/" />);
+
+    const floatingNav = screen.getByRole("navigation", {
+      name: "Pływająca nawigacja sekcji",
+    });
+    const projectsSection = document.getElementById("projects");
+
+    Object.defineProperty(projectsSection, "getBoundingClientRect", {
+      configurable: true,
+      value: () => ({
+        top: 900,
+        bottom: 1100,
+        height: 200,
+        left: 0,
+        right: 100,
+        width: 100,
+      }),
+    });
+    Object.defineProperty(window, "scrollY", { configurable: true, value: 320 });
+
+    await user.click(within(floatingNav).getByRole("link", { name: "Projekty" }));
+    fireEvent.scroll(window);
+
+    await waitFor(() => {
+      expect(screen.getByText("Aktualnie: Projekty")).toBeTruthy();
+      expect(
+        within(floatingNav).getByRole("link", { name: "Projekty" }).getAttribute("aria-current"),
+      ).toBe("page");
+    });
   });
 
   it("does not mark CMS active from a homepage web CMS section hash", () => {
