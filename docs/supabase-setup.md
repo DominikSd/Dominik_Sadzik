@@ -78,18 +78,36 @@ Never put `SUPABASE_SERVICE_ROLE_KEY` in frontend code or any `VITE_*` variable.
 ## 5. Website description form
 
 The public route `#/opisz-strone` saves quote requests to `public.website_briefs` through the
-frontend Supabase anon key and RLS.
+Supabase Edge Function `website-brief-submit`. The function stores the request in
+`public.website_briefs` and can send an email notification to the site owner.
 
 Required conditions:
 
 - `VITE_SUPABASE_URL`, `VITE_SUPABASE_ANON_KEY` and `VITE_SITE_ID` point to the same Supabase project,
 - `VITE_SITE_ID` exists in `public.sites`,
 - the site row has `active = true`,
-- `002_website_briefs.sql` has been applied.
+- `002_website_briefs.sql` has been applied,
+- Edge Function `website-brief-submit` has been deployed.
 
-The form does not send email notifications yet. If notifications are needed, add a separate Supabase
-Edge Function later and store provider credentials only as Supabase secrets, for example for Resend
-or another mail provider. Do not put SMTP/API keys in `.env`, GitHub Variables or frontend code.
+Deploy the function:
+
+```bash
+npx supabase functions deploy website-brief-submit
+```
+
+Email notifications use Resend and require Supabase Edge Function secrets:
+
+```bash
+npx supabase secrets set RESEND_API_KEY=<resend_api_key>
+npx supabase secrets set BRIEF_NOTIFICATION_EMAIL=<your_email_for_notifications>
+npx supabase secrets set BRIEF_FROM_EMAIL=<verified_sender_email>
+```
+
+Use a sender verified in Resend, for example an address on your verified domain. Do not put Resend,
+SMTP or other mail API keys in `.env`, GitHub Variables or frontend code.
+
+If these secrets are missing, the Edge Function still saves the request in `website_briefs`, but it
+skips the email notification.
 
 ## 6. Auth redirect URLs
 

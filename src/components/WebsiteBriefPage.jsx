@@ -41,9 +41,9 @@ const initialForm = {
 
 const projectTypeOptions = [
   "prosta strona wizytówka",
-  "strona z CMS",
-  "portfolio",
-  "landing page",
+  "strona z panelem administratora",
+  "portfolio / galeria prac",
+  "jedna strona promocyjna",
   "odświeżenie obecnej strony",
   "nie wiem, potrzebuję doradztwa",
 ];
@@ -55,7 +55,7 @@ const websiteGoalOptions = [
   "prezentacja realizacji lub portfolio",
   "publikowanie aktualności",
   "budowanie wiarygodności",
-  "połączenie z social mediami",
+  "połączenie z mediami społecznościowymi",
   "inne",
 ];
 
@@ -63,7 +63,7 @@ const cmsOptions = [
   "tak, chcę edytować podstawowe teksty",
   "tak, chcę edytować ofertę, FAQ i kontakt",
   "tak, chcę dodawać aktualności lub ogłoszenia",
-  "nie, wystarczy mi strona bez panelu",
+  "nie, wystarczy mi strona bez możliwości samodzielnej edycji",
   "nie wiem, proszę doradzić",
 ];
 
@@ -71,9 +71,9 @@ const materialFields = [
   ["logo", "Logo"],
   ["texts", "Teksty"],
   ["photos", "Zdjęcia lub grafiki"],
-  ["domain", "Domena"],
+  ["domain", "Adres strony (domena)"],
   ["businessEmail", "Firmowa poczta"],
-  ["socialProfiles", "Profile social media"],
+  ["socialProfiles", "Profile w mediach społecznościowych"],
 ];
 
 const materialOptions = ["tak", "nie", "częściowo", "potrzebuję pomocy"];
@@ -90,18 +90,18 @@ const styleOptions = [
 ];
 
 const addonOptions = [
-  "pomoc z domeną",
-  "pomoc z hostingiem",
+  "pomoc z adresem strony",
+  "pomoc z miejscem na stronę",
   "poczta firmowa",
-  "podstawowe SEO",
-  "Google Analytics / GA4",
-  "Google Search Console",
+  "podstawowe przygotowanie pod Google",
+  "statystyki odwiedzin strony",
+  "zgłoszenie strony do Google",
   "opieka po publikacji",
   "wizytówki",
-  "grafiki do social mediów",
-  "QR kod",
+  "grafiki do mediów społecznościowych",
+  "kod QR",
   "karty reklamowe / ulotki",
-  "integracje z narzędziami",
+  "połączenie z zewnętrznymi narzędziami",
 ];
 
 const deadlineOptions = [
@@ -319,8 +319,9 @@ export default function WebsiteBriefPage({ contact }) {
             </h1>
             <p className="mt-6 max-w-3xl text-lg leading-8 text-slate-300">
               Ten formularz pomoże mi zrozumieć, jakiej strony potrzebujesz: prostej wizytówki,
-              strony z CMS, pomocy z domeną, SEO, hostingiem albo późniejszą opieką. Nie musisz znać
-              technicznych szczegółów — wystarczy, że opiszesz swój pomysł.
+              strony z panelem administratora, pomocy z adresem strony, widocznością w Google albo
+              późniejszą opieką. Nie musisz znać technicznych szczegółów — wystarczy, że opiszesz
+              swój pomysł.
             </p>
           </div>
 
@@ -390,7 +391,7 @@ export default function WebsiteBriefPage({ contact }) {
                 placeholder="+48 ..."
               />
               <TextField
-                label="Obecna strona lub social media, opcjonalnie"
+                label="Obecna strona lub media społecznościowe, opcjonalnie"
                 value={form.currentWebsite}
                 onChange={(event) => updateField("currentWebsite", event.target.value)}
                 placeholder="https://..."
@@ -421,7 +422,7 @@ export default function WebsiteBriefPage({ contact }) {
             />
           </BriefSection>
 
-          <BriefSection icon={ClipboardList} eyebrow="03" title="CMS i materiały">
+          <BriefSection icon={ClipboardList} eyebrow="03" title="Edycja strony i materiały">
             <RadioGroup
               legend="Czy chcesz samodzielnie edytować treści na stronie?"
               name="cmsNeeds"
@@ -531,7 +532,7 @@ export default function WebsiteBriefPage({ contact }) {
             <div>
               <p className="font-bold text-white">Gotowe?</p>
               <p className="mt-1 text-sm text-slate-300">
-                Formularz zapisze zgłoszenie w Supabase. Nie wysyła żadnych sekretów z frontendu.
+                Wyślij opis, a wrócę z propozycją zakresu lub dodatkowymi pytaniami.
               </p>
             </div>
             <button

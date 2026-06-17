@@ -30,7 +30,7 @@ describe("WebsiteBriefPage", () => {
     ).toBeTruthy();
     expect(screen.getByRole("heading", { name: "Dane kontaktowe" })).toBeTruthy();
     expect(screen.getByRole("heading", { name: "Jakiej strony potrzebujesz?" })).toBeTruthy();
-    expect(screen.getByRole("heading", { name: "CMS i materiały" })).toBeTruthy();
+    expect(screen.getByRole("heading", { name: "Edycja strony i materiały" })).toBeTruthy();
     expect(screen.getByRole("heading", { name: "Styl i dodatki" })).toBeTruthy();
   });
 
@@ -53,7 +53,7 @@ describe("WebsiteBriefPage", () => {
 
     await user.type(screen.getByLabelText("Imię i nazwisko / nazwa firmy"), "Dominik");
     await user.type(screen.getByLabelText("E-mail"), "dominik@example.com");
-    await user.click(screen.getByLabelText("strona z CMS"));
+    await user.click(screen.getByLabelText("strona z panelem administratora"));
     await user.type(
       screen.getByLabelText("Opisz krótko, czym się zajmujesz i czego oczekujesz od strony"),
       "Potrzebuję strony z panelem administratora.",
@@ -68,7 +68,7 @@ describe("WebsiteBriefPage", () => {
         expect.objectContaining({
           name: "Dominik",
           email: "dominik@example.com",
-          projectTypes: ["strona z CMS"],
+          projectTypes: ["strona z panelem administratora"],
           consentContact: true,
         }),
       );

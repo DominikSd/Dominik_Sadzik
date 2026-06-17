@@ -33,8 +33,15 @@ export async function submitWebsiteBrief(form) {
     source: "brief_form",
   };
 
-  const { error } = await client.from("website_briefs").insert(payload);
-  if (error) throw error;
+  const { data, error } = await client.functions.invoke("website-brief-submit", {
+    body: payload,
+  });
 
-  return { ok: true };
+  if (error) throw error;
+  if (data?.error) {
+    const message = data.error.message || data.error.code || "brief_submit_failed";
+    throw new Error(message);
+  }
+
+  return data || { ok: true };
 }
