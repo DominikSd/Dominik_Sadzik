@@ -36,6 +36,17 @@ describe("seo helpers", () => {
     expect(seo.robots).toBe("index,follow");
   });
 
+  it("returns route-aware SEO for the privacy policy route", () => {
+    const seo = getPublicRouteSeo({
+      content: defaultSiteContent,
+      routeHash: "#/polityka-prywatnosci",
+    });
+
+    expect(seo.title).toBe("Polityka prywatności | Dominik Sadzik");
+    expect(seo.canonical).toBe("https://dominik-sadzik.pl/#/polityka-prywatnosci");
+    expect(seo.robots).toBe("index,follow");
+  });
+
   it("applies noindex metadata for private panel routes", () => {
     applyNoindexSeo("Panel CMS - Test");
 

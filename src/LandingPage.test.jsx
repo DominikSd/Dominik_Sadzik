@@ -316,6 +316,19 @@ describe("LandingPage navigation", () => {
     expect(screen.getByText("Aktualnie: Opisz stronę")).toBeTruthy();
   });
 
+  it("renders the privacy policy route and links it from the footer", () => {
+    const { rerender } = render(<LandingPage routeHash="#/" />);
+
+    expect(screen.getByRole("link", { name: "Prywatność" }).getAttribute("href")).toBe(
+      "#/polityka-prywatnosci",
+    );
+
+    rerender(<LandingPage routeHash="#/polityka-prywatnosci" />);
+
+    expect(screen.getByRole("heading", { name: "Polityka prywatności" })).toBeTruthy();
+    expect(screen.getByText("Aktualnie: Polityka prywatności")).toBeTruthy();
+  });
+
   it("links the contact section to the website description form", () => {
     render(<LandingPage routeHash="#/" />);
 

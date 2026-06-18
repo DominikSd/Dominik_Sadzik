@@ -8,6 +8,7 @@ const corsHeaders = {
 
 type BriefPayload = {
   site_id?: string;
+  company_website?: string | null;
   name?: string;
   email?: string;
   phone?: string | null;
@@ -77,6 +78,9 @@ function cleanMaterials(value: unknown) {
 }
 
 function normalizePayload(input: BriefPayload) {
+  const honeypot = cleanText(input.company_website, 300);
+  if (honeypot) throw new Error("spam_detected");
+
   const payload = {
     site_id: cleanText(input.site_id, 80),
     name: cleanText(input.name, 160),
@@ -108,6 +112,22 @@ function normalizePayload(input: BriefPayload) {
   if (!payload.consent_contact) throw new Error("consent_required");
 
   return payload;
+}
+
+async function enforceBasicRateLimit(
+  client: ReturnType<typeof createClient>,
+  payload: ReturnType<typeof normalizePayload>,
+) {
+  const tenMinutesAgo = new Date(Date.now() - 10 * 60 * 1000).toISOString();
+  const { count, error } = await client
+    .from("website_briefs")
+    .select("id", { count: "exact", head: true })
+    .eq("site_id", payload.site_id)
+    .eq("email", payload.email)
+    .gte("created_at", tenMinutesAgo);
+
+  if (error) throw new Error(`brief_rate_limit_check_failed:${error.message}`);
+  if ((count || 0) >= 3) throw new Error("rate_limited");
 }
 
 function escapeHtml(value: unknown) {
@@ -249,6 +269,10 @@ Deno.serve(async (req) => {
     });
 
     const usingServiceRole = Boolean(Deno.env.get("SUPABASE_SERVICE_ROLE_KEY"));
+    if (usingServiceRole) {
+      await enforceBasicRateLimit(client, payload);
+    }
+
     const insertQuery = client.from("website_briefs").insert(payload);
     const insertResult = usingServiceRole
       ? await insertQuery.select("id").single()
@@ -277,6 +301,18 @@ Deno.serve(async (req) => {
     });
   } catch (error) {
     const message = error instanceof Error ? error.message : "brief_submit_failed";
+
+    if (message === "spam_detected") {
+      return jsonResponse({ ok: true, emailSent: false, emailSkipped: true });
+    }
+
+    if (message === "rate_limited") {
+      return errorResponse(
+        "rate_limited",
+        "Wysłano już kilka zgłoszeń. Odczekaj chwilę i spróbuj ponownie.",
+        429,
+      );
+    }
 
     if (
       [

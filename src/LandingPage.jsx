@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import AnimatedCircuit from "./components/AnimatedCircuit";
+import PrivacyPolicyPage from "./components/PrivacyPolicyPage";
 import WebsiteBriefPage from "./components/WebsiteBriefPage";
 import { defaultSiteContent } from "./content/defaultSiteContent";
 import { trackContactClick, trackCtaClick, trackNavigationClick } from "./lib/analytics/ga4";
@@ -78,6 +79,7 @@ const routeLabelsBySlug = {
   "tester-istqb": "QA",
   gamedev: "GameDev",
   "opisz-strone": "Opisz stronę",
+  "polityka-prywatnosci": "Polityka prywatności",
 };
 
 function getRouteSlug(routeHash = "") {
@@ -1191,7 +1193,7 @@ function PortfolioSection({ portfolio }) {
                   <a
                     href={item.href}
                     target={item.href.startsWith("http") ? "_blank" : undefined}
-                    rel={item.href.startsWith("http") ? "noreferrer" : undefined}
+                    rel={item.href.startsWith("http") ? "noopener noreferrer" : undefined}
                     aria-label={`Otwórz projekt: ${item.title}`}
                     className="block h-full w-full"
                   >
@@ -1266,7 +1268,7 @@ function PortfolioSection({ portfolio }) {
                     className="mt-6 inline-flex min-w-0 items-center gap-2 self-center break-words text-sm font-semibold text-cyan-300 hover:text-cyan-200 sm:self-start"
                     href={item.href}
                     target={item.href.startsWith("http") ? "_blank" : undefined}
-                    rel={item.href.startsWith("http") ? "noreferrer" : undefined}
+                    rel={item.href.startsWith("http") ? "noopener noreferrer" : undefined}
                   >
                     <span className="min-w-0">{item.linkLabel || "Zobacz projekt"}</span>
                     <Icon name="external-link" className="h-4 w-4 flex-none" />
@@ -1461,6 +1463,11 @@ function ContactSection({ contact }) {
                 <span>Opisz swoją stronę</span>
                 <Icon name="arrow-right" className="h-4 w-4 flex-none" />
               </a>
+              <p className="mt-4 text-xs leading-5 text-slate-400">
+                Administratorem Twoich danych osobowych jest Dominik Sadzik. Dane podane w
+                formularzu będą przetwarzane wyłącznie w celu udzielenia odpowiedzi na Twoją
+                wiadomość.
+              </p>
             </div>
           </div>
           <div className="w-full min-w-0 rounded-lg border border-cyan-300/20 bg-slate-950/55 p-4 shadow-2xl shadow-blue-500/10 sm:p-6">
@@ -1747,7 +1754,7 @@ function PageMediaGallery({ mediaItems = [] }) {
               <a
                 href={item.demoSrc}
                 target="_blank"
-                rel="noreferrer"
+                rel="noopener noreferrer"
                 className="mt-4 inline-flex items-center justify-center gap-2 rounded-full border border-cyan-300/25 bg-cyan-300/10 px-4 py-2 text-sm font-semibold text-cyan-100 transition hover:border-cyan-200/50 hover:bg-cyan-300/15"
               >
                 {item.demoLabel || "Zobacz animację"}
@@ -2181,6 +2188,7 @@ export default function LandingPage({ routeHash = "" }) {
   const pageKey = detailPageRoutes[routeSlug];
   const activePage = pageKey ? content.pages?.[pageKey] : null;
   const isBriefRoute = routeSlug === "opisz-strone";
+  const isPrivacyRoute = routeSlug === "polityka-prywatnosci";
 
   useEffect(() => {
     clearProgrammaticScrollTarget();
@@ -2197,7 +2205,7 @@ export default function LandingPage({ routeHash = "" }) {
     const updateNavigationState = () => {
       frame = 0;
       setIsFloatingNavVisible(window.scrollY > 160);
-      if (activePage || isBriefRoute) return;
+      if (activePage || isBriefRoute || isPrivacyRoute) return;
 
       const programmaticTarget = programmaticScrollTargetRef.current;
       if (programmaticTarget) {
@@ -2225,10 +2233,10 @@ export default function LandingPage({ routeHash = "" }) {
       window.removeEventListener("scroll", scheduleUpdate);
       window.removeEventListener("resize", scheduleUpdate);
     };
-  }, [activePage, isBriefRoute, routeSlug]);
+  }, [activePage, isBriefRoute, isPrivacyRoute, routeSlug]);
 
   useEffect(() => {
-    if (activePage || isBriefRoute) {
+    if (activePage || isBriefRoute || isPrivacyRoute) {
       const frame = window.requestAnimationFrame(() => {
         if (!isBriefRoute && routeSlug === "tester-istqb") {
           document.getElementById("istqbCertificate")?.scrollIntoView({ block: "start" });
@@ -2248,7 +2256,7 @@ export default function LandingPage({ routeHash = "" }) {
     });
 
     return () => window.cancelAnimationFrame(frame);
-  }, [activePage, isBriefRoute, routeSlug]);
+  }, [activePage, isBriefRoute, isPrivacyRoute, routeSlug]);
 
   useEffect(() => {
     const seo = getPublicRouteSeo({ content, routeHash, activePage });
@@ -2328,6 +2336,8 @@ export default function LandingPage({ routeHash = "" }) {
       <main className="relative z-10 overflow-visible">
         {isBriefRoute ? (
           <WebsiteBriefPage contact={content.contact} />
+        ) : isPrivacyRoute ? (
+          <PrivacyPolicyPage contact={content.contact} />
         ) : activePage ? (
           <ServiceDetailPage
             page={activePage}
@@ -2379,6 +2389,9 @@ export default function LandingPage({ routeHash = "" }) {
               className="hover:text-cyan-300"
             >
               GameDev
+            </a>
+            <a href="#/polityka-prywatnosci" className="hover:text-cyan-300">
+              Prywatność
             </a>
           </nav>
         </div>

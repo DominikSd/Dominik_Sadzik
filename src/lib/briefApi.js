@@ -14,6 +14,7 @@ export async function submitWebsiteBrief(form) {
 
   const payload = {
     site_id: siteId,
+    company_website: emptyToNull(form.companyWebsite),
     name: String(form.name || "").trim(),
     email: String(form.email || "").trim(),
     phone: emptyToNull(form.phone),

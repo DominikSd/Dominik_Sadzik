@@ -14,6 +14,7 @@ import { trackFormSubmit } from "../lib/analytics/ga4";
 import { submitWebsiteBrief } from "../lib/briefApi";
 
 const initialForm = {
+  companyWebsite: "",
   name: "",
   email: "",
   phone: "",
@@ -37,6 +38,16 @@ const initialForm = {
   budget: "",
   projectDescription: "",
   consentContact: false,
+};
+
+const fieldLimits = {
+  name: 160,
+  email: 180,
+  phone: 80,
+  currentWebsite: 300,
+  inspirationLinks: 1200,
+  budget: 300,
+  projectDescription: 3000,
 };
 
 const projectTypeOptions = [
@@ -131,6 +142,19 @@ function validateForm(form) {
   }
   if (!form.consentContact) {
     errors.consentContact = "Zgoda na kontakt jest wymagana.";
+  }
+  if (form.name.length > fieldLimits.name) errors.name = "Wpis jest za długi.";
+  if (form.email.length > fieldLimits.email) errors.email = "Adres e-mail jest za długi.";
+  if (form.phone.length > fieldLimits.phone) errors.phone = "Numer telefonu jest za długi.";
+  if (form.currentWebsite.length > fieldLimits.currentWebsite) {
+    errors.currentWebsite = "Link lub opis jest za długi.";
+  }
+  if (form.inspirationLinks.length > fieldLimits.inspirationLinks) {
+    errors.inspirationLinks = "Ten opis jest za długi.";
+  }
+  if (form.budget.length > fieldLimits.budget) errors.budget = "Ten opis jest za długi.";
+  if (form.projectDescription.length > fieldLimits.projectDescription) {
+    errors.projectDescription = "Opis projektu jest za długi.";
   }
 
   return errors;
@@ -258,7 +282,7 @@ export default function WebsiteBriefPage({ contact }) {
   const [status, setStatus] = useState("idle");
   const [submitError, setSubmitError] = useState("");
 
-  const ownerEmail = contact?.email || "kontakt@dominiksadzik.pl";
+  const ownerEmail = contact?.email || "kontakt@dominik-sadzik.pl";
   const isSubmitting = status === "submitting";
   const selectedMaterials = useMemo(
     () => materialFields.filter(([key]) => form.materials[key]).length,
@@ -288,6 +312,14 @@ export default function WebsiteBriefPage({ contact }) {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+
+    if (form.companyWebsite.trim()) {
+      setStatus("success");
+      setSubmitError("");
+      setForm(initialForm);
+      return;
+    }
+
     const nextErrors = validateForm(form);
     setErrors(nextErrors);
     setSubmitError("");
@@ -371,12 +403,24 @@ export default function WebsiteBriefPage({ contact }) {
         )}
 
         <form className="grid gap-6" onSubmit={handleSubmit} noValidate>
+          <label className="absolute -left-[10000px] top-auto h-px w-px overflow-hidden">
+            Zostaw to pole puste
+            <input
+              type="text"
+              tabIndex={-1}
+              autoComplete="off"
+              value={form.companyWebsite}
+              onChange={(event) => updateField("companyWebsite", event.target.value)}
+            />
+          </label>
+
           <BriefSection icon={UserRound} eyebrow="01" title="Dane kontaktowe">
             <div className="grid gap-5 md:grid-cols-2">
               <TextField
                 label="Imię i nazwisko / nazwa firmy"
                 value={form.name}
                 error={errors.name}
+                maxLength={fieldLimits.name}
                 onChange={(event) => updateField("name", event.target.value)}
                 placeholder="Np. Anna Kowalska / Studio ABC"
               />
@@ -385,18 +429,23 @@ export default function WebsiteBriefPage({ contact }) {
                 type="email"
                 value={form.email}
                 error={errors.email}
+                maxLength={fieldLimits.email}
                 onChange={(event) => updateField("email", event.target.value)}
                 placeholder="adres@email.pl"
               />
               <TextField
                 label="Telefon, opcjonalnie"
                 value={form.phone}
+                error={errors.phone}
+                maxLength={fieldLimits.phone}
                 onChange={(event) => updateField("phone", event.target.value)}
                 placeholder="+48 ..."
               />
               <TextField
                 label="Obecna strona lub media społecznościowe, opcjonalnie"
                 value={form.currentWebsite}
+                error={errors.currentWebsite}
+                maxLength={fieldLimits.currentWebsite}
                 onChange={(event) => updateField("currentWebsite", event.target.value)}
                 placeholder="https://..."
               />
@@ -475,6 +524,8 @@ export default function WebsiteBriefPage({ contact }) {
               label="Linki do stron, które Ci się podobają, albo opis stylu"
               textarea
               value={form.inspirationLinks}
+              error={errors.inspirationLinks}
+              maxLength={fieldLimits.inspirationLinks}
               onChange={(event) => updateField("inspirationLinks", event.target.value)}
               placeholder="Możesz wkleić linki albo opisać klimat strony."
             />
@@ -497,6 +548,8 @@ export default function WebsiteBriefPage({ contact }) {
             <TextField
               label="Orientacyjny budżet / uwagi do wyceny, opcjonalnie"
               value={form.budget}
+              error={errors.budget}
+              maxLength={fieldLimits.budget}
               onChange={(event) => updateField("budget", event.target.value)}
               placeholder="Nie musisz podawać dokładnej kwoty."
             />
@@ -504,6 +557,8 @@ export default function WebsiteBriefPage({ contact }) {
               label="Opisz krótko, czym się zajmujesz i czego oczekujesz od strony"
               textarea
               value={form.projectDescription}
+              error={errors.projectDescription}
+              maxLength={fieldLimits.projectDescription}
               onChange={(event) => updateField("projectDescription", event.target.value)}
               placeholder="Napisz po ludzku, czego potrzebujesz. Techniczne szczegóły mogę dobrać później."
             />
@@ -522,6 +577,11 @@ export default function WebsiteBriefPage({ contact }) {
                 <span className="block text-slate-500">
                   Dane z formularza są używane tylko do odpowiedzi na zgłoszenie i przygotowania
                   propozycji zakresu.
+                </span>
+                <span className="mt-2 block text-slate-500">
+                  Administratorem Twoich danych osobowych jest Dominik Sadzik. Dane podane w
+                  formularzu będą przetwarzane wyłącznie w celu udzielenia odpowiedzi na Twoją
+                  wiadomość.
                 </span>
               </span>
             </label>

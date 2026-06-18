@@ -46,6 +46,21 @@ describe("WebsiteBriefPage", () => {
     expect(submitWebsiteBrief).not.toHaveBeenCalled();
   });
 
+  it("ignores automated submissions that fill the hidden field", async () => {
+    const user = userEvent.setup();
+    render(<WebsiteBriefPage contact={{ email: "kontakt@example.com" }} />);
+
+    await user.type(screen.getByLabelText("Zostaw to pole puste"), "https://spam.example");
+    await user.click(screen.getByRole("button", { name: /Wyślij opis strony/i }));
+
+    await waitFor(() => {
+      expect(submitWebsiteBrief).not.toHaveBeenCalled();
+      expect(screen.getByRole("status").textContent).toContain(
+        "Dziękuję za przesłanie opisu strony",
+      );
+    });
+  });
+
   it("submits the brief and shows success message", async () => {
     const user = userEvent.setup();
     submitWebsiteBrief.mockResolvedValue({ ok: true });

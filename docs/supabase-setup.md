@@ -109,6 +109,20 @@ SMTP or other mail API keys in `.env`, GitHub Variables or frontend code.
 If these secrets are missing, the Edge Function still saves the request in `website_briefs`, but it
 skips the email notification.
 
+Basic form protections:
+
+- the frontend includes a hidden honeypot field for simple bots,
+- the Edge Function ignores submissions that fill the honeypot field,
+- the Edge Function limits repeated submissions from the same email in a short time window when it
+  can use the server-side Supabase key,
+- visible validation errors stay generic and do not expose backend details.
+
+After changing `supabase/functions/website-brief-submit/index.ts`, deploy the function again:
+
+```bash
+npx supabase functions deploy website-brief-submit
+```
+
 ## 6. Auth redirect URLs
 
 In Supabase Authentication → URL Configuration add the callback and recovery URLs used by the

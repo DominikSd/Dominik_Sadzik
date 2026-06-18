@@ -46,6 +46,7 @@ describe("submitWebsiteBrief", () => {
     expect(mocks.invoke).toHaveBeenCalledWith("website-brief-submit", {
       body: {
         site_id: "site-123",
+        company_website: null,
         name: "Dominik",
         email: "test@example.com",
         phone: null,

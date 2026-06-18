@@ -16,7 +16,15 @@
 - Confirm Supabase Edge Function secrets are set:
   - `GA4_PROPERTY_ID`
   - `GOOGLE_SERVICE_ACCOUNT_JSON_BASE64`
+  - `RESEND_API_KEY` if email notifications from the website description form are enabled
+  - `BRIEF_NOTIFICATION_EMAIL` if email notifications from the website description form are enabled
+  - `BRIEF_FROM_EMAIL` if email notifications from the website description form are enabled
 - Deploy `ga4-report` Edge Function.
+- Deploy `website-brief-submit` Edge Function after form or email-notification changes.
+- For GitHub Pages, confirm `Settings -> Pages -> Enforce HTTPS` is enabled.
+- Remember that GitHub Pages does not provide a simple project-level way to set custom HTTP
+  security headers like `X-Frame-Options`, `Permissions-Policy` or a strict CSP. Add these later if
+  the site moves to Netlify, Vercel, Cloudflare Pages or another host that supports them.
 - Log in to the admin panel.
 - Save a draft and publish one harmless text change.
 - Open `Statystyki` and verify the GA4 report status.

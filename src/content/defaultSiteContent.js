@@ -88,6 +88,18 @@ export const defaultSiteContent = {
           "Krótki formularz, który pomaga zebrać potrzeby przed wyceną strony internetowej lub panelu CMS.",
         ogImage: "https://dominik-sadzik.pl/link-preview.png",
       },
+      "polityka-prywatnosci": {
+        title: "Polityka prywatności | Dominik Sadzik",
+        description:
+          "Informacje o danych z formularza kontaktowego, analityce i kontakcie w sprawie danych na stronie Dominik Sadzik.",
+        slug: "polityka-prywatnosci",
+        canonical: "https://dominik-sadzik.pl/#/polityka-prywatnosci",
+        noindex: false,
+        ogTitle: "Polityka prywatności | Dominik Sadzik",
+        ogDescription:
+          "Krótka informacja o tym, jakie dane może przetwarzać strona i do czego są wykorzystywane.",
+        ogImage: "https://dominik-sadzik.pl/link-preview.png",
+      },
     },
   },
   hero: {

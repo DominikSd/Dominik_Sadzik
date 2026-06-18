@@ -469,7 +469,7 @@ export default function AnalyticsPanel() {
             <a
               href="https://analytics.google.com/analytics/web/"
               target="_blank"
-              rel="noreferrer"
+              rel="noopener noreferrer"
               className="inline-flex items-center gap-2 rounded-lg bg-cyan-400 px-3 py-2 text-sm font-black text-slate-950 hover:bg-cyan-300"
             >
               <ExternalLink className="h-4 w-4" /> Google Analytics
