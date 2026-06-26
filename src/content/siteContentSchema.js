@@ -335,6 +335,25 @@ export function validateSectionData(key, data) {
 export function normalizeSiteContent(candidate) {
   const candidatePages = candidate?.pages || {};
   const candidateSeo = candidate?.seo || {};
+  const candidatePortfolio = candidate?.portfolio;
+  const candidatePortfolioItems = Array.isArray(candidatePortfolio?.items)
+    ? candidatePortfolio.items
+    : [];
+  const candidatePortfolioTitles = new Set(
+    candidatePortfolioItems.map((item) => item?.title).filter(Boolean),
+  );
+  const portfolio = candidatePortfolio
+    ? {
+        ...defaultSiteContent.portfolio,
+        ...candidatePortfolio,
+        items: [
+          ...candidatePortfolioItems,
+          ...defaultSiteContent.portfolio.items.filter(
+            (item) => item?.title && !candidatePortfolioTitles.has(item.title),
+          ),
+        ],
+      }
+    : defaultSiteContent.portfolio;
   const pages = {
     ...defaultSiteContent.pages,
     ...candidatePages,
@@ -360,6 +379,7 @@ export function normalizeSiteContent(candidate) {
     ...candidate,
     seo,
     pages,
+    portfolio,
     schemaVersion: CONTENT_SCHEMA_VERSION,
   });
 }

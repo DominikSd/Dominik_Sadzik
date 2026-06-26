@@ -70,6 +70,20 @@ describe("site content schema", () => {
     expect(content.seo.pages.start.title).toBe(defaultSiteContent.seo.pages.start.title);
   });
 
+  it("keeps newly bundled portfolio items when normalizing older published CMS content", () => {
+    const olderPortfolio = {
+      ...defaultSiteContent.portfolio,
+      items: defaultSiteContent.portfolio.items.filter((item) => item.title !== "Strony demo"),
+    };
+
+    const content = normalizeSiteContent({
+      ...defaultSiteContent,
+      portfolio: olderPortfolio,
+    });
+
+    expect(content.portfolio.items.some((item) => item.title === "Strony demo")).toBe(true);
+  });
+
   it("validates SEO slugs before saving a draft", () => {
     const seo = {
       ...defaultSiteContent.seo,
