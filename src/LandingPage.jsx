@@ -1160,6 +1160,7 @@ function PortfolioMockup({ item, fallbackSrc, fallbackScale = 1 }) {
 }
 
 function PortfolioSection({ portfolio }) {
+  const [openDemoGroups, setOpenDemoGroups] = useState({});
   const fallbackScreenshots = useMemo(
     () =>
       Object.fromEntries(
@@ -1183,100 +1184,194 @@ function PortfolioSection({ portfolio }) {
       <div className="relative z-10 mx-auto w-full max-w-7xl">
         <SectionTitle eyebrow={portfolio.eyebrow} title={portfolio.title} text={portfolio.text} />
         <div className="grid min-w-0 gap-5 md:grid-cols-2 xl:grid-cols-4">
-          {portfolio.items.map((item, index) => (
-            <article
-              key={item.title}
-              className="group flex min-w-0 flex-col overflow-hidden rounded-lg border border-white/10 bg-white/[0.045] backdrop-blur transition hover:-translate-y-1 hover:border-cyan-300/35 hover:shadow-2xl hover:shadow-cyan-500/10"
-            >
-              <div className="relative aspect-[16/10] min-w-0 overflow-hidden bg-slate-950">
-                {item.href ? (
-                  <a
-                    href={item.href}
-                    target={item.href.startsWith("http") ? "_blank" : undefined}
-                    rel={item.href.startsWith("http") ? "noopener noreferrer" : undefined}
-                    aria-label={`Otwórz projekt: ${item.title}`}
-                    className="block h-full w-full"
-                  >
+          {portfolio.items.map((item, index) => {
+            const demoItems = item.demoItems || [];
+            const hasDemoItems = demoItems.length > 0;
+            const demoPanelId = `portfolio-demo-group-${index}`;
+            const isDemoGroupOpen = Boolean(openDemoGroups[item.title]);
+
+            return (
+              <article
+                key={item.title}
+                className="group flex min-w-0 flex-col overflow-hidden rounded-lg border border-white/10 bg-white/[0.045] backdrop-blur transition hover:-translate-y-1 hover:border-cyan-300/35 hover:shadow-2xl hover:shadow-cyan-500/10"
+              >
+                <div className="relative aspect-[16/10] min-w-0 overflow-hidden bg-slate-950">
+                  {item.href ? (
+                    <a
+                      href={item.href}
+                      target={item.href.startsWith("http") ? "_blank" : undefined}
+                      rel={item.href.startsWith("http") ? "noopener noreferrer" : undefined}
+                      aria-label={`Otwórz projekt: ${item.title}`}
+                      className="block h-full w-full"
+                    >
+                      <PortfolioMockup
+                        item={item}
+                        fallbackSrc={fallbackScreenshots[item.title]}
+                        fallbackScale={fallbackScales[item.title]}
+                      />
+                    </a>
+                  ) : (
                     <PortfolioMockup
                       item={item}
                       fallbackSrc={fallbackScreenshots[item.title]}
                       fallbackScale={fallbackScales[item.title]}
                     />
-                  </a>
-                ) : (
-                  <PortfolioMockup
-                    item={item}
-                    fallbackSrc={fallbackScreenshots[item.title]}
-                    fallbackScale={fallbackScales[item.title]}
-                  />
-                )}
-                <span className="absolute left-4 top-4 rounded-full border border-cyan-300/30 bg-slate-950/75 px-3 py-1 text-xs font-semibold text-cyan-100 backdrop-blur">
-                  Projekt 0{index + 1}
-                </span>
-                {item.href && (
-                  <span className="pointer-events-none absolute bottom-4 right-4 inline-flex h-9 w-9 items-center justify-center rounded-full border border-white/15 bg-slate-950/75 text-cyan-200 opacity-0 backdrop-blur transition group-hover:opacity-100">
-                    <Icon name="external-link" className="h-4 w-4" />
+                  )}
+                  <span className="absolute left-4 top-4 rounded-full border border-cyan-300/30 bg-slate-950/75 px-3 py-1 text-xs font-semibold text-cyan-100 backdrop-blur">
+                    Projekt 0{index + 1}
                   </span>
-                )}
-              </div>
-              <div className="flex min-w-0 flex-1 flex-col p-5 text-center sm:p-6 sm:text-left">
-                <div className="mb-4 flex min-w-0 flex-wrap items-center justify-center gap-2 sm:justify-start">
-                  <span className="max-w-full rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs font-semibold text-slate-200">
-                    {item.type || "Projekt"}
-                  </span>
-                  {item.category && (
-                    <span className="max-w-full rounded-full border border-cyan-300/20 bg-cyan-300/10 px-3 py-1 text-xs font-semibold text-cyan-100">
-                      {item.category}
+                  {item.href && (
+                    <span className="pointer-events-none absolute bottom-4 right-4 inline-flex h-9 w-9 items-center justify-center rounded-full border border-white/15 bg-slate-950/75 text-cyan-200 opacity-0 backdrop-blur transition group-hover:opacity-100">
+                      <Icon name="external-link" className="h-4 w-4" />
                     </span>
                   )}
-                  <span
-                    className={`rounded-full px-3 py-1 text-xs font-semibold ${
-                      item.status === "realizacja"
-                        ? "border border-emerald-300/25 bg-emerald-400/10 text-emerald-100"
-                        : "border border-violet-300/25 bg-violet-400/10 text-violet-100"
-                    }`}
-                  >
-                    {getPortfolioStatusLabel(item.status)}
-                  </span>
                 </div>
-                <h3 className="min-w-0 whitespace-pre-line break-words text-xl font-bold text-white">
-                  {item.title}
-                </h3>
-                <p className="mt-3 min-w-0 flex-1 break-words leading-7 text-slate-400">
-                  {item.text}
-                </p>
-                {item.details && (
-                  <div className="mt-4 rounded-lg border border-white/10 bg-slate-950/45 p-3 text-sm leading-6 text-slate-300">
-                    <span className="font-semibold text-cyan-200">Co zrobiłem: </span>
-                    {item.details}
-                  </div>
-                )}
-                {item.tags?.length > 0 && (
-                  <div className="mt-5 flex min-w-0 flex-wrap justify-center gap-2 sm:justify-start">
-                    {item.tags.map((tag) => (
-                      <span
-                        key={`${item.title}-${tag}`}
-                        className="max-w-full break-words rounded-full bg-cyan-300/10 px-3 py-1 text-xs font-semibold text-cyan-100 ring-1 ring-cyan-300/15"
-                      >
-                        {tag}
+                <div className="flex min-w-0 flex-1 flex-col p-5 text-center sm:p-6 sm:text-left">
+                  <div className="mb-4 flex min-w-0 flex-wrap items-center justify-center gap-2 sm:justify-start">
+                    <span className="max-w-full rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs font-semibold text-slate-200">
+                      {item.type || "Projekt"}
+                    </span>
+                    {item.category && (
+                      <span className="max-w-full rounded-full border border-cyan-300/20 bg-cyan-300/10 px-3 py-1 text-xs font-semibold text-cyan-100">
+                        {item.category}
                       </span>
-                    ))}
+                    )}
+                    <span
+                      className={`rounded-full px-3 py-1 text-xs font-semibold ${
+                        item.status === "realizacja"
+                          ? "border border-emerald-300/25 bg-emerald-400/10 text-emerald-100"
+                          : "border border-violet-300/25 bg-violet-400/10 text-violet-100"
+                      }`}
+                    >
+                      {getPortfolioStatusLabel(item.status)}
+                    </span>
                   </div>
-                )}
-                {item.href && (
-                  <a
-                    className="mt-6 inline-flex min-w-0 items-center gap-2 self-center break-words text-sm font-semibold text-cyan-300 hover:text-cyan-200 sm:self-start"
-                    href={item.href}
-                    target={item.href.startsWith("http") ? "_blank" : undefined}
-                    rel={item.href.startsWith("http") ? "noopener noreferrer" : undefined}
-                  >
-                    <span className="min-w-0">{item.linkLabel || "Zobacz projekt"}</span>
-                    <Icon name="external-link" className="h-4 w-4 flex-none" />
-                  </a>
-                )}
-              </div>
-            </article>
-          ))}
+                  <h3 className="min-w-0 whitespace-pre-line break-words text-xl font-bold text-white">
+                    {item.title}
+                  </h3>
+                  <p className="mt-3 min-w-0 flex-1 break-words leading-7 text-slate-400">
+                    {item.text}
+                  </p>
+                  {item.details && (
+                    <div className="mt-4 rounded-lg border border-white/10 bg-slate-950/45 p-3 text-sm leading-6 text-slate-300">
+                      <span className="font-semibold text-cyan-200">Co zrobiłem: </span>
+                      {item.details}
+                    </div>
+                  )}
+                  {item.tags?.length > 0 && (
+                    <div className="mt-5 flex min-w-0 flex-wrap justify-center gap-2 sm:justify-start">
+                      {item.tags.map((tag) => (
+                        <span
+                          key={`${item.title}-${tag}`}
+                          className="max-w-full break-words rounded-full bg-cyan-300/10 px-3 py-1 text-xs font-semibold text-cyan-100 ring-1 ring-cyan-300/15"
+                        >
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
+                  )}
+                  {hasDemoItems && (
+                    <div className="mt-6 rounded-lg border border-cyan-300/20 bg-slate-950/55 p-3 text-left shadow-inner shadow-cyan-500/5">
+                      <button
+                        type="button"
+                        className="flex w-full min-w-0 items-center justify-between gap-3 rounded-lg px-2 py-2 text-left text-sm font-bold text-cyan-100 outline-none transition hover:bg-cyan-300/10 focus-visible:ring-2 focus-visible:ring-cyan-300/70"
+                        aria-expanded={isDemoGroupOpen}
+                        aria-controls={demoPanelId}
+                        onClick={() =>
+                          setOpenDemoGroups((current) => ({
+                            ...current,
+                            [item.title]: !current[item.title],
+                          }))
+                        }
+                      >
+                        <span className="min-w-0">
+                          <span className="block text-white">Rozwiń przykłady</span>
+                          <span className="mt-1 block text-xs font-medium text-slate-400">
+                            {demoItems.length === 1
+                              ? "1 strona demo do podejrzenia"
+                              : `${demoItems.length} strony demo do podejrzenia`}
+                          </span>
+                        </span>
+                        <Icon
+                          name="chevron-down"
+                          className={`h-5 w-5 flex-none text-cyan-200 transition ${
+                            isDemoGroupOpen ? "rotate-180" : ""
+                          }`}
+                        />
+                      </button>
+                      <div id={demoPanelId} hidden={!isDemoGroupOpen}>
+                        <div className="mt-3 space-y-3 border-t border-white/10 pt-3">
+                          {demoItems.map((demo) => {
+                            const hasFinalDemoHref = demo.href && demo.href !== "#";
+
+                            return (
+                              <div
+                                key={demo.name}
+                                className="rounded-lg border border-white/10 bg-white/[0.045] p-4"
+                              >
+                                <div className="flex min-w-0 flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+                                  <div className="min-w-0">
+                                    <h4 className="break-words text-base font-bold text-white">
+                                      {demo.name}
+                                    </h4>
+                                    <p className="mt-2 break-words text-sm leading-6 text-slate-400">
+                                      {demo.description}
+                                    </p>
+                                  </div>
+                                  {hasFinalDemoHref ? (
+                                    <a
+                                      href={demo.href}
+                                      target={demo.href.startsWith("http") ? "_blank" : undefined}
+                                      rel={
+                                        demo.href.startsWith("http")
+                                          ? "noopener noreferrer"
+                                          : undefined
+                                      }
+                                      className="inline-flex shrink-0 items-center justify-center gap-2 rounded-full border border-cyan-300/30 bg-cyan-300/10 px-3 py-2 text-xs font-bold text-cyan-100 transition hover:border-cyan-200 hover:bg-cyan-300/15"
+                                    >
+                                      <span>{demo.linkLabel || "Zobacz demo"}</span>
+                                      <Icon name="external-link" className="h-3.5 w-3.5" />
+                                    </a>
+                                  ) : (
+                                    <span className="inline-flex shrink-0 items-center justify-center rounded-full border border-white/10 bg-white/5 px-3 py-2 text-xs font-semibold text-slate-400">
+                                      URL do podpięcia
+                                    </span>
+                                  )}
+                                </div>
+                                {demo.tags?.length > 0 && (
+                                  <div className="mt-4 flex min-w-0 flex-wrap gap-2">
+                                    {demo.tags.map((tag) => (
+                                      <span
+                                        key={`${demo.name}-${tag}`}
+                                        className="max-w-full break-words rounded-full bg-cyan-300/10 px-2.5 py-1 text-[11px] font-semibold text-cyan-100 ring-1 ring-cyan-300/15"
+                                      >
+                                        {tag}
+                                      </span>
+                                    ))}
+                                  </div>
+                                )}
+                              </div>
+                            );
+                          })}
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                  {item.href && (
+                    <a
+                      className="mt-6 inline-flex min-w-0 items-center gap-2 self-center break-words text-sm font-semibold text-cyan-300 hover:text-cyan-200 sm:self-start"
+                      href={item.href}
+                      target={item.href.startsWith("http") ? "_blank" : undefined}
+                      rel={item.href.startsWith("http") ? "noopener noreferrer" : undefined}
+                    >
+                      <span className="min-w-0">{item.linkLabel || "Zobacz projekt"}</span>
+                      <Icon name="external-link" className="h-4 w-4 flex-none" />
+                    </a>
+                  )}
+                </div>
+              </article>
+            );
+          })}
         </div>
       </div>
     </section>

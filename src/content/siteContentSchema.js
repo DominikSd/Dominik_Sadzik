@@ -244,6 +244,19 @@ export const sectionSchemas = {
           screenshotUrl: z.string().trim().max(300).optional().default(""),
           mockupTone: z.enum(["cyan", "violet", "blue", "emerald"]).optional().default("cyan"),
           mockupScale: z.number().min(0.8).max(1.8).optional().default(1),
+          demoItems: z
+            .array(
+              z.object({
+                name: z.string().trim().min(1).max(100),
+                description: z.string().trim().min(1).max(300),
+                tags: z.array(z.string().trim().min(1).max(40)).max(6).optional().default([]),
+                href: z.string().trim().max(240).optional().default("#"),
+                linkLabel: z.string().trim().max(80).optional().default("Zobacz demo"),
+              }),
+            )
+            .max(8)
+            .optional()
+            .default([]),
         }),
       )
       .min(1)

@@ -286,6 +286,27 @@ export const defaultSiteContent = {
         mockupScale: 1.28,
       },
       {
+        type: "Hub demo",
+        title: "Strony demo",
+        text: "Przykładowe strony usługowe przygotowane jako realistyczne demo do portfolio.",
+        details:
+          "Jedno spokojne miejsce na kolejne warianty stron demo, bez dokładania wielu podobnych kart do portfolio.",
+        status: "projekt demo",
+        category: "Demo stron usługowych",
+        tags: ["strony demo", "usługi lokalne", "portfolio", "responsive"],
+        mockupTone: "cyan",
+        demoItems: [
+          {
+            name: "Demo: serwis domowy",
+            description:
+              "Strona usługowa dla fikcyjnej lokalnej marki, pokazująca hero, ofertę, proces, FAQ, kontakt i podstawowe SEO.",
+            tags: ["strona usługowa", "local business", "SEO", "responsive"],
+            href: "https://dominiksd.github.io/demo-serwis-domowy/",
+            linkLabel: "Zobacz demo",
+          },
+        ],
+      },
+      {
         type: "Automatyzacja",
         title: "Kontrola strony po publikacji",
         text: "Projekt demo pokazujący, jak można sprawdzać kluczowe elementy strony po publikacji: widoczność sekcji, CTA, formularz i podstawowe linki.",
