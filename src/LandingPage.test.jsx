@@ -338,27 +338,27 @@ describe("LandingPage navigation", () => {
     expect(screen.getByText(/przygotuję wstępną propozycję zakresu i wyceny/i)).toBeTruthy();
   });
 
-  it("renders an accessible expandable demo websites hub in portfolio", async () => {
+  it("renders an accessible demo websites hub in portfolio", async () => {
     const user = userEvent.setup();
     render(<LandingPage routeHash="#/" />);
 
     expect(screen.getByRole("heading", { name: "Strony demo" })).toBeTruthy();
 
-    const expandButton = screen.getByRole("button", { name: /Rozwiń przykłady/i });
-    const panel = document.getElementById(expandButton.getAttribute("aria-controls"));
-
-    expect(expandButton.getAttribute("aria-expanded")).toBe("false");
-    expect(panel?.hidden).toBe(true);
-
-    await user.click(expandButton);
-
-    expect(expandButton.getAttribute("aria-expanded")).toBe("true");
-    expect(panel?.hidden).toBe(false);
-    expect(screen.getByText("Demo: serwis domowy")).toBeTruthy();
+    const activeDemoTab = screen.getByRole("tab", { name: /Demo: serwis domowy/i });
+    expect(activeDemoTab.getAttribute("aria-selected")).toBe("true");
+    expect(screen.getAllByText("Demo: serwis domowy").length).toBeGreaterThan(1);
     expect(screen.getByText(/hero, ofertę, proces, FAQ, kontakt i podstawowe SEO/i)).toBeTruthy();
+
     const demoLink = screen.getByRole("link", { name: /Zobacz demo/i });
     expect(demoLink.getAttribute("href")).toBe("https://dominiksd.github.io/demo-serwis-domowy/");
     expect(demoLink.getAttribute("target")).toBe("_blank");
+
+    const cmsDemoTab = screen.getByRole("tab", { name: /Demo CMS/i });
+    await user.click(cmsDemoTab);
+
+    expect(cmsDemoTab.getAttribute("aria-selected")).toBe("true");
+    expect(screen.getByText(/prostym panelem administratora/i)).toBeTruthy();
+    expect(screen.getAllByText("Wkrótce").length).toBeGreaterThan(0);
   });
 
   it("renders the QA detail route without a blank screen", () => {

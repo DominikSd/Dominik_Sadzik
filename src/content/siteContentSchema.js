@@ -127,6 +127,12 @@ const pageHeroSchema = z.object({
   ctaHref: z.string().trim().min(1).max(220),
 });
 
+const retiredPortfolioTitles = new Set([
+  "Kontrola strony po publikacji",
+  "Raport testów funkcjonalnych",
+  "Interaktywny prototyp 2.5D",
+]);
+
 const editablePageSchema = z.object({
   slug: slugSchema.min(1),
   seo: pageSeoSchema,
@@ -252,6 +258,7 @@ export const sectionSchemas = {
                 tags: z.array(z.string().trim().min(1).max(40)).max(6).optional().default([]),
                 href: z.string().trim().max(240).optional().default("#"),
                 linkLabel: z.string().trim().max(80).optional().default("Zobacz demo"),
+                status: z.string().trim().max(40).optional().default(""),
               }),
             )
             .max(8)
@@ -337,7 +344,7 @@ export function normalizeSiteContent(candidate) {
   const candidateSeo = candidate?.seo || {};
   const candidatePortfolio = candidate?.portfolio;
   const candidatePortfolioItems = Array.isArray(candidatePortfolio?.items)
-    ? candidatePortfolio.items
+    ? candidatePortfolio.items.filter((item) => !retiredPortfolioTitles.has(item?.title))
     : [];
   const candidatePortfolioTitles = new Set(
     candidatePortfolioItems.map((item) => item?.title).filter(Boolean),

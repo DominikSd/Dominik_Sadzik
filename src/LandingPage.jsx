@@ -1159,8 +1159,148 @@ function PortfolioMockup({ item, fallbackSrc, fallbackScale = 1 }) {
   );
 }
 
+function PortfolioDemoHub({ group }) {
+  const demoItems = group.demoItems || [];
+  const [activeIndex, setActiveIndex] = useState(0);
+  const activeDemo = demoItems[activeIndex] || demoItems[0];
+  const hasFinalDemoHref = activeDemo?.href && activeDemo.href !== "#";
+
+  if (!demoItems.length) return null;
+
+  return (
+    <div className="mt-6 overflow-hidden rounded-lg border border-cyan-300/20 bg-slate-950/70 shadow-2xl shadow-cyan-500/10 backdrop-blur">
+      <div className="relative grid min-w-0 gap-0 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)]">
+        <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-cyan-300/70 to-transparent" />
+        <div className="relative min-w-0 border-b border-white/10 p-5 sm:p-7 lg:border-b-0 lg:border-r">
+          <div className="mb-6 flex min-w-0 flex-col gap-3 text-center sm:text-left">
+            <p className="text-xs font-bold uppercase tracking-[0.28em] text-cyan-300">
+              Demo library
+            </p>
+            <h3 className="break-words text-2xl font-black text-white md:text-3xl">
+              {group.title}
+            </h3>
+            <p className="break-words leading-7 text-slate-400">{group.text}</p>
+          </div>
+
+          <div className="grid min-w-0 gap-3" role="tablist" aria-label="Strony demo">
+            {demoItems.map((demo, index) => {
+              const isActive = index === activeIndex;
+              const isAvailable = demo.href && demo.href !== "#";
+
+              return (
+                <button
+                  key={demo.name}
+                  type="button"
+                  role="tab"
+                  aria-selected={isActive}
+                  aria-controls="portfolio-demo-preview"
+                  className={`group/demo flex min-w-0 items-center justify-between gap-4 rounded-lg border p-4 text-left outline-none transition focus-visible:ring-2 focus-visible:ring-cyan-300/70 ${
+                    isActive
+                      ? "border-cyan-300/40 bg-cyan-300/12 shadow-lg shadow-cyan-500/10"
+                      : "border-white/10 bg-white/[0.035] hover:border-cyan-300/25 hover:bg-white/[0.055]"
+                  }`}
+                  onClick={() => setActiveIndex(index)}
+                >
+                  <span className="min-w-0">
+                    <span className="flex min-w-0 items-center gap-2">
+                      <span
+                        className={`h-2.5 w-2.5 flex-none rounded-full ${
+                          isAvailable
+                            ? "bg-cyan-300 shadow-[0_0_14px_rgba(103,232,249,0.9)]"
+                            : "bg-slate-500"
+                        }`}
+                      />
+                      <span className="break-words font-bold text-white transition group-hover/demo:text-cyan-100">
+                        {demo.name}
+                      </span>
+                    </span>
+                    <span className="mt-1 block text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">
+                      {demo.status || (isAvailable ? "dostępne" : "wkrótce")}
+                    </span>
+                  </span>
+                  <Icon
+                    name="arrow-right"
+                    className={`h-4 w-4 flex-none text-cyan-200 transition ${
+                      isActive
+                        ? "translate-x-0 opacity-100"
+                        : "opacity-40 group-hover/demo:translate-x-1 group-hover/demo:opacity-80"
+                    }`}
+                  />
+                </button>
+              );
+            })}
+          </div>
+        </div>
+
+        <div className="relative min-w-0 overflow-hidden p-5 sm:p-7">
+          <div className="pointer-events-none absolute right-6 top-6 h-24 w-24 rounded-full bg-cyan-300/10 blur-3xl" />
+          <div className="pointer-events-none absolute bottom-0 left-0 h-px w-full bg-gradient-to-r from-cyan-300/0 via-cyan-300/25 to-violet-300/0" />
+          <motion.div
+            key={activeDemo.name}
+            id="portfolio-demo-preview"
+            role="tabpanel"
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.22 }}
+            className="relative z-10 flex min-h-full min-w-0 flex-col justify-between rounded-lg border border-white/10 bg-white/[0.04] p-5 shadow-inner shadow-cyan-500/5 sm:p-6"
+          >
+            <div className="min-w-0">
+              <div className="mb-5 flex min-w-0 flex-wrap items-center gap-2">
+                <span className="rounded-full border border-cyan-300/25 bg-cyan-300/10 px-3 py-1 text-xs font-bold uppercase tracking-[0.18em] text-cyan-100">
+                  aktywne demo
+                </span>
+                <span className="rounded-full border border-white/10 bg-slate-950/60 px-3 py-1 text-xs font-semibold text-slate-300">
+                  {activeDemo.status || (hasFinalDemoHref ? "dostępne" : "wkrótce")}
+                </span>
+              </div>
+              <h4 className="break-words text-2xl font-black text-white md:text-4xl">
+                {activeDemo.name}
+              </h4>
+              <p className="mt-4 max-w-2xl break-words text-base leading-8 text-slate-300">
+                {activeDemo.description}
+              </p>
+              {activeDemo.tags?.length > 0 && (
+                <div className="mt-6 flex min-w-0 flex-wrap gap-2">
+                  {activeDemo.tags.map((tag) => (
+                    <span
+                      key={`${activeDemo.name}-${tag}`}
+                      className="max-w-full break-words rounded-full bg-cyan-300/10 px-3 py-1 text-xs font-semibold text-cyan-100 ring-1 ring-cyan-300/15"
+                    >
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            <div className="mt-8 flex min-w-0 flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+              <p className="min-w-0 text-sm leading-6 text-slate-500">
+                Wybierz przykład z listy, żeby podejrzeć zakres i przejść do gotowego demo.
+              </p>
+              {hasFinalDemoHref ? (
+                <a
+                  href={activeDemo.href}
+                  target={activeDemo.href.startsWith("http") ? "_blank" : undefined}
+                  rel={activeDemo.href.startsWith("http") ? "noopener noreferrer" : undefined}
+                  className="inline-flex w-full shrink-0 items-center justify-center gap-2 rounded-full gradient-button px-5 py-3 text-sm font-bold shadow-xl shadow-blue-500/20 transition hover:scale-[1.02] sm:w-auto"
+                >
+                  <span>{activeDemo.linkLabel || "Zobacz demo"}</span>
+                  <Icon name="external-link" className="h-4 w-4" />
+                </a>
+              ) : (
+                <span className="inline-flex w-full shrink-0 items-center justify-center rounded-full border border-white/10 bg-white/5 px-5 py-3 text-sm font-bold text-slate-400 sm:w-auto">
+                  {activeDemo.linkLabel || "Wkrótce"}
+                </span>
+              )}
+            </div>
+          </motion.div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function PortfolioSection({ portfolio }) {
-  const [openDemoGroups, setOpenDemoGroups] = useState({});
   const fallbackScreenshots = useMemo(
     () =>
       Object.fromEntries(
@@ -1175,6 +1315,9 @@ function PortfolioSection({ portfolio }) {
       ),
     [],
   );
+  const portfolioItems = portfolio.items || [];
+  const demoGroups = portfolioItems.filter((item) => item.demoItems?.length > 0);
+  const regularItems = portfolioItems.filter((item) => !item.demoItems?.length);
 
   return (
     <section
@@ -1184,195 +1327,104 @@ function PortfolioSection({ portfolio }) {
       <div className="relative z-10 mx-auto w-full max-w-7xl">
         <SectionTitle eyebrow={portfolio.eyebrow} title={portfolio.title} text={portfolio.text} />
         <div className="grid min-w-0 gap-5 md:grid-cols-2 xl:grid-cols-4">
-          {portfolio.items.map((item, index) => {
-            const demoItems = item.demoItems || [];
-            const hasDemoItems = demoItems.length > 0;
-            const demoPanelId = `portfolio-demo-group-${index}`;
-            const isDemoGroupOpen = Boolean(openDemoGroups[item.title]);
-
-            return (
-              <article
-                key={item.title}
-                className="group flex min-w-0 flex-col overflow-hidden rounded-lg border border-white/10 bg-white/[0.045] backdrop-blur transition hover:-translate-y-1 hover:border-cyan-300/35 hover:shadow-2xl hover:shadow-cyan-500/10"
-              >
-                <div className="relative aspect-[16/10] min-w-0 overflow-hidden bg-slate-950">
-                  {item.href ? (
-                    <a
-                      href={item.href}
-                      target={item.href.startsWith("http") ? "_blank" : undefined}
-                      rel={item.href.startsWith("http") ? "noopener noreferrer" : undefined}
-                      aria-label={`Otwórz projekt: ${item.title}`}
-                      className="block h-full w-full"
-                    >
-                      <PortfolioMockup
-                        item={item}
-                        fallbackSrc={fallbackScreenshots[item.title]}
-                        fallbackScale={fallbackScales[item.title]}
-                      />
-                    </a>
-                  ) : (
+          {regularItems.map((item, index) => (
+            <article
+              key={item.title}
+              className="group flex min-w-0 flex-col overflow-hidden rounded-lg border border-white/10 bg-white/[0.045] backdrop-blur transition hover:-translate-y-1 hover:border-cyan-300/35 hover:shadow-2xl hover:shadow-cyan-500/10"
+            >
+              <div className="relative aspect-[16/10] min-w-0 overflow-hidden bg-slate-950">
+                {item.href ? (
+                  <a
+                    href={item.href}
+                    target={item.href.startsWith("http") ? "_blank" : undefined}
+                    rel={item.href.startsWith("http") ? "noopener noreferrer" : undefined}
+                    aria-label={`Otwórz projekt: ${item.title}`}
+                    className="block h-full w-full"
+                  >
                     <PortfolioMockup
                       item={item}
                       fallbackSrc={fallbackScreenshots[item.title]}
                       fallbackScale={fallbackScales[item.title]}
                     />
-                  )}
-                  <span className="absolute left-4 top-4 rounded-full border border-cyan-300/30 bg-slate-950/75 px-3 py-1 text-xs font-semibold text-cyan-100 backdrop-blur">
-                    Projekt 0{index + 1}
+                  </a>
+                ) : (
+                  <PortfolioMockup
+                    item={item}
+                    fallbackSrc={fallbackScreenshots[item.title]}
+                    fallbackScale={fallbackScales[item.title]}
+                  />
+                )}
+                <span className="absolute left-4 top-4 rounded-full border border-cyan-300/30 bg-slate-950/75 px-3 py-1 text-xs font-semibold text-cyan-100 backdrop-blur">
+                  Projekt 0{index + 1}
+                </span>
+                {item.href && (
+                  <span className="pointer-events-none absolute bottom-4 right-4 inline-flex h-9 w-9 items-center justify-center rounded-full border border-white/15 bg-slate-950/75 text-cyan-200 opacity-0 backdrop-blur transition group-hover:opacity-100">
+                    <Icon name="external-link" className="h-4 w-4" />
                   </span>
-                  {item.href && (
-                    <span className="pointer-events-none absolute bottom-4 right-4 inline-flex h-9 w-9 items-center justify-center rounded-full border border-white/15 bg-slate-950/75 text-cyan-200 opacity-0 backdrop-blur transition group-hover:opacity-100">
-                      <Icon name="external-link" className="h-4 w-4" />
+                )}
+              </div>
+              <div className="flex min-w-0 flex-1 flex-col p-5 text-center sm:p-6 sm:text-left">
+                <div className="mb-4 flex min-w-0 flex-wrap items-center justify-center gap-2 sm:justify-start">
+                  <span className="max-w-full rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs font-semibold text-slate-200">
+                    {item.type || "Projekt"}
+                  </span>
+                  {item.category && (
+                    <span className="max-w-full rounded-full border border-cyan-300/20 bg-cyan-300/10 px-3 py-1 text-xs font-semibold text-cyan-100">
+                      {item.category}
                     </span>
                   )}
+                  <span
+                    className={`rounded-full px-3 py-1 text-xs font-semibold ${
+                      item.status === "realizacja"
+                        ? "border border-emerald-300/25 bg-emerald-400/10 text-emerald-100"
+                        : "border border-violet-300/25 bg-violet-400/10 text-violet-100"
+                    }`}
+                  >
+                    {getPortfolioStatusLabel(item.status)}
+                  </span>
                 </div>
-                <div className="flex min-w-0 flex-1 flex-col p-5 text-center sm:p-6 sm:text-left">
-                  <div className="mb-4 flex min-w-0 flex-wrap items-center justify-center gap-2 sm:justify-start">
-                    <span className="max-w-full rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs font-semibold text-slate-200">
-                      {item.type || "Projekt"}
-                    </span>
-                    {item.category && (
-                      <span className="max-w-full rounded-full border border-cyan-300/20 bg-cyan-300/10 px-3 py-1 text-xs font-semibold text-cyan-100">
-                        {item.category}
-                      </span>
-                    )}
-                    <span
-                      className={`rounded-full px-3 py-1 text-xs font-semibold ${
-                        item.status === "realizacja"
-                          ? "border border-emerald-300/25 bg-emerald-400/10 text-emerald-100"
-                          : "border border-violet-300/25 bg-violet-400/10 text-violet-100"
-                      }`}
-                    >
-                      {getPortfolioStatusLabel(item.status)}
-                    </span>
+                <h3 className="min-w-0 whitespace-pre-line break-words text-xl font-bold text-white">
+                  {item.title}
+                </h3>
+                <p className="mt-3 min-w-0 flex-1 break-words leading-7 text-slate-400">
+                  {item.text}
+                </p>
+                {item.details && (
+                  <div className="mt-4 rounded-lg border border-white/10 bg-slate-950/45 p-3 text-sm leading-6 text-slate-300">
+                    <span className="font-semibold text-cyan-200">Co zrobiłem: </span>
+                    {item.details}
                   </div>
-                  <h3 className="min-w-0 whitespace-pre-line break-words text-xl font-bold text-white">
-                    {item.title}
-                  </h3>
-                  <p className="mt-3 min-w-0 flex-1 break-words leading-7 text-slate-400">
-                    {item.text}
-                  </p>
-                  {item.details && (
-                    <div className="mt-4 rounded-lg border border-white/10 bg-slate-950/45 p-3 text-sm leading-6 text-slate-300">
-                      <span className="font-semibold text-cyan-200">Co zrobiłem: </span>
-                      {item.details}
-                    </div>
-                  )}
-                  {item.tags?.length > 0 && (
-                    <div className="mt-5 flex min-w-0 flex-wrap justify-center gap-2 sm:justify-start">
-                      {item.tags.map((tag) => (
-                        <span
-                          key={`${item.title}-${tag}`}
-                          className="max-w-full break-words rounded-full bg-cyan-300/10 px-3 py-1 text-xs font-semibold text-cyan-100 ring-1 ring-cyan-300/15"
-                        >
-                          {tag}
-                        </span>
-                      ))}
-                    </div>
-                  )}
-                  {hasDemoItems && (
-                    <div className="mt-6 rounded-lg border border-cyan-300/20 bg-slate-950/55 p-3 text-left shadow-inner shadow-cyan-500/5">
-                      <button
-                        type="button"
-                        className="flex w-full min-w-0 items-center justify-between gap-3 rounded-lg px-2 py-2 text-left text-sm font-bold text-cyan-100 outline-none transition hover:bg-cyan-300/10 focus-visible:ring-2 focus-visible:ring-cyan-300/70"
-                        aria-expanded={isDemoGroupOpen}
-                        aria-controls={demoPanelId}
-                        onClick={() =>
-                          setOpenDemoGroups((current) => ({
-                            ...current,
-                            [item.title]: !current[item.title],
-                          }))
-                        }
+                )}
+                {item.tags?.length > 0 && (
+                  <div className="mt-5 flex min-w-0 flex-wrap justify-center gap-2 sm:justify-start">
+                    {item.tags.map((tag) => (
+                      <span
+                        key={`${item.title}-${tag}`}
+                        className="max-w-full break-words rounded-full bg-cyan-300/10 px-3 py-1 text-xs font-semibold text-cyan-100 ring-1 ring-cyan-300/15"
                       >
-                        <span className="min-w-0">
-                          <span className="block text-white">Rozwiń przykłady</span>
-                          <span className="mt-1 block text-xs font-medium text-slate-400">
-                            {demoItems.length === 1
-                              ? "1 strona demo do podejrzenia"
-                              : `${demoItems.length} strony demo do podejrzenia`}
-                          </span>
-                        </span>
-                        <Icon
-                          name="chevron-down"
-                          className={`h-5 w-5 flex-none text-cyan-200 transition ${
-                            isDemoGroupOpen ? "rotate-180" : ""
-                          }`}
-                        />
-                      </button>
-                      <div id={demoPanelId} hidden={!isDemoGroupOpen}>
-                        <div className="mt-3 space-y-3 border-t border-white/10 pt-3">
-                          {demoItems.map((demo) => {
-                            const hasFinalDemoHref = demo.href && demo.href !== "#";
-
-                            return (
-                              <div
-                                key={demo.name}
-                                className="rounded-lg border border-white/10 bg-white/[0.045] p-4"
-                              >
-                                <div className="flex min-w-0 flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
-                                  <div className="min-w-0">
-                                    <h4 className="break-words text-base font-bold text-white">
-                                      {demo.name}
-                                    </h4>
-                                    <p className="mt-2 break-words text-sm leading-6 text-slate-400">
-                                      {demo.description}
-                                    </p>
-                                  </div>
-                                  {hasFinalDemoHref ? (
-                                    <a
-                                      href={demo.href}
-                                      target={demo.href.startsWith("http") ? "_blank" : undefined}
-                                      rel={
-                                        demo.href.startsWith("http")
-                                          ? "noopener noreferrer"
-                                          : undefined
-                                      }
-                                      className="inline-flex shrink-0 items-center justify-center gap-2 rounded-full border border-cyan-300/30 bg-cyan-300/10 px-3 py-2 text-xs font-bold text-cyan-100 transition hover:border-cyan-200 hover:bg-cyan-300/15"
-                                    >
-                                      <span>{demo.linkLabel || "Zobacz demo"}</span>
-                                      <Icon name="external-link" className="h-3.5 w-3.5" />
-                                    </a>
-                                  ) : (
-                                    <span className="inline-flex shrink-0 items-center justify-center rounded-full border border-white/10 bg-white/5 px-3 py-2 text-xs font-semibold text-slate-400">
-                                      URL do podpięcia
-                                    </span>
-                                  )}
-                                </div>
-                                {demo.tags?.length > 0 && (
-                                  <div className="mt-4 flex min-w-0 flex-wrap gap-2">
-                                    {demo.tags.map((tag) => (
-                                      <span
-                                        key={`${demo.name}-${tag}`}
-                                        className="max-w-full break-words rounded-full bg-cyan-300/10 px-2.5 py-1 text-[11px] font-semibold text-cyan-100 ring-1 ring-cyan-300/15"
-                                      >
-                                        {tag}
-                                      </span>
-                                    ))}
-                                  </div>
-                                )}
-                              </div>
-                            );
-                          })}
-                        </div>
-                      </div>
-                    </div>
-                  )}
-                  {item.href && (
-                    <a
-                      className="mt-6 inline-flex min-w-0 items-center gap-2 self-center break-words text-sm font-semibold text-cyan-300 hover:text-cyan-200 sm:self-start"
-                      href={item.href}
-                      target={item.href.startsWith("http") ? "_blank" : undefined}
-                      rel={item.href.startsWith("http") ? "noopener noreferrer" : undefined}
-                    >
-                      <span className="min-w-0">{item.linkLabel || "Zobacz projekt"}</span>
-                      <Icon name="external-link" className="h-4 w-4 flex-none" />
-                    </a>
-                  )}
-                </div>
-              </article>
-            );
-          })}
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
+                )}
+                {item.href && (
+                  <a
+                    className="mt-6 inline-flex min-w-0 items-center gap-2 self-center break-words text-sm font-semibold text-cyan-300 hover:text-cyan-200 sm:self-start"
+                    href={item.href}
+                    target={item.href.startsWith("http") ? "_blank" : undefined}
+                    rel={item.href.startsWith("http") ? "noopener noreferrer" : undefined}
+                  >
+                    <span className="min-w-0">{item.linkLabel || "Zobacz projekt"}</span>
+                    <Icon name="external-link" className="h-4 w-4 flex-none" />
+                  </a>
+                )}
+              </div>
+            </article>
+          ))}
         </div>
+        {demoGroups.map((group) => (
+          <PortfolioDemoHub key={group.title} group={group} />
+        ))}
       </div>
     </section>
   );

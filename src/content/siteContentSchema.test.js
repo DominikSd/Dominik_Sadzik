@@ -84,6 +84,46 @@ describe("site content schema", () => {
     expect(content.portfolio.items.some((item) => item.title === "Strony demo")).toBe(true);
   });
 
+  it("removes retired portfolio cards from older published CMS content", () => {
+    const content = normalizeSiteContent({
+      ...defaultSiteContent,
+      portfolio: {
+        ...defaultSiteContent.portfolio,
+        items: [
+          ...defaultSiteContent.portfolio.items,
+          {
+            type: "Automatyzacja",
+            title: "Kontrola strony po publikacji",
+            text: "Stara karta portfolio.",
+            status: "projekt demo",
+          },
+          {
+            type: "Testowanie / QA",
+            title: "Raport testów funkcjonalnych",
+            text: "Stara karta portfolio.",
+            status: "koncepcja",
+          },
+          {
+            type: "GameDev",
+            title: "Interaktywny prototyp 2.5D",
+            text: "Stara karta portfolio.",
+            status: "prototyp",
+          },
+        ],
+      },
+    });
+
+    expect(
+      content.portfolio.items.some((item) => item.title === "Kontrola strony po publikacji"),
+    ).toBe(false);
+    expect(
+      content.portfolio.items.some((item) => item.title === "Raport testów funkcjonalnych"),
+    ).toBe(false);
+    expect(
+      content.portfolio.items.some((item) => item.title === "Interaktywny prototyp 2.5D"),
+    ).toBe(false);
+  });
+
   it("validates SEO slugs before saving a draft", () => {
     const seo = {
       ...defaultSiteContent.seo,
