@@ -31,7 +31,15 @@ const sectionHeadingSchema = z.object({
   text: z.string().trim().max(600).default(""),
 });
 
-const iconKeySchema = z.enum(["monitor", "palette", "sparkles", "globe", "check"]);
+const iconKeySchema = z.enum([
+  "monitor",
+  "palette",
+  "sparkles",
+  "globe",
+  "check",
+  "badge",
+  "shield-check",
+]);
 
 const featureCardSchema = z.object({
   icon: iconKeySchema.optional().default("sparkles"),
@@ -163,7 +171,9 @@ export const sectionSchemas = {
         projects: routeSeoSchema,
         faq: routeSeoSchema,
         contact: routeSeoSchema,
+        portfolio: routeSeoSchema,
         "opisz-strone": routeSeoSchema,
+        "polityka-prywatnosci": routeSeoSchema,
       })
       .default(defaultSiteContent.seo.pages),
   }),
@@ -174,6 +184,7 @@ export const sectionSchemas = {
     description: z.string().trim().min(1).max(700),
     primaryCta: ctaSchema,
     secondaryCta: ctaSchema,
+    briefCta: ctaSchema.optional().default(defaultSiteContent.hero.briefCta),
     stats: z
       .array(
         z.object({
@@ -194,6 +205,9 @@ export const sectionSchemas = {
       )
       .min(1)
       .max(8),
+  }),
+  audience: sectionHeadingSchema.extend({
+    items: z.array(featureCardSchema).min(1).max(6),
   }),
   automationQa: sectionHeadingSchema.extend({
     certificateNote: z.string().trim().max(220).default(""),
@@ -273,19 +287,28 @@ export const sectionSchemas = {
     webCms: editablePageSchema,
     qaAutomation: editablePageSchema,
     gamedev: editablePageSchema,
+    portfolio: editablePageSchema,
   }),
   packages: sectionHeadingSchema.extend({
+    note: z.string().trim().max(360).optional().default(""),
     items: z
       .array(
         z.object({
           name: z.string().trim().min(1).max(100),
+          price: z.string().trim().max(80).optional().default(""),
           desc: z.string().trim().min(1).max(360),
+          forWhom: z.string().trim().max(260).optional().default(""),
           points: z.array(z.string().trim().min(1).max(80)).min(1).max(8),
+          ctaLabel: z.string().trim().max(80).optional().default("Zapytaj o zakres"),
+          ctaHref: z.string().trim().max(220).optional().default("#contact"),
           highlighted: z.boolean().optional().default(false),
         }),
       )
       .min(1)
       .max(6),
+  }),
+  whyMe: sectionHeadingSchema.extend({
+    items: z.array(featureCardSchema).min(1).max(6),
   }),
   faq: sectionHeadingSchema.extend({
     items: z
@@ -314,6 +337,7 @@ export const siteContentSchema = z.object({
   seo: sectionSchemas.seo,
   hero: sectionSchemas.hero,
   services: sectionSchemas.services,
+  audience: sectionSchemas.audience,
   automationQa: sectionSchemas.automationQa,
   gamedevTeaser: sectionSchemas.gamedevTeaser,
   benefits: sectionSchemas.benefits,
@@ -321,6 +345,7 @@ export const siteContentSchema = z.object({
   portfolio: sectionSchemas.portfolio,
   pages: sectionSchemas.pages,
   packages: sectionSchemas.packages,
+  whyMe: sectionSchemas.whyMe,
   faq: sectionSchemas.faq,
   contact: sectionSchemas.contact,
 });
@@ -371,6 +396,7 @@ export function normalizeSiteContent(candidate) {
       candidatePages.istqbTesting ||
       defaultSiteContent.pages.qaAutomation,
     gamedev: candidatePages.gamedev || defaultSiteContent.pages.gamedev,
+    portfolio: candidatePages.portfolio || defaultSiteContent.pages.portfolio,
   };
   const seo = {
     ...defaultSiteContent.seo,

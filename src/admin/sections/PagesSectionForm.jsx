@@ -13,6 +13,7 @@ const pageLabels = [
   ["webCms", "Strony i CMS"],
   ["qaAutomation", "QA i automatyzacja"],
   ["gamedev", "GameDev"],
+  ["portfolio", "Portfolio"],
 ];
 
 const sectionLabels = {
@@ -35,6 +36,11 @@ const sectionLabels = {
   connectionToWeb: "Połączenie z ofertą web",
   demos: "Projekty i demo",
   finalCta: "CTA końcowe",
+  clientWork: "Realizacje klientów",
+  demoWebsites: "Strony demo",
+  qaSkills: "QA i automatyzacja",
+  gamedevProjects: "GameDev i projekty interaktywne",
+  graphicWork: "Projekty graficzne",
 };
 
 function PageSeoEditor({ page, updatePage }) {

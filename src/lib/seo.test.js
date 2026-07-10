@@ -47,6 +47,18 @@ describe("seo helpers", () => {
     expect(seo.robots).toBe("index,follow");
   });
 
+  it("returns route-aware SEO for the portfolio route", () => {
+    const seo = getPublicRouteSeo({
+      content: defaultSiteContent,
+      routeHash: "#/portfolio",
+      activePage: defaultSiteContent.pages.portfolio,
+    });
+
+    expect(seo.title).toBe("Portfolio | Dominik Sadzik - QA, GameDev i grafika");
+    expect(seo.canonical).toBe("https://dominik-sadzik.pl/#/portfolio");
+    expect(seo.description).toContain("QA");
+  });
+
   it("applies noindex metadata for private panel routes", () => {
     applyNoindexSeo("Panel CMS - Test");
 
@@ -64,8 +76,8 @@ describe("seo helpers", () => {
       }),
     );
 
-    expect(document.querySelector('meta[property="og:title"]').getAttribute("content")).toContain(
-      "Dominik Sadzik",
+    expect(document.querySelector('meta[property="og:title"]').getAttribute("content")).toBe(
+      "Strona internetowa dla małej firmy",
     );
     expect(document.querySelector('meta[name="twitter:card"]').getAttribute("content")).toBe(
       "summary_large_image",

@@ -5,20 +5,22 @@ export const defaultSiteContent = {
   settings: {
     siteName: "Dominik Sadzik",
     tagline: "Strony internetowe i wizytówki online",
-    footerText: "© 2026 Dominik Sadzik - Projektowanie stron i wizytówek",
+    footerText: "© 2026 Dominik Sadzik - Strony internetowe, wizytówki online i lekki CMS",
     navItems: [
       { label: "Start", href: "#start" },
-      { label: "Strony i CMS", href: "#/strony-cms" },
-      { label: "QA", href: "#/qa-automatyzacja" },
-      { label: "GameDev", href: "#/gamedev" },
-      { label: "Projekty", href: "#projects" },
+      { label: "Oferta", href: "#offer" },
+      { label: "Cennik", href: "#pricing" },
+      { label: "Realizacje", href: "#projects" },
+      { label: "Proces", href: "#process" },
+      { label: "FAQ", href: "#faq" },
       { label: "Kontakt", href: "#contact" },
+      { label: "Portfolio", href: "#/portfolio" },
     ],
   },
   seo: {
-    metaTitle: "Dominik Sadzik | Strony internetowe, wizytówki online i lekki CMS",
+    metaTitle: "Dominik Sadzik | Strony internetowe dla małych firm",
     metaDescription:
-      "Tworzę nowoczesne, responsywne strony internetowe, portfolio i wizytówki online z prostym panelem CMS do edycji treści.",
+      "Tworzę nowoczesne, responsywne strony internetowe, wizytówki online i lekkie panele CMS dla małych firm, specjalistów i usługodawców.",
     canonical: "https://dominik-sadzik.pl/",
     robots: "index,follow",
     ogTitle: "Dominik Sadzik | Strony internetowe, wizytówki online i lekki CMS",
@@ -29,15 +31,15 @@ export const defaultSiteContent = {
     locale: "pl_PL",
     pages: {
       start: {
-        title: "Dominik Sadzik | Strony internetowe, wizytówki online i lekki CMS",
+        title: "Dominik Sadzik | Strony internetowe dla małych firm",
         description:
-          "Tworzę nowoczesne, responsywne strony internetowe, portfolio i wizytówki online z prostym panelem CMS do edycji treści.",
+          "Strony internetowe, wizytówki online i prosty CMS dla małych firm, specjalistów i usług lokalnych.",
         slug: "",
         canonical: "https://dominik-sadzik.pl/",
         noindex: false,
-        ogTitle: "Dominik Sadzik | Strony internetowe i lekki CMS",
+        ogTitle: "Strona internetowa dla małej firmy",
         ogDescription:
-          "Portfolio i oferta tworzenia stron, wizytówek online oraz prostego CMS-a do edycji treści.",
+          "Nowoczesna, responsywna strona z jasną ofertą, szybkim kontaktem i opcjonalnym panelem CMS.",
         ogImage: "https://dominik-sadzik.pl/link-preview.png",
       },
       projects: {
@@ -76,6 +78,18 @@ export const defaultSiteContent = {
           "Skontaktuj się w sprawie strony internetowej, wizytówki online, lekkiego CMS-a lub testów strony.",
         ogImage: "https://dominik-sadzik.pl/link-preview.png",
       },
+      portfolio: {
+        title: "Portfolio | Dominik Sadzik - strony, QA i projekty interaktywne",
+        description:
+          "Zobacz realizacje, strony demo, projekty QA, automatyzację, GameDev i projekty graficzne Dominika Sadzika.",
+        slug: "portfolio",
+        canonical: "https://dominik-sadzik.pl/#/portfolio",
+        noindex: false,
+        ogTitle: "Portfolio | Dominik Sadzik",
+        ogDescription:
+          "Realizacje, strony demo, projekty graficzne oraz dodatkowe kompetencje QA i GameDev.",
+        ogImage: "https://dominik-sadzik.pl/link-preview.png",
+      },
       "opisz-strone": {
         title: "Opisz stronę do wyceny | Dominik Sadzik",
         description:
@@ -103,38 +117,66 @@ export const defaultSiteContent = {
     },
   },
   hero: {
-    eyebrow: "Strony internetowe - lekki CMS - QA",
-    title: "Nowoczesne strony internetowe i",
-    highlightedTitle: "lekki CMS dla Twojej firmy",
+    eyebrow: "Strony internetowe dla małych firm",
+    title: "Nowoczesne strony internetowe i wizytówki dla",
+    highlightedTitle: "Twojej firmy",
     description:
       "Projektuję estetyczne, responsywne strony i wizytówki online z prostym panelem edycji treści. Dbam o czytelny układ, wygodę korzystania i sprawne działanie strony po publikacji.",
-    primaryCta: { label: "Wycena projektu", href: "#contact" },
-    secondaryCta: { label: "Zobacz projekty", href: "#projects" },
+    primaryCta: { label: "Poproś o wycenę", href: "#contact" },
+    secondaryCta: { label: "Zobacz realizacje", href: "#projects" },
+    briefCta: { label: "Opisz stronę", href: "#/opisz-strone" },
     stats: [
-      { value: "100%", label: "responsywny projekt" },
-      { value: "SEO", label: "podstawy widoczności" },
-      { value: "CMS", label: "panel administratora" },
+      { value: "Mobile", label: "strona wygodna na telefonie i komputerze" },
+      { value: "Start", label: "pomoc z publikacją, domeną i formularzem" },
+      { value: "CMS", label: "panel administratora do treści i aktualności" },
     ],
   },
   services: {
-    eyebrow: "Główna oferta",
-    title: "Strony internetowe, wizytówki online i lekki CMS",
-    text: "Pomagam małym firmom i specjalistom pokazać ofertę w internecie: przejrzyście, responsywnie i z możliwością wygodnej edycji najważniejszych treści.",
+    eyebrow: "Oferta",
+    title: "Co mogę przygotować?",
+    text: "Dobieram zakres do celu strony i budżetu. Możemy zacząć od prostej wizytówki online albo przygotować stronę firmową z panelem administratora.",
     items: [
       {
         icon: "monitor",
-        title: "Strony internetowe",
-        text: "Nowoczesna strona firmowa, landing page albo portfolio, które jasno prowadzi użytkownika do kontaktu.",
+        title: "Wizytówka online",
+        text: "Krótka strona z ofertą, danymi kontaktowymi i jasnym przyciskiem do rozmowy lub formularza.",
       },
       {
         icon: "palette",
-        title: "Wizytówki online",
-        text: "Krótka, estetyczna strona z ofertą, danymi kontaktowymi, grafiką i dopasowaniem do branży.",
+        title: "Strona firmowa",
+        text: "Rozbudowana prezentacja usług, realizacji, procesu współpracy, FAQ i najważniejszych informacji dla klienta.",
       },
       {
         icon: "sparkles",
-        title: "Lekki CMS",
-        text: "Prywatny panel do edycji treści, SEO, FAQ, danych kontaktowych i publikacji zmian bez ruszania kodu.",
+        title: "Strona z lekkim CMS",
+        text: "Lekki CMS, czyli panel administratora do zmiany tekstów, FAQ, danych kontaktowych, prostych wpisów i publikacji zmian bez ruszania kodu.",
+      },
+      {
+        icon: "check",
+        title: "Poprawki i rozwój strony",
+        text: "Odświeżenie istniejącej strony, dodanie nowych sekcji, integracji, formularza albo lepszej ścieżki kontaktu.",
+      },
+    ],
+  },
+  audience: {
+    eyebrow: "Dla kogo",
+    title: "Dla kogo robię strony?",
+    text: "Najlepiej sprawdzają się u osób, które chcą szybko i jasno pokazać ofertę, bez rozbudowanego zaplecza i technicznego chaosu.",
+    items: [
+      {
+        icon: "globe",
+        title: "Małe firmy i lokalne usługi",
+        text: "Strona, która tłumaczy, co robisz, dla kogo i jak można się z Tobą skontaktować.",
+      },
+      {
+        icon: "badge",
+        title: "Specjaliści i gabinety",
+        text: "Oferta podana prostym językiem, przejrzyste sekcje i kontakt bez szukania po całej stronie.",
+      },
+      {
+        icon: "palette",
+        title: "Portfolio i marka osobista",
+        text: "Miejsce na projekty, doświadczenie, wizytówkę online i materiały, które budują wiarygodność.",
       },
     ],
   },
@@ -195,49 +237,61 @@ export const defaultSiteContent = {
     ],
   },
   benefits: {
-    eyebrow: "Co otrzymujesz",
-    title: "Stronę, która pomaga klientowi szybko podjąć decyzję",
-    text: "Najważniejsze jest to, żeby odwiedzający od razu wiedział, czym się zajmujesz, co oferujesz i jak może się z Tobą skontaktować.",
+    eyebrow: "W ramach strony",
+    title: "Co możesz dostać w ramach strony?",
+    text: "Nie chodzi tylko o ładny ekran. Strona ma prowadzić odwiedzającego od pierwszego wrażenia do kontaktu i działać spokojnie po publikacji.",
     items: [
-      "Responsywny wygląd na telefonie i komputerze",
-      "Czytelna oferta bez technicznego chaosu",
-      "Pomoc z domeną, hostingiem i publikacją",
-      "Formularz, kalendarz rezerwacji lub szybki kontakt online",
-      "Nowoczesny wygląd dopasowany do branży",
-      "Możliwość dalszej rozbudowy",
+      "układ strony dopasowany do celu i branży",
+      "responsywny wygląd na telefonie, tablecie i komputerze",
+      "sekcje oferty, realizacji, procesu, FAQ i kontaktu",
+      "formularz kontaktowy lub szybkie przekierowanie do wiadomości",
+      "SEO, czyli tytuły, opisy, mapa strony i podgląd linku w social mediach",
+      "pomoc z publikacją, domeną i podstawową konfiguracją hostingu",
+      "opcjonalny panel administratora do edycji treści",
+      "podstawowe statystyki i kliknięcia w ważne elementy strony",
     ],
   },
   process: {
     eyebrow: "Proces",
     title: "Jak wygląda współpraca?",
-    text: "Prosto i etapami, żebyś od początku wiedział, co będzie się działo.",
+    text: "Pracujemy etapami, żeby od początku było jasne, co powstaje, za co płacisz i kiedy strona może trafić do publikacji.",
     items: [
       {
         step: "01",
-        title: "Rozmowa",
-        text: "Mówisz, czego potrzebujesz. Ustalamy cel strony, grupę klientów i najważniejsze informacje.",
+        title: "Krótki opis potrzeb",
+        text: "Opowiadasz, czym się zajmujesz, dla kogo ma być strona i co ma zrobić odwiedzający po wejściu.",
       },
       {
         step: "02",
-        title: "Plan strony",
-        text: "Przygotowuję prostą strukturę: co ma być na stronie, w jakiej kolejności i jak to pokazać.",
+        title: "Zakres i wycena",
+        text: "Ustalamy typ strony, liczbę sekcji, materiały, termin oraz orientacyjny koszt przed rozpoczęciem pracy.",
       },
       {
         step: "03",
-        title: "Projekt i wykonanie",
-        text: "Tworzę nowoczesny wygląd, dopasowuję wersję mobilną i dbam o czytelność treści.",
+        title: "Struktura i treści",
+        text: "Układam logiczną kolejność informacji: oferta, przewagi, proces, odpowiedzi na pytania i kontakt.",
       },
       {
         step: "04",
+        title: "Projekt i wdrożenie",
+        text: "Tworzę stronę, dopasowuję wersję mobilną i dbam o czytelny wygląd bez przeładowania.",
+      },
+      {
+        step: "05",
+        title: "Sprawdzenie i poprawki",
+        text: "Testuję podstawowe ścieżki, formularz, linki, wersję mobilną i wprowadzam ustalone poprawki.",
+      },
+      {
+        step: "06",
         title: "Publikacja",
-        text: "Pomagam uruchomić stronę, podpiąć domenę, formularz i najważniejsze ustawienia.",
+        text: "Pomagam uruchomić stronę, podpiąć domenę, formularz i najważniejsze ustawienia potrzebne na start oraz pod Google.",
       },
     ],
   },
   portfolio: {
-    eyebrow: "Realizacje i projekty",
-    title: "Przykłady pracy, które pokazują zakres możliwości",
-    text: "Wybrane realizacje, projekty graficzne i koncepcje pokazują, jak mogę połączyć stronę, identyfikację wizualną, panel edycji treści oraz kontrolę jakości.",
+    eyebrow: "Realizacje i demo",
+    title: "Zobacz przykłady stron, paneli i materiałów",
+    text: "Poniżej są wdrożone realizacje, projekty graficzne i spokojny hub ze stronami demo. Dodatkowe kompetencje QA i GameDev przeniosłem do osobnego portfolio.",
     items: [
       {
         type: "Realizacja klienta",
@@ -275,7 +329,7 @@ export const defaultSiteContent = {
       {
         type: "Panel CMS/template",
         title: "Lekki panel CMS dla strony firmowej",
-        text: "Przykład zaplecza, w którym właściciel strony może samodzielnie zmieniać teksty, FAQ, ofertę, SEO i dane kontaktowe.",
+        text: "Przykład zaplecza, w którym właściciel strony może samodzielnie zmieniać teksty, FAQ, ofertę, dane kontaktowe oraz tytuły i opisy dla Google.",
         details:
           "Zmiany można spokojnie przygotować, sprawdzić i dopiero potem opublikować. Panel pokazuje też podstawowe statystyki odwiedzin.",
         status: "projekt koncepcyjny",
@@ -299,7 +353,7 @@ export const defaultSiteContent = {
           {
             name: "Demo: serwis domowy",
             description:
-              "Strona usługowa dla fikcyjnej lokalnej marki, pokazująca hero, ofertę, proces, FAQ, kontakt i podstawowe SEO.",
+              "Strona usługowa dla fikcyjnej lokalnej marki, pokazująca pierwszą sekcję, ofertę, proces, FAQ, kontakt i podstawy widoczności w Google.",
             tags: ["strona usługowa", "local business", "SEO", "responsive"],
             href: "https://dominiksd.github.io/demo-serwis-domowy/",
             linkLabel: "Zobacz demo",
@@ -308,7 +362,7 @@ export const defaultSiteContent = {
           {
             name: "Demo CMS",
             description:
-              "Przykład strony z prostym panelem administratora do edycji tekstów, FAQ, SEO i danych kontaktowych.",
+              "Przykład strony z prostym panelem administratora do edycji tekstów, FAQ, opisów dla Google i danych kontaktowych.",
             tags: ["CMS", "panel administratora", "edycja treści"],
             href: "#",
             linkLabel: "Wkrótce",
@@ -355,7 +409,7 @@ export const defaultSiteContent = {
         title: "Strony internetowe i lekki CMS",
         subtitle: "Nowoczesna strona z możliwością edycji treści",
         description:
-          "Projektuję strony, które mają jasno pokazać ofertę i ułatwić kontakt. Jeśli chcesz później samodzielnie zmieniać teksty, mogę dodać prosty panel CMS.",
+          "Projektuję strony, które jasno pokazują ofertę i ułatwiają kontakt. Jeśli chcesz później samodzielnie zmieniać treści, CMS działa tu jako prosty panel administratora, a nie ciężki system do wszystkiego.",
         ctaLabel: "Zapytaj o stronę",
         ctaHref: "#contact",
       },
@@ -370,21 +424,21 @@ export const defaultSiteContent = {
             "landing page",
             "wizytówka online",
             "lekki CMS",
-            "panel statystyk GA4",
-            "integracje z Google Calendar, formularzem lub systemem rezerwacji",
+            "podstawowe statystyki wejść i kliknięć",
+            "integracje z kalendarzem, formularzem lub systemem rezerwacji",
           ],
         },
         cmsPanel: {
           title: "Panel CMS",
           description:
-            "Panel nie ma udawać WordPressa. Ma dawać szybki dostęp do najważniejszych treści i chronić stronę przed przypadkowym zepsuciem układu.",
+            "CMS oznacza tutaj panel administratora: proste miejsce do zmiany wybranych treści, dodania aktualności, sprawdzenia statystyk i opublikowania zmian bez dotykania kodu.",
           items: [
-            "zmiana tekstów w ofercie",
-            "edycja FAQ i kontaktu",
-            "tytuły i opisy pod wyszukiwarkę",
-            "zapis zmian przed publikacją",
-            "prosty podgląd statystyk",
-            "dostęp dla osoby, która ma pomagać przy stronie",
+            "edycja oferty i tekstów na stronie",
+            "FAQ, kontakt i najważniejsze dane",
+            "SEO: tytuły i opisy dla Google",
+            "wersja robocza przed publikacją",
+            "statystyki wejść, podstron i kliknięć",
+            "dostęp dla osoby pomagającej przy stronie",
           ],
         },
         process: {
@@ -632,45 +686,213 @@ export const defaultSiteContent = {
         },
       },
     },
+    portfolio: {
+      slug: "portfolio",
+      seo: {
+        title: "Portfolio | Dominik Sadzik - QA, GameDev i grafika",
+        description:
+          "Dodatkowe kompetencje Dominika Sadzika: QA, automatyzacja, GameDev, prototypy interaktywne i projekty graficzne.",
+        canonical: "https://dominik-sadzik.pl/#/portfolio",
+        noindex: false,
+        ogTitle: "Portfolio | Dominik Sadzik",
+        ogDescription:
+          "Zobacz dodatkowe kompetencje: QA, automatyzację, projekty graficzne i prototypy interaktywne.",
+        ogImage: "https://dominik-sadzik.pl/link-preview.png",
+      },
+      hero: {
+        eyebrow: "Portfolio",
+        title: "Portfolio i dodatkowe kompetencje",
+        subtitle: "QA, GameDev i materiały graficzne jako uzupełnienie oferty stron",
+        description:
+          "Tutaj zostawiam kompetencje poboczne, które wspierają główną ofertę stron internetowych: testowanie, automatyzację, projekty graficzne i małe prototypy interaktywne.",
+        ctaLabel: "Wróć do oferty strony",
+        ctaHref: "#offer",
+      },
+      sections: {
+        qaSkills: {
+          title: "QA i automatyzacja",
+          description:
+            "Testowanie traktuję jako przewagę przy budowie stron: szybciej wyłapuję błędy, sprawdzam formularze i patrzę na stronę oczami użytkownika.",
+          items: [
+            "certyfikat ISTQB",
+            "testy formularzy i linków",
+            "kontrola wersji mobilnej",
+            "raportowanie błędów prostym językiem",
+          ],
+        },
+        gamedevProjects: {
+          title: "GameDev i projekty interaktywne",
+          description:
+            "Małe prototypy pokazują pracę z ruchem, logiką, stanem i reakcją na działanie użytkownika. To dodatkowa kompetencja, nie główna oferta strony.",
+          items: [
+            "prototypy 2.5D",
+            "sterowanie postacią",
+            "kolizje i punkty",
+            "interaktywne otoczenie",
+            "poziomy z platformami",
+            "test przeszkód",
+          ],
+          mediaItems: [
+            {
+              title: "Prototyp z punktami",
+              description: "Krótki test zbierania obiektów, HUD-u i reakcji świata gry.",
+              src: "portfolio/gamedev-stones-screen.webp",
+              demoSrc: "portfolio/gamedev-stones-demo.gif",
+              alt: "Screen prototypu 3D ze zbieraniem obiektów i licznikiem punktów.",
+              tags: ["GameDev", "3D", "HUD"],
+            },
+            {
+              title: "Interakcja z otoczeniem",
+              description: "Przykład obiektu i sceny, które reagują na działania gracza.",
+              src: "portfolio/gamedev-arena-screen.webp",
+              demoSrc: "portfolio/gamedev-destruction-demo.gif",
+              alt: "Screen interakcji z obiektami w środowisku 3D.",
+              tags: ["interakcje", "fizyka", "prototyp"],
+            },
+            {
+              title: "Model i animacja postaci",
+              description:
+                "Eksperyment z prostą postacią, ruchem i prezentacją obiektu w luźniejszej formie.",
+              src: "portfolio/gamedev-pizza-character-screen.webp",
+              demoSrc: "portfolio/gamedev-pizza-character.gif",
+              alt: "Screen modelu postaci w kształcie kawałka pizzy.",
+              tags: ["model", "animacja", "prototyp"],
+            },
+            {
+              title: "Poziom z platformami",
+              description:
+                "Fragment poziomu z platformami i przeszkodami, czyli szybkie sprawdzenie rytmu przejścia.",
+              src: "portfolio/gamedev-conveyor-screen.webp",
+              demoSrc: "portfolio/gamedev-conveyor-demo.gif",
+              alt: "Screen poziomu 3D z platformami i przeszkodami.",
+              tags: ["projekt poziomu", "platformy", "prototyp"],
+            },
+            {
+              title: "Test przeszkód",
+              description:
+                "Układ z kolcami i platformami, gdzie ważne jest wyczucie odległości, czasu i ryzyka.",
+              src: "portfolio/gamedev-spikes-screen.webp",
+              demoSrc: "portfolio/gamedev-spikes-demo.gif",
+              alt: "Screen poziomu 3D z kolcami i platformami.",
+              tags: ["przeszkody", "platformy", "balans"],
+            },
+          ],
+        },
+        graphicWork: {
+          title: "Projekty graficzne i materiały",
+          description:
+            "Oprócz strony mogę przygotować proste materiały wspierające komunikację: wizytówki, okładki, karty promocyjne albo grafiki pasujące do identyfikacji.",
+          items: ["wizytówki", "branding", "karty reklamowe", "okładki i materiały informacyjne"],
+        },
+        finalCta: {
+          title: "Chcesz stronę sprzedażową, a portfolio tylko jako kontekst?",
+          description:
+            "Najlepiej zacząć od celu biznesowego strony, a dopiero potem dobrać elementy wizualne, CMS, testy i dodatkowe materiały.",
+          ctaLabel: "Opisz swoją stronę",
+          ctaHref: "#/opisz-strone",
+        },
+      },
+    },
   },
   packages: {
-    eyebrow: "Pakiety",
-    title: "Możesz zacząć od małego projektu",
-    text: "Każdy projekt wyceniam indywidualnie po krótkiej rozmowie, ale pakiety pomagają szybko wybrać dobry kierunek.",
+    eyebrow: "Cennik",
+    title: "Pakiety i orientacyjne ceny",
+    text: "Dokładną wycenę podaję po poznaniu zakresu, materiałów i terminu. Poniższe widełki pomagają ocenić, od czego warto zacząć.",
+    note: "Finalna cena zależy od liczby sekcji, treści, grafik, integracji, panelu administratora i zakresu pomocy przy publikacji.",
     items: [
       {
         name: "Wizytówka online",
-        desc: "Dla osób, które chcą szybko i estetycznie pokazać się w internecie.",
-        points: ["strona one-page", "oferta i kontakt", "wersja mobilna", "pomoc z publikacją"],
+        price: "od 1500-2000 zł",
+        desc: "Najprostszy start: estetyczna strona, która pokazuje kim jesteś, co oferujesz i jak można się z Tobą skontaktować.",
+        forWhom:
+          "Dla specjalisty, małej usługi albo marki osobistej, która potrzebuje jasnej wizytówki w internecie.",
+        points: [
+          "jedna przewijana strona",
+          "oferta i kontakt",
+          "wersja mobilna",
+          "pomoc z publikacją",
+        ],
+        ctaLabel: "Zapytaj o wizytówkę",
+        ctaHref: "#contact",
       },
       {
         name: "Strona firmowa",
-        desc: "Dla małych firm, specjalistów i usług lokalnych.",
+        price: "od 2500-3500 zł",
+        desc: "Dla firm i usług, które potrzebują pełniejszej prezentacji: oferty, realizacji, procesu współpracy, FAQ i szybkiej ścieżki kontaktu.",
+        forWhom:
+          "Dla firmy, która chce wyglądać wiarygodnie i odpowiedzieć na najważniejsze pytania klienta przed pierwszą rozmową.",
         points: [
-          "kilka sekcji",
-          "portfolio lub realizacje",
+          "kilka sekcji lub podstron",
+          "realizacje albo przykłady pracy",
           "formularz kontaktowy",
           "przycisk rezerwacji terminu lub integracja z kalendarzem",
-          "podstawy SEO",
+          "SEO, czyli podstawy widoczności w Google",
         ],
         highlighted: true,
+        ctaLabel: "Zapytaj o stronę firmową",
+        ctaHref: "#contact",
       },
       {
-        name: "Poprawki i rozwój",
-        desc: "Dla osób, które mają już stronę, ale chcą ją poprawić lub rozbudować.",
-        points: ["lepszy układ", "poprawa treści", "nowy wygląd", "dalsze wsparcie"],
+        name: "Strona z lekkim CMS",
+        price: "od 3500-5000 zł+",
+        desc: "Dla osób, które chcą po publikacji samodzielnie zmieniać treści: ofertę, FAQ, aktualności, proste wpisy i dane kontaktowe.",
+        forWhom:
+          "CMS to tutaj panel administratora: proste miejsce do edycji treści, publikacji zmian i podglądu statystyk bez ruszania kodu.",
+        points: [
+          "strona firmowa z miejscem na rozwój",
+          "panel administratora do treści",
+          "aktualności, wpisy lub prosty blog",
+          "wersja robocza przed publikacją",
+          "statystyki wejść i popularnych podstron",
+          "kliknięcia w ważne przyciski",
+          "wdrożenie i krótka instrukcja",
+        ],
+        ctaLabel: "Zapytaj o CMS",
+        ctaHref: "#contact",
+      },
+    ],
+  },
+  whyMe: {
+    eyebrow: "Dlaczego warto",
+    title: "Łączę projekt strony z myśleniem o jakości",
+    text: "Główna oferta to strony i CMS, ale doświadczenie w QA, automatyzacji i projektach interaktywnych pomaga mi budować strony, które są czytelne i mniej przypadkowe.",
+    items: [
+      {
+        icon: "check",
+        title: "Praktyczne podejście",
+        text: "Skupiam się na tym, co ma pomóc klientowi zrozumieć ofertę i wykonać następny krok.",
+      },
+      {
+        icon: "shield-check",
+        title: "Kontrola jakości",
+        text: "Sprawdzam formularze, linki, wersję mobilną i miejsca, które łatwo przeoczyć przed publikacją.",
+      },
+      {
+        icon: "sparkles",
+        title: "Możliwość rozbudowy",
+        text: "Stronę można zacząć prosto, a później dodać CMS, nowe sekcje, integracje lub statystyki.",
+      },
+      {
+        icon: "globe",
+        title: "Jasna komunikacja",
+        text: "Tłumaczę zakres normalnym językiem i unikam technicznego żargonu tam, gdzie nie jest potrzebny.",
       },
     ],
   },
   faq: {
     eyebrow: "FAQ",
-    title: "Najczęstsze pytania",
-    text: "Zebrałem odpowiedzi na pytania, które najczęściej pojawiają się przed rozpoczęciem strony internetowej.",
+    title: "Najczęstsze pytania przed startem",
+    text: "Krótko i konkretnie: co musisz mieć, ile to trwa i co dzieje się po publikacji strony.",
     items: [
       {
         question: "Czy muszę mieć gotowe teksty na stronę?",
         answer:
           "Nie musisz mieć wszystkiego gotowego. Możesz opisać mi swoją ofertę zwykłymi słowami, a ja pomogę ułożyć to w czytelną strukturę.",
+      },
+      {
+        question: "Ile trwa przygotowanie strony?",
+        answer:
+          "Prosta wizytówka może powstać szybciej, a większa strona wymaga więcej materiałów i decyzji. Po krótkim opisie potrzeb podam realny termin dla konkretnego zakresu.",
       },
       {
         question: "Czy strona będzie działać na telefonie?",
@@ -683,16 +905,31 @@ export const defaultSiteContent = {
           "Tak. Mogę pomóc wybrać domenę, hosting i przejść przez podstawowe ustawienia potrzebne do publikacji strony.",
       },
       {
+        question: "Czy mogę mieć panel administratora?",
+        answer:
+          "Tak, jeśli ma to sens dla Twojej strony. Lekki CMS to panel administratora, w którym można zmieniać wybrane teksty, FAQ, dane kontaktowe, tytuły i opisy dla Google oraz publikować zmiany bez dotykania kodu.",
+      },
+      {
+        question: "Czy CMS oznacza blog albo aktualności?",
+        answer:
+          "Może, jeśli tego potrzebujesz. W lekkim CMS-ie można przygotować proste aktualności, wpisy lub sekcję z poradami, ale bez budowania dużego portalu i bez komplikowania obsługi strony.",
+      },
+      {
         question: "Czy mogę później rozbudować stronę?",
         answer:
           "Tak. Stronę można rozwijać etapami: dodać nowe sekcje, podstrony, formularze, portfolio albo integracje z narzędziami, np. przyciskiem do rezerwacji terminu w kalendarzu.",
+      },
+      {
+        question: "Co jeśli mam już stronę, ale wygląda słabo?",
+        answer:
+          "Możemy zacząć od przeglądu obecnej strony i zdecydować, czy lepiej ją poprawić, odświeżyć wizualnie, czy przygotować nową wersję od podstaw.",
       },
     ],
   },
   contact: {
     eyebrow: "Kontakt",
-    title: "Masz pomysł na stronę?",
-    text: "Napisz, czego potrzebujesz. Odezwę się i podpowiem, jakie rozwiązanie będzie najlepsze na start.",
+    title: "Opisz, jakiej strony potrzebujesz",
+    text: "Napisz kilka zdań o firmie, ofercie i celu strony. Odezwę się z propozycją zakresu albo dodatkowymi pytaniami.",
     email: "kontakt@dominiksadzik.pl",
     phone: "",
     www: "dominik-sadzik.pl",
