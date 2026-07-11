@@ -91,11 +91,27 @@ describe("site content schema", () => {
         item.title === "Strony demo"
           ? {
               ...item,
-              demoItems: item.demoItems.map((demoItem) =>
-                demoItem.name === "Demo CMS"
-                  ? { ...demoItem, href: "#", linkLabel: "Wkrótce", status: "wkrótce" }
-                  : demoItem,
-              ),
+              demoItems: item.demoItems
+                .filter((demoItem) => demoItem.name !== "Blog CMS demo")
+                .map((demoItem) =>
+                  demoItem.name === "Panel CMS demo"
+                    ? {
+                        ...demoItem,
+                        name: "Demo CMS",
+                        href: "#",
+                        linkLabel: "Wkrótce",
+                        status: "wkrótce",
+                      }
+                    : demoItem.name === "Landing kursu demo"
+                      ? {
+                          ...demoItem,
+                          name: "Landing page",
+                          href: "#",
+                          linkLabel: "Wkrótce",
+                          status: "wkrótce",
+                        }
+                      : demoItem,
+                ),
             }
           : item,
       ),
@@ -106,11 +122,23 @@ describe("site content schema", () => {
       portfolio: olderPortfolio,
     });
     const demoHub = content.portfolio.items.find((item) => item.title === "Strony demo");
-    const cmsDemo = demoHub.demoItems.find((demoItem) => demoItem.name === "Demo CMS");
+    const cmsDemo = demoHub.demoItems.find((demoItem) => demoItem.name === "Panel CMS demo");
+    const cmsBlogDemo = demoHub.demoItems.find((demoItem) => demoItem.name === "Blog CMS demo");
+    const landingDemo = demoHub.demoItems.find(
+      (demoItem) => demoItem.name === "Landing kursu demo",
+    );
 
-    expect(cmsDemo.href).toBe("https://dominiksd.github.io/cms-demo-portfolio/");
-    expect(cmsDemo.linkLabel).toBe("Zobacz demo CMS");
+    expect(cmsDemo.href).toBe("https://dominiksd.github.io/demo-cms-panel-admin/");
+    expect(cmsDemo.linkLabel).toBe("Zobacz panel CMS");
     expect(cmsDemo.status).toBe("dostępne");
+    expect(cmsBlogDemo.href).toBe("https://dominiksd.github.io/demo-cms-blog/");
+    expect(cmsBlogDemo.linkLabel).toBe("Zobacz demo bloga");
+    expect(cmsBlogDemo.status).toBe("dostępne");
+    expect(landingDemo.href).toBe("https://dominiksd.github.io/demo-landing-kurs/");
+    expect(landingDemo.linkLabel).toBe("Zobacz landing");
+    expect(landingDemo.status).toBe("dostępne");
+    expect(demoHub.demoItems.some((demoItem) => demoItem.name === "Demo CMS")).toBe(false);
+    expect(demoHub.demoItems.some((demoItem) => demoItem.name === "Landing page")).toBe(false);
   });
 
   it("removes retired portfolio cards from older published CMS content", () => {

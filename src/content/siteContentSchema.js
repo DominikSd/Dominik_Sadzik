@@ -141,6 +141,16 @@ const retiredPortfolioTitles = new Set([
   "Interaktywny prototyp 2.5D",
 ]);
 
+const bundledDemoNameAliases = new Map([
+  ["Demo CMS", "Panel CMS demo"],
+  ["Demo: blog CMS", "Blog CMS demo"],
+  ["Landing page", "Landing kursu demo"],
+]);
+
+function getBundledDemoMergeKey(name) {
+  return bundledDemoNameAliases.get(name) || name;
+}
+
 function mergeBundledPortfolioItem(candidateItem) {
   const bundledItem = defaultSiteContent.portfolio.items.find(
     (item) => item?.title && item.title === candidateItem?.title,
@@ -157,21 +167,26 @@ function mergeBundledPortfolioItem(candidateItem) {
 
   const bundledDemoByName = new Map(
     bundledDemoItems
-      .map((demoItem) => [demoItem?.name, demoItem])
+      .map((demoItem) => [getBundledDemoMergeKey(demoItem?.name), demoItem])
       .filter(([name]) => Boolean(name)),
   );
-  const candidateDemoNames = new Set(candidateDemoItems.map((demoItem) => demoItem?.name));
+  const candidateDemoNames = new Set(
+    candidateDemoItems.map((demoItem) => getBundledDemoMergeKey(demoItem?.name)),
+  );
 
   return {
     ...bundledItem,
     ...candidateItem,
     demoItems: [
-      ...candidateDemoItems.map((demoItem) =>
-        bundledDemoByName.has(demoItem?.name)
-          ? { ...demoItem, ...bundledDemoByName.get(demoItem.name) }
-          : demoItem,
+      ...candidateDemoItems.map((demoItem) => {
+        const demoMergeKey = getBundledDemoMergeKey(demoItem?.name);
+        return bundledDemoByName.has(demoMergeKey)
+          ? { ...demoItem, ...bundledDemoByName.get(demoMergeKey) }
+          : demoItem;
+      }),
+      ...bundledDemoItems.filter(
+        (demoItem) => !candidateDemoNames.has(getBundledDemoMergeKey(demoItem?.name)),
       ),
-      ...bundledDemoItems.filter((demoItem) => !candidateDemoNames.has(demoItem?.name)),
     ],
   };
 }

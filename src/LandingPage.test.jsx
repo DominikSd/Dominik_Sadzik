@@ -358,18 +358,38 @@ describe("LandingPage navigation", () => {
     expect(demoLink.getAttribute("href")).toBe("https://dominiksd.github.io/demo-serwis-domowy/");
     expect(demoLink.getAttribute("target")).toBe("_blank");
 
-    const cmsDemoTab = screen.getByRole("tab", { name: /Demo CMS/i });
+    const cmsDemoTab = screen.getByRole("tab", { name: /Panel CMS demo/i });
     await user.click(cmsDemoTab);
 
     expect(cmsDemoTab.getAttribute("aria-selected")).toBe("true");
-    expect(screen.getByText(/Interaktywne demo lekkiego CMS-a/i)).toBeTruthy();
-    expect(screen.getByAltText("Podgląd projektu: Demo CMS")).toBeTruthy();
+    expect(screen.getByText(/Interaktywne demo panelu CMS/i)).toBeTruthy();
+    expect(screen.getByAltText("Podgląd projektu: Panel CMS demo")).toBeTruthy();
 
-    const cmsDemoLink = screen.getByRole("link", { name: /Zobacz demo CMS/i });
+    const cmsDemoLink = screen.getByRole("link", { name: /Zobacz panel CMS/i });
     expect(cmsDemoLink.getAttribute("href")).toBe(
-      "https://dominiksd.github.io/cms-demo-portfolio/",
+      "https://dominiksd.github.io/demo-cms-panel-admin/",
     );
     expect(cmsDemoLink.getAttribute("target")).toBe("_blank");
+
+    const cmsBlogTab = screen.getByRole("tab", { name: /Blog CMS demo/i });
+    await user.click(cmsBlogTab);
+
+    expect(cmsBlogTab.getAttribute("aria-selected")).toBe("true");
+    expect(screen.getByText(/Lekkie publiczne demo CMS-a do prowadzenia bloga/i)).toBeTruthy();
+
+    const cmsBlogLink = screen.getByRole("link", { name: /Zobacz demo bloga/i });
+    expect(cmsBlogLink.getAttribute("href")).toBe("https://dominiksd.github.io/demo-cms-blog/");
+    expect(cmsBlogLink.getAttribute("target")).toBe("_blank");
+
+    const landingTab = screen.getByRole("tab", { name: /Landing kursu demo/i });
+    await user.click(landingTab);
+
+    expect(landingTab.getAttribute("aria-selected")).toBe("true");
+    expect(screen.getByText(/Fikcyjny landing kursu online/i)).toBeTruthy();
+
+    const landingLink = screen.getByRole("link", { name: /Zobacz landing/i });
+    expect(landingLink.getAttribute("href")).toBe("https://dominiksd.github.io/demo-landing-kurs/");
+    expect(landingLink.getAttribute("target")).toBe("_blank");
   });
 
   it("expands the selected project directly below the tapped item on mobile", async () => {
@@ -378,19 +398,19 @@ describe("LandingPage navigation", () => {
     const user = userEvent.setup();
     render(<LandingPage routeHash="#/" />);
 
-    const cmsDemoTab = screen.getByRole("tab", { name: /Demo CMS/i });
+    const cmsDemoTab = screen.getByRole("tab", { name: /Panel CMS demo/i });
     await user.click(cmsDemoTab);
 
     expect(cmsDemoTab.getAttribute("aria-expanded")).toBe("true");
 
-    const mobilePanel = screen.getByRole("tabpanel", { name: /Demo CMS/i });
-    expect(within(mobilePanel).getByText(/Interaktywne demo lekkiego CMS-a/i)).toBeTruthy();
-    expect(within(mobilePanel).getByRole("link", { name: /Zobacz demo CMS/i })).toBeTruthy();
+    const mobilePanel = screen.getByRole("tabpanel", { name: /Panel CMS demo/i });
+    expect(within(mobilePanel).getByText(/Interaktywne demo panelu CMS/i)).toBeTruthy();
+    expect(within(mobilePanel).getByRole("link", { name: /Zobacz panel CMS/i })).toBeTruthy();
 
     await user.click(cmsDemoTab);
 
     expect(cmsDemoTab.getAttribute("aria-expanded")).toBe("false");
-    expect(screen.queryByRole("tabpanel", { name: /Demo CMS/i })).toBeNull();
+    expect(screen.queryByRole("tabpanel", { name: /Panel CMS demo/i })).toBeNull();
   });
 
   it("renders the portfolio route as a separate home for extra skills", () => {
