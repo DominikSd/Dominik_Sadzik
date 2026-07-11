@@ -141,6 +141,41 @@ const retiredPortfolioTitles = new Set([
   "Interaktywny prototyp 2.5D",
 ]);
 
+function mergeBundledPortfolioItem(candidateItem) {
+  const bundledItem = defaultSiteContent.portfolio.items.find(
+    (item) => item?.title && item.title === candidateItem?.title,
+  );
+
+  if (!bundledItem) return candidateItem;
+
+  const candidateDemoItems = Array.isArray(candidateItem?.demoItems) ? candidateItem.demoItems : [];
+  const bundledDemoItems = Array.isArray(bundledItem.demoItems) ? bundledItem.demoItems : [];
+
+  if (!candidateDemoItems.length || !bundledDemoItems.length) {
+    return { ...bundledItem, ...candidateItem };
+  }
+
+  const bundledDemoByName = new Map(
+    bundledDemoItems
+      .map((demoItem) => [demoItem?.name, demoItem])
+      .filter(([name]) => Boolean(name)),
+  );
+  const candidateDemoNames = new Set(candidateDemoItems.map((demoItem) => demoItem?.name));
+
+  return {
+    ...bundledItem,
+    ...candidateItem,
+    demoItems: [
+      ...candidateDemoItems.map((demoItem) =>
+        bundledDemoByName.has(demoItem?.name)
+          ? { ...demoItem, ...bundledDemoByName.get(demoItem.name) }
+          : demoItem,
+      ),
+      ...bundledDemoItems.filter((demoItem) => !candidateDemoNames.has(demoItem?.name)),
+    ],
+  };
+}
+
 const editablePageSchema = z.object({
   slug: slugSchema.min(1),
   seo: pageSeoSchema,
@@ -369,7 +404,9 @@ export function normalizeSiteContent(candidate) {
   const candidateSeo = candidate?.seo || {};
   const candidatePortfolio = candidate?.portfolio;
   const candidatePortfolioItems = Array.isArray(candidatePortfolio?.items)
-    ? candidatePortfolio.items.filter((item) => !retiredPortfolioTitles.has(item?.title))
+    ? candidatePortfolio.items
+        .filter((item) => !retiredPortfolioTitles.has(item?.title))
+        .map(mergeBundledPortfolioItem)
     : [];
   const candidatePortfolioTitles = new Set(
     candidatePortfolioItems.map((item) => item?.title).filter(Boolean),

@@ -362,11 +362,11 @@ export const defaultSiteContent = {
           {
             name: "Demo CMS",
             description:
-              "Przykład strony z prostym panelem administratora do edycji tekstów, FAQ, opisów dla Google i danych kontaktowych.",
-            tags: ["CMS", "panel administratora", "edycja treści"],
-            href: "#",
-            linkLabel: "Wkrótce",
-            status: "wkrótce",
+              "Interaktywne demo lekkiego CMS-a do portfolio: panel administratora, edycja treści i przykład zaplecza strony.",
+            tags: ["CMS", "panel administratora", "portfolio", "demo"],
+            href: "https://github.com/DominikSd/cms-demo-portfolio",
+            linkLabel: "Zobacz repo demo",
+            status: "dostępne",
           },
           {
             name: "Landing page",

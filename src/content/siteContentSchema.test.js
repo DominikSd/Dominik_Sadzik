@@ -84,6 +84,35 @@ describe("site content schema", () => {
     expect(content.portfolio.items.some((item) => item.title === "Strony demo")).toBe(true);
   });
 
+  it("updates bundled demo links when normalizing older published CMS content", () => {
+    const olderPortfolio = {
+      ...defaultSiteContent.portfolio,
+      items: defaultSiteContent.portfolio.items.map((item) =>
+        item.title === "Strony demo"
+          ? {
+              ...item,
+              demoItems: item.demoItems.map((demoItem) =>
+                demoItem.name === "Demo CMS"
+                  ? { ...demoItem, href: "#", linkLabel: "Wkrótce", status: "wkrótce" }
+                  : demoItem,
+              ),
+            }
+          : item,
+      ),
+    };
+
+    const content = normalizeSiteContent({
+      ...defaultSiteContent,
+      portfolio: olderPortfolio,
+    });
+    const demoHub = content.portfolio.items.find((item) => item.title === "Strony demo");
+    const cmsDemo = demoHub.demoItems.find((demoItem) => demoItem.name === "Demo CMS");
+
+    expect(cmsDemo.href).toBe("https://github.com/DominikSd/cms-demo-portfolio");
+    expect(cmsDemo.linkLabel).toBe("Zobacz repo demo");
+    expect(cmsDemo.status).toBe("dostępne");
+  });
+
   it("removes retired portfolio cards from older published CMS content", () => {
     const content = normalizeSiteContent({
       ...defaultSiteContent,
