@@ -358,15 +358,19 @@ export const defaultSiteContent = {
             href: "https://dominiksd.github.io/demo-serwis-domowy/",
             linkLabel: "Zobacz demo",
             status: "dostępne",
+            screenshotUrl: "portfolio/demo-serwis-domowy.svg",
+            mockupTone: "emerald",
           },
           {
             name: "Demo CMS",
             description:
               "Interaktywne demo lekkiego CMS-a do portfolio: panel administratora, edycja treści i przykład zaplecza strony.",
             tags: ["CMS", "panel administratora", "portfolio", "demo"],
-            href: "https://github.com/DominikSd/cms-demo-portfolio",
-            linkLabel: "Zobacz repo demo",
+            href: "https://dominiksd.github.io/cms-demo-portfolio/",
+            linkLabel: "Zobacz demo CMS",
             status: "dostępne",
+            screenshotUrl: "portfolio/cms-demo-portfolio-preview.svg",
+            mockupTone: "emerald",
           },
           {
             name: "Landing page",

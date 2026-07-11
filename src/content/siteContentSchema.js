@@ -308,6 +308,12 @@ export const sectionSchemas = {
                 href: z.string().trim().max(240).optional().default("#"),
                 linkLabel: z.string().trim().max(80).optional().default("Zobacz demo"),
                 status: z.string().trim().max(40).optional().default(""),
+                screenshotUrl: z.string().trim().max(300).optional().default(""),
+                mockupTone: z
+                  .enum(["cyan", "violet", "blue", "emerald"])
+                  .optional()
+                  .default("cyan"),
+                mockupScale: z.number().min(0.8).max(1.8).optional().default(1),
               }),
             )
             .max(8)

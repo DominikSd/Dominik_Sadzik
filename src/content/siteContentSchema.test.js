@@ -108,8 +108,8 @@ describe("site content schema", () => {
     const demoHub = content.portfolio.items.find((item) => item.title === "Strony demo");
     const cmsDemo = demoHub.demoItems.find((demoItem) => demoItem.name === "Demo CMS");
 
-    expect(cmsDemo.href).toBe("https://github.com/DominikSd/cms-demo-portfolio");
-    expect(cmsDemo.linkLabel).toBe("Zobacz repo demo");
+    expect(cmsDemo.href).toBe("https://dominiksd.github.io/cms-demo-portfolio/");
+    expect(cmsDemo.linkLabel).toBe("Zobacz demo CMS");
     expect(cmsDemo.status).toBe("dostępne");
   });
 

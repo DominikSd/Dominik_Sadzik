@@ -1,0 +1,140 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 675" role="img" aria-labelledby="title desc">
+  <title id="title">Podgląd demo CMS Studio Harmonia</title>
+  <desc id="desc">Stylizowany podgląd panelu administratora Studio Harmonia z menu bocznym, trybem demo, kartami statystyk i szybkimi akcjami.</desc>
+  <defs>
+    <linearGradient id="cream" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0" stop-color="#fffdf6" />
+      <stop offset="1" stop-color="#f4f0e6" />
+    </linearGradient>
+    <linearGradient id="sidebar" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0" stop-color="#0d2c23" />
+      <stop offset="1" stop-color="#091f19" />
+    </linearGradient>
+    <linearGradient id="teal" x1="0" x2="1">
+      <stop offset="0" stop-color="#079283" />
+      <stop offset="1" stop-color="#0f766e" />
+    </linearGradient>
+    <filter id="cardShadow" x="-18%" y="-18%" width="136%" height="136%">
+      <feDropShadow dx="0" dy="14" stdDeviation="16" flood-color="#0f172a" flood-opacity="0.11" />
+    </filter>
+    <filter id="softShadow" x="-18%" y="-18%" width="136%" height="136%">
+      <feDropShadow dx="0" dy="8" stdDeviation="8" flood-color="#0f172a" flood-opacity="0.10" />
+    </filter>
+  </defs>
+
+  <rect width="1200" height="675" rx="28" fill="#071a15" />
+  <rect x="0" y="0" width="1200" height="675" rx="28" fill="url(#cream)" />
+
+  <g>
+    <rect width="280" height="675" fill="url(#sidebar)" />
+    <circle cx="39" cy="39" r="21" fill="#f1d7a7" />
+    <text x="29" y="46" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="950" fill="#071a15">SH</text>
+    <text x="72" y="46" font-family="Inter, Arial, sans-serif" font-size="16" font-weight="950" fill="#ffffff">CMS Demo</text>
+    <text x="153" y="46" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="700" fill="#d8c29b">Studio Harmonia</text>
+    <line x1="18" y1="78" x2="262" y2="78" stroke="#ffffff" stroke-opacity="0.14" />
+
+    <g font-family="Inter, Arial, sans-serif" font-size="16" font-weight="700">
+      <rect x="18" y="95" width="244" height="45" rx="7" fill="#dcece5" />
+      <path d="M33 113h6v6h-6zM43 113h6v6h-6zM33 123h6v6h-6zM43 123h6v6h-6z" fill="none" stroke="#0d2c23" stroke-width="1.8" />
+      <text x="58" y="124" fill="#0f172a">Dashboard</text>
+
+      <rect x="18" y="149" width="244" height="45" rx="7" fill="#1d342c" />
+      <path d="M35 164h10l5 5v14H35zM45 164v6h6" fill="none" stroke="#ffffff" stroke-width="1.8" stroke-linejoin="round" />
+      <text x="58" y="179" fill="#ffffff">Strony</text>
+
+      <rect x="18" y="202" width="244" height="45" rx="7" fill="#1d342c" />
+      <path d="M34 217h14v16H34zM38 213h14v16" fill="none" stroke="#ffffff" stroke-width="1.8" stroke-linejoin="round" />
+      <text x="58" y="231" fill="#ffffff">Aktualności</text>
+
+      <rect x="18" y="255" width="244" height="45" rx="7" fill="#1d342c" />
+      <path d="M33 272h16v14H33zM37 282l4-4 3 3 3-5 3 6" fill="none" stroke="#ffffff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
+      <text x="58" y="284" fill="#ffffff">Media</text>
+
+      <rect x="18" y="308" width="244" height="45" rx="7" fill="#1d342c" />
+      <circle cx="39" cy="329" r="7" fill="none" stroke="#ffffff" stroke-width="1.8" />
+      <path d="M44 334l7 7" stroke="#ffffff" stroke-width="1.8" stroke-linecap="round" />
+      <text x="58" y="337" fill="#ffffff">SEO</text>
+
+      <rect x="18" y="361" width="244" height="45" rx="7" fill="#1d342c" />
+      <path d="M40 375v18M31 384h18M34 378l12 12M46 378l-12 12" stroke="#ffffff" stroke-width="1.7" stroke-linecap="round" />
+      <text x="58" y="390" fill="#ffffff">Ustawienia</text>
+
+      <rect x="18" y="414" width="244" height="45" rx="7" fill="#1d342c" />
+      <path d="M34 431h13v13H34zM42 426h9v9M43 435l9-9" fill="none" stroke="#ffffff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
+      <text x="58" y="443" fill="#ffffff">Podgląd strony</text>
+    </g>
+  </g>
+
+  <g transform="translate(302 26)">
+    <text x="0" y="10" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="950" letter-spacing="5" fill="#00796b">PANEL ADMINISTRATORA</text>
+    <text x="0" y="51" font-family="Inter, Arial, sans-serif" font-size="33" font-weight="950" fill="#06121f">Studio Harmonia</text>
+
+    <g transform="translate(404 8)" font-family="Inter, Arial, sans-serif" font-size="16" font-weight="900">
+      <rect width="109" height="38" rx="19" fill="#dbece6" />
+      <text x="15" y="25" fill="#0f5f55">Tryb demo</text>
+      <rect x="121" width="111" height="38" rx="7" fill="#ffffff" stroke="#cfd8d3" />
+      <circle cx="145" cy="19" r="5" fill="none" stroke="#071a15" stroke-width="1.8" />
+      <text x="164" y="25" fill="#071a15">Podgląd</text>
+      <rect x="243" width="178" height="38" rx="7" fill="url(#teal)" />
+      <path d="M268 18c0-7 11-7 11 0M264 22c0-13 19-13 19 0M273 18v14" fill="none" stroke="#ffffff" stroke-width="1.7" stroke-linecap="round" />
+      <text x="293" y="25" fill="#ffffff">Opublikuj zmiany</text>
+      <circle cx="452" cy="19" r="20" fill="#e8d0a0" />
+      <text x="442" y="25" fill="#071a15">AD</text>
+    </g>
+
+    <rect x="0" y="76" width="876" height="94" rx="7" fill="#e4f1eb" stroke="#a7d0c6" />
+    <path d="M20 99l6-4 6 4v13c0 7-12 12-12 12s-12-5-12-12V99z" transform="translate(8 0)" fill="none" stroke="#087e73" stroke-width="1.8" stroke-linejoin="round" />
+    <text x="47" y="108" font-family="Inter, Arial, sans-serif" font-size="17" font-weight="950" fill="#00796b">Tryb demonstracyjny</text>
+    <text x="47" y="134" font-family="Inter, Arial, sans-serif" font-size="16" font-weight="500" fill="#0f5f55">Wprowadzone zmiany są widoczne wyłącznie w Twoim podglądzie. Dane nie są zapisywane i znikną po odświeżeniu</text>
+    <text x="47" y="154" font-family="Inter, Arial, sans-serif" font-size="16" font-weight="500" fill="#0f5f55">strony.</text>
+
+    <text x="0" y="203" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="950" letter-spacing="5" fill="#00796b">DASHBOARD</text>
+    <text x="0" y="235" font-family="Inter, Arial, sans-serif" font-size="25" font-weight="950" fill="#06121f">Przegląd strony i szybkie akcje</text>
+
+    <g transform="translate(0 258)" font-family="Inter, Arial, sans-serif">
+      <g filter="url(#softShadow)">
+        <rect width="206" height="140" rx="7" fill="#ffffff" stroke="#d8ded9" />
+        <path d="M23 24h13l8 8v22H23zM36 24v9h9M28 42h12M28 49h17" fill="none" stroke="#102923" stroke-width="2" stroke-linejoin="round" />
+        <text x="21" y="85" font-size="32" font-weight="950" fill="#071a15">7</text>
+        <text x="21" y="117" font-size="16" font-weight="500" fill="#52625c">Podstrony i sekcje</text>
+      </g>
+      <g transform="translate(223 0)" filter="url(#softShadow)">
+        <rect width="206" height="140" rx="7" fill="#ffffff" stroke="#d8ded9" />
+        <circle cx="31" cy="30" r="6" fill="none" stroke="#102923" stroke-width="2" />
+        <path d="M16 30c10-13 22-13 32 0-10 13-22 13-32 0z" fill="none" stroke="#102923" stroke-width="2" />
+        <text x="20" y="85" font-size="32" font-weight="950" fill="#071a15">7</text>
+        <text x="20" y="117" font-size="16" font-weight="500" fill="#52625c">Aktywne sekcje</text>
+      </g>
+      <g transform="translate(446 0)" filter="url(#softShadow)">
+        <rect width="206" height="140" rx="7" fill="#ffffff" stroke="#d8ded9" />
+        <path d="M22 24h16v22H22zM28 18h16v22H28M26 31h9M26 38h8" fill="none" stroke="#102923" stroke-width="2" stroke-linejoin="round" />
+        <text x="20" y="85" font-size="32" font-weight="950" fill="#071a15">2</text>
+        <text x="20" y="117" font-size="16" font-weight="500" fill="#52625c">Aktualności</text>
+      </g>
+      <g transform="translate(669 0)" filter="url(#softShadow)">
+        <rect width="206" height="140" rx="7" fill="#ffffff" stroke="#d8ded9" />
+        <path d="M22 24h17v18H22zM25 38l5-5 3 3 5-7 4 9" fill="none" stroke="#102923" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+        <text x="20" y="85" font-size="32" font-weight="950" fill="#071a15">5</text>
+        <text x="20" y="117" font-size="16" font-weight="500" fill="#52625c">Zdjęcia w bibliotece</text>
+      </g>
+    </g>
+
+    <g transform="translate(0 416)" font-family="Inter, Arial, sans-serif">
+      <rect width="357" height="215" rx="9" fill="#ffffff" stroke="#d8ded9" filter="url(#cardShadow)" />
+      <text x="20" y="48" font-size="25" font-weight="950" fill="#06121f">Szybkie akcje</text>
+      <text x="20" y="80" font-size="16" font-weight="500" fill="#52625c">Najczęściej używane miejsca panelu.</text>
+      <rect x="20" y="104" width="319" height="46" rx="7" fill="#fffdf8" stroke="#d8ded9" />
+      <text x="37" y="132" font-size="16" font-weight="600" fill="#06121f">Edytuj stronę</text>
+      <rect x="20" y="160" width="319" height="46" rx="7" fill="#fffdf8" stroke="#d8ded9" />
+      <text x="37" y="188" font-size="16" font-weight="600" fill="#06121f">Dodaj aktualność</text>
+
+      <rect x="376" width="500" height="215" rx="9" fill="#ffffff" stroke="#d8ded9" filter="url(#cardShadow)" />
+      <text x="396" y="48" font-size="25" font-weight="950" fill="#06121f">Ostatnio edytowane</text>
+      <text x="396" y="80" font-size="16" font-weight="500" fill="#52625c">Lista demonstracyjna, bez zapisu historii użytkownika.</text>
+      <rect x="396" y="104" width="460" height="58" rx="7" fill="#fffdf8" stroke="#d8ded9" />
+      <path d="M416 124v18M407 133h18M410 127l12 12M422 127l-12 12" stroke="#102923" stroke-width="1.8" stroke-linecap="round" />
+      <text x="434" y="139" font-size="16" font-weight="600" fill="#06121f">Hero strony głównej</text>
+      <rect x="396" y="172" width="460" height="58" rx="7" fill="#fffdf8" stroke="#d8ded9" />
+    </g>
+  </g>
+</svg>

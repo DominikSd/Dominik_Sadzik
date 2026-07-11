@@ -349,6 +349,7 @@ describe("LandingPage navigation", () => {
 
     expect(activeDemoTab.getAttribute("aria-selected")).toBe("true");
     expect(screen.getAllByText("Demo: serwis domowy").length).toBeGreaterThan(1);
+    expect(screen.getByAltText("Podgląd projektu: Demo: serwis domowy")).toBeTruthy();
     expect(
       screen.getByText(/pierwszą sekcję, ofertę, proces, FAQ, kontakt i podstawy widoczności/i),
     ).toBeTruthy();
@@ -362,10 +363,11 @@ describe("LandingPage navigation", () => {
 
     expect(cmsDemoTab.getAttribute("aria-selected")).toBe("true");
     expect(screen.getByText(/Interaktywne demo lekkiego CMS-a/i)).toBeTruthy();
+    expect(screen.getByAltText("Podgląd projektu: Demo CMS")).toBeTruthy();
 
-    const cmsDemoLink = screen.getByRole("link", { name: /Zobacz repo demo/i });
+    const cmsDemoLink = screen.getByRole("link", { name: /Zobacz demo CMS/i });
     expect(cmsDemoLink.getAttribute("href")).toBe(
-      "https://github.com/DominikSd/cms-demo-portfolio",
+      "https://dominiksd.github.io/cms-demo-portfolio/",
     );
     expect(cmsDemoLink.getAttribute("target")).toBe("_blank");
   });
@@ -383,7 +385,7 @@ describe("LandingPage navigation", () => {
 
     const mobilePanel = screen.getByRole("tabpanel", { name: /Demo CMS/i });
     expect(within(mobilePanel).getByText(/Interaktywne demo lekkiego CMS-a/i)).toBeTruthy();
-    expect(within(mobilePanel).getByRole("link", { name: /Zobacz repo demo/i })).toBeTruthy();
+    expect(within(mobilePanel).getByRole("link", { name: /Zobacz demo CMS/i })).toBeTruthy();
 
     await user.click(cmsDemoTab);
 

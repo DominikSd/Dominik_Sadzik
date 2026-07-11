@@ -1515,9 +1515,19 @@ function toHubProjectItem(item) {
 }
 
 function toHubDemoItem(item) {
+  const mockupItem = item.screenshotUrl
+    ? {
+        title: item.name,
+        screenshotUrl: item.screenshotUrl,
+        mockupTone: item.mockupTone || "cyan",
+        mockupScale: item.mockupScale || 1,
+      }
+    : null;
+
   return {
     ...item,
     groupLabel: getPortfolioHubGroup(item, "Strony demo"),
+    mockupItem,
   };
 }
 
