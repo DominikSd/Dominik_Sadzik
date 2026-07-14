@@ -376,6 +376,7 @@ describe("LandingPage navigation", () => {
 
     expect(cmsBlogTab.getAttribute("aria-selected")).toBe("true");
     expect(screen.getByText(/Lekkie publiczne demo CMS-a do prowadzenia bloga/i)).toBeTruthy();
+    expect(screen.getByAltText("Podgląd projektu: Blog CMS demo")).toBeTruthy();
 
     const cmsBlogLink = screen.getByRole("link", { name: /Zobacz demo bloga/i });
     expect(cmsBlogLink.getAttribute("href")).toBe("https://dominiksd.github.io/demo-cms-blog/");
@@ -386,6 +387,7 @@ describe("LandingPage navigation", () => {
 
     expect(landingTab.getAttribute("aria-selected")).toBe("true");
     expect(screen.getByText(/Fikcyjny landing kursu online/i)).toBeTruthy();
+    expect(screen.getByAltText("Podgląd projektu: Landing kursu demo")).toBeTruthy();
 
     const landingLink = screen.getByRole("link", { name: /Zobacz landing/i });
     expect(landingLink.getAttribute("href")).toBe("https://dominiksd.github.io/demo-landing-kurs/");

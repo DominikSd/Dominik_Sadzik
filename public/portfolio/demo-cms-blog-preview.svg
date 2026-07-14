@@ -1,0 +1,120 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1000" viewBox="0 0 1600 1000" role="img" aria-labelledby="title desc">
+  <title id="title">Podglad projektu demo CMS blog</title>
+  <desc id="desc">Obraz pogladowy panelu redakcyjnego Praktyczny Blog z metrykami, lista pracy i kalendarzem publikacji.</desc>
+  <defs>
+    <filter id="panelShadow" x="-10%" y="-10%" width="120%" height="130%">
+      <feDropShadow dx="0" dy="20" stdDeviation="18" flood-color="#19233e" flood-opacity="0.14"/>
+    </filter>
+  </defs>
+
+  <rect width="1600" height="1000" fill="#f5f7fb"/>
+  <rect x="70" y="60" width="1460" height="880" rx="24" fill="#ffffff" filter="url(#panelShadow)"/>
+
+  <g>
+    <rect x="70" y="60" width="296" height="880" rx="24" fill="#10201d"/>
+    <path d="M342 60h24v880h-24z" fill="#10201d"/>
+    <circle cx="128" cy="126" r="30" fill="#dbe4ff"/>
+    <text x="107" y="137" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="26" font-weight="900" fill="#10201d">PB</text>
+    <text x="176" y="120" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="25" font-weight="900" fill="#ffffff">Praktyczny Blog</text>
+    <text x="176" y="151" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="16" fill="#a9b7b3">Panel demo CMS</text>
+    <path d="M106 190h224" stroke="#28423d" stroke-width="2"/>
+
+    <g font-family="Inter, Segoe UI, Arial, sans-serif" font-size="20" font-weight="750">
+      <rect x="104" y="224" width="226" height="54" rx="8" fill="#3157d5"/>
+      <text x="138" y="259" fill="#ffffff">Pulpit</text>
+      <rect x="104" y="294" width="226" height="54" rx="8" fill="#ffffff" opacity="0.07"/>
+      <text x="138" y="329" fill="#ffffff">Posty</text>
+      <rect x="104" y="364" width="226" height="54" rx="8" fill="#ffffff" opacity="0.07"/>
+      <text x="138" y="399" fill="#ffffff">Kalendarz</text>
+      <rect x="104" y="434" width="226" height="54" rx="8" fill="#ffffff" opacity="0.07"/>
+      <text x="138" y="469" fill="#ffffff">Media</text>
+      <rect x="104" y="504" width="226" height="54" rx="8" fill="#ffffff" opacity="0.07"/>
+      <text x="138" y="539" fill="#ffffff">SEO</text>
+      <rect x="104" y="574" width="226" height="54" rx="8" fill="#ffffff" opacity="0.07"/>
+      <text x="138" y="609" fill="#ffffff">Ustawienia</text>
+    </g>
+
+    <rect x="104" y="782" width="226" height="102" rx="12" fill="#ffffff" opacity="0.08"/>
+    <text x="126" y="824" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="18" font-weight="850" fill="#ffffff">Dane demo</text>
+    <text x="126" y="858" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="15" fill="#b9c7c3">Zmiany istnieja tylko</text>
+    <text x="126" y="880" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="15" fill="#b9c7c3">w pamieci karty.</text>
+  </g>
+
+  <g transform="translate(416 116)">
+    <text x="0" y="32" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="18" font-weight="850" fill="#3157d5">PULPIT REDAKCYJNY</text>
+    <text x="0" y="86" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="48" font-weight="900" fill="#182033">Zaplanuj i przygotuj kolejne publikacje</text>
+    <rect x="875" y="22" width="160" height="48" rx="8" fill="#3157d5"/>
+    <text x="907" y="53" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="18" font-weight="850" fill="#ffffff">Nowy post</text>
+
+    <g transform="translate(0 136)">
+      <rect x="0" y="0" width="246" height="134" rx="12" fill="#ffffff" stroke="#e4e7ec" stroke-width="2"/>
+      <circle cx="42" cy="42" r="18" fill="#edf3ff"/>
+      <text x="28" y="52" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="22" font-weight="900" fill="#3157d5">2</text>
+      <text x="28" y="96" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="36" font-weight="900" fill="#182033">1</text>
+      <text x="74" y="97" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="19" font-weight="750" fill="#667085">Szkice</text>
+
+      <rect x="270" y="0" width="246" height="134" rx="12" fill="#ffffff" stroke="#e4e7ec" stroke-width="2"/>
+      <circle cx="312" cy="42" r="18" fill="#edf3ff"/>
+      <text x="298" y="52" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="22" font-weight="900" fill="#3157d5">C</text>
+      <text x="298" y="96" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="36" font-weight="900" fill="#182033">1</text>
+      <text x="344" y="97" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="19" font-weight="750" fill="#667085">Zaplanowane</text>
+
+      <rect x="540" y="0" width="246" height="134" rx="12" fill="#ffffff" stroke="#e4e7ec" stroke-width="2"/>
+      <circle cx="582" cy="42" r="18" fill="#edf3ff"/>
+      <text x="569" y="52" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="22" font-weight="900" fill="#3157d5">P</text>
+      <text x="568" y="96" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="36" font-weight="900" fill="#182033">2</text>
+      <text x="614" y="97" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="19" font-weight="750" fill="#667085">Opublikowane</text>
+
+      <rect x="810" y="0" width="246" height="134" rx="12" fill="#ffffff" stroke="#e4e7ec" stroke-width="2"/>
+      <circle cx="852" cy="42" r="18" fill="#edf3ff"/>
+      <text x="838" y="52" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="22" font-weight="900" fill="#3157d5">T</text>
+      <text x="838" y="96" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="36" font-weight="900" fill="#182033">1 min</text>
+      <text x="944" y="97" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="19" font-weight="750" fill="#667085">Czytania</text>
+    </g>
+
+    <g transform="translate(0 320)">
+      <rect x="0" y="0" width="624" height="360" rx="12" fill="#ffffff" stroke="#e4e7ec" stroke-width="2"/>
+      <text x="34" y="50" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="28" font-weight="900" fill="#182033">Kontynuuj prace</text>
+      <text x="34" y="84" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="18" fill="#667085">Szkice i wpisy, ktore czekaja na uzupelnienie.</text>
+
+      <g font-family="Inter, Segoe UI, Arial, sans-serif">
+        <rect x="32" y="120" width="560" height="74" rx="10" fill="#f5f7fb"/>
+        <text x="56" y="150" font-size="20" font-weight="850" fill="#182033">Research SEO przed napisaniem poradnika</text>
+        <text x="56" y="177" font-size="16" fill="#667085">szkic · 100% uzupelnienia</text>
+        <rect x="32" y="210" width="560" height="74" rx="10" fill="#f5f7fb"/>
+        <text x="56" y="240" font-size="20" font-weight="850" fill="#182033">Automatyzacja researchu bez utraty jakosci</text>
+        <text x="56" y="267" font-size="16" fill="#667085">zaplanowany · 100% uzupelnienia</text>
+        <rect x="32" y="300" width="410" height="20" rx="10" fill="#dbe4ff"/>
+      </g>
+    </g>
+
+    <g transform="translate(660 320)">
+      <rect x="0" y="0" width="396" height="360" rx="12" fill="#ffffff" stroke="#e4e7ec" stroke-width="2"/>
+      <text x="32" y="50" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="28" font-weight="900" fill="#182033">Mini-kalendarz</text>
+      <text x="32" y="84" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="18" fill="#667085">Najblizsze wpisy demo.</text>
+      <g font-family="Inter, Segoe UI, Arial, sans-serif">
+        <text x="32" y="138" font-size="17" font-weight="850" fill="#3157d5">2026-07-18</text>
+        <text x="32" y="168" font-size="19" font-weight="850" fill="#182033">Research SEO przed poradnikiem</text>
+        <rect x="32" y="188" width="84" height="30" rx="15" fill="#fff7e6"/>
+        <text x="52" y="209" font-size="14" font-weight="850" fill="#d97706">szkic</text>
+
+        <path d="M32 244h330" stroke="#e4e7ec" stroke-width="2"/>
+        <text x="32" y="288" font-size="17" font-weight="850" fill="#3157d5">2026-07-22</text>
+        <text x="32" y="318" font-size="19" font-weight="850" fill="#182033">Automatyzacja researchu</text>
+        <rect x="32" y="338" width="128" height="30" rx="15" fill="#e8eeff"/>
+        <text x="52" y="359" font-size="14" font-weight="850" fill="#2848b5">zaplanowany</text>
+      </g>
+    </g>
+
+    <g transform="translate(0 718)">
+      <rect x="0" y="0" width="1056" height="112" rx="12" fill="#ffffff" stroke="#e4e7ec" stroke-width="2"/>
+      <text x="32" y="45" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="24" font-weight="900" fill="#182033">Rozklad tresci</text>
+      <rect x="270" y="38" width="250" height="14" rx="7" fill="#dbe4ff"/>
+      <rect x="270" y="38" width="88" height="14" rx="7" fill="#3157d5"/>
+      <text x="540" y="54" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="17" font-weight="750" fill="#667085">Procesy i organizacja</text>
+      <rect x="270" y="72" width="250" height="14" rx="7" fill="#dbe4ff"/>
+      <rect x="270" y="72" width="172" height="14" rx="7" fill="#3157d5"/>
+      <text x="540" y="88" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="17" font-weight="750" fill="#667085">Narzedzia</text>
+    </g>
+  </g>
+</svg>

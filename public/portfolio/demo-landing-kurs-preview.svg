@@ -1,0 +1,88 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1000" viewBox="0 0 1600 1000" role="img" aria-labelledby="title desc">
+  <title id="title">Podglad projektu demo landing kurs</title>
+  <desc id="desc">Obraz pogladowy strony Akademia Prosty Start z hero kursem, modulami i panelem zapisu.</desc>
+  <defs>
+    <linearGradient id="heroBlue" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0" stop-color="#3158d4"/>
+      <stop offset="1" stop-color="#203b9d"/>
+    </linearGradient>
+    <linearGradient id="warmPanel" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0" stop-color="#fff8df"/>
+      <stop offset="1" stop-color="#ffe5a3"/>
+    </linearGradient>
+    <filter id="softShadow" x="-10%" y="-10%" width="120%" height="130%">
+      <feDropShadow dx="0" dy="22" stdDeviation="22" flood-color="#182033" flood-opacity="0.16"/>
+    </filter>
+  </defs>
+
+  <rect width="1600" height="1000" fill="#f7f8fc"/>
+  <path d="M0 0h1600v300c-178 92-338 112-480 60-172-63-307-44-438 34-150 89-301 108-482 58C100 424 35 407 0 400z" fill="#e9eeff"/>
+
+  <g filter="url(#softShadow)">
+    <rect x="92" y="72" width="1416" height="856" rx="26" fill="#ffffff" stroke="#dfe4f1" stroke-width="3"/>
+  </g>
+
+  <g>
+    <rect x="92" y="72" width="1416" height="74" rx="26" fill="#ffffff"/>
+    <path d="M92 120h1416" stroke="#dfe4f1" stroke-width="3"/>
+    <circle cx="132" cy="108" r="10" fill="#f36f62"/>
+    <circle cx="166" cy="108" r="10" fill="#ffb547"/>
+    <circle cx="200" cy="108" r="10" fill="#6cc581"/>
+    <text x="242" y="117" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="24" font-weight="800" fill="#172033">Akademia Prosty Start</text>
+    <text x="1130" y="116" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="18" font-weight="700" fill="#657086">Dla kogo</text>
+    <text x="1232" y="116" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="18" font-weight="700" fill="#657086">Program</text>
+    <rect x="1342" y="90" width="118" height="36" rx="18" fill="#3158d4"/>
+    <text x="1364" y="114" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="16" font-weight="800" fill="#ffffff">Zapis</text>
+  </g>
+
+  <g transform="translate(160 205)">
+    <rect x="0" y="0" width="270" height="44" rx="22" fill="#fff2cf"/>
+    <circle cx="27" cy="22" r="9" fill="#ffb547"/>
+    <text x="48" y="29" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="18" font-weight="800" fill="#203b9d">14 dni · poziom podstawowy</text>
+
+    <text x="0" y="118" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="70" font-weight="900" fill="#172033">Uporzadkuj proces</text>
+    <text x="0" y="194" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="70" font-weight="900" fill="#172033">i zbuduj pierwsza</text>
+    <text x="0" y="270" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="70" font-weight="900" fill="#3158d4">automatyzacje</text>
+    <text x="0" y="330" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="30" fill="#657086">Landing edukacyjny dla malej firmy: czytelny program,</text>
+    <text x="0" y="372" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="30" fill="#657086">materialy, lekcje i demonstracyjny formularz zapisu.</text>
+
+    <rect x="0" y="430" width="245" height="60" rx="30" fill="#3158d4"/>
+    <text x="35" y="468" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="21" font-weight="850" fill="#ffffff">Dolacz do listy</text>
+    <rect x="270" y="430" width="218" height="60" rx="30" fill="#ffffff" stroke="#dfe4f1" stroke-width="3"/>
+    <text x="305" y="468" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="21" font-weight="850" fill="#203b9d">Zobacz program</text>
+  </g>
+
+  <g transform="translate(905 202)">
+    <rect x="0" y="0" width="458" height="584" rx="30" fill="url(#heroBlue)"/>
+    <rect x="38" y="40" width="382" height="242" rx="24" fill="#ffffff"/>
+    <rect x="70" y="78" width="112" height="142" rx="20" fill="url(#warmPanel)"/>
+    <path d="M100 105h52M100 139h74M100 173h44" stroke="#203b9d" stroke-width="13" stroke-linecap="round"/>
+    <circle cx="198" cy="78" r="35" fill="#f36f62"/>
+    <rect x="220" y="92" width="152" height="20" rx="10" fill="#e9eeff"/>
+    <rect x="220" y="130" width="122" height="20" rx="10" fill="#e9eeff"/>
+    <rect x="220" y="168" width="162" height="20" rx="10" fill="#e9eeff"/>
+    <rect x="220" y="206" width="92" height="20" rx="10" fill="#e9eeff"/>
+
+    <text x="42" y="352" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="24" font-weight="850" fill="#ffffff">Plan kursu</text>
+    <g font-family="Inter, Segoe UI, Arial, sans-serif" font-size="18" font-weight="800">
+      <rect x="42" y="382" width="374" height="54" rx="15" fill="#ffffff" opacity="0.96"/>
+      <text x="68" y="416" fill="#172033">01  Znajdz proces</text>
+      <rect x="42" y="452" width="374" height="54" rx="15" fill="#ffffff" opacity="0.9"/>
+      <text x="68" y="486" fill="#172033">02  Bezpieczne AI</text>
+      <rect x="42" y="522" width="374" height="54" rx="15" fill="#ffffff" opacity="0.84"/>
+      <text x="68" y="556" fill="#172033">03  Pierwsze usprawnienie</text>
+    </g>
+  </g>
+
+  <g transform="translate(160 765)">
+    <rect x="0" y="0" width="290" height="92" rx="20" fill="#ffffff" stroke="#dfe4f1" stroke-width="3"/>
+    <text x="28" y="38" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="18" font-weight="800" fill="#657086">MODULY</text>
+    <text x="28" y="72" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="34" font-weight="900" fill="#172033">4 glowne</text>
+    <rect x="324" y="0" width="290" height="92" rx="20" fill="#ffffff" stroke="#dfe4f1" stroke-width="3"/>
+    <text x="352" y="38" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="18" font-weight="800" fill="#657086">LEKCJE</text>
+    <text x="352" y="72" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="34" font-weight="900" fill="#172033">12 lekcji</text>
+    <rect x="648" y="0" width="290" height="92" rx="20" fill="#ffffff" stroke="#dfe4f1" stroke-width="3"/>
+    <text x="676" y="38" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="18" font-weight="800" fill="#657086">MATERIALY</text>
+    <text x="676" y="72" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="34" font-weight="900" fill="#172033">PDF / DOC / XLS</text>
+  </g>
+</svg>

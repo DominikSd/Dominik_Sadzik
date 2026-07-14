@@ -134,9 +134,11 @@ describe("site content schema", () => {
     expect(cmsBlogDemo.href).toBe("https://dominiksd.github.io/demo-cms-blog/");
     expect(cmsBlogDemo.linkLabel).toBe("Zobacz demo bloga");
     expect(cmsBlogDemo.status).toBe("dostępne");
+    expect(cmsBlogDemo.screenshotUrl).toBe("portfolio/demo-cms-blog-preview.svg");
     expect(landingDemo.href).toBe("https://dominiksd.github.io/demo-landing-kurs/");
     expect(landingDemo.linkLabel).toBe("Zobacz landing");
     expect(landingDemo.status).toBe("dostępne");
+    expect(landingDemo.screenshotUrl).toBe("portfolio/demo-landing-kurs-preview.svg");
     expect(demoHub.demoItems.some((demoItem) => demoItem.name === "Demo CMS")).toBe(false);
     expect(demoHub.demoItems.some((demoItem) => demoItem.name === "Landing page")).toBe(false);
   });

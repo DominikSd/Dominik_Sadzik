@@ -380,6 +380,7 @@ export const defaultSiteContent = {
             href: "https://dominiksd.github.io/demo-cms-blog/",
             linkLabel: "Zobacz demo bloga",
             status: "dostępne",
+            screenshotUrl: "portfolio/demo-cms-blog-preview.svg",
             mockupTone: "cyan",
           },
           {
@@ -390,6 +391,7 @@ export const defaultSiteContent = {
             href: "https://dominiksd.github.io/demo-landing-kurs/",
             linkLabel: "Zobacz landing",
             status: "dostępne",
+            screenshotUrl: "portfolio/demo-landing-kurs-preview.svg",
             mockupTone: "violet",
           },
           {
