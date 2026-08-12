@@ -101,10 +101,19 @@ function getSectionSeoKey(routeSlug = "") {
   return routeSlug;
 }
 
-function getRouteCanonical({ entry, slug, baseUrl, routePrefix = "#" }) {
-  if (entry?.canonical) return entry.canonical;
-  if (!slug) return normalizeBaseUrl(baseUrl);
-  return `${normalizeBaseUrl(baseUrl)}${routePrefix}${slug}`;
+function getRouteCanonical({ entry, baseUrl }) {
+  const fallback = normalizeBaseUrl(baseUrl);
+  const configuredCanonical = String(entry?.canonical || "").trim();
+
+  if (!configuredCanonical) return fallback;
+
+  try {
+    const canonicalUrl = new URL(configuredCanonical, fallback);
+    canonicalUrl.hash = "";
+    return canonicalUrl.toString();
+  } catch {
+    return fallback;
+  }
 }
 
 export function getPublicRouteSeo({ content, routeHash = "", activePage = null } = {}) {
@@ -114,15 +123,12 @@ export function getPublicRouteSeo({ content, routeHash = "", activePage = null }
 
   if (activePage?.seo) {
     const pageSeo = activePage.seo;
-    const slug = activePage.slug || routeSlug;
     return {
       title: pageSeo.title || globalSeo.metaTitle,
       description: pageSeo.description || globalSeo.metaDescription,
       canonical: getRouteCanonical({
         entry: pageSeo,
-        slug: `/${slug}`,
         baseUrl,
-        routePrefix: "#",
       }),
       robots: pageSeo.noindex ? "noindex,nofollow" : globalSeo.robots || "index,follow",
       ogTitle: pageSeo.ogTitle || pageSeo.title || globalSeo.ogTitle || globalSeo.metaTitle,
@@ -134,9 +140,7 @@ export function getPublicRouteSeo({ content, routeHash = "", activePage = null }
       ogImage: toAbsoluteUrl(pageSeo.ogImage || globalSeo.ogImage || DEFAULT_OG_IMAGE, baseUrl),
       ogUrl: getRouteCanonical({
         entry: pageSeo,
-        slug: `/${slug}`,
         baseUrl,
-        routePrefix: "#",
       }),
       siteName: globalSeo.siteName || "Dominik Sadzik",
       locale: globalSeo.locale || "pl_PL",
@@ -145,12 +149,9 @@ export function getPublicRouteSeo({ content, routeHash = "", activePage = null }
 
   const sectionSeoKey = getSectionSeoKey(routeSlug);
   const entry = globalSeo.pages?.[sectionSeoKey] || globalSeo.pages?.start || {};
-  const slug = entry.slug || (sectionSeoKey === "start" ? "" : sectionSeoKey);
   const sectionCanonical = getRouteCanonical({
     entry,
-    slug,
     baseUrl,
-    routePrefix: "#",
   });
 
   return {

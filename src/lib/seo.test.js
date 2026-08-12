@@ -11,7 +11,7 @@ describe("seo helpers", () => {
     });
 
     expect(seo.title).toBe("Strony internetowe i lekki CMS | Dominik Sadzik");
-    expect(seo.canonical).toBe("https://dominik-sadzik.pl/#/strony-cms");
+    expect(seo.canonical).toBe("https://dominik-sadzik.pl/");
     expect(seo.robots).toBe("index,follow");
   });
 
@@ -22,7 +22,7 @@ describe("seo helpers", () => {
     });
 
     expect(seo.title).toBe("Projekty i realizacje | Dominik Sadzik");
-    expect(seo.canonical).toBe("https://dominik-sadzik.pl/#projects");
+    expect(seo.canonical).toBe("https://dominik-sadzik.pl/");
   });
 
   it("returns route-aware SEO for the website description route", () => {
@@ -32,7 +32,7 @@ describe("seo helpers", () => {
     });
 
     expect(seo.title).toBe("Opisz stronę do wyceny | Dominik Sadzik");
-    expect(seo.canonical).toBe("https://dominik-sadzik.pl/#/opisz-strone");
+    expect(seo.canonical).toBe("https://dominik-sadzik.pl/");
     expect(seo.robots).toBe("index,follow");
   });
 
@@ -43,7 +43,7 @@ describe("seo helpers", () => {
     });
 
     expect(seo.title).toBe("Polityka prywatności | Dominik Sadzik");
-    expect(seo.canonical).toBe("https://dominik-sadzik.pl/#/polityka-prywatnosci");
+    expect(seo.canonical).toBe("https://dominik-sadzik.pl/");
     expect(seo.robots).toBe("index,follow");
   });
 
@@ -55,7 +55,7 @@ describe("seo helpers", () => {
     });
 
     expect(seo.title).toBe("Portfolio | Dominik Sadzik - QA, GameDev i grafika");
-    expect(seo.canonical).toBe("https://dominik-sadzik.pl/#/portfolio");
+    expect(seo.canonical).toBe("https://dominik-sadzik.pl/");
     expect(seo.description).toContain("QA");
   });
 
@@ -116,7 +116,52 @@ describe("seo helpers", () => {
     expect(document.querySelectorAll('meta[name="description"]')).toHaveLength(1);
     expect(document.querySelectorAll('link[rel="canonical"]')).toHaveLength(1);
     expect(document.querySelector('link[rel="canonical"]').getAttribute("href")).toBe(
-      "https://dominik-sadzik.pl/#/strony-cms",
+      "https://dominik-sadzik.pl/",
     );
+  });
+
+  it("removes URL fragments from canonicals loaded from CMS", () => {
+    const seo = getPublicRouteSeo({
+      content: {
+        ...defaultSiteContent,
+        pages: {
+          ...defaultSiteContent.pages,
+          webCms: {
+            ...defaultSiteContent.pages.webCms,
+            seo: {
+              ...defaultSiteContent.pages.webCms.seo,
+              canonical: "https://dominik-sadzik.pl/#/strony-cms",
+            },
+          },
+        },
+      },
+      routeHash: "#/strony-cms",
+      activePage: {
+        ...defaultSiteContent.pages.webCms,
+        seo: {
+          ...defaultSiteContent.pages.webCms.seo,
+          canonical: "https://dominik-sadzik.pl/#/strony-cms",
+        },
+      },
+    });
+
+    expect(seo.canonical).toBe("https://dominik-sadzik.pl/");
+    expect(seo.ogUrl).toBe("https://dominik-sadzik.pl/");
+  });
+
+  it("keeps a clean canonical URL configured for a future route", () => {
+    const seo = getPublicRouteSeo({
+      content: defaultSiteContent,
+      routeHash: "#/strony-cms",
+      activePage: {
+        ...defaultSiteContent.pages.webCms,
+        seo: {
+          ...defaultSiteContent.pages.webCms.seo,
+          canonical: "https://dominik-sadzik.pl/strony-cms/",
+        },
+      },
+    });
+
+    expect(seo.canonical).toBe("https://dominik-sadzik.pl/strony-cms/");
   });
 });
