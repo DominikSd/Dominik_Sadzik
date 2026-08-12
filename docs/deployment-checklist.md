@@ -4,6 +4,9 @@
 - Run `npm run format:check`.
 - Run `npm run build`.
 - Confirm `postbuild` secret scan passes.
+- Confirm `/robots.txt` points only to `https://dominik-sadzik.pl/sitemap.xml`.
+- Confirm `/sitemap.xml` returns `200` and lists only clean canonical URLs without `#`.
+- In Google Search Console submit `sitemap.xml` and remove any old `sitemap-main.xml` submission.
 - Apply Supabase migrations.
 - Confirm `sites` contains the target site.
 - Confirm first owner exists in `site_members`.

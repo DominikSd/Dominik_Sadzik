@@ -20,6 +20,7 @@ gwarancja wysokich pozycji w Google.
   - `ProfessionalService`.
 - `public/robots.txt`.
 - `public/sitemap.xml`.
+- Jedna mapa strony wskazana w `robots.txt`; nie utrzymujemy duplikatu `sitemap-main.xml`.
 - Route-aware SEO w React:
   - strona główna,
   - sekcja projektów,
@@ -66,8 +67,12 @@ fallback bierze SEO z `src/content/defaultSiteContent.js`.
 - `title`: około 30-60 znaków.
 - `description`: około 70-160 znaków.
 - `slug`: małe litery, cyfry i myślniki, bez spacji i polskich znaków.
-- `canonical`: pełny adres URL albo puste pole.
+- `canonical`: pełny adres URL bez fragmentu `#` albo puste pole.
 - `ogImage`: pełny URL albo ścieżka publiczna, np. `link-preview.png`.
+
+Przy obecnym hash routingu wszystkie publiczne widoki wskazują jako canonical stronę główną.
+Istniejące wartości CMS zawierające `#` są automatycznie oczyszczane w aplikacji. Osobne canonicale
+dla podstron należy ustawić dopiero po migracji na czyste URL-e.
 
 ## Google Search Console
 
@@ -110,6 +115,7 @@ To jest bezpieczne dla deployu na GitHub Pages, ale ma ograniczenia SEO:
 - sitemap zawiera tylko główny publiczny adres strony,
 - Google i social media mogą traktować hash-route jako część jednej strony,
 - oddzielne podstrony z `#` nie są tak mocne SEO jak czyste URL-e.
+- adresów z `#` nie dodajemy do sitemap i nie używamy ich jako canonicali.
 
 Rekomendacja na później: jeśli SEO ma być ważnym kanałem pozyskiwania ruchu, warto rozważyć
 przejście na czyste URL-e i hosting, który obsługuje fallback SPA albo statyczne generowanie
@@ -127,3 +133,19 @@ Panel CMS nadal musi być chroniony przez:
 - brak sekretów w froncie.
 
 Panel oraz widoki logowania/resetu hasła dostają w aplikacji `robots: noindex,nofollow`.
+Nie blokujemy ich dodatkowo w `robots.txt`, ponieważ fragment `#` nie jest wysyłany do serwera, a
+crawler musi móc wyrenderować aplikację, żeby zobaczyć `noindex`.
+
+## Linki do stron demo
+
+Linki do własnych realizacji i dem mogą pozostać zwykłymi linkami. `noopener noreferrer` zabezpiecza
+otwarcie nowej karty, ale nie zastępuje `nofollow` i nie ma takiego celu.
+
+Dla każdego osobnego repozytorium demo trzeba świadomie wybrać jedną politykę:
+
+- jeśli demo ma pojawiać się w wyszukiwarce: unikalny tytuł, opis, canonical i własna sitemap,
+- jeśli demo jest tylko podglądem portfolio: `<meta name="robots" content="noindex,follow">` w
+  statycznym `<head>` i brak blokady tego adresu w `robots.txt`.
+
+Fikcyjne demo indeksowane publicznie powinno wyraźnie zawierać słowo „demo” w tytule i treści, żeby
+nie wyglądało jak prawdziwa firma lub oferta.

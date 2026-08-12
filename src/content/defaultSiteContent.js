@@ -47,7 +47,7 @@ export const defaultSiteContent = {
         description:
           "Zobacz przykłady stron internetowych, projektów graficznych, lekkiego CMS-a, QA i prototypów interaktywnych.",
         slug: "projects",
-        canonical: "https://dominik-sadzik.pl/#projects",
+        canonical: "https://dominik-sadzik.pl/",
         noindex: false,
         ogTitle: "Projekty i realizacje | Dominik Sadzik",
         ogDescription:
@@ -59,7 +59,7 @@ export const defaultSiteContent = {
         description:
           "Odpowiedzi na najczęstsze pytania o stronę internetową, CMS, domenę, hosting i dalszą rozbudowę.",
         slug: "faq",
-        canonical: "https://dominik-sadzik.pl/#faq",
+        canonical: "https://dominik-sadzik.pl/",
         noindex: false,
         ogTitle: "FAQ | Strony internetowe i CMS",
         ogDescription:
@@ -71,7 +71,7 @@ export const defaultSiteContent = {
         description:
           "Napisz, jeśli potrzebujesz strony internetowej, wizytówki online, prostego CMS-a albo wsparcia QA.",
         slug: "contact",
-        canonical: "https://dominik-sadzik.pl/#contact",
+        canonical: "https://dominik-sadzik.pl/",
         noindex: false,
         ogTitle: "Kontakt | Dominik Sadzik",
         ogDescription:
@@ -83,7 +83,7 @@ export const defaultSiteContent = {
         description:
           "Zobacz realizacje, strony demo, projekty QA, automatyzację, GameDev i projekty graficzne Dominika Sadzika.",
         slug: "portfolio",
-        canonical: "https://dominik-sadzik.pl/#/portfolio",
+        canonical: "https://dominik-sadzik.pl/",
         noindex: false,
         ogTitle: "Portfolio | Dominik Sadzik",
         ogDescription:
@@ -95,7 +95,7 @@ export const defaultSiteContent = {
         description:
           "Opisz, jakiej strony internetowej, wizytówki online lub lekkiego CMS-a potrzebujesz, a przygotuję wstępną propozycję zakresu.",
         slug: "opisz-strone",
-        canonical: "https://dominik-sadzik.pl/#/opisz-strone",
+        canonical: "https://dominik-sadzik.pl/",
         noindex: false,
         ogTitle: "Opisz stronę do wyceny | Dominik Sadzik",
         ogDescription:
@@ -107,7 +107,7 @@ export const defaultSiteContent = {
         description:
           "Informacje o danych z formularza kontaktowego, analityce i kontakcie w sprawie danych na stronie Dominik Sadzik.",
         slug: "polityka-prywatnosci",
-        canonical: "https://dominik-sadzik.pl/#/polityka-prywatnosci",
+        canonical: "https://dominik-sadzik.pl/",
         noindex: false,
         ogTitle: "Polityka prywatności | Dominik Sadzik",
         ogDescription:
@@ -414,7 +414,7 @@ export const defaultSiteContent = {
         title: "Strony internetowe i lekki CMS | Dominik Sadzik",
         description:
           "Nowoczesne strony internetowe, wizytówki online i lekki panel CMS do edycji treści, SEO, FAQ, kontaktu i statystyk.",
-        canonical: "https://dominik-sadzik.pl/#/strony-cms",
+        canonical: "https://dominik-sadzik.pl/",
         noindex: false,
         ogTitle: "Strony internetowe i lekki CMS",
         ogDescription:
@@ -499,7 +499,7 @@ export const defaultSiteContent = {
         title: "QA, testowanie i automatyzacja | Dominik Sadzik",
         description:
           "QA, testowanie stron i aplikacji, certyfikat ISTQB, checklisty przed publikacją i czytelne raportowanie błędów.",
-        canonical: "https://dominik-sadzik.pl/#/qa-automatyzacja",
+        canonical: "https://dominik-sadzik.pl/",
         noindex: false,
         ogTitle: "QA, testowanie i automatyzacja",
         ogDescription:
@@ -592,7 +592,7 @@ export const defaultSiteContent = {
         title: "GameDev i projekty interaktywne | Dominik Sadzik",
         description:
           "Prototypy gier i małe interaktywne demo pokazujące pracę z ruchem, zasadami, sterowaniem i czytelnym UI.",
-        canonical: "https://dominik-sadzik.pl/#/gamedev",
+        canonical: "https://dominik-sadzik.pl/",
         noindex: false,
         ogTitle: "GameDev i projekty interaktywne",
         ogDescription:
@@ -709,7 +709,7 @@ export const defaultSiteContent = {
         title: "Portfolio | Dominik Sadzik - QA, GameDev i grafika",
         description:
           "Dodatkowe kompetencje Dominika Sadzika: QA, automatyzacja, GameDev, prototypy interaktywne i projekty graficzne.",
-        canonical: "https://dominik-sadzik.pl/#/portfolio",
+        canonical: "https://dominik-sadzik.pl/",
         noindex: false,
         ogTitle: "Portfolio | Dominik Sadzik",
         ogDescription:
