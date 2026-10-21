@@ -3,6 +3,18 @@ import { defaultSiteContent } from "../content/defaultSiteContent";
 import { applyNoindexSeo, applySeo, getPublicRouteSeo } from "./seo";
 
 describe("seo helpers", () => {
+  it("uses map-specific SEO while preserving the configured site identity", () => {
+    const seo = getPublicRouteSeo({
+      content: {
+        ...defaultSiteContent,
+        settings: { ...defaultSiteContent.settings, siteName: "Example" },
+      },
+      routeHash: "#/mapa",
+    });
+    expect(seo.title).toBe("Mapa portfolio | Example");
+    expect(seo.description).toContain("Interaktywna mapa");
+    expect(seo.canonical).toBe(defaultSiteContent.seo.canonical);
+  });
   it("returns route-aware SEO for a detail hash route", () => {
     const seo = getPublicRouteSeo({
       content: defaultSiteContent,

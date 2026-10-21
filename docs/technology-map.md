@@ -1,0 +1,98 @@
+# Interaktywna mapa portfolio
+
+Mapa jest głównym elementem pierwszego ekranu strony oraz osobnym widokiem `/#/mapa`.
+Przycisk „Odkryj mapę” otwiera większy widok z proporcjami graf/panel około 70/30.
+Klasyczne menu i wszystkie dotychczasowe sekcje pozostają dostępne.
+
+## Treści i konfiguracja
+
+`src/content/technologyMap.js` zawiera definicje kategorii, podwęzłów, opisów, adresów,
+i tekstów mapy. Dane projektów oraz kontaktu są odczytywane z aktualnego
+contentu strony: opublikowanego CMS lub domyślnego fallbacku. Mapa nie pobiera draftów
+publicznie; istniejący lokalny podgląd draftu nadal działa.
+
+Główne kategorie: Strony WWW i CMS, Projekty, QA / Automatyzacja, O mnie, Kontakt.
+Centrum stanowi „Strony WWW i CMS” z wyróżnioną poświatą. Pozostałe cztery główne gałęzie wychodzą bezpośrednio z tego węzła. Brak CV i profili społecznościowych
+w aktualnych treściach oznacza brak takich odnośników. Nie dodano fikcyjnych projektów QA.
+
+### Director Assistant
+
+W konfiguracji istnieje węzeł `director-assistant`. Ma opis „Opis projektu w przygotowaniu”
+i `href: null`, więc panel nie pokazuje przycisku nawigacyjnego. Aby opublikować informacje,
+uzupełnij `mapCopy.director` oraz podaj prawdziwy adres w definicji węzła. Jeśli projekt
+otrzyma własną podstronę, najpierw dodaj jej routing i treści. Nie kieruj do nieistniejącej trasy.
+
+Nowe linki powinny prowadzić do istniejących tras `#/...`, sekcji `#...` lub jawnego kontaktu
+`mailto:`. Domyślne linki mapy prowadzą do istniejących stron/sekcji; panel nie otwiera CMS.
+
+## Moduły
+
+- `MapLoader.jsx`: lazy loading, Suspense i fallback linków po błędzie ładowania mapy.
+- `TechnologyMap.jsx`: wybór gałęzi i szczegółów.
+- `TechnologyGraph.jsx`: React Flow, zoom, przesuwanie i wycentrowanie.
+- `TechnologyNode.jsx`: semantyczne przyciski, stany hover/focus/wyboru.
+- `TechnologyEdge.jsx` i `edgeGeometry.js`: punkty styku na obwodzie koła lub zaokrąglonej krawędzi kafelka oraz łagodne krzywe bez zawracania do stałych portów.
+- `mapLayout.js`: radialne pozycje głównych gałęzi, wachlarze podwęzłów, odstępy zapobiegające kolizjom i aktywne połączenia.
+- `MapDetailsPanel.jsx`: panel desktopowy i dolny panel mobile z zamykaniem/Escape.
+- `MapNavigationList.jsx`: alternatywa tekstowa i mobilne rozwijanie gałęzi.
+- `technologyMap.css`: kolory, siatka, rozmiary węzłów i animacje.
+
+`@xyflow/react` i jego CSS ładują się dopiero, gdy potrzebny jest graf desktopowy.
+Na mobile renderowana jest uproszczona nawigacja bez montowania grafu. Przy powiększeniu
+okna powyżej 767 px graf może zostać załadowany. Pozycje nie używają symulacji fizycznej.
+
+## Zachowanie i dostępność
+
+Początkowo oferta w centrum i cztery gałęzie dookoła. Rozwijana jest jedna ścieżka
+hierarchii naraz; ponowne kliknięcie gałęzi zwija ją wraz z potomkami. Projekty pokazują
+najpierw Director Assistant, projekty web, projekty graficzne i GameDev. Dopiero kolejne
+kliknięcie grupy ujawnia konkretne realizacje z CMS. Puste grupy nie mają przycisku rozwijania.
+
+Podwęzły rozchodzą się wachlarzowo na zewnątrz od wybranej gałęzi, z kontrolą kolizji,
+bez pionowej kolumny po prawej. Kamera płynnie obejmuje otwartą gałąź i jej nowe dzieci.
+Po zwinięciu wraca do poprzedniego poziomu; „Wycentruj mapę” obejmuje cały widoczny graf. Kliknięcie węzła wybiera szczegóły, a przejście następuje dopiero
+przez link w panelu. Wybrana ścieżka jest podświetlana; mapa ma jeden wspólny sposób eksploracji.
+
+Graf obsługuje drag tła, pinch zoom oraz przyciski +/−/wycentrowanie. Zwykła rolka
+przewija stronę. Węzły nie zmieniają ręcznie położenia. Tab i Enter/Spacja działają
+na przyciskach; lista jest alternatywą dla przestrzennego grafu. Panel mobilny jest
+niemodalny, więc nie blokuje nawigacji po gałęziach; po zamknięciu oddaje fokus.
+
+`prefers-reduced-motion` wyłącza animacje połączeń, oddychanie i animowane ruchy kamery.
+Animacje CSS zatrzymują się poza viewportem. Energy Trail korzysta z istniejących
+`data-cursor-zone="map"`, `data-cursor-target="node"`, `data-cursor-state="dragging"`.
+
+Istniejące funkcje GA4 rejestrują przejścia dopiero po zgodzie. Kontakt wysyła typ `email`
+i lokalizację `technology_map`, bez adresu ani treści wiadomości. Nie dodano eventów
+każdej klatki, przesunięcia mapy ani ruchu kursora.
+
+## Kontrola
+
+Uruchom `npm run format:check`, `npm test`, `npm run build`.
+Repo nie ma osobnego skryptu lint ani skonfigurowanego workflow e2e; kontrola interakcji
+odbywa się dodatkowo przez Playwright na lokalnym Vite. Sprawdź desktop, 1024 px i mobile,
+rozwijanie/zamykanie, Director Assistant bez fałszywego CTA, focus, zoom/drag/reset,
+przejścia do oferty, briefu i kontaktu, reduced motion oraz niezmienione trasy CMS.
+Przed publikacją oceń też płynność na własnym telefonie i laptopie.
+
+## Nowy start — wariant 2
+
+Strona główna używa wyśrodkowanego wstępu, szerokiej mapy i krótkiego menu:
+Usługi, Projekty, O mnie, Kontakt. Logo odsyła do początku. CTA wyceny pozostało
+w nagłówku, a link do briefu znajduje się pod mapą. Cennik, proces i FAQ nadal są
+w istniejących sekcjach i pływającej nawigacji. Po mapie pokazujemy najpierw ofertę,
+następnie dotychczasową sekcję odbiorców. Widok `/#/mapa` zachowuje oddzielny panel.
+
+Na stronie głównej szczegóły są nakładką pojawiającą się dopiero po wybraniu węzła;
+na telefonie nadal korzystają z dolnego panelu. Widok listy i sterowanie mapą są
+w prawym dolnym rogu. Lista mobilna nie ładuje biblioteki grafu.
+
+`src/content/homePresentation.js` rozpoznaje dokładny oryginalny zestaw ośmiu
+adresów menu oraz oryginalną parę nagłówków szablonu i prezentuje nowy wariant.
+To zgodność z wcześniej opublikowaną treścią, bez zapisu do bazy. Własne teksty,
+opisy, CTA i niestandardowe menu CMS pozostają respektowane. Nowe wartości
+startowe są w `defaultSiteContent.js`; można je zapisać i opublikować w obecnych
+formularzach CMS. Opis jest zastępowany tylko wtedy, gdy również jest oryginalny.
+
+`public/images/map-hero-backdrop.webp` to wygenerowane dekoracyjne tło (~37 KB),
+bez tekstów i elementów interfejsu. Ikony i logo pozostają z istniejącego projektu.

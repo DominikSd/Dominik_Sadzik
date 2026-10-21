@@ -56,41 +56,19 @@ describe("LandingPage navigation", () => {
     );
   });
 
-  it("renders sales-focused main navigation with portfolio as a separate route", () => {
+  it("renders the compact homepage navigation with existing destinations", () => {
     render(<LandingPage routeHash="#/" />);
-
     const mainNav = screen.getByRole("navigation", { name: "Główna nawigacja" });
     expect(
       within(mainNav)
         .getAllByRole("link")
-        .map((link) => link.textContent.trim()),
-    ).toEqual(["Start", "Oferta", "Cennik", "Realizacje", "Proces", "FAQ", "Kontakt", "Portfolio"]);
-
-    expect(within(mainNav).getByRole("link", { name: "Start" }).getAttribute("href")).toBe(
-      "#start",
-    );
-    expect(within(mainNav).getByRole("link", { name: "Oferta" }).getAttribute("href")).toBe(
-      "#offer",
-    );
-    expect(within(mainNav).getByRole("link", { name: "Cennik" }).getAttribute("href")).toBe(
-      "#pricing",
-    );
-    expect(within(mainNav).getByRole("link", { name: "Realizacje" }).getAttribute("href")).toBe(
-      "#projects",
-    );
-    expect(within(mainNav).getByRole("link", { name: "Proces" }).getAttribute("href")).toBe(
-      "#process",
-    );
-    expect(within(mainNav).getByRole("link", { name: "FAQ" }).getAttribute("href")).toBe("#faq");
-    expect(within(mainNav).getByRole("link", { name: "Kontakt" }).getAttribute("href")).toBe(
-      "#contact",
-    );
-    expect(within(mainNav).getByRole("link", { name: "Portfolio" }).getAttribute("href")).toBe(
-      "#/portfolio",
-    );
-    expect(within(mainNav).queryByRole("link", { name: "ISTQB" })).toBeNull();
-    expect(within(mainNav).queryByRole("link", { name: "QA" })).toBeNull();
-    expect(within(mainNav).queryByRole("link", { name: "GameDev" })).toBeNull();
+        .map((link) => [link.textContent.trim(), link.getAttribute("href")]),
+    ).toEqual([
+      ["Usługi", "#offer"],
+      ["Projekty", "#projects"],
+      ["O mnie", "#why-me"],
+      ["Kontakt", "#contact"],
+    ]);
   });
 
   it("tracks clicks in the main navigation", async () => {
@@ -98,9 +76,9 @@ describe("LandingPage navigation", () => {
     render(<LandingPage routeHash="#/" />);
 
     const mainNav = screen.getByRole("navigation", { name: "Główna nawigacja" });
-    await user.click(within(mainNav).getByRole("link", { name: "Oferta" }));
+    await user.click(within(mainNav).getByRole("link", { name: "Usługi" }));
 
-    expect(trackNavigationClick).toHaveBeenCalledWith("Oferta", "#offer", "desktop");
+    expect(trackNavigationClick).toHaveBeenCalledWith("Usługi", "#offer", "desktop");
   });
 
   it("keeps the old ISTQB route alias readable outside the sales nav", () => {
@@ -120,7 +98,7 @@ describe("LandingPage navigation", () => {
     expect(menuButton.getAttribute("aria-expanded")).toBe("true");
 
     const mobileMenu = screen.getByRole("navigation", { name: "Menu mobilne" });
-    await user.click(within(mobileMenu).getByRole("link", { name: "Portfolio" }));
+    await user.click(within(mobileMenu).getByRole("link", { name: "O mnie" }));
 
     expect(menuButton.getAttribute("aria-expanded")).toBe("false");
   });
@@ -142,7 +120,7 @@ describe("LandingPage navigation", () => {
     render(<LandingPage routeHash="#/" />);
 
     expect(screen.getByRole("heading", { name: "Dla kogo robię strony?" })).toBeTruthy();
-    expect(screen.getByRole("heading", { name: "Co mogę przygotować?" })).toBeTruthy();
+    expect(screen.getByRole("heading", { name: "Zobacz, co mogę przygotować" })).toBeTruthy();
     expect(screen.getByRole("heading", { name: "Pakiety i orientacyjne ceny" })).toBeTruthy();
     expect(screen.getByText("od 1500-2000 zł")).toBeTruthy();
     expect(screen.getByText("od 2500-3500 zł")).toBeTruthy();
@@ -488,5 +466,35 @@ describe("LandingPage navigation", () => {
     expect(
       screen.queryByTitle(/youtube/i) || document.querySelector("iframe[src*='youtube']"),
     ).toBeNull();
+  });
+  it("renders the map route and exits it through classic home-section navigation", async () => {
+    render(<LandingPage routeHash="#/mapa" />);
+    await screen.findByRole("heading", { name: "Mapa portfolio", exact: true });
+    expect(document.querySelectorAll(".technology-map")).toHaveLength(1);
+    const nav = screen.getByRole("navigation", { name: "Główna nawigacja" });
+    fireEvent.click(within(nav).getByRole("link", { name: "Kontakt", exact: true }));
+    expect(window.location.hash).toBe("#contact");
+  });
+
+  it("does not repeat overlapping CMS hero text in the new first screen", () => {
+    window.history.replaceState(null, "", "/?preview=draft#/");
+    window.localStorage.setItem(
+      DRAFT_PREVIEW_STORAGE_KEY,
+      JSON.stringify({
+        savedAt: new Date().toISOString(),
+        content: {
+          ...defaultSiteContent,
+          hero: {
+            ...defaultSiteContent.hero,
+            title: "Strony i wizytówki dla",
+            highlightedTitle: "wizytowki dla Twojej firmy",
+          },
+        },
+      }),
+    );
+    render(<LandingPage routeHash="#/" />);
+    expect(screen.getByRole("heading", { level: 1 }).textContent).toBe(
+      "Strony i wizytówki dla Twojej firmy",
+    );
   });
 });

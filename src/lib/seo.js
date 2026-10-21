@@ -1,3 +1,5 @@
+import { mapCopy } from "../content/technologyMap.js";
+
 export const DEFAULT_SITE_URL = "https://dominik-sadzik.pl/";
 export const DEFAULT_OG_IMAGE = `${DEFAULT_SITE_URL}link-preview.png`;
 
@@ -148,7 +150,15 @@ export function getPublicRouteSeo({ content, routeHash = "", activePage = null }
   }
 
   const sectionSeoKey = getSectionSeoKey(routeSlug);
-  const entry = globalSeo.pages?.[sectionSeoKey] || globalSeo.pages?.start || {};
+  const entry =
+    globalSeo.pages?.[sectionSeoKey] ||
+    (routeSlug === "mapa"
+      ? {
+          title: `${mapCopy.seo.title} | ${content?.settings?.siteName || "Portfolio"}`,
+          description: mapCopy.seo.description,
+        }
+      : globalSeo.pages?.start) ||
+    {};
   const sectionCanonical = getRouteCanonical({
     entry,
     baseUrl,

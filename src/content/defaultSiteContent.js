@@ -7,14 +7,10 @@ export const defaultSiteContent = {
     tagline: "Strony internetowe i wizytówki online",
     footerText: "© 2026 Dominik Sadzik - Strony internetowe, wizytówki online i lekki CMS",
     navItems: [
-      { label: "Start", href: "#start" },
-      { label: "Oferta", href: "#offer" },
-      { label: "Cennik", href: "#pricing" },
-      { label: "Realizacje", href: "#projects" },
-      { label: "Proces", href: "#process" },
-      { label: "FAQ", href: "#faq" },
+      { label: "Usługi", href: "#offer" },
+      { label: "Projekty", href: "#projects" },
+      { label: "O mnie", href: "#why-me" },
       { label: "Kontakt", href: "#contact" },
-      { label: "Portfolio", href: "#/portfolio" },
     ],
   },
   seo: {
@@ -118,10 +114,9 @@ export const defaultSiteContent = {
   },
   hero: {
     eyebrow: "Strony internetowe dla małych firm",
-    title: "Nowoczesne strony internetowe i wizytówki dla",
-    highlightedTitle: "Twojej firmy",
-    description:
-      "Projektuję estetyczne, responsywne strony i wizytówki online z prostym panelem edycji treści. Dbam o czytelny układ, wygodę korzystania i sprawne działanie strony po publikacji.",
+    title: "Twoja strona. Mój kod.",
+    highlightedTitle: "Wspólny efekt.",
+    description: "Strony internetowe, lekki CMS i projekty dopracowane od pomysłu do publikacji.",
     primaryCta: { label: "Poproś o wycenę", href: "#contact" },
     secondaryCta: { label: "Zobacz realizacje", href: "#projects" },
     briefCta: { label: "Opisz stronę", href: "#/opisz-strone" },

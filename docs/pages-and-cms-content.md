@@ -57,3 +57,10 @@ Kazda podstrona ma:
 5. Sprawdz `npm run format:check`, `npm test` i `npm run build`.
 
 Na potrzeby template'u trzymaj tresci specyficzne dla klienta w content/config, a nie w logice CMS.
+
+## Mapa portfolio
+
+`#/mapa` to dodatkowy widok interaktywnej mapy. Ta sama mapa jest częścią hero strony
+startowej. Jej projekty i kontakt korzystają z aktualnego contentu CMS. Definicje grafu
+pozostają w konfiguracji frontendu, bez zmiany modelu CMS i jego uprawnień.
+Szczegóły oraz przygotowanie Director Assistant: [Mapa technologiczna](technology-map.md).

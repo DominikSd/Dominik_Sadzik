@@ -12,6 +12,7 @@ import { applyNoindexSeo } from "./lib/seo.js";
 import { getAuthModeFromSearch } from "./admin/auth/authRedirects.js";
 import "./index.css";
 import ErrorBoundary from "./components/ErrorBoundary.jsx";
+import EnergyCursor from "./components/energy-cursor/EnergyCursor.jsx";
 
 // AppRouter and hash routing are intentionally simple because GitHub Pages uses hash-based navigation.
 
@@ -136,6 +137,7 @@ export function AppRouter() {
   return (
     <>
       {app}
+      {!authMode && hash !== `#/${adminHashPath}` && <EnergyCursor />}
       <AnalyticsConsent />
     </>
   );

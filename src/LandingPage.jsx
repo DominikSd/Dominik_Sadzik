@@ -1,5 +1,9 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { motion } from "framer-motion";
+import "./components/technology-map/technologyMap.css";
+import { homeHero, headerLinks } from "./content/homePresentation.js";
+import { ArrowRight, ChevronDown } from "lucide-react";
+import MapLoader from "./components/technology-map/MapLoader.jsx";
 import AnimatedCircuit from "./components/AnimatedCircuit";
 import PrivacyPolicyPage from "./components/PrivacyPolicyPage";
 import WebsiteBriefPage from "./components/WebsiteBriefPage";
@@ -77,6 +81,7 @@ const sectionLabelsById = Object.fromEntries(
 
 const routeLabelsBySlug = {
   "strony-cms": "Strony i CMS",
+  mapa: "Mapa portfolio",
   portfolio: "Portfolio",
   "qa-automatyzacja": "QA",
   "automatyzacja-testowanie": "QA",
@@ -485,6 +490,7 @@ function NavLink({ item, active, variant = "desktop", onNavigate }) {
 
 function Header({ settings, hero, routeSlug, activeSectionId, onNavigate }) {
   const [isOpen, setIsOpen] = useState(false);
+  const navItems = headerLinks(settings);
   const logoSrc = `${import.meta.env.BASE_URL}portfolio/logo.svg`;
 
   useEffect(() => {
@@ -492,9 +498,14 @@ function Header({ settings, hero, routeSlug, activeSectionId, onNavigate }) {
   }, [routeSlug]);
 
   return (
-    <header className="relative z-40 border-b border-white/10 bg-[#050816]/75 backdrop-blur-xl">
+    <header className="site-header relative z-40 border-b border-white/10 bg-[#050816]/75 backdrop-blur-xl">
       <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-4 sm:px-6 md:px-10">
-        <div className="flex items-center gap-3">
+        <a
+          href="#start"
+          onClick={(event) => onNavigate(event, "#start")}
+          className="site-brand flex items-center gap-3"
+          aria-label={`${settings.siteName} — strona główna`}
+        >
           <div className="flex h-11 w-11 items-center justify-center overflow-hidden rounded-lg border border-cyan-400/40 bg-slate-950/70 p-0.5 shadow-lg shadow-blue-500/20">
             <img
               src={logoSrc}
@@ -507,11 +518,10 @@ function Header({ settings, hero, routeSlug, activeSectionId, onNavigate }) {
           </div>
           <div>
             <p className="text-sm font-bold tracking-wide text-white">{settings.siteName}</p>
-            <p className="text-xs text-cyan-200/70">{settings.tagline}</p>
           </div>
-        </div>
+        </a>
         <nav aria-label="Główna nawigacja" className="hidden items-center gap-1 text-sm lg:flex">
-          {settings.navItems.map((item) => (
+          {navItems.map((item) => (
             <NavLink
               key={`${item.label}-${item.href}`}
               item={item}
@@ -528,7 +538,7 @@ function Header({ settings, hero, routeSlug, activeSectionId, onNavigate }) {
           }}
           className="hidden rounded-full gradient-button px-5 py-2.5 text-sm font-semibold shadow-lg shadow-blue-500/25 transition hover:scale-105 lg:inline-flex"
         >
-          {hero.primaryCta.label}
+          {hero.primaryCta.label} <ArrowRight size={15} aria-hidden="true" />
         </a>
         <button
           type="button"
@@ -543,7 +553,7 @@ function Header({ settings, hero, routeSlug, activeSectionId, onNavigate }) {
       {isOpen && (
         <div className="border-t border-white/10 bg-[#050816]/95 px-6 py-4 lg:hidden">
           <nav aria-label="Menu mobilne" className="flex flex-col gap-3 text-sm text-slate-200">
-            {settings.navItems.map((item) => (
+            {navItems.map((item) => (
               <NavLink
                 key={`${item.label}-${item.href}`}
                 item={item}
@@ -772,105 +782,69 @@ function NetworkMonitorLogo() {
   );
 }
 
-function Hero({ hero, onNavigate }) {
+function Hero({ hero: rawHero, content, onNavigate }) {
+  const hero = homeHero(rawHero);
+  const titleWords = hero.title.trim().split(/\s+/);
+  const highlightWords = hero.highlightedTitle.trim().split(/\s+/);
+  const comparable = (words) =>
+    words
+      .join(" ")
+      .toLocaleLowerCase("pl")
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .replace(/ł/g, "l");
+  let overlap = 0;
+  for (let count = 1; count <= Math.min(titleWords.length, highlightWords.length); count++) {
+    if (comparable(titleWords.slice(-count)) === comparable(highlightWords.slice(0, count)))
+      overlap = count;
+  }
+  const highlight = highlightWords.slice(overlap).join(" ");
   return (
-    <section
-      id="start"
-      className="relative overflow-x-hidden px-6 pb-16 pt-12 md:min-h-[calc(100vh-80px)] md:px-10 md:pb-20 md:pt-16 md:flex md:items-center scroll-mt-24"
-    >
-      <div className="pointer-events-none absolute left-4 top-6 z-0 md:left-12 md:top-10">
-        <div className="block md:hidden">
-          <AnimatedCircuit variant="mini" className="h-24 w-40 opacity-35" />
-        </div>
-        <div className="hidden md:block">
-          <AnimatedCircuit variant="stair" className="h-40 w-64 opacity-65" />
-        </div>
-      </div>
-      <div className="pointer-events-none absolute bottom-6 right-4 z-0 md:bottom-10 md:right-12">
-        <div className="block md:hidden">
-          <AnimatedCircuit variant="mini" flip className="h-20 w-36 opacity-30" />
-        </div>
-        <div className="hidden md:block">
-          <AnimatedCircuit variant="branch" flip className="h-44 w-72 opacity-55" />
-        </div>
-      </div>
-      <div className="relative z-10 mx-auto grid w-full max-w-7xl min-w-0 items-center gap-14 md:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)]">
-        <div className="min-w-0">
-          <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-cyan-400/20 bg-white/5 px-4 py-2 text-sm text-cyan-100 backdrop-blur">
-            <span className="h-2 w-2 rounded-full bg-cyan-300 shadow-[0_0_16px_rgba(34,211,238,0.9)]" />
-            {hero.eyebrow}
-          </div>
-          <h1 className="max-w-4xl break-words text-4xl font-black leading-[1.05] tracking-tight md:text-6xl lg:text-7xl">
-            {hero.title} <span className="gradient-text">{hero.highlightedTitle}</span>
+    <section id="start" className="home-hero relative scroll-mt-24">
+      <div className="map-hero">
+        <div className="map-hero-copy">
+          <h1>
+            {hero.title} <span className="gradient-text">{highlight}</span>
           </h1>
-          <p className="mt-6 max-w-2xl break-words text-lg leading-8 text-slate-300 md:text-xl">
-            {hero.description}
-          </p>
-          <div className="mt-9 flex flex-col gap-4 sm:flex-row">
-            <a
-              className="inline-flex items-center justify-center gap-2 rounded-full gradient-button px-7 py-4 text-sm font-bold shadow-xl shadow-blue-500/25 transition hover:scale-105"
-              href={hero.primaryCta.href}
-              onClick={(event) => {
-                trackCtaClick(hero.primaryCta.label, "hero");
-                onNavigate(event, hero.primaryCta.href);
-              }}
-            >
-              {hero.primaryCta.label} <Icon name="arrow-right" className="h-4 w-4" />
-            </a>
-            {hero.briefCta && (
-              <a
-                className="inline-flex items-center justify-center gap-2 rounded-full border border-cyan-200/50 bg-gradient-to-r from-cyan-300/15 to-violet-400/15 px-7 py-4 text-sm font-bold text-cyan-50 shadow-lg shadow-cyan-500/10 backdrop-blur transition hover:-translate-y-0.5 hover:border-cyan-100/70 hover:bg-cyan-300/20 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-200"
-                href={hero.briefCta.href}
-                onClick={(event) => {
-                  trackCtaClick(hero.briefCta.label, "hero_brief");
-                  onNavigate(event, hero.briefCta.href);
-                }}
-              >
-                {hero.briefCta.label}
-                <Icon name="arrow-right" className="h-4 w-4" />
-              </a>
-            )}
-            <a
-              className="inline-flex items-center justify-center gap-2 rounded-full border border-white/15 bg-white/5 px-7 py-4 text-sm font-semibold text-slate-100 backdrop-blur transition hover:border-cyan-300/50 hover:bg-white/10"
-              href={hero.secondaryCta.href}
-              onClick={(event) => {
-                trackCtaClick(hero.secondaryCta.label, "hero_secondary");
-                onNavigate(event, hero.secondaryCta.href);
-              }}
-            >
-              {hero.secondaryCta.label}
-            </a>
-          </div>
-          <div className="mt-10 grid max-w-xl gap-3 sm:grid-cols-3">
-            {hero.stats.map((stat) => (
-              <div
-                key={`${stat.value}-${stat.label}`}
-                className="rounded-lg border border-white/10 bg-white/[0.045] p-4 text-center sm:text-left"
-              >
-                <p className="text-2xl font-black text-cyan-200">{stat.value}</p>
-                <p className="mt-1 text-sm text-slate-400">{stat.label}</p>
-              </div>
-            ))}
-          </div>
+          <p>{hero.description}</p>
         </div>
-        <div className="relative">
-          <NetworkMonitorLogo />
-        </div>
+        <MapLoader content={content} onNavigate={onNavigate} />
+        <a className="map-hero-hint" href="#offer" onClick={(event) => onNavigate(event, "#offer")}>
+          Wybierz obszar i poznaj szczegóły.
+          <ChevronDown size={19} aria-hidden="true" />
+        </a>
       </div>
     </section>
   );
 }
 
-function ServicesSection({ services, id = "offer" }) {
+function ServicesSection({ services, id = "offer", introCta }) {
   const gridClass = services.items.length >= 4 ? "md:grid-cols-2 xl:grid-cols-4" : "md:grid-cols-3";
 
   return (
-    <section id={id} className="relative overflow-hidden px-6 py-20 md:px-10 lg:py-24 scroll-mt-24">
+    <section
+      id={id}
+      className={`relative overflow-hidden px-6 py-20 md:px-10 lg:py-24 scroll-mt-24 ${introCta ? "home-offer-section" : ""}`}
+    >
       <div className="pointer-events-none absolute right-2 top-8 z-0 hidden opacity-55 md:block">
         <AnimatedCircuit variant="longDrop" className="h-28 w-80" />
       </div>
       <div className="relative z-10 mx-auto max-w-7xl">
-        <SectionTitle eyebrow={services.eyebrow} title={services.title} text={services.text} />
+        {introCta ? (
+          <div className="home-offer-intro">
+            <h2>
+              {services.title === "Co mogę przygotować?"
+                ? "Zobacz, co mogę przygotować"
+                : services.title}
+            </h2>
+            <p>{services.text}</p>
+            <a href={introCta.href} onClick={() => trackCtaClick(introCta.label, "home_intro")}>
+              {introCta.label} <ArrowRight size={15} aria-hidden="true" />
+            </a>
+          </div>
+        ) : (
+          <SectionTitle eyebrow={services.eyebrow} title={services.title} text={services.text} />
+        )}
         <motion.div
           initial="hidden"
           whileInView="visible"
@@ -2522,6 +2496,7 @@ export default function LandingPage({ routeHash = "" }) {
   const activePage = pageKey ? content.pages?.[pageKey] : null;
   const isBriefRoute = routeSlug === "opisz-strone";
   const isPrivacyRoute = routeSlug === "polityka-prywatnosci";
+  const isMapRoute = routeSlug === "mapa";
 
   useEffect(() => {
     clearProgrammaticScrollTarget();
@@ -2538,7 +2513,7 @@ export default function LandingPage({ routeHash = "" }) {
     const updateNavigationState = () => {
       frame = 0;
       setIsFloatingNavVisible(window.scrollY > 160);
-      if (activePage || isBriefRoute || isPrivacyRoute) return;
+      if (activePage || isBriefRoute || isPrivacyRoute || isMapRoute) return;
 
       const programmaticTarget = programmaticScrollTargetRef.current;
       if (programmaticTarget) {
@@ -2566,10 +2541,10 @@ export default function LandingPage({ routeHash = "" }) {
       window.removeEventListener("scroll", scheduleUpdate);
       window.removeEventListener("resize", scheduleUpdate);
     };
-  }, [activePage, isBriefRoute, isPrivacyRoute, routeSlug]);
+  }, [activePage, isBriefRoute, isPrivacyRoute, isMapRoute, routeSlug]);
 
   useEffect(() => {
-    if (activePage || isBriefRoute || isPrivacyRoute) {
+    if (activePage || isBriefRoute || isPrivacyRoute || isMapRoute) {
       const frame = window.requestAnimationFrame(() => {
         if (!isBriefRoute && routeSlug === "tester-istqb") {
           document.getElementById("istqbCertificate")?.scrollIntoView({ block: "start" });
@@ -2589,7 +2564,7 @@ export default function LandingPage({ routeHash = "" }) {
     });
 
     return () => window.cancelAnimationFrame(frame);
-  }, [activePage, isBriefRoute, isPrivacyRoute, routeSlug]);
+  }, [activePage, isBriefRoute, isPrivacyRoute, isMapRoute, routeSlug]);
 
   useEffect(() => {
     const seo = getPublicRouteSeo({ content, routeHash, activePage });
@@ -2605,7 +2580,7 @@ export default function LandingPage({ routeHash = "" }) {
 
     if (!sectionId) {
       lockActiveSectionDuringScroll("start");
-      if (activePage) {
+      if (activePage || isBriefRoute || isPrivacyRoute || isMapRoute) {
         window.location.hash = "#/";
         return;
       }
@@ -2615,7 +2590,7 @@ export default function LandingPage({ routeHash = "" }) {
       return;
     }
 
-    if (activePage) {
+    if (activePage || isBriefRoute || isPrivacyRoute || isMapRoute) {
       lockActiveSectionDuringScroll(sectionId);
       window.location.hash = `#${sectionId}`;
       return;
@@ -2667,7 +2642,9 @@ export default function LandingPage({ routeHash = "" }) {
         onNavigate={handleNavigate}
       />
       <main className="relative z-10 overflow-visible">
-        {isBriefRoute ? (
+        {isMapRoute ? (
+          <MapLoader content={content} onNavigate={handleNavigate} full />
+        ) : isBriefRoute ? (
           <WebsiteBriefPage contact={content.contact} />
         ) : isPrivacyRoute ? (
           <PrivacyPolicyPage contact={content.contact} />
@@ -2679,9 +2656,13 @@ export default function LandingPage({ routeHash = "" }) {
           />
         ) : (
           <>
-            <Hero hero={content.hero} onNavigate={handleNavigate} />
+            <Hero hero={content.hero} content={content} onNavigate={handleNavigate} />
+            <ServicesSection
+              services={content.services}
+              id="offer"
+              introCta={content.hero.briefCta}
+            />
             <ServicesSection services={content.audience} id="audience" />
-            <ServicesSection services={content.services} id="offer" />
             <BenefitsSection benefits={content.benefits} />
             <PackagesSection packages={content.packages} onNavigate={handleNavigate} />
 
