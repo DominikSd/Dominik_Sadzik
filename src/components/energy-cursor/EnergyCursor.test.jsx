@@ -129,6 +129,57 @@ describe("EnergyCursor safeguards", () => {
     expect(document.documentElement.hasAttribute("data-energy-cursor")).toBe(false);
   });
 
+  it("returns to native after sustained jank and stays disabled across input and resize", () => {
+    let now = 0;
+    vi.spyOn(performance, "now").mockImplementation(() => now);
+    render(<EnergyCursor />);
+    pointer(document.body);
+    step(now);
+    for (let i = 1; i <= 40; i++) {
+      now = i * 50;
+      pointer(document.body, 100 + i * 4, 100);
+      step(now);
+    }
+    expect(document.querySelector(".energy-cursor").dataset.disabled).toBe("performance");
+    expect(document.documentElement.hasAttribute("data-energy-cursor")).toBe(false);
+    expect(frames.size).toBe(0);
+    expect(document.querySelector(".energy-cursor canvas").width).toBe(0);
+    pointer(document.body, 400, 200);
+    fireEvent.resize(window);
+    pointer(document.body, 500, 200);
+    step(3000);
+    expect(document.documentElement.hasAttribute("data-energy-cursor")).toBe(false);
+    expect(frames.size).toBe(0);
+  });
+
+  it("reuses event targets and activates native-cursor hiding just once", () => {
+    let now = 0;
+    vi.spyOn(performance, "now").mockImplementation(() => now);
+    const { unmount } = render(<EnergyCursor />);
+    const set = vi.spyOn(document.documentElement, "setAttribute");
+    for (let i = 0; i < 10; i++) {
+      now = i * 16;
+      pointer(document.body, 100 + i * 4, 100);
+      step(now);
+    }
+    expect(document.elementFromPoint).not.toHaveBeenCalled();
+    expect(set.mock.calls.filter(([name]) => name === "data-energy-cursor")).toHaveLength(1);
+    unmount();
+  });
+
+  it("clears only drawn particle bounds, including the final expiry frame", () => {
+    const engine = new ParticleEngine(context, cursorConfig);
+    engine.emit(100, 100, 0);
+    engine.draw(0, 1920, 1080);
+    context.clearRect.mockClear();
+    engine.draw(30, 1920, 1080);
+    expect(context.clearRect).toHaveBeenCalledWith(95, 95, 10, 10);
+    engine.draw(500, 1920, 1080);
+    context.clearRect.mockClear();
+    engine.draw(600, 1920, 1080);
+    expect(context.clearRect).not.toHaveBeenCalled();
+  });
+
   it("detects nested map nodes, dragging, editable ancestors and native opt-out", () => {
     const zone = document.createElement("div");
     zone.innerHTML =

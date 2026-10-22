@@ -9,14 +9,15 @@ logowania zachowują wskaźnik systemowy. Nie wymaga zmiennych środowiskowych a
 
 - `EnergyCursor.jsx` — cykl życia, jeden RAF, wskaźnik i pierścień HTML, Canvas przez portal do body.
 - `ParticleEngine.js` — ograniczony ślad Canvas 2D i jeden zastępowany impuls kliknięcia.
+- `CursorPerformanceMonitor.js` — pomiar płynności aktywnych klatek i decyzja o powrocie do wskaźnika systemowego.
 - `cursorZone.js` — semantyczne cele hover oraz niezależny kontrakt mapy.
 - `cursorConfig.js` — wszystkie podstawowe parametry do dostrojenia.
 - `energyCursor.css` — wygląd pierścienia i bezpieczne ukrywanie wskaźnika systemowego.
 
-Domyślnie: punkt 5 px, pierścień 24 px, hover 34 px, opóźnienie pierścienia 55 ms,
+Domyślnie: punkt 5 px, pierścień 24 px, hover 34 px, opóźnienie pierścienia 35 ms,
 cząsteczki 1–3 px / 400 ms, emisja najczęściej co 32 ms podczas ruchu (około 8–13 widocznych),
-limit 24, impuls 300 ms. Rozdzielczość Canvas ograniczają `maxDpr: 2` i
-`maxCanvasPixels: 4000000`.
+limit 24, impuls 300 ms. Rozdzielczość Canvas ograniczają `maxDpr: 1.5` i
+`maxCanvasPixels: 1500000`.
 
 Mniej intensywny ślad: zmniejsz `particleOpacity`, `particleLifetime` lub `maxParticles`,
 zwiększ `particleInterval` albo `particleDistance`. Mocniejszy: odwrotnie.
@@ -61,3 +62,32 @@ formularz briefu, nawigację publiczną i panel CMS. Sprawdź reduced motion w s
 wyjście poza okno, zmianę karty, resize oraz mysz/dotyk na urządzeniu hybrydowym.
 Dłuższa sesja na przeciętnym laptopie i prawdziwe urządzenie hybrydowe są zalecane
 przed publikacją; testy automatyczne nie zastępują oceny płynności i profilu pamięci.
+
+## Ochrona płynności
+
+Ruch myszy wykorzystuje istniejący `event.target` i cache celu zamiast dodatkowego
+hit-testu przy każdym zdarzeniu. Po zmianie DOM lub przewinięciu aktualny cel jest
+sprawdzany najwyżej raz na klatkę. Atrybut ukrywający natywny wskaźnik jest ustawiany
+raz przy pokazaniu efektu, zamiast w każdej klatce. Canvas czyści wyłącznie poprzedni
+obszar cząsteczek/impulsu, a nie całą powierzchnię ekranu. Niższy limit rozdzielczości
+zmniejsza pamięć bufora, szczególnie na ekranach HiDPI.
+
+Podczas aktywnej animacji monitor mierzy odstępy RAF i czas pracy samego kursora.
+Po oknie co najmniej 1500 ms / 12 odstępów całkowicie wyłącza efekt, gdy:
+
+- średni odstęp przekracza 38 ms,
+- co najmniej 40% odstępów przekracza 40 ms,
+- albo co najmniej 40% klatek kursora kosztuje ponad 8 ms.
+
+Wtedy znika kursor dekoracyjny, wraca systemowy wskaźnik, RAF i obserwator zmian DOM
+są zatrzymywane, a bufor Canvas jest zwalniany. Efekt pozostaje wyłączony przez czas
+życia komponentu, również po zwykłej zmianie trasy, resize i kolejnych ruchach myszy;
+pełne odświeżenie umożliwia ponowną ocenę. Diagnostyczny atrybut warstwy ma wartość
+`data-disabled="performance"`. Nie wysyłamy pomiarów ani danych urządzenia do analityki.
+
+Bezczynność, ukrycie karty, utrata fokusu i przerwy >1000 ms zerują okno pomiaru.
+Pojedyncze przycięcie i stabilne 30/60/120 Hz nie wyłączają efektu. Monitor nie ustala
+przyczyny spadku FPS: może to być też obciążona strona lub inne aplikacje. Nie może
+przywrócić kursora w trakcie całkowitego zablokowania głównego wątku; działa po
+wznowieniu pracy przeglądarki. Słaby układ graficzny i rzeczywisty laptop nadal
+wymagają oceny ręcznej.

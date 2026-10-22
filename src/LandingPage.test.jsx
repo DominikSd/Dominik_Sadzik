@@ -476,6 +476,43 @@ describe("LandingPage navigation", () => {
     expect(window.location.hash).toBe("#contact");
   });
 
+  it("renders separated headline phrases without punctuation", () => {
+    render(<LandingPage routeHash="#/" />);
+    const heading = screen.getByRole("heading", { level: 1 });
+    expect([...heading.querySelectorAll("span")].map((el) => el.textContent)).toEqual([
+      "Twoja strona",
+      "Mój kod",
+      "Wspólny efekt",
+    ]);
+    expect(heading.textContent).toBe("Twoja strona Mój kod Wspólny efekt");
+  });
+
+  it("keeps the mobile homepage focused on CTAs and leaves the map on its own route", () => {
+    const original = window.matchMedia;
+    window.matchMedia = () => ({
+      matches: false,
+      addEventListener: vi.fn(),
+      removeEventListener: vi.fn(),
+    });
+    try {
+      render(<LandingPage routeHash="#/" />);
+      expect(document.querySelector("#start .technology-map")).toBeNull();
+      const hero = document.getElementById("start");
+      const ctas = hero.querySelector(".home-mobile-actions");
+      expect(within(ctas).getByRole("link", { name: "Poproś o wycenę" }).getAttribute("href")).toBe(
+        "#contact",
+      );
+      expect(
+        within(ctas).getByRole("link", { name: "Zobacz realizacje" }).getAttribute("href"),
+      ).toBe("#projects");
+      expect(
+        within(ctas).getByRole("link", { name: "Odkryj mapę portfolio" }).getAttribute("href"),
+      ).toBe("#/mapa");
+    } finally {
+      window.matchMedia = original;
+    }
+  });
+
   it("does not repeat overlapping CMS hero text in the new first screen", () => {
     window.history.replaceState(null, "", "/?preview=draft#/");
     window.localStorage.setItem(

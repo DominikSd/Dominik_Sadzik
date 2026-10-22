@@ -2,6 +2,7 @@ import React, { useEffect, useRef } from "react";
 import { createPortal } from "react-dom";
 import { cursorConfig as config } from "./cursorConfig.js";
 import { getCursorZone } from "./cursorZone.js";
+import { CursorPerformanceMonitor } from "./CursorPerformanceMonitor.js";
 import { ParticleEngine } from "./ParticleEngine.js";
 import "./energyCursor.css";
 
@@ -27,13 +28,18 @@ export default function EnergyCursor() {
     let ring = null;
     let emissionPoint = null;
     let lastTime = 0;
+    let target = null;
+    let targetDirty = false;
+    let observer;
+    const monitor = new CursorPerformanceMonitor(config);
 
     const allowed = () => capability.matches && !reduced.matches && !failed;
     function hide() {
-      root.removeAttribute("data-energy-cursor");
-      layer.dataset.visible = "false";
+      if (root.hasAttribute("data-energy-cursor")) root.removeAttribute("data-energy-cursor");
+      if (layer.dataset.visible !== "false") layer.dataset.visible = "false";
       visible = false;
-      point = ring = emissionPoint = null;
+      point = ring = emissionPoint = target = null;
+      monitor.reset();
       cancelAnimationFrame(frame);
       frame = 0;
       try {
@@ -42,9 +48,13 @@ export default function EnergyCursor() {
         failed = true;
       }
     }
-    function fail() {
+    function fail(reason = "error") {
       failed = true;
       hide();
+      layer.dataset.disabled = reason;
+      observer?.disconnect();
+      engine = null;
+      canvasRef.current.width = canvasRef.current.height = 0;
     }
     function resize() {
       try {
@@ -75,6 +85,11 @@ export default function EnergyCursor() {
       frame = 0;
       try {
         if (!visible || !point) return;
+        const started = performance.now();
+        if (targetDirty) {
+          targetDirty = false;
+          if (!syncTarget(document.elementFromPoint(point.x, point.y))) return;
+        }
         const blend = 1 - Math.exp(-Math.min(now - lastTime, 64) / config.followMs);
         lastTime = now;
         ring.x += (point.x - ring.x) * blend;
@@ -85,9 +100,13 @@ export default function EnergyCursor() {
         ringRef.current.style.transform = `translate3d(${ring.x}px, ${ring.y}px, 0)`;
         const particles = engine.draw(now, width, height);
         // Hide the native pointer only after the replacement has actually rendered.
-        layer.dataset.visible = "true";
-        root.setAttribute("data-energy-cursor", "active");
+        if (layer.dataset.visible !== "true") {
+          layer.dataset.visible = "true";
+          root.setAttribute("data-energy-cursor", "active");
+        }
+        if (monitor.sample(now, performance.now() - started)) return fail("performance");
         if (moving || particles) schedule();
+        else monitor.reset();
       } catch {
         fail();
       }
@@ -105,12 +124,16 @@ export default function EnergyCursor() {
     }
     function move(event) {
       try {
+        if (failed) return;
         if (event.pointerType !== "mouse" || !allowed() || !engine || document.hidden) {
           hide();
           return;
         }
-        if (!syncTarget(document.elementFromPoint(event.clientX, event.clientY) || event.target))
-          return;
+        // Pointer events already carry the hit-tested target. Reuse it until it changes.
+        if (target !== event.target) {
+          if (!syncTarget(event.target)) return;
+          target = event.target;
+        }
         const now = performance.now();
         point = { x: event.clientX, y: event.clientY };
         if (!visible) {
@@ -134,7 +157,8 @@ export default function EnergyCursor() {
     function refreshTarget() {
       try {
         if (!point) return;
-        syncTarget(document.elementFromPoint(point.x, point.y));
+        targetDirty = true;
+        schedule();
       } catch {
         fail();
       }
@@ -150,7 +174,7 @@ export default function EnergyCursor() {
     function leave(event) {
       if (!event.relatedTarget) hide();
     }
-    const observer = new MutationObserver(refreshTarget);
+    observer = new MutationObserver(refreshTarget);
     observer.observe(document.body, {
       subtree: true,
       childList: true,

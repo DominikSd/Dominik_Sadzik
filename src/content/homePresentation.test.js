@@ -15,6 +15,15 @@ describe("homepage presentation compatibility", () => {
     expect(homeHero(legacy).description).toBe("Własny opis");
     expect(homeHero(legacy).primaryCta).toBe(custom.primaryCta);
   });
+  it("upgrades the previous punctuated headline without changing custom copy", () => {
+    const previous = {
+      ...defaultSiteContent.hero,
+      title: "Twoja strona. Mój kod.",
+      highlightedTitle: "Wspólny efekt.",
+    };
+    expect(homeHero(previous).title).toBe("Twoja strona Mój kod");
+    expect(homeHero(previous).highlightedTitle).toBe("Wspólny efekt");
+  });
   it("preserves custom CMS navigation and upgrades the exact old template menu", () => {
     const navItems = [{ label: "Moja oferta", href: "#/strony-cms" }];
     expect(headerLinks({ navItems })).toBe(navItems);

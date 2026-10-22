@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import "./components/technology-map/technologyMap.css";
-import { homeHero, headerLinks } from "./content/homePresentation.js";
+import { homeHero, headerLinks, heroTitleParts } from "./content/homePresentation.js";
 import { ArrowRight, ChevronDown } from "lucide-react";
 import MapLoader from "./components/technology-map/MapLoader.jsx";
 import AnimatedCircuit from "./components/AnimatedCircuit";
@@ -784,6 +784,17 @@ function NetworkMonitorLogo() {
 
 function Hero({ hero: rawHero, content, onNavigate }) {
   const hero = homeHero(rawHero);
+  const [desktop, setDesktop] = useState(
+    () => window.matchMedia?.("(min-width: 768px)").matches ?? true,
+  );
+  useEffect(() => {
+    const media = window.matchMedia?.("(min-width: 768px)");
+    if (!media) return;
+    const update = () => setDesktop(media.matches);
+    update();
+    media.addEventListener("change", update);
+    return () => media.removeEventListener("change", update);
+  }, []);
   const titleWords = hero.title.trim().split(/\s+/);
   const highlightWords = hero.highlightedTitle.trim().split(/\s+/);
   const comparable = (words) =>
@@ -803,12 +814,40 @@ function Hero({ hero: rawHero, content, onNavigate }) {
     <section id="start" className="home-hero relative scroll-mt-24">
       <div className="map-hero">
         <div className="map-hero-copy">
+          <p className="home-mobile-eyebrow">{hero.eyebrow}</p>
           <h1>
-            {hero.title} <span className="gradient-text">{highlight}</span>
+            {heroTitleParts(hero.title).map((part) => (
+              <React.Fragment key={part}>
+                <span>{part}</span>{" "}
+              </React.Fragment>
+            ))}
+            <span className="gradient-text">{highlight}</span>
           </h1>
           <p>{hero.description}</p>
         </div>
-        <MapLoader content={content} onNavigate={onNavigate} />
+        <div className="home-mobile-actions">
+          {[hero.primaryCta, hero.secondaryCta].filter(Boolean).map((cta, index) => (
+            <a
+              key={`${cta.href}-${index}`}
+              href={cta.href}
+              onClick={(event) => {
+                trackCtaClick(cta.label, "hero_mobile");
+                onNavigate(event, cta.href);
+              }}
+            >
+              {cta.label}
+              <ArrowRight size={16} aria-hidden="true" />
+            </a>
+          ))}
+          <a
+            className="home-mobile-map-link"
+            href="#/mapa"
+            onClick={() => trackNavigationClick("mapa", "#/mapa", "hero_mobile")}
+          >
+            Odkryj mapę portfolio <ArrowRight size={14} aria-hidden="true" />
+          </a>
+        </div>
+        {desktop && <MapLoader content={content} onNavigate={onNavigate} />}
         <a className="map-hero-hint" href="#offer" onClick={(event) => onNavigate(event, "#offer")}>
           Wybierz obszar i poznaj szczegóły.
           <ChevronDown size={19} aria-hidden="true" />

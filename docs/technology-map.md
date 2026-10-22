@@ -38,7 +38,7 @@ Nowe linki powinny prowadzić do istniejących tras `#/...`, sekcji `#...` lub j
 - `technologyMap.css`: kolory, siatka, rozmiary węzłów i animacje.
 
 `@xyflow/react` i jego CSS ładują się dopiero, gdy potrzebny jest graf desktopowy.
-Na mobile renderowana jest uproszczona nawigacja bez montowania grafu. Przy powiększeniu
+Na mobile w osobnym widoku mapy renderowana jest uproszczona nawigacja bez montowania grafu. Przy powiększeniu
 okna powyżej 767 px graf może zostać załadowany. Pozycje nie używają symulacji fizycznej.
 
 ## Zachowanie i dostępność
@@ -96,3 +96,29 @@ formularzach CMS. Opis jest zastępowany tylko wtedy, gdy również jest orygina
 
 `public/images/map-hero-backdrop.webp` to wygenerowane dekoracyjne tło (~37 KB),
 bez tekstów i elementów interfejsu. Ikony i logo pozostają z istniejącego projektu.
+
+## Korekta nagłówka i start mobilny
+
+Nagłówek strony głównej ma trzy frazy bez kropek, rozdzielone odstępami na desktopie,
+a na telefonie ułożone w trzech wierszach. `homeHero` rozpoznaje także poprzednią
+domyślną parę tekstów z kropkami; własne teksty z CMS nadal są respektowane.
+
+Poniżej 768 px strona główna wraca do klasycznego wstępu: eyebrow, nagłówek, opis,
+aktualne `primaryCta` i `secondaryCta` z CMS oraz dyskretny link „Odkryj mapę portfolio”.
+Nie montuje mapy ani jej listy i nie pobiera modułu grafu. Widok `/#/mapa` zachowuje
+mobilne rozwijanie gałęzi i szczegóły w dolnym panelu. Na desktopie mapa nadal jest
+głównym elementem startu. Przejście między szerokościami przełącza odpowiedni wariant.
+
+## Ikony węzłów
+
+Definicje w `src/content/technologyMap.js` zawierają semantyczny klucz `icon`.
+`TechnologyNode.jsx` mapuje go na istniejące ikony Lucide, ze wspólną grubością kreski.
+Każda główna gałąź i jej podkategorie mają przypisane znaczące symbole: folder,
+panele aplikacji, przeglądarka, paleta, kontroler, checklista, odznaka, koła zębate itd.
+Ikony pozostają dekoracyjne (`aria-hidden`); etykieta tekstowa identyfikuje przycisk.
+
+Realizacje dobierają symbol na podstawie kategorii, typu i tagów z CMS: monitor dla
+strony, suwaki dla CMS, okno dla aplikacji, pióro dla brandingu i drukarka dla materiałów
+do druku. Przy grafice tytuł pozwala odróżnić branding od konkretnego druku. Nieznany
+typ ma neutralny dokument zamiast symbolu kodu. Ikony nie zmieniają grupowania,
+adresów, opisów ani modelu edycji CMS. Nową ikonę kategorii dopisuje się w `nodeIcons`.

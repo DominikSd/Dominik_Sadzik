@@ -29,6 +29,31 @@ function setup() {
 }
 
 describe("Technology map content and navigation", () => {
+  it("chooses project symbols from metadata and keeps unknown projects neutral", () => {
+    const content = {
+      ...defaultSiteContent,
+      portfolio: {
+        ...defaultSiteContent.portfolio,
+        items: [
+          { title: "Strona", category: "Strony WWW", tags: [] },
+          { title: "Panel", category: "CMS", tags: [] },
+          { title: "Branding i wizytówki", category: "Grafika", tags: ["druk"] },
+          { title: "Okładka teczki", category: "Grafika", tags: [] },
+          { title: "Aplikacja", category: "Aplikacja", tags: [] },
+          { title: "Eksperyment", tags: [] },
+        ],
+      },
+    };
+    const items = flattenMapItems(createTechnologyMap(content));
+    expect(
+      items
+        .filter((item) => item.id.startsWith("project-"))
+        .sort((a, b) => a.id.localeCompare(b.id))
+        .map((item) => item.icon),
+    ).toEqual(["monitor", "settings", "brand", "print", "application", "file"]);
+    expect(items.find((item) => item.id === "projects").icon).toBe("folder");
+    expect(items.find((item) => item.id === "director-assistant").icon).toBe("dashboard");
+  });
   it("groups projects and reveals specific work only on the next level", () => {
     const projects = model.groups.find((node) => node.id === "projects");
     expect(projects.children.map((node) => node.id)).toEqual([

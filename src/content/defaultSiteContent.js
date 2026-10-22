@@ -114,8 +114,8 @@ export const defaultSiteContent = {
   },
   hero: {
     eyebrow: "Strony internetowe dla małych firm",
-    title: "Twoja strona. Mój kod.",
-    highlightedTitle: "Wspólny efekt.",
+    title: "Twoja strona Mój kod",
+    highlightedTitle: "Wspólny efekt",
     description: "Strony internetowe, lekki CMS i projekty dopracowane od pomysłu do publikacji.",
     primaryCta: { label: "Poproś o wycenę", href: "#contact" },
     secondaryCta: { label: "Zobacz realizacje", href: "#projects" },

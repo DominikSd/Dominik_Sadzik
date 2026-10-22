@@ -5,7 +5,9 @@ export function homeHero(hero) {
   const legacy =
     hero.title === "Nowoczesne strony internetowe i wizytówki dla" &&
     hero.highlightedTitle === "Twojej firmy";
-  return legacy
+  const previous =
+    hero.title === "Twoja strona. Mój kod." && hero.highlightedTitle === "Wspólny efekt.";
+  return legacy || previous
     ? {
         ...hero,
         title: defaultSiteContent.hero.title,
@@ -46,4 +48,9 @@ export function headerLinks(settings) {
     )
     ? defaultSiteContent.settings.navItems
     : settings.navItems;
+}
+
+// Brand-specific phrases live alongside content, not in the reusable map UI.
+export function heroTitleParts(title) {
+  return title === "Twoja strona Mój kod" ? ["Twoja strona", "Mój kod"] : [title];
 }

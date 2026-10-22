@@ -9,24 +9,71 @@ export const mapCopy = {
   },
 };
 
+// Semantic keys keep content independent from the UI icon library.
+const nodeIcons = {
+  services: "globe",
+  projects: "folder",
+  qa: "shield",
+  about: "person",
+  contact: "contact",
+  websites: "monitor",
+  cms: "settings",
+  seo: "search",
+  cooperation: "handshake",
+  "director-assistant": "dashboard",
+  "web-projects": "browser",
+  "graphic-projects": "palette",
+  gamedev: "gamepad",
+  testing: "checklist",
+  istqb: "award",
+  automation: "automation",
+  technologies: "cpu",
+  skills: "tools",
+  experience: "compass",
+  brief: "form",
+  email: "email",
+};
+
+function projectIcon(item, graphic) {
+  const metadata = [item.category, item.type, ...(item.tags || [])].join(" ");
+  if (graphic) {
+    if (/branding|identyfikac|logo/i.test(item.title)) return "brand";
+    if (
+      /druk|wizytów|wizytow|ulotk|plakat|teczk|karta promocyjna/i.test(
+        [item.title, metadata].join(" "),
+      )
+    )
+      return "print";
+    if (/branding|identyfikac|logo/i.test(metadata)) return "brand";
+    return "palette";
+  }
+  if (/cms/i.test(metadata)) return "settings";
+  if (/aplikac|application|dashboard/i.test(metadata)) return "application";
+  if (/stron|www|website|web|landing/i.test(metadata)) return "monitor";
+  return "file";
+}
+
 const entry = (id, label, description, href, extra = {}) => ({
   id,
   label,
   description,
   href,
+  icon: nodeIcons[id] || "file",
   ...extra,
 });
 
 export function createTechnologyMap(content) {
   const pages = content.pages || {};
-  const projectItems = (content.portfolio.items || []).map((item, index) =>
-    entry(`project-${index}`, item.title.replace(/\s+/g, " "), item.text, "#projects", {
+  const projectItems = (content.portfolio.items || []).map((item, index) => {
+    const graphic = /grafik|branding|druk/i.test(
+      [item.category, item.type, ...(item.tags || [])].join(" "),
+    );
+    return entry(`project-${index}`, item.title.replace(/\s+/g, " "), item.text, "#projects", {
       status: item.status,
-      graphic: /grafik|branding|druk/i.test(
-        [item.category, item.type, ...(item.tags || [])].join(" "),
-      ),
-    }),
-  );
+      graphic,
+      icon: projectIcon(item, graphic),
+    });
+  });
   const groups = [
     entry(
       "services",

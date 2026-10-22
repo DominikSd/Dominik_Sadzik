@@ -800,3 +800,92 @@
 #offer.home-offer-section > .pointer-events-none {
   display: none;
 }
+
+/* The three headline phrases use spacing rather than punctuation. */
+.home-hero .map-hero-copy h1 {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: center;
+  column-gap: clamp(20px, 2.4vw, 36px);
+  row-gap: 4px;
+}
+.home-hero .map-hero-copy h1 > span {
+  max-width: 100%;
+}
+.home-mobile-eyebrow,
+.home-mobile-actions {
+  display: none;
+}
+@media (max-width: 767px) {
+  .home-hero {
+    border-radius: 0 0 50% 50% / 0 0 3% 3%;
+  }
+  .home-hero::before {
+    opacity: 0.18;
+    inset: 0;
+  }
+  .home-hero .map-hero {
+    padding: 36px 22px 38px;
+  }
+  .home-hero .map-hero-copy {
+    text-align: left;
+  }
+  .home-hero .map-hero-copy h1 {
+    flex-direction: column;
+    align-items: flex-start;
+    font-size: clamp(31px, 8.5vw, 40px);
+    line-height: 1.18;
+    row-gap: 5px;
+  }
+  .home-hero .map-hero-copy .home-mobile-eyebrow {
+    display: block;
+    margin: 0 0 18px;
+    font-family: var(--font-body), sans-serif;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    line-height: 1.6;
+    color: #89cce6;
+    text-transform: uppercase;
+  }
+  .home-hero .map-hero-copy p {
+    margin-top: 20px;
+    font-size: 15px;
+    line-height: 1.8;
+  }
+  .home-mobile-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 26px;
+  }
+  .home-mobile-actions a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    min-height: 48px;
+    padding: 12px 18px;
+    border: 1px solid #ffffff24;
+    border-radius: 100px;
+    font-size: 14px;
+    font-weight: 600;
+  }
+  .home-mobile-actions a:first-child {
+    border-color: transparent;
+    background: linear-gradient(105deg, #2563eb, #7c3aed);
+  }
+  .home-mobile-actions .home-mobile-map-link {
+    margin-top: 2px;
+    min-height: 44px;
+    padding: 8px;
+    border: 0;
+    color: #98b8d3;
+    font-size: 12px;
+    font-weight: 400;
+  }
+  .home-hero .map-hero-hint {
+    display: none;
+  }
+}
