@@ -10,6 +10,7 @@ import {
 } from "./SeoSectionForm";
 
 const pageLabels = [
+  ["directorAssistant", "Director Assistant"],
   ["webCms", "Strony i CMS"],
   ["qaAutomation", "QA i automatyzacja"],
   ["gamedev", "GameDev"],
@@ -17,6 +18,17 @@ const pageLabels = [
 ];
 
 const sectionLabels = {
+  desktopApps: "Aplikacje desktopowe",
+  projectContext: "Kontekst projektu",
+  technologyStack: "Technologie",
+  archiveRevisions: "Archiwum i rewizje",
+  importData: "Import danych",
+  documentCreation: "Tworzenie dokumentów",
+  dataChecks: "Kontrola braków",
+  gallery: "Galeria i podpis wizualizacji",
+  companyData: "Dane firmy",
+  recurringDocuments: "Dokumenty cykliczne",
+  customDocuments: "Własne dokumenty",
   whatICanBuild: "Co mogę przygotować",
   cmsPanel: "Panel CMS",
   process: "Proces współpracy",

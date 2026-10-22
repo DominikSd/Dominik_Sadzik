@@ -64,3 +64,48 @@ Na potrzeby template'u trzymaj tresci specyficzne dla klienta w content/config, 
 startowej. Jej projekty i kontakt korzystają z aktualnego contentu CMS. Definicje grafu
 pozostają w konfiguracji frontendu, bez zmiany modelu CMS i jego uprawnień.
 Szczegóły oraz przygotowanie Director Assistant: [Mapa technologiczna](technology-map.md).
+
+## Director Assistant
+
+Nowa podstrona projektu działa pod `/director-assistant/` (oraz kompatybilnym
+`/#/director-assistant`). Link znajduje się w mapie, karcie portfolio i stopce. Prezentacja
+zawiera opis możliwości, technologie oraz osiem wizualizacji dostarczonych przez autora.
+
+Treść domyślna jest wydzielona do `src/content/directorAssistant.js` i dołączona jako
+`pages.directorAssistant`. Starsze opublikowane dane CMS automatycznie dostają tę nową stronę
+z fallbacku. Istniejące podstrony oraz zapis draft/published pozostają w tym samym modelu.
+
+W panelu: `Treści podstron` → `Director Assistant`. Można edytować hero, SEO oraz teksty
+i listy sekcji (kontekst projektu, technologie, kartoteki, edytor, archiwum, import, eksport,
+kontrola braków i wspólny podpis galerii).
+`mediaItems` zawierają dostarczone wizualizacje; wspólny podpis wyjaśnia ich poglądową adaptację.
+Przy kolejnych materiałach dodaj pliki do publicznych zasobów repo i uzupełnij URL, tekst
+alternatywny, tytuł oraz opis. Nie dodajemy uploadu ani Supabase Storage.
+
+Teksty opisują możliwości i technologie potwierdzone przez autora, bez niepotwierdzonych wyników.
+Statyczny dokument SEO generowany przy buildzie używa treści repo, nie pobiera danych z CMS.
+Sposób synchronizacji opisuje `docs/seo-checklist.md`.
+
+### Materiały prezentacji aplikacji
+
+Podstrona zawiera otwarcie z edytorem, trzy prezentacje (kartoteki i historia, edytor,
+archiwum i rewizje), opis importu / eksportu / kontroli braków oraz galerię pozostałych
+czterech widoków. Wszystkie osiem wizualizacji jest w `public/portfolio/director-assistant/`.
+Oryginalne PNG mają 1600 × 1040 px; podglądy WebP mają 1200 px, a miniatury galerii 600 px.
+Nie zmieniono kolorów, jasności ani treści dostarczonych obrazów.
+
+Konfiguracja obrazów i tekstów: `src/content/directorAssistant.js`. Wpisy mediów zawierają
+`src`, `fullSrc`, `thumbnailSrc`, tytuł, opis i tekst alternatywny. Pełne PNG są wczytywane
+dopiero po otwarciu podglądu. Galeria korzysta z natywnego dialogu: Escape zamyka,
+strzałki zmieniają obraz, przyciski obsługują dotyk, a „Rozmiar oryginalny” udostępnia
+widok 1:1 z przewijaniem. Linki do PNG działają również bez JavaScriptu.
+
+Wspólny podpis pod wszystkimi obrazami wyjaśnia adaptację screenów i użycie danych
+przykładowych. Nie należy go usuwać przy kolejnych aktualizacjach materiałów.
+Technologie (C#, .NET, Avalonia, SQLite) oraz możliwości opisano na podstawie informacji autora.
+Konwersja PDF jest opisana z wymaganym udziałem LibreOffice.
+
+W `/#/portfolio` aplikacja ma osobną kartę `pages.portfolio.sections.desktopApps`.
+Starsze dane CMS dostają tę sekcję z fallbacku, zachowując dotychczasowe sekcje portfolio.
+Treści i listy są edytowane istniejącymi formularzami CMS; zmiany plików wizualnych
+wprowadza się w repozytorium. Edytor CMS nie jest modułem uploadu obrazów.

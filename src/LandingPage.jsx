@@ -4,6 +4,10 @@ import "./components/technology-map/technologyMap.css";
 import { homeHero, headerLinks, heroTitleParts } from "./content/homePresentation.js";
 import { ArrowRight, ChevronDown } from "lucide-react";
 import MapLoader from "./components/technology-map/MapLoader.jsx";
+import DirectorAssistantPage, {
+  DirectorPortfolioCard,
+} from "./components/DirectorAssistantPage.jsx";
+import { isDirectorPath } from "./lib/routeUtils.js";
 import AnimatedCircuit from "./components/AnimatedCircuit";
 import PrivacyPolicyPage from "./components/PrivacyPolicyPage";
 import WebsiteBriefPage from "./components/WebsiteBriefPage";
@@ -28,6 +32,7 @@ const stagger = {
 };
 
 const detailPageRoutes = {
+  "director-assistant": "directorAssistant",
   "strony-cms": "webCms",
   portfolio: "portfolio",
   "qa-automatyzacja": "qaAutomation",
@@ -80,6 +85,7 @@ const sectionLabelsById = Object.fromEntries(
 );
 
 const routeLabelsBySlug = {
+  "director-assistant": "Director Assistant",
   "strony-cms": "Strony i CMS",
   mapa: "Mapa portfolio",
   portfolio: "Portfolio",
@@ -2459,15 +2465,19 @@ function ServiceDetailPage({ page, contact, onNavigate }) {
   return (
     <>
       <PageHero page={page} onNavigate={onNavigate} />
-      {getVisiblePageSections(page).map(([key, section], index) => (
-        <PageSectionList
-          key={key}
-          sectionKey={key}
-          section={section}
-          sectionIndex={index}
-          onNavigate={onNavigate}
-        />
-      ))}
+      {getVisiblePageSections(page).map(([key, section], index) =>
+        key === "desktopApps" ? (
+          <DirectorPortfolioCard key={key} section={section} basePath={import.meta.env.BASE_URL} />
+        ) : (
+          <PageSectionList
+            key={key}
+            sectionKey={key}
+            section={section}
+            sectionIndex={index}
+            onNavigate={onNavigate}
+          />
+        ),
+      )}
       <ContactSection contact={contact} />
     </>
   );
@@ -2608,10 +2618,16 @@ export default function LandingPage({ routeHash = "" }) {
   useEffect(() => {
     const seo = getPublicRouteSeo({ content, routeHash, activePage });
     applySeo(draftPreview?.content ? { ...seo, robots: "noindex,nofollow" } : seo);
-    applyStructuredData(content);
+    applyStructuredData(content, activePage);
   }, [activePage, content, draftPreview, routeHash]);
 
   const handleNavigate = (event, href) => {
+    if (!String(href || "").startsWith("#")) return;
+    if (isDirectorPath(window.location.pathname, import.meta.env.BASE_URL)) {
+      event.preventDefault();
+      window.location.assign(`${import.meta.env.BASE_URL}${href}`);
+      return;
+    }
     if (String(href || "").startsWith("#/")) return;
 
     event.preventDefault();
@@ -2687,6 +2703,13 @@ export default function LandingPage({ routeHash = "" }) {
           <WebsiteBriefPage contact={content.contact} />
         ) : isPrivacyRoute ? (
           <PrivacyPolicyPage contact={content.contact} />
+        ) : activePage?.slug === "director-assistant" ? (
+          <DirectorAssistantPage
+            page={activePage}
+            settings={content.settings}
+            basePath={import.meta.env.BASE_URL}
+            onNavigate={handleNavigate}
+          />
         ) : activePage ? (
           <ServiceDetailPage
             page={activePage}
@@ -2748,6 +2771,15 @@ export default function LandingPage({ routeHash = "" }) {
               className="hover:text-cyan-300"
             >
               GameDev
+            </a>
+            <a
+              href={`${import.meta.env.BASE_URL}director-assistant/`}
+              onClick={() =>
+                trackNavigationClick("Director Assistant", "director-assistant", "footer")
+              }
+              className="hover:text-cyan-300"
+            >
+              Director Assistant
             </a>
             <a href="#/polityka-prywatnosci" className="hover:text-cyan-300">
               Prywatność

@@ -1,8 +1,21 @@
 import { describe, expect, it } from "vitest";
 import { defaultSiteContent } from "../content/defaultSiteContent";
-import { applyNoindexSeo, applySeo, getPublicRouteSeo } from "./seo";
+import { applyNoindexSeo, applySeo, applyStructuredData, getPublicRouteSeo } from "./seo";
 
 describe("seo helpers", () => {
+  it("adds project SEO and removes project structured data when leaving", () => {
+    const page = defaultSiteContent.pages.directorAssistant;
+    applySeo(getPublicRouteSeo({ content: defaultSiteContent, activePage: page }));
+    applyStructuredData(defaultSiteContent, page);
+    expect(document.querySelector('meta[property="og:url"]').content).toBe(page.seo.canonical);
+    const project = JSON.parse(document.getElementById("structured-data-project").textContent);
+    expect(project.about.name).toBe("Director Assistant");
+    expect(project.about.aggregateRating).toBeUndefined();
+    expect(project.breadcrumb.itemListElement[1].item).toBe(page.seo.canonical);
+    applyStructuredData(defaultSiteContent);
+    expect(document.getElementById("structured-data-project")).toBeNull();
+  });
+
   it("uses map-specific SEO while preserving the configured site identity", () => {
     const seo = getPublicRouteSeo({
       content: {
@@ -66,7 +79,7 @@ describe("seo helpers", () => {
       activePage: defaultSiteContent.pages.portfolio,
     });
 
-    expect(seo.title).toBe("Portfolio | Dominik Sadzik - QA, GameDev i grafika");
+    expect(seo.title).toBe("Portfolio | Dominik Sadzik — aplikacje, QA, GameDev i grafika");
     expect(seo.canonical).toBe("https://dominik-sadzik.pl/");
     expect(seo.description).toContain("QA");
   });

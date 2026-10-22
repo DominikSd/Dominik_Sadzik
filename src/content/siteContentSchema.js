@@ -57,6 +57,8 @@ const editableListSectionSchema = z.object({
         title: z.string().trim().min(1).max(100),
         description: z.string().trim().max(260).default(""),
         src: z.string().trim().min(1).max(300),
+        fullSrc: z.string().trim().max(300).optional(),
+        thumbnailSrc: z.string().trim().max(300).optional(),
         demoSrc: z.string().trim().max(300).optional().default(""),
         demoLabel: z.string().trim().max(80).optional().default("Zobacz animację"),
         alt: z.string().trim().min(1).max(180),
@@ -340,6 +342,7 @@ export const sectionSchemas = {
       .max(12),
   }),
   pages: z.object({
+    directorAssistant: editablePageSchema,
     webCms: editablePageSchema,
     qaAutomation: editablePageSchema,
     gamedev: editablePageSchema,
@@ -447,6 +450,15 @@ export function normalizeSiteContent(candidate) {
   const pages = {
     ...defaultSiteContent.pages,
     ...candidatePages,
+    directorAssistant: candidatePages.directorAssistant
+      ? {
+          ...candidatePages.directorAssistant,
+          sections: {
+            ...defaultSiteContent.pages.directorAssistant.sections,
+            ...candidatePages.directorAssistant.sections,
+          },
+        }
+      : defaultSiteContent.pages.directorAssistant,
     webCms: candidatePages.webCms || defaultSiteContent.pages.webCms,
     qaAutomation:
       candidatePages.qaAutomation ||
@@ -454,7 +466,15 @@ export function normalizeSiteContent(candidate) {
       candidatePages.istqbTesting ||
       defaultSiteContent.pages.qaAutomation,
     gamedev: candidatePages.gamedev || defaultSiteContent.pages.gamedev,
-    portfolio: candidatePages.portfolio || defaultSiteContent.pages.portfolio,
+    portfolio: candidatePages.portfolio
+      ? {
+          ...candidatePages.portfolio,
+          sections: {
+            desktopApps: defaultSiteContent.pages.portfolio.sections.desktopApps,
+            ...candidatePages.portfolio.sections,
+          },
+        }
+      : defaultSiteContent.pages.portfolio,
   };
   const seo = {
     ...defaultSiteContent.seo,

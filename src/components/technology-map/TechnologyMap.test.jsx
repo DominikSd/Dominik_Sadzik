@@ -8,7 +8,7 @@ import {
   expansionPath,
 } from "../../content/technologyMap.js";
 import { defaultSiteContent } from "../../content/defaultSiteContent.js";
-import { buildGraph, branchFocusIds } from "./mapLayout.js";
+import { buildGraph, branchFocusIds, mapPanExtent, emptyViewAnchor } from "./mapLayout.js";
 import { trackContactClick } from "../../lib/analytics/ga4.js";
 
 vi.mock("../../lib/analytics/ga4.js", () => ({
@@ -53,6 +53,28 @@ describe("Technology map content and navigation", () => {
     ).toEqual(["monitor", "settings", "brand", "print", "application", "file"]);
     expect(items.find((item) => item.id === "projects").icon).toBe("folder");
     expect(items.find((item) => item.id === "director-assistant").icon).toBe("dashboard");
+  });
+  it("recovers from empty gaps between branches without moving a view that contains nodes", () => {
+    const nodes = buildGraph(model, ["projects", "web-projects"], null, vi.fn()).nodes;
+    expect(emptyViewAnchor(nodes, { x: 600, y: 300, zoom: 1 }, 1200, 600)).toBeNull();
+    const anchor = emptyViewAnchor(nodes, { x: -5000, y: -5000, zoom: 1.7 }, 1200, 600);
+    expect(nodes.some((node) => node.data.shape === anchor)).toBe(true);
+    expect(emptyViewAnchor([], { x: 0, y: 0, zoom: 1 }, 1200, 600)).toBeNull();
+  });
+  it("updates navigation limits for opened branches and viewport size", () => {
+    expect(mapPanExtent([], 1200, 600)).toBeUndefined();
+    const initial = buildGraph(model, [], null, vi.fn()).nodes;
+    const expanded = buildGraph(model, ["projects", "web-projects"], null, vi.fn()).nodes;
+    const a = mapPanExtent(initial, 1200, 600);
+    const b = mapPanExtent(expanded, 1200, 600);
+    expect(b[1][0]).toBeGreaterThan(a[1][0]);
+    for (const node of expanded) {
+      expect(node.position.x).toBeGreaterThan(b[0][0]);
+      expect(node.position.y).toBeGreaterThan(b[0][1]);
+      expect(node.position.x + node.data.shape.width).toBeLessThan(b[1][0]);
+      expect(node.position.y + node.data.shape.height).toBeLessThan(b[1][1]);
+    }
+    expect(mapPanExtent(initial, 800, 600)[1][0]).toBeLessThan(a[1][0]);
   });
   it("groups projects and reveals specific work only on the next level", () => {
     const projects = model.groups.find((node) => node.id === "projects");
@@ -132,7 +154,7 @@ describe("Technology map content and navigation", () => {
     expect(expanded.edges.find((e) => e.id === "services-qa").className).toBe("map-edge-active");
     expect(expanded.edges.find((e) => e.id === "qa-istqb").className).toBe("map-edge-active");
   });
-  it("reads current published project and contact data, without inventing a Director link", () => {
+  it("reads current published project and contact data, with the Director presentation link", () => {
     const current = createTechnologyMap({
       ...defaultSiteContent,
       contact: { ...defaultSiteContent.contact, email: "example@example.test" },
@@ -145,21 +167,25 @@ describe("Technology map content and navigation", () => {
     expect(flattenMapItems(current).find((n) => n.id === "project-0").label).toBe(
       "Published project",
     );
-    expect(projects.children.find((n) => n.id === "director-assistant").href).toBeNull();
+    expect(projects.children.find((n) => n.id === "director-assistant").href).toBe(
+      "/director-assistant/",
+    );
     expect(
       current.groups.find((g) => g.id === "contact").children.find((n) => n.id === "email").href,
     ).toBe("mailto:example@example.test");
     expect(current.groups.flatMap((g) => g.children).some((n) => n.id === "cv")).toBe(false);
   });
-  it("expands/collapses branches and opens Director Assistant details without a fake CTA", () => {
+  it("expands/collapses branches and opens Director Assistant details with its presentation CTA", () => {
     const { tree } = setup();
     const projects = within(tree).getByRole("button", { name: /Projekty/ });
     expect(projects.getAttribute("aria-expanded")).toBe("false");
     fireEvent.click(projects);
     fireEvent.click(within(tree).getByRole("button", { name: "Director Assistant" }));
     const panel = screen.getByRole("complementary", { name: "Szczegóły: Director Assistant" });
-    expect(within(panel).getByText("Opis projektu w przygotowaniu.")).toBeTruthy();
-    expect(within(panel).queryByRole("link")).toBeNull();
+    expect(
+      within(panel).getByText(defaultSiteContent.pages.directorAssistant.hero.description),
+    ).toBeTruthy();
+    expect(within(panel).getByRole("link").getAttribute("href")).toBe("/director-assistant/");
     fireEvent.keyDown(panel, { key: "Escape" });
     expect(
       screen.queryByRole("complementary", { name: "Szczegóły: Director Assistant" }),

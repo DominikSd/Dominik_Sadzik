@@ -11,6 +11,51 @@ describe("site content schema", () => {
     expect(() => normalizeSiteContent(defaultSiteContent)).not.toThrow();
   });
 
+  it("adds Director to older published pages without replacing their existing content", () => {
+    const { directorAssistant, ...olderPages } = defaultSiteContent.pages;
+    const content = normalizeSiteContent({ ...defaultSiteContent, pages: olderPages });
+    expect(content.pages.directorAssistant).toEqual(
+      normalizeSiteContent(defaultSiteContent).pages.directorAssistant,
+    );
+    expect(content.pages.webCms).toEqual(normalizeSiteContent(defaultSiteContent).pages.webCms);
+    const changed = {
+      ...directorAssistant,
+      hero: { ...directorAssistant.hero, subtitle: "Opis po publikacji" },
+    };
+    const published = normalizeSiteContent({
+      ...defaultSiteContent,
+      pages: { ...olderPages, directorAssistant: changed },
+    });
+    expect(published.pages.directorAssistant.hero.subtitle).toBe("Opis po publikacji");
+  });
+
+  it("adds the desktop project card and gallery fields to older published pages", () => {
+    const { desktopApps, ...oldSections } = defaultSiteContent.pages.portfolio.sections;
+    const content = normalizeSiteContent({
+      ...defaultSiteContent,
+      pages: {
+        ...defaultSiteContent.pages,
+        portfolio: { ...defaultSiteContent.pages.portfolio, sections: oldSections },
+        directorAssistant: {
+          ...defaultSiteContent.pages.directorAssistant,
+          sections: {
+            companyData: {
+              title: "Własna nazwa",
+              description: "Własny opis",
+              items: ["Własne dane"],
+            },
+          },
+        },
+      },
+    });
+    expect(content.pages.portfolio.sections.desktopApps.title).toBe(desktopApps.title);
+    expect(content.pages.directorAssistant.sections.companyData.title).toBe("Własna nazwa");
+    expect(content.pages.directorAssistant.sections.gallery.mediaItems).toHaveLength(4);
+    expect(content.pages.directorAssistant.sections.customDocuments.mediaItems[0].fullSrc).toMatch(
+      /\.png$/,
+    );
+  });
+
   it("maps editable keys to the expected CMS collections", () => {
     expect(getCollectionForKey("hero")).toBe("page_sections");
     expect(getCollectionForKey("services")).toBe("page_sections");

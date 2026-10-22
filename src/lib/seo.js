@@ -258,7 +258,49 @@ export function applyNoindexSeo(title = "Panel CMS - Dominik Sadzik") {
   });
 }
 
-export function applyStructuredData(content) {
+export function getProjectStructuredData(content, page) {
+  if (page?.slug !== "director-assistant") return null;
+  const seo = getPublicRouteSeo({ content, activePage: page });
+  return {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    "@id": `${seo.canonical}#webpage`,
+    url: seo.canonical,
+    name: page.hero.title,
+    description: seo.description,
+    image: seo.ogImage,
+    inLanguage: "pl-PL",
+    about: {
+      "@type": "SoftwareApplication",
+      name: page.hero.title,
+      description: page.hero.description,
+      applicationCategory: "BusinessApplication",
+      author: {
+        "@type": "Person",
+        name: content.settings.siteName,
+        url: normalizeBaseUrl(content.seo.canonical),
+      },
+    },
+    breadcrumb: {
+      "@type": "BreadcrumbList",
+      itemListElement: [
+        {
+          "@type": "ListItem",
+          position: 1,
+          name: content.settings.siteName,
+          item: normalizeBaseUrl(content.seo.canonical),
+        },
+        { "@type": "ListItem", position: 2, name: page.hero.title, item: seo.canonical },
+      ],
+    },
+  };
+}
+
+export function applyStructuredData(content, activePage = null) {
+  const project = getProjectStructuredData(content, activePage);
+  if (project) ensureJsonLd("structured-data-project", project);
+  else if (typeof document !== "undefined")
+    document.getElementById("structured-data-project")?.remove();
   const globalSeo = content?.seo || {};
   const baseUrl = normalizeBaseUrl(globalSeo.canonical || DEFAULT_SITE_URL);
   const siteName = globalSeo.siteName || content?.settings?.siteName || "Dominik Sadzik";

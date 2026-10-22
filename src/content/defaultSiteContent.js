@@ -1,3 +1,5 @@
+import { directorAssistantPage, directorProjectCard } from "./directorAssistant.js";
+
 export const CONTENT_SCHEMA_VERSION = 1;
 
 export const defaultSiteContent = {
@@ -403,6 +405,7 @@ export const defaultSiteContent = {
     ],
   },
   pages: {
+    directorAssistant: directorAssistantPage,
     webCms: {
       slug: "strony-cms",
       seo: {
@@ -701,26 +704,27 @@ export const defaultSiteContent = {
     portfolio: {
       slug: "portfolio",
       seo: {
-        title: "Portfolio | Dominik Sadzik - QA, GameDev i grafika",
+        title: "Portfolio | Dominik Sadzik — aplikacje, QA, GameDev i grafika",
         description:
-          "Dodatkowe kompetencje Dominika Sadzika: QA, automatyzacja, GameDev, prototypy interaktywne i projekty graficzne.",
+          "Autorskie projekty i kompetencje Dominika Sadzika: Director Assistant, aplikacje desktopowe, QA, automatyzacja, GameDev i projekty graficzne.",
         canonical: "https://dominik-sadzik.pl/",
         noindex: false,
         ogTitle: "Portfolio | Dominik Sadzik",
         ogDescription:
-          "Zobacz dodatkowe kompetencje: QA, automatyzację, projekty graficzne i prototypy interaktywne.",
+          "Zobacz Director Assistant, autorską aplikację desktopową, oraz QA, GameDev i projekty graficzne.",
         ogImage: "https://dominik-sadzik.pl/link-preview.png",
       },
       hero: {
         eyebrow: "Portfolio",
         title: "Portfolio i dodatkowe kompetencje",
-        subtitle: "QA, GameDev i materiały graficzne jako uzupełnienie oferty stron",
+        subtitle: "Autorskie aplikacje, QA, GameDev i projekty graficzne",
         description:
-          "Tutaj zostawiam kompetencje poboczne, które wspierają główną ofertę stron internetowych: testowanie, automatyzację, projekty graficzne i małe prototypy interaktywne.",
+          "Tutaj pokazuję autorskie aplikacje oraz kompetencje wspierające tworzenie oprogramowania: testowanie, automatyzację, projekty graficzne i prototypy interaktywne.",
         ctaLabel: "Wróć do oferty strony",
         ctaHref: "#offer",
       },
       sections: {
+        desktopApps: directorProjectCard,
         qaSkills: {
           title: "QA i automatyzacja",
           description:

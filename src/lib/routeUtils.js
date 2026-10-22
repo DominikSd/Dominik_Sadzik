@@ -33,3 +33,11 @@ export function pathToHash(pathname, base = "/") {
   const route = normalizedSegments.join("/");
   return route ? `#/${route}` : "#/";
 }
+
+export function isDirectorPath(pathname, base = "/") {
+  return pathToHash(pathname, base) === "#/director-assistant";
+}
+
+export function resolvePublicHash(pathname, hash, base = "/") {
+  return !hash && isDirectorPath(pathname, base) ? "#/director-assistant" : normalizeHash(hash);
+}

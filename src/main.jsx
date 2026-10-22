@@ -7,7 +7,13 @@ import AuthCallbackHandler from "./admin/auth/AuthCallbackHandler.jsx";
 import UpdatePasswordForm from "./admin/auth/UpdatePasswordForm.jsx";
 import { getSafeAnalyticsPath, initAnalytics, trackPageView } from "./lib/analytics/ga4.js";
 import { adminHashPath, supabase } from "./lib/supabaseClient.js";
-import { extractAuthHash, normalizeHash, pathToHash } from "./lib/routeUtils.js";
+import {
+  extractAuthHash,
+  normalizeHash,
+  pathToHash,
+  resolvePublicHash,
+  isDirectorPath,
+} from "./lib/routeUtils.js";
 import { applyNoindexSeo } from "./lib/seo.js";
 import { getAuthModeFromSearch } from "./admin/auth/authRedirects.js";
 import "./index.css";
@@ -27,7 +33,11 @@ function getBasePath() {
 function getRouteState() {
   return {
     authMode: getAuthModeFromSearch(window.location.search),
-    hash: normalizeHash(window.location.hash),
+    hash: resolvePublicHash(
+      window.location.pathname,
+      window.location.hash,
+      import.meta.env.BASE_URL,
+    ),
   };
 }
 
@@ -73,6 +83,10 @@ export function AppRouter() {
       return;
     }
 
+    if (!rawHash && isDirectorPath(window.location.pathname, import.meta.env.BASE_URL)) {
+      setRouteState((current) => ({ ...current, hash: "#/director-assistant" }));
+      return;
+    }
     const normalizedHash = normalizeHash(rawHash);
     if (normalizedHash !== rawHash) {
       window.history.replaceState(

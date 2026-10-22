@@ -1,10 +1,10 @@
-import React, { useCallback, useEffect, useMemo, useRef } from "react";
+import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Background, ReactFlow, ReactFlowProvider, useReactFlow } from "@xyflow/react";
 import { useReducedMotion } from "framer-motion";
 import { Plus, Minus, Scan } from "lucide-react";
 import TechnologyNode from "./TechnologyNode.jsx";
 import TechnologyEdge from "./TechnologyEdge.jsx";
-import { buildGraph, branchFocusIds } from "./mapLayout.js";
+import { buildGraph, branchFocusIds, mapPanExtent, emptyViewAnchor } from "./mapLayout.js";
 import "@xyflow/react/dist/style.css";
 
 const nodeTypes = { technology: TechnologyNode };
@@ -14,10 +14,12 @@ function TechnologyGraph({ model, expanded, selected, onSelect }) {
   const flow = useReactFlow();
   const reduced = useReducedMotion();
   const viewport = useRef(null);
+  const [size, setSize] = useState({ width: 0, height: 0 });
   const { nodes, edges } = useMemo(
     () => buildGraph(model, expanded, selected, onSelect),
     [model, expanded, selected, onSelect],
   );
+  const panExtent = useMemo(() => mapPanExtent(nodes, size.width, size.height), [nodes, size]);
   const fit = useCallback(
     () => flow.fitView({ padding: 0.06, duration: reduced ? 0 : 280, maxZoom: 1 }),
     [flow, reduced],
@@ -37,10 +39,19 @@ function TechnologyGraph({ model, expanded, selected, onSelect }) {
     return () => clearTimeout(timeout);
   }, [expanded, model, flow, reduced]);
   useEffect(() => {
-    const observer = new ResizeObserver(() => fit());
+    let resizeFrame = 0;
+    const observer = new ResizeObserver(([entry]) => {
+      const { width, height } = entry.contentRect;
+      setSize((current) =>
+        current.width === width && current.height === height ? current : { width, height },
+      );
+      cancelAnimationFrame(resizeFrame);
+      resizeFrame = requestAnimationFrame(fit);
+    });
     if (viewport.current) observer.observe(viewport.current);
     return () => {
       observer.disconnect();
+      cancelAnimationFrame(resizeFrame);
     };
   }, [fit]);
   return (
@@ -49,6 +60,26 @@ function TechnologyGraph({ model, expanded, selected, onSelect }) {
       ref={viewport}
       data-cursor-zone="map"
       data-cursor-state="idle"
+      onFocusCapture={(event) => {
+        const button = event.target.closest("[data-map-id]");
+        if (!button?.matches(":focus-visible")) return;
+        const rect = button.getBoundingClientRect();
+        const canvas = viewport.current.getBoundingClientRect();
+        const inset = 64;
+        if (
+          rect.left >= canvas.left + inset &&
+          rect.right <= canvas.right - inset &&
+          rect.top >= canvas.top + inset &&
+          rect.bottom <= canvas.bottom - inset
+        )
+          return;
+        const node = nodes.find((item) => item.id === button.dataset.mapId);
+        if (node)
+          flow.setCenter(node.data.shape.x, node.data.shape.y, {
+            zoom: flow.getZoom(),
+            duration: reduced ? 0 : 200,
+          });
+      }}
     >
       <ReactFlow
         nodes={nodes}
@@ -58,6 +89,7 @@ function TechnologyGraph({ model, expanded, selected, onSelect }) {
         defaultEdgeOptions={edgeOptions}
         fitView
         fitViewOptions={{ padding: 0.06, maxZoom: 1 }}
+        translateExtent={panExtent}
         minZoom={0.3}
         maxZoom={1.7}
         nodesDraggable={false}
@@ -73,6 +105,10 @@ function TechnologyGraph({ model, expanded, selected, onSelect }) {
         }}
         onMoveEnd={() => {
           if (viewport.current) viewport.current.dataset.cursorState = "idle";
+          const camera = flow.getViewport();
+          const anchor = emptyViewAnchor(nodes, camera, size.width, size.height);
+          if (anchor)
+            flow.setCenter(anchor.x, anchor.y, { zoom: camera.zoom, duration: reduced ? 0 : 220 });
         }}
         aria-label="Interaktywna mapa portfolio"
         proOptions={{ hideAttribution: true }}

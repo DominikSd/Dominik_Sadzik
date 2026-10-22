@@ -31,6 +31,21 @@ describe("LandingPage navigation", () => {
     }));
   });
 
+  it("renders Director intent with a clean canonical and real return links", () => {
+    render(<LandingPage routeHash="#/director-assistant" />);
+    expect(screen.getByRole("heading", { level: 1, name: "Director Assistant" })).toBeTruthy();
+    expect(
+      screen.getByText(defaultSiteContent.pages.directorAssistant.hero.description),
+    ).toBeTruthy();
+    expect(screen.getByRole("link", { name: /Wróć do portfolio/ }).getAttribute("href")).toBe(
+      "/#/portfolio",
+    );
+    expect(document.querySelector('link[rel="canonical"]').href).toBe(
+      defaultSiteContent.pages.directorAssistant.seo.canonical,
+    );
+    expect(screen.getAllByRole("img", { name: /Director/ }).length).toBeGreaterThanOrEqual(8);
+  });
+
   it("renders local draft preview content from ?preview=draft", () => {
     window.history.replaceState(null, "", "/?preview=draft#/");
     window.localStorage.setItem(
@@ -399,6 +414,10 @@ describe("LandingPage navigation", () => {
     expect(screen.getByRole("heading", { name: "Portfolio i dodatkowe kompetencje" })).toBeTruthy();
     expect(screen.queryByRole("heading", { name: "Realizacje klientów" })).toBeNull();
     expect(screen.queryByRole("heading", { name: "Strony demo" })).toBeNull();
+    expect(screen.getByRole("heading", { name: "Director Assistant" })).toBeTruthy();
+    expect(
+      screen.getByRole("link", { name: /Poznaj Director Assistant/ }).getAttribute("href"),
+    ).toBe("/director-assistant/");
     expect(screen.getByRole("heading", { name: "QA i automatyzacja" })).toBeTruthy();
     expect(screen.getByRole("heading", { name: "GameDev i projekty interaktywne" })).toBeTruthy();
     expect(screen.getByRole("heading", { name: "Projekty graficzne i materiały" })).toBeTruthy();

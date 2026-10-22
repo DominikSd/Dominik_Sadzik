@@ -3,7 +3,9 @@
 - Run `npm test`.
 - Run `npm run format:check`.
 - Run `npm run build`.
-- Confirm `postbuild` secret scan passes.
+- Confirm `postbuild` generates `dist/director-assistant/index.html` and the secret scan passes.
+- Open `/director-assistant/` directly, reload it, and check its content and metadata with JavaScript disabled.
+- If Director content/SEO changed in CMS, synchronize approved values to `src/content/directorAssistant.js` before building the static snapshot.
 - Confirm `/robots.txt` points only to `https://dominik-sadzik.pl/sitemap.xml`.
 - Confirm `/sitemap.xml` returns `200` and lists only clean canonical URLs without `#`.
 - In Google Search Console submit `sitemap.xml` and remove any old `sitemap-main.xml` submission.

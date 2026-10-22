@@ -91,6 +91,14 @@ describe("AppRouter", () => {
     expect(screen.getByTestId("admin-route")).toBeTruthy();
   });
 
+  it("renders the clean Director entry without appending a hash", () => {
+    window.history.pushState(null, "", "/director-assistant/");
+    render(<AppRouter />);
+    expect(screen.getByTestId("landing-route").textContent).toContain("#/director-assistant");
+    expect(window.location.pathname).toBe("/director-assistant/");
+    expect(window.location.hash).toBe("");
+  });
+
   it("passes public hash routes to the landing page", () => {
     window.history.pushState(null, "", "/#/gamedev");
 

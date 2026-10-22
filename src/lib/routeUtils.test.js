@@ -1,7 +1,16 @@
 import { describe, expect, it } from "vitest";
-import { extractAuthHash, normalizeHash, pathToHash } from "./routeUtils.js";
+import { extractAuthHash, normalizeHash, pathToHash, resolvePublicHash } from "./routeUtils.js";
 
 describe("routeUtils", () => {
+  it("resolves clean project paths without changing existing hash routing", () => {
+    expect(resolvePublicHash("/director-assistant/", "")).toBe("#/director-assistant");
+    expect(resolvePublicHash("/Portfolio/director-assistant/", "", "/Portfolio/")).toBe(
+      "#/director-assistant",
+    );
+    expect(resolvePublicHash("/director-assistant/", "#/panel-admin")).toBe("#/panel-admin");
+    expect(resolvePublicHash("/", "")).toBe("#/");
+  });
+
   it("normalizes empty and slash hashes to root", () => {
     expect(normalizeHash("")).toBe("#/");
     expect(normalizeHash("#")).toBe("#/");

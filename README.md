@@ -259,3 +259,12 @@ Roadmapa późniejsza:
 - lekkie posty/aktualności, jeśli faktycznie będą potrzebne,
 - AI Assistant do poprawy tekstów i interpretacji statystyk,
 - opcjonalna wersja panelu jako template do innych stron.
+
+### Prezentacja Director Assistant
+
+Podstrona `/director-assistant/` przedstawia autorską aplikację desktopową, technologie i galerię
+ośmiu wizualizacji z powiększaniem oryginalnych PNG. Projekt ma także własną kartę w portfolio.
+Treść: `src/content/directorAssistant.js` albo CMS → Treści podstron → Director Assistant.
+`npm run build` generuje również statyczny HTML tej podstrony i sitemapę, a następnie skanuje
+wynik pod kątem sekretów. Nie pomijaj `postbuild` przy publikacji. Szczegóły i synchronizacja
+SEO po edycji w CMS: [docs/seo-checklist.md](docs/seo-checklist.md).

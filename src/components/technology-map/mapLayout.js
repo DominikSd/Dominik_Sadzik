@@ -93,3 +93,59 @@ export function branchFocusIds(model, expanded) {
   const branch = [model.center, ...model.groups].map(find).find(Boolean);
   return branch ? [branch.id, ...(branch.children || []).map((item) => item.id)] : null;
 }
+
+// Pan limits grow with opened branches and leave a modest navigation margin.
+// At maximum zoom (1.7), that margin is still smaller than the visible world.
+export function mapPanExtent(nodes, width, height) {
+  if (!nodes.length || !width || !height) return undefined;
+  let left = Infinity,
+    top = Infinity,
+    right = -Infinity,
+    bottom = -Infinity;
+  for (const node of nodes) {
+    const shape = node.data.shape;
+    left = Math.min(left, node.position.x);
+    top = Math.min(top, node.position.y);
+    right = Math.max(right, node.position.x + shape.width);
+    bottom = Math.max(bottom, node.position.y + shape.height);
+  }
+  const marginX = width * 0.35;
+  const marginY = height * 0.35;
+  return [
+    [left - marginX, top - marginY],
+    [right + marginX, bottom + marginY],
+  ];
+}
+
+// Rectangular pan bounds can contain empty corners between radial branches.
+// If a gesture ends there, return the closest actual node as a camera anchor.
+export function emptyViewAnchor(nodes, viewport, width, height) {
+  if (!nodes.length || !width || !height) return null;
+  const left = (64 - viewport.x) / viewport.zoom;
+  const right = (width - 64 - viewport.x) / viewport.zoom;
+  const top = (52 - viewport.y) / viewport.zoom;
+  const bottom = (height - 52 - viewport.y) / viewport.zoom;
+  if (
+    nodes.some(
+      ({ position, data: { shape } }) =>
+        position.x + shape.width > left &&
+        position.x < right &&
+        position.y + shape.height > top &&
+        position.y < bottom,
+    )
+  )
+    return null;
+  const x = (width / 2 - viewport.x) / viewport.zoom;
+  const y = (height / 2 - viewport.y) / viewport.zoom;
+  let nearest = null;
+  let distance = Infinity;
+  for (const node of nodes) {
+    const shape = node.data.shape;
+    const squared = (shape.x - x) ** 2 + (shape.y - y) ** 2;
+    if (squared < distance) {
+      nearest = shape;
+      distance = squared;
+    }
+  }
+  return nearest;
+}

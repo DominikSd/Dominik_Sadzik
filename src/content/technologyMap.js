@@ -108,9 +108,12 @@ export function createTechnologyMap(content) {
 
       color: "violet",
       children: [
-        entry("director-assistant", mapCopy.director.title, mapCopy.director.description, null, {
-          status: "Opis w przygotowaniu",
-        }),
+        entry(
+          "director-assistant",
+          pages.directorAssistant?.hero?.title || mapCopy.director.title,
+          pages.directorAssistant?.hero?.description || mapCopy.director.description,
+          `${import.meta.env?.BASE_URL || "/"}director-assistant/`,
+        ),
         entry(
           "web-projects",
           "Projekty web",
